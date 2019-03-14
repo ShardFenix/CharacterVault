@@ -1,0 +1,971 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+
+.item{
+    border: 2px groove black;
+    margin: 2px;
+    padding: 6px 4px;
+    font-size: 18px;
+	-webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.noselect{
+	-webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.item.selected{
+    background-color: #00e7ff;
+    box-shadow: 0px 0px 2px 3px #000;
+}
+
+.yellowback{
+    background-color: #ffdb77;
+}
+
+.redback{
+    background-color: #ff8888;
+}
+
+.greenback{
+    background-color: #52ff7d;
+}
+
+.greenback:hover{
+	border:2px groove #52ff7d; 
+}
+
+.green{
+	font-color:green;
+}
+.red{
+	color:red;
+}
+
+.item.grey{
+	background-color:#888;
+}
+
+.redx{
+	color:red;
+	font-weight:bold;
+	font-size:1.5em;
+	cursor:pointer;
+	width:22px;
+}
+.greenx{
+	color:green;
+	font-weight:bold;
+	font-size:1.5em;
+	cursor:pointer;
+	width:22px;
+}
+
+.slidecontainer {
+    width: 100%;
+}
+
+.slider {
+    -webkit-appearance: none;
+    width: 100%;
+    height: 15px;
+    border-radius: 5px;
+    background: #d3d3d3;
+    outline: none;
+    opacity: 0.7;
+    -webkit-transition: .2s;
+    transition: opacity .2s;
+}
+
+.slider:hover {
+    opacity: 1;
+}
+
+.slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    background: #4CAF50;
+    cursor: pointer;
+}
+
+.slider::-moz-range-thumb {
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    background: #4CAF50;
+    cursor: pointer;
+}
+
+button {
+    padding: 12px;
+    background-color: #00e80f;
+    border: 2px solid black;
+	font-weight:bold;
+	width:105px;
+}
+
+.header{
+	font-size:1.6em;
+	font-weight:bold;
+	text-align:center;
+}
+
+input[type="text"]{
+	font-size:1.3em;
+	padding:4px;
+}
+
+input[type="text"].small{
+	font-size:1em;
+	width:30px;
+	text-align:center;
+}
+
+input[type="text"].small.round{
+	border-radius:10px;
+	border:1px solid black;
+}
+
+input[type="text"].big{
+	font-size:2em;
+	width:50px;
+	border:2px solid black;
+	border-radius:20px;
+	padding:12px 4px;
+	cursor:pointer;
+	text-align:center;
+	margin-top:-3px;
+}
+
+input[type="text"].medium{
+	font-size:1.6em;
+	width:70px;
+	border:2px solid black;
+	border-radius:15px;
+	padding:4px;
+	cursor:pointer;
+	text-align:center;
+}
+
+.deletebutton{
+	float:right;
+	font-weight:bold;
+	font-size:34px;
+	margin-top:-8px;
+}
+
+.tab{
+	font-size:20px;
+	font-weight:bold;
+	border: 2px solid black;
+	background-color:#ffffff;
+	padding:8px 0px;
+	margin-left:-8px;
+	width:14.27%;
+	display:inline-block;
+	text-align:center;
+	cursor:pointer;
+	
+	-webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.tab.activetab{
+	background-color:#d60000;
+}
+
+.label{
+	font-weight:bold;
+	font-size:1.3em;
+	text-align:center;
+}
+
+.center{
+	text-align:center;
+}
+
+input[type='text'][disabled]{
+background-color:white;
+}
+
+.bordertitle{
+    background-color: white;
+    margin-top: -0.8em;
+    position: absolute;
+}
+
+input[type="text"].hidden{
+	border:none;
+	width:50px;
+}
+
+.top{
+	vertical-align:top;
+}
+
+.left{
+	text-align:left;
+}
+
+.right{
+	text-align:right;
+}
+
+.descriptionbox{
+	min-height:400px;
+	max-height:400px;
+	resize:none;
+	font-size:1.5em;
+}
+
+.descriptionbox2{
+	min-height:400px;
+	max-height:400px;
+	resize:none;
+	font-size:1.5em;
+	border: 3px groove #44ff68;
+}
+
+.smallbutton{
+	background-color:#7fa;
+	font-size:0.8em;
+	border:1px solid black;
+	border-radius:5px;
+	padding:4px;
+}
+
+button{
+	min-width:150px;
+	width:auto;
+}
+
+.subtract{
+    font-size: 2em;
+    position: absolute;
+    border-right: 1px solid black;
+    padding: 0px 4px;
+}
+
+.add {
+    font-size: 1.2em;
+    position: relative;
+    border-left: 1px solid black;
+    padding: 10px 1px;
+    line-height: 2em;
+    right: 24px;
+    top: -2px;
+}
+
+#refDescription{
+	width:98%;
+}
+
+#refDescription table {
+    border-collapse: collapse;
+}
+
+#refDescription td {
+    border: 1px solid black;
+    padding: 4px;
+}
+
+#refDescription br{
+	line-height:2em;
+}
+
+.leftcol{
+	min-width:60px;
+}
+
+</style>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular-animate.js"></script>
+</head>
+<body style="background-color:#ffffff;">
+<div ng-app="myApp">
+<div ng-controller="MyController" ng-cloak>
+
+<div style="margin-top:-8px;">
+<span class="tab" ng-click="tab='stats'" ng-class="{'activetab':tab=='stats'}">Stats</span>
+<span class="tab" ng-click="tab='abilities'" ng-class="{'activetab':tab=='abilities'}">Abilities</span>
+<span class="tab" ng-click="tab='equipment'" ng-class="{'activetab':tab=='equipment'}">Equipment</span>
+<span class="tab" ng-click="tab='spells'" ng-class="{'activetab':tab=='spells'}">Spells</span>
+<span class="tab" ng-click="tab='combat'" ng-class="{'activetab':tab=='combat'}">Combat</span>
+<span class="tab" ng-click="tab='notes'" ng-class="{'activetab':tab=='notes'}">Notes</span>
+<span class="tab" ng-click="tab='reference'" ng-class="{'activetab':tab=='reference'}">Reference</span>
+<!--
+<span class="tab" ng-click="tab='raw'" ng-class="{'activetab':tab=='raw'}">Raw</span>
+<!-- -->
+</div>
+
+<div ng-show="tab=='stats'">
+
+<table style="width:100%;"><tbody><tr>
+<td style="width:100px;">
+<div style="width:60px;text-align:center;">
+<label><span class='label'>STR</span>
+<input type='text' class='big' disabled ng-model='modifiers.str'/>
+<input type='text' class='small round' ng-model='char.str' number ng-change='calculate()'/>
+</label></div><br>
+
+<div style="width:60px;text-align:center;">
+<label><span class='label'>DEX</span>
+<input type='text' class='big' disabled ng-model='modifiers.dex'/>
+<input type='text' class='small round' ng-model='char.dex' number ng-change='calculate()'/>
+</label></div><br>
+
+<div style="width:60px;text-align:center;">
+<label><span class='label'>CON</span>
+<input type='text' class='big' disabled ng-model='modifiers.con'/>
+<input type='text' class='small round' ng-model='char.con' number ng-change='calculate()'/>
+</label></div><br>
+
+<div style="width:60px;text-align:center;">
+<label><span class='label'>INT</span>
+<input type='text' class='big' disabled ng-model='modifiers.int'/>
+<input type='text' class='small round' ng-model='char.int' number ng-change='calculate()'/>
+</label></div><br>
+
+<div style="width:60px;text-align:center;">
+<label><span class='label'>WIS</span>
+<input type='text' class='big' disabled ng-model='modifiers.wis'/>
+<input type='text' class='small round' ng-model='char.wis' number ng-change='calculate()'/>
+</label></div><br>
+
+<div style="width:60px;text-align:center;">
+<label><span class='label'>CHA</span>
+<input type='text' class='big' disabled ng-model='modifiers.cha'/>
+<input type='text' class='small round' ng-model='char.cha' number ng-change='calculate()'/>
+</label></div>
+
+</div>
+</td>
+
+<td style="width:700px;">
+<table style="width:100%">
+	<tr>
+		<td style="width:150px;text-align:center;" class="label">
+			<label>
+				<span class='label'>Level</span><br>
+				<input type='text' class='medium' ng-model='char.level' number ng-change='calculate()'/>
+			</label>
+		</td>
+		<td style="width:150px;text-align:center;">
+			<label>
+				<span class='label'>Proficiency Bonus</span><br>
+				<input type='text' class='medium' disabled ng-model='char.proficiency' ng-change='calculate()'/>
+			</label>
+		</td>
+		<td style="width:150px;text-align:center;">
+			<label>
+				<span class='label'>Armor Class</span><br>
+				<input type='text' class='medium' ng-model='char.ac'/>
+			</label>
+		</td>
+		<td style="width:150px;text-align:center;">
+			<label>
+				<span class='label'>Initiative Bonus</span><br>
+				<input type='text' class='medium' ng-model='char.initiative'/>
+			</label>
+		</td>
+		<td style="width:150px;text-align:center;">
+			<label>
+				<span class='label'>Move<br>Speed</span><br>
+				<input type='text' class='medium' ng-model='char.speed'/>
+			</label>
+		</td>
+		<td style="width:150px;text-align:center;">
+			<label>
+				<span class='label'>Spell Save DC</span><br>
+				<input type='text' class='medium' ng-model='char.spelldc'/>
+			</label>
+		</td>
+		<td style="width:150px;text-align:center;">
+			<label>
+				<span class='label'>Spell Atk Bonus</span><br>
+				<input type='text' class='medium' ng-model='char.spellatk'/>
+			</label>
+		</td>
+	</tr>
+</table>
+<table>
+<tr>
+	
+<td colspan=2 class="top">
+<br>
+<div class='label' style='text-align:left;'>Skills</div>
+<span ng-show='char.skillmults.acrobatics===0' class='redx' ng-click='char.skillmults.acrobatics=1;calculate();'>&#x2716;</span>
+<span ng-show='char.skillmults.acrobatics===1' class='greenx' ng-click='char.skillmults.acrobatics=2;calculate();'>&#x2714;</span>
+<span ng-show='char.skillmults.acrobatics===2' class='greenx' ng-click='char.skillmults.acrobatics=0;calculate();'>&#x271A;</span>
+<span style="font-weight:bold;font-size:1.3em;"> {{skills.acrobatics}}</span> Acrobatics
+<br>
+<span ng-show='char.skillmults.animalhandling===0' class='redx' ng-click='char.skillmults.animalhandling=1;calculate();'>&#x2716;</span>
+<span ng-show='char.skillmults.animalhandling===1' class='greenx' ng-click='char.skillmults.animalhandling=2;calculate();'>&#x2714;</span>
+<span ng-show='char.skillmults.animalhandling===2' class='greenx' ng-click='char.skillmults.animalhandling=0;calculate();'>&#x271A;</span>
+<span style="font-weight:bold;font-size:1.3em;"> {{skills.animalhandling}}</span> Animal Handling
+<br>
+<span ng-show='char.skillmults.arcana===0' class='redx' ng-click='char.skillmults.arcana=1;calculate();'>&#x2716;</span>
+<span ng-show='char.skillmults.arcana===1' class='greenx' ng-click='char.skillmults.arcana=2;calculate();'>&#x2714;</span>
+<span ng-show='char.skillmults.arcana===2' class='greenx' ng-click='char.skillmults.arcana=0;calculate();'>&#x271A;</span>
+<span style="font-weight:bold;font-size:1.3em;"> {{skills.arcana}}</span> Arcana
+<br>
+<span ng-show='char.skillmults.athletics===0' class='redx' ng-click='char.skillmults.athletics=1;calculate();'>&#x2716;</span>
+<span ng-show='char.skillmults.athletics===1' class='greenx' ng-click='char.skillmults.athletics=2;calculate();'>&#x2714;</span>
+<span ng-show='char.skillmults.athletics===2' class='greenx' ng-click='char.skillmults.athletics=0;calculate();'>&#x271A;</span>
+<span style="font-weight:bold;font-size:1.3em;"> {{skills.athletics}}</span> Athletics
+<br>
+<span ng-show='char.skillmults.deception===0' class='redx' ng-click='char.skillmults.deception=1;calculate();'>&#x2716;</span>
+<span ng-show='char.skillmults.deception===1' class='greenx' ng-click='char.skillmults.deception=2;calculate();'>&#x2714;</span>
+<span ng-show='char.skillmults.deception===2' class='greenx' ng-click='char.skillmults.deception=0;calculate();'>&#x271A;</span>
+<span style="font-weight:bold;font-size:1.3em;"> {{skills.deception}}</span> Deception
+<br>
+<span ng-show='char.skillmults.history===0' class='redx' ng-click='char.skillmults.history=1;calculate();'>&#x2716;</span>
+<span ng-show='char.skillmults.history===1' class='greenx' ng-click='char.skillmults.history=2;calculate();'>&#x2714;</span>
+<span ng-show='char.skillmults.history===2' class='greenx' ng-click='char.skillmults.history=0;calculate();'>&#x271A;</span>
+<span style="font-weight:bold;font-size:1.3em;"> {{skills.history}}</span> History
+<br>
+<span ng-show='char.skillmults.insight===0' class='redx' ng-click='char.skillmults.insight=1;calculate();'>&#x2716;</span>
+<span ng-show='char.skillmults.insight===1' class='greenx' ng-click='char.skillmults.insight=2;calculate();'>&#x2714;</span>
+<span ng-show='char.skillmults.insight===2' class='greenx' ng-click='char.skillmults.insight=0;calculate();'>&#x271A;</span>
+<span style="font-weight:bold;font-size:1.3em;"> {{skills.insight}}</span> Insight
+<br>
+<span ng-show='char.skillmults.intimidation===0' class='redx' ng-click='char.skillmults.intimidation=1;calculate();'>&#x2716;</span>
+<span ng-show='char.skillmults.intimidation===1' class='greenx' ng-click='char.skillmults.intimidation=2;calculate();'>&#x2714;</span>
+<span ng-show='char.skillmults.intimidation===2' class='greenx' ng-click='char.skillmults.intimidation=0;calculate();'>&#x271A;</span>
+<span style="font-weight:bold;font-size:1.3em;"> {{skills.intimidation}}</span> Intimidation
+<br>
+<span ng-show='char.skillmults.investigation===0' class='redx' ng-click='char.skillmults.investigation=1;calculate();'>&#x2716;</span>
+<span ng-show='char.skillmults.investigation===1' class='greenx' ng-click='char.skillmults.investigation=2;calculate();'>&#x2714;</span>
+<span ng-show='char.skillmults.investigation===2' class='greenx' ng-click='char.skillmults.investigation=0;calculate();'>&#x271A;</span>
+<span style="font-weight:bold;font-size:1.3em;"> {{skills.investigation}}</span> Investigation
+<br>
+<span ng-show='char.skillmults.medicine===0' class='redx' ng-click='char.skillmults.medicine=1;calculate();'>&#x2716;</span>
+<span ng-show='char.skillmults.medicine===1' class='greenx' ng-click='char.skillmults.medicine=2;calculate();'>&#x2714;</span>
+<span ng-show='char.skillmults.medicine===2' class='greenx' ng-click='char.skillmults.medicine=0;calculate();'>&#x271A;</span>
+<span style="font-weight:bold;font-size:1.3em;"> {{skills.medicine}}</span> Medicine
+<br>
+<span ng-show='char.skillmults.nature===0' class='redx' ng-click='char.skillmults.nature=1;calculate();'>&#x2716;</span>
+<span ng-show='char.skillmults.nature===1' class='greenx' ng-click='char.skillmults.nature=2;calculate();'>&#x2714;</span>
+<span ng-show='char.skillmults.nature===2' class='greenx' ng-click='char.skillmults.nature=0;calculate();'>&#x271A;</span>
+<span style="font-weight:bold;font-size:1.3em;"> {{skills.nature}}</span> Nature
+<br>
+<span ng-show='char.skillmults.perception===0' class='redx' ng-click='char.skillmults.perception=1;calculate();'>&#x2716;</span>
+<span ng-show='char.skillmults.perception===1' class='greenx' ng-click='char.skillmults.perception=2;calculate();'>&#x2714;</span>
+<span ng-show='char.skillmults.perception===2' class='greenx' ng-click='char.skillmults.perception=0;calculate();'>&#x271A;</span>
+<span style="font-weight:bold;font-size:1.3em;"> {{skills.perception}}</span> Perception
+<br>
+<span ng-show='char.skillmults.performance===0' class='redx' ng-click='char.skillmults.performance=1;calculate();'>&#x2716;</span>
+<span ng-show='char.skillmults.performance===1' class='greenx' ng-click='char.skillmults.performance=2;calculate();'>&#x2714;</span>
+<span ng-show='char.skillmults.performance===2' class='greenx' ng-click='char.skillmults.performance=0;calculate();'>&#x271A;</span>
+<span style="font-weight:bold;font-size:1.3em;"> {{skills.performance}}</span> Performance
+<br>
+<span ng-show='char.skillmults.persuasion===0' class='redx' ng-click='char.skillmults.persuasion=1;calculate();'>&#x2716;</span>
+<span ng-show='char.skillmults.persuasion===1' class='greenx' ng-click='char.skillmults.persuasion=2;calculate();'>&#x2714;</span>
+<span ng-show='char.skillmults.persuasion===2' class='greenx' ng-click='char.skillmults.persuasion=0;calculate();'>&#x271A;</span>
+<span style="font-weight:bold;font-size:1.3em;"> {{skills.persuasion}}</span> Persuasion
+<br>
+<span ng-show='char.skillmults.religion===0' class='redx' ng-click='char.skillmults.religion=1;calculate();'>&#x2716;</span>
+<span ng-show='char.skillmults.religion===1' class='greenx' ng-click='char.skillmults.religion=2;calculate();'>&#x2714;</span>
+<span ng-show='char.skillmults.religion===2' class='greenx' ng-click='char.skillmults.religion=0;calculate();'>&#x271A;</span>
+<span style="font-weight:bold;font-size:1.3em;"> {{skills.religion}}</span> Religion
+<br>
+<span ng-show='char.skillmults.sleight===0' class='redx' ng-click='char.skillmults.sleight=1;calculate();'>&#x2716;</span>
+<span ng-show='char.skillmults.sleight===1' class='greenx' ng-click='char.skillmults.sleight=2;calculate();'>&#x2714;</span>
+<span ng-show='char.skillmults.sleight===2' class='greenx' ng-click='char.skillmults.sleight=0;calculate();'>&#x271A;</span>
+<span style="font-weight:bold;font-size:1.3em;"> {{skills.sleight}}</span> Sleight of Hand
+<br>
+<span ng-show='char.skillmults.stealth===0' class='redx' ng-click='char.skillmults.stealth=1;calculate();'>&#x2716;</span>
+<span ng-show='char.skillmults.stealth===1' class='greenx' ng-click='char.skillmults.stealth=2;calculate();'>&#x2714;</span>
+<span ng-show='char.skillmults.stealth===2' class='greenx' ng-click='char.skillmults.stealth=0;calculate();'>&#x271A;</span>
+<span style="font-weight:bold;font-size:1.3em;"> {{skills.stealth}}</span> Stealth
+<br>
+<span ng-show='char.skillmults.survival===0' class='redx' ng-click='char.skillmults.survival=1;calculate();'>&#x2716;</span>
+<span ng-show='char.skillmults.survival===1' class='greenx' ng-click='char.skillmults.survival=2;calculate();'>&#x2714;</span>
+<span ng-show='char.skillmults.survival===2' class='greenx' ng-click='char.skillmults.survival=0;calculate();'>&#x271A;</span>
+<span style="font-weight:bold;font-size:1.3em;"> {{skills.survival}}</span> Survival
+</td>
+
+<td style="padding-left:20px;" class="top">
+<br><br>
+<div>
+	<table style="border:1px solid black;width:180px;"><tr>
+		<td>
+			<span class="bordertitle label">Hit Points</span>
+			<div class="label" style="padding:8px 10px">
+				<input type='text' class='hidden right' ng-model='char.hp'/>
+				<span>&nbsp;/&nbsp;</span>
+				<input type='text' class='hidden left' ng-model='char.maxhp'/>
+				</div>
+		</td>
+	</tr></table>
+</div>
+<br>
+<div>
+	<table style="border:1px solid black;width:180px;"><tr>
+		<td>
+			<span class="bordertitle label">Hit Dice</span>
+			<div class="label" style="padding:2px 8px">
+				<input type='text' class='hidden right' ng-model='char.hitdiceamount'/>
+				<span>d</span>
+				<input type='text' class='hidden left' ng-model='char.hitdice'/>
+			</div>
+		</td>
+	</tr></table>
+</div>
+<br><br>
+
+<div class='label' style='text-align:left;'>Saving Throws</div>
+<span ng-show='char.saves.str===0' class='redx' ng-click='char.saves.str=1;calculate();'>&#x2716;</span>
+<span ng-show='char.saves.str===1' class='greenx' ng-click='char.saves.str=0;calculate();'>&#x2714;</span>
+<span style="font-weight:bold;font-size:1.3em;"> {{saves.str}}</span> Strength
+<br>
+<span ng-show='char.saves.dex===0' class='redx' ng-click='char.saves.dex=1;calculate();'>&#x2716;</span>
+<span ng-show='char.saves.dex===1' class='greenx' ng-click='char.saves.dex=0;calculate();'>&#x2714;</span>
+<span style="font-weight:bold;font-size:1.3em;"> {{saves.dex}}</span> Dexterity
+<br>
+<span ng-show='char.saves.con===0' class='redx' ng-click='char.saves.con=1;calculate();'>&#x2716;</span>
+<span ng-show='char.saves.con===1' class='greenx' ng-click='char.saves.con=0;calculate();'>&#x2714;</span>
+<span style="font-weight:bold;font-size:1.3em;"> {{saves.con}}</span> Constitution
+<br>
+<span ng-show='char.saves.int===0' class='redx' ng-click='char.saves.int=1;calculate();'>&#x2716;</span>
+<span ng-show='char.saves.int===1' class='greenx' ng-click='char.saves.int=0;calculate();'>&#x2714;</span>
+<span style="font-weight:bold;font-size:1.3em;"> {{saves.int}}</span> Intelligence
+<br>
+<span ng-show='char.saves.wis===0' class='redx' ng-click='char.saves.wis=1;calculate();'>&#x2716;</span>
+<span ng-show='char.saves.wis===1' class='greenx' ng-click='char.saves.wis=0;calculate();'>&#x2714;</span>
+<span style="font-weight:bold;font-size:1.3em;"> {{saves.wis}}</span> Wisdom
+<br>
+<span ng-show='char.saves.cha===0' class='redx' ng-click='char.saves.cha=1;calculate();'>&#x2716;</span>
+<span ng-show='char.saves.cha===1' class='greenx' ng-click='char.saves.cha=0;calculate();'>&#x2714;</span>
+<span style="font-weight:bold;font-size:1.3em;"> {{saves.cha}}</span> Charisma
+
+<br><br><br>
+<table><tr><td>Copper:</td><td>
+	<span class='subtract noselect' ng-click="decrCopper()">-</span>
+	<input type='text' class='medium' number ng-model='char.copper'/>
+	<span class='add noselect' ng-click="incrCopper()">&#x271A;</span></td></tr>
+<tr><td>Silver:</td><td>
+	<span class='subtract noselect' ng-click="decrSilver()">-</span>
+	<input type='text' class='medium' number ng-model='char.silver'/>
+	<span class='add noselect' ng-click="incrSilver()">&#x271A;</span></td></tr>
+<tr><td>Gold:</td><td>
+	<span class='subtract noselect' ng-click="decrGold()">-</span>
+	<input type='text' class='medium' number ng-model='char.gold'/>
+	<span class='add noselect' ng-click="incrGold()">&#x271A;</span></td></tr>
+<tr><td>Platinum:</td><td>
+	<span class='subtract noselect' ng-click="char.platinum=char.platinum-1">-</span>
+	<input type='text' class='medium' number ng-model='char.platinum'/>
+	<span class='add noselect' ng-click="char.platinum=char.platinum+1">&#x271A;</span></td></tr>
+</table>
+
+
+</td>
+<td class="top" style="padding-left:30px;width:250px;">
+<br>
+	<div class="label center">Abilities</div>
+	<div class="item greenback" ng-repeat="item in char.passives"
+			ng-mouseenter="highlightAbility(item)" ng-mouseleave="$parent.tooltip=null">{{item.name}}</div>
+</td>
+
+</tr>
+</table>
+</td>
+
+<td style="vertical-align:top;">
+<br><br><br>
+<br><br>
+<div style="padding:10px;border:1px solid black;">
+	<span class="label bordertitle" style="margin-top:-24px;">Add Passive Ability</span>
+	<label>Name
+		<input type="text" ng-model="newpassive.name"/>
+	</label>
+	<br>
+	<label>Description
+	<textarea class="descriptionbox" ng-hide="tooltip" ng-model="newpassive.description" style="width:100%;min-height:400px;max-height:400px;"></textarea>
+	<textarea class="descriptionbox2" ng-show="tooltip" ng-model="tooltip" style="width:100%;min-height:400px;"></textarea>
+	</label>
+	<button ng-click="add(newpassive,char.passives)">Add to Passives</button>
+	<br>
+	<button style="display:none"></button>
+	</div>
+</td>
+
+
+<td class="top center">
+<br>
+<div style="border:1px solid black;padding:10px;">
+<div class="label bordertitle">Save/Load</div>
+<input type='text' ng-model='char.name' placeholder='Character Name'/>
+<br>
+<button ng-click="save()">Save</button>
+<br>
+<br><br><br>
+	
+<button ng-repeat='item in saveList track by $index' ng-click="load($index)">{{item.name}}</button>
+</div>
+</td>
+</tr></tbody></table>
+</div>
+
+<div ng-show="tab=='abilities'">
+<table style="width:100%;">
+<thead class="header"><tr>
+<th>Available</th>
+<th>Exhausted</th>
+<th>Add Ability</th>
+<th colspan=2>Description</th>
+</tr></thead>
+<tbody><tr>
+<td width="20%" style="vertical-align:top;">
+	<div class="leftmenu">
+		<div class="greenback item" ng-repeat="item in char.stock | orderBy:'name' track by item.name "
+				ng-click="move(item,char.stock,char.used)"
+				ng-mouseenter="highlightAbility(item)" ng-mouseleave="$parent.tooltip=null">
+			<span style="font-weight:bold;">{{item.name}}</span>
+			<span>({{item.count}})</span>
+			<span class="deletebutton" ng-click="increment(item,$event)">&plus;</span>
+		</div>
+	</div>
+</td>
+
+<td width="20%" style="vertical-align:top;">
+	<div class="leftmenu">
+		<div class="redback item" ng-repeat="item in char.used | orderBy:'name' track by item.name"
+				ng-click="move(item,char.used,char.stock)" 
+				ng-mouseenter="highlightAbility(item)" ng-mouseleave="$parent.tooltip=null">
+			<span style="font-weight:bold;">{{item.name}}</span>
+			<span>({{item.count}})</span>
+			<span class="deletebutton" ng-click="delete(item,char.used,$event)">&times;</span>
+		</span>
+	</div>
+</td>
+
+<td width="20%" style="vertical-align:top;text-align:center;">
+	<input type="text" ng-model="newability.name"/>
+	<br>
+	<input type="text" ng-model="newability.count"/>
+	<br><br>
+	<label style="font-size:20px;">
+		<input type="checkbox" ng-model="newability.shortRest"/>
+		Recovers on short rest
+	</label>
+	<br><br>
+	<button ng-click="add(newability,char.used)">Add to Abilities</button>
+	<br>
+	<button ng-click="moveShortRest(char.used,char.stock)">Short Rest</button>
+	<br>
+	<button ng-click="moveAll(char.used,char.stock)">Long Rest</button>
+	<br>
+	<br>
+	<br>
+
+	<button style="display:none"></button>
+</td>
+<td>
+<textarea class="descriptionbox" ng-hide="tooltip" ng-model="newability.description" style="width:100%;min-height:400px;"></textarea>
+<textarea class="descriptionbox2" ng-show="tooltip" ng-model="tooltip" style="width:100%;min-height:400px;"></textarea>
+</td>
+</tr></tbody></table>
+</div>
+<!-- End Abilities -->
+
+<div ng-show="tab=='equipment'">
+<table style="width:100%;">
+<thead class="header"><tr>
+<th>Equipped</th>
+<th>Inventory</th>
+<th></th>
+<th>Profociencies and Languages</th>
+</tr>
+
+<tbody><tr>
+<td width="20%" style="vertical-align:top;">
+	<div class="leftmenu">
+		<div class="yellowback item" ng-repeat="item in char.equipment | orderBy:'name' track by item.name " ng-click="move(item,char.equipment,char.inventory)">
+			<span style="font-weight:bold;">{{item.name}}</span>
+			<span>({{item.count}})</span>
+			<span class="deletebutton" ng-click="delete(item,char.equipment,$event)">&times;</span>
+		</div>
+	</div>
+</td>
+
+
+<td width="20%" style="vertical-align:top;">
+	<div class="leftmenu">
+		<div class="yellowback item" ng-repeat="item in char.inventory | orderBy:'name' track by item.name " ng-click="move(item,char.inventory,char.equipment)">
+			<span style="font-weight:bold;">{{item.name}}</span>
+			<span>({{item.count}})</span>
+			<span class="deletebutton" ng-click="delete(item,char.inventory,$event)">&times;</span>
+		</div>
+	</div>
+</td>
+
+
+<td width="20%" style="vertical-align:top;text-align:center;">
+	<input type="text" ng-model="item.name"/>
+	<br>
+	<input type="text" ng-model="item.count"/>
+	<br>
+	<button ng-click="add(item,char.inventory)">&laquo; Inventory</button>
+	<br>
+	<button ng-click="add(item,char.proficiencies)">Proficiencies &raquo;</button>
+	<br>
+	<button style="display:none"></button>
+</td>
+
+<td width="20%" style="vertical-align:top;">
+	<input ng-model='profSearch' placeholder="Search..."
+	<div class="leftmenu">
+		<div class="greenback item" ng-repeat="item in char.proficiencies | filter:profSearch | orderBy:'name' track by item.name ">
+			<span style="font-weight:bold;">{{item.name}}</span>
+			<span class="deletebutton" ng-click="delete(item,char.proficiencies,$event)">&times;</span>
+		</div>
+	</div>
+</td>
+
+</tr></tbody></table>
+</div>
+<!-- End equipment -->
+
+
+
+
+<div ng-show="tab=='spells'">
+<table style="width:100%;">
+<thead class="header"><tr>
+<th>Known Spells<th></th>
+<th></th></tr>
+<tbody><tr>
+<td width="20%" style="vertical-align:top;">
+	<div class="leftmenu" ng-mouseleave="endRawSpellPreview()">
+		<div class="label">Cantrips</div>
+		<div class="greenback item" ng-repeat="spell in char.spells | orderBy:'name' track by spell.name"
+				ng-click="selectSpell(spell)" ng-class="{'selected':chosenspell==spell}" ng-if="spell.level==0"
+				ng-mouseenter="rawSpellPreview(spell)">
+			<span style="font-weight:bold;">{{spell.name}}</span>
+			<span class="deletebutton" ng-click="delete(spell,char.spells,$event)">&times;</span>			
+		</div>
+		<br>
+		<div ng-repeat="lv in [1,2,3,4,5,6,7,8,9]">
+			<div class="label">Level {{lv}}</div>
+			<div class="greenback item" ng-repeat="spell in char.spells | orderBy:'name' track by spell.name"
+					ng-click="selectSpell(spell)" ng-class="{'selected':chosenspell==spell}" ng-if="spell.level==lv"
+					ng-mouseenter="rawSpellPreview(spell)">
+				<span style="font-weight:bold;">{{spell.name}}</span>
+				<span class="deletebutton" ng-click="delete(spell,char.spells,$event)">&times;</span>			
+			</div>
+			<br>
+		</div>
+	</div>
+</td>
+
+<td width="20%" style="vertical-align:top;text-align:center;">
+
+<span class="label">Spell Name</span>
+<br>
+	<input type="text" placeholder="Spell Name" ng-model="newspell.name"/>
+<br></br>
+<span class="label">Spell Level</span>
+</br>
+	<input type="text" placeholder="Spell Level" ng-model="newspell.level"/>
+	<br></br>
+	<button ng-click="add(newspell,char.spells)">Add to Spells</button>
+	<br>
+	<button style="display:none"></button>
+</td>
+
+<td style="vertical-align:top;">
+<div class="label">Spell Preview</div>
+<div class="greenback item" ng-repeat="lv in [0,1,2,3,4,5,6,7,8,9]"
+		ng-mouseenter="spellPreview(lv)"
+		ng-mouseleave="spellPreview(chosenspell.level)"
+		ng-class="{'grey':chosenspell.level>lv}">Level {{lv}}</div>
+		<br>
+<div class="redback item" ng-click='selectSpell(null)'>Clear Selection</div>
+</td>
+
+<td style="vertical-align:top;">
+<span class="label">Spell Description</span>
+<textarea class="descriptionbox" ng-hide="tooltip" ng-model="newspell.description" style="width:100%;min-height:400px;"></textarea>
+<textarea class="descriptionbox2" ng-show="tooltip" ng-model="tooltip" style="width:100%;min-height:400px;"></textarea>
+
+</td>
+</tr>
+</tbody></table>
+</div>
+<!-- End Abilities -->
+
+<div ng-show="tab=='combat'">
+<table style="width:100%;"><thead class="label center"><tr>
+<th>Abilities</th><th>Spells</th><th>Items</th><th>Spell Preview</th>
+<th ng-hide="tooltip">Initiative Order</th><th ng-show="tooltip">Description</th>
+</tr></thead>
+<tbody><tr>
+	<td width="17%" style="vertical-align:top;">
+		<div class="leftmenu">
+			<div class="greenback item" ng-repeat="item in char.stock | orderBy:'name' track by item.name "
+					ng-click="move(item,char.stock,char.used)"
+					ng-mouseenter="highlightAbility(item)" ng-mouseleave="$parent.tooltip=null">
+				<span style="font-weight:bold;">{{item.name}}</span>
+				<span>({{item.count}})</span>
+				<span class="deletebutton" ng-click="increment(item,$event)">&plus;</span>
+			</div>
+		</div>
+	</td>
+
+	<td width="17%" style="vertical-align:top;">
+		<div class="leftmenu" ng-mouseleave="endRawSpellPreview()">
+			<div class="label">Cantrips</div>
+			<div class="greenback item" ng-repeat="spell in char.spells | orderBy:'name' track by spell.name"
+					ng-click="selectSpell(spell)" ng-class="{'selected':chosenspell==spell}" ng-if="spell.level==0"
+					ng-mouseenter="rawSpellPreview(spell)">
+				<span style="font-weight:bold;">{{spell.name}}</span>
+				<span class="deletebutton" ng-click="delete(spell,char.spells,$event)">&times;</span>			
+			</div>
+			<br>
+			<div ng-repeat='lv in [1,2,3,4,5,6,7,8,9]'>
+				<div class="label" ng-show="spellLevelAvailable(lv)">Level {{lv}}</div>
+				<div class="greenback item" ng-show="spellLevelAvailable(spell.level)" ng-repeat="spell in char.spells | orderBy:'name' track by spell.name"
+						ng-click="selectSpell(spell)" ng-class="{'selected':chosenspell==spell}" ng-if="spell.level==lv"
+						ng-mouseenter="rawSpellPreview(spell)">
+					<span style="font-weight:bold;">{{spell.name}}</span>
+					<span class="deletebutton" ng-click="delete(spell,char.spells,$event)">&times;</span>			
+				</div>
+				<br>
+			</div>
+		</div>
+	</td>
+
+	<td width="20%" style="vertical-align:top;">
+		<div class="leftmenu">
+			<div class="yellowback item" ng-repeat="item in char.equipment | orderBy:'name' track by item.name" ng-if="combatRelevant(item)">
+				<span style="font-weight:bold;">{{item.name}}</span>
+				<span>({{item.count}})</span>
+				<span class="deletebutton" ng-click="delete(item,char.equipment,$event)">&times;</span>
+			</div>
+			<div class="yellowback item" ng-repeat="item in char.inventory | orderBy:'name' track by item.name" ng-if="combatRelevant(item)">
+				<span style="font-weight:bold;">{{item.name}}</span>
+				<span>({{item.count}})</span>
+				<span class="deletebutton" ng-click="delete(item,char.inventory,$event)">&times;</span>
+			</div>
+		</div>
+	</td>
+
+	<td style="vertical-align:top;">
+	<div class="greenback item" ng-repeat="lv in [0,1,2,3,4,5,6,7,8,9]"
+		ng-mouseenter="spellPreview(lv)"
+		ng-mouseleave="spellPreview(chosenspell.level)"
+		ng-class="{'grey':chosenspell.level>lv}">Level {{lv}}</div>
+		<br>
+	<div class="redback item" ng-click='selectSpell(null)'>Clear Selection</div>
+	</td>
+
+	<td style="vertical-align:top;">
+	<div>
+		<!--Initiative order-->
+		<form ng-submit="addInitiative()">
+			<input type='text' placeholder="Enter Name" ng-model="newInitiative"/>
+		</form>
+		<div ng-repeat="item in initiativeOrder" ng-click="initUp(item)" class="yellowback item">
+			{{item}}
+			<span class="deletebutton" ng-click="deleteInit(item,$event)">&times;</span>
+		</div>
+		<button class="redback item" ng-click="initiativeOrder=[]">Clear Initiative</button>
+	</div>
+	<textarea class="descriptionbox2" ng-show="tooltip" ng-model="tooltip" style="width:100%;min-height:400px;"></textarea>
+	</td>
+
+	</tr>
+	</tbody>
+	</table>
+</div>
+
+<div ng-show="tab=='notes'">
+	<textarea ng-model='char.notes' style="margin-left: -4px;margin-top: 10px;width: 100%;height: 800px;"></textarea>
+</div>
+
+<div ng-show="tab=='raw'">{{char}}</div>
+
+<div ng-show="tab=='reference'">
+	<span class="tab" ng-click="subtab='spells'" ng-class="{'activetab':subtab=='spells'}">Spells</span>
+	<!--<span class="tab" ng-click="subtab='creatures'" ng-class="{'activetab':subtab=='creatures'}">Creatures</span>-->
+
+	<div ng-show="subtab='spells'">
+	<table style="width:100%;"><thead class='label'><tr>
+		<th>Spells</th>
+		<th>Filters</th>
+		<th>Description</th>
+	</tr></thead><tbody><tr>
+	<td style="width:340px;max-width:340px;display:inherit;vertical-align:top;">
+		<input style="width:340px;" type="text" ng-model="spellSearch" placeholder="Filter..."/>
+		<div class="item greenback" ng-repeat="spell in filteredSpellList | filter:spellSearch"
+			ng-click="showRef(spell)">{{spell.name}} ({{spell.level}})</div>
+	</td>
+	<td style="width:25%;vertical-align:top;">
+	<br>
+		<span class="item" ng-repeat="i in [0,1,2,3,4,5,6,7,8,9]" style="margin:0px -2px 0px 0px;padding:8px 10px;"
+				ng-class="{'greenback':spellFilters.levels[i]}"
+				ng-click="spellFilters.levels[i]=!spellFilters.levels[i];updateSpellFilter()">{{i}}</span>
+<br><br><table><tr>
+		<td><div class="item" style="display:inherit;" ng-class="{'redback':spellFilters.excludeClass[0]}" ng-click="classFilterExclude(0)">Bard</div></td>
+		<td><div class="item" style="display:inherit;" ng-class="{'greenback':spellFilters.includeClass[0]}" ng-click="classFilterInclude(0)">Bard</div></td></tr><tr>
+		<td><div class="item" style="display:inherit;" ng-class="{'redback':spellFilters.excludeClass[1]}" ng-click="classFilterExclude(1)">Cleric</div></td>
+		<td><div class="item" style="display:inherit;" ng-class="{'greenback':spellFilters.includeClass[1]}" ng-click="classFilterInclude(1)">Cleric</div></td></tr><tr>
+		<td><div class="item" style="display:inherit;" ng-class="{'redback':spellFilters.excludeClass[2]}" ng-click="classFilterExclude(2)">Druid</div></td>
+		<td><div class="item" style="display:inherit;" ng-class="{'greenback':spellFilters.includeClass[2]}" ng-click="classFilterInclude(2)">Druid</div></td></tr><tr>
+		<td><div class="item" style="display:inherit;" ng-class="{'redback':spellFilters.excludeClass[3]}" ng-click="classFilterExclude(3)">Paladin</div></td>
+		<td><div class="item" style="display:inherit;" ng-class="{'greenback':spellFilters.includeClass[3]}" ng-click="classFilterInclude(3)">Paladin</div></td></tr><tr>
+		<td><div class="item" style="display:inherit;" ng-class="{'redback':spellFilters.excludeClass[4]}" ng-click="classFilterExclude(4)">Ranger</div></td>
+		<td><div class="item" style="display:inherit;" ng-class="{'greenback':spellFilters.includeClass[4]}" ng-click="classFilterInclude(4)">Ranger</div></td></tr><tr>
+		<td><div class="item" style="display:inherit;" ng-class="{'redback':spellFilters.excludeClass[5]}" ng-click="classFilterExclude(5)">Sorcerer</div></td>
+		<td><div class="item" style="display:inherit;" ng-class="{'greenback':spellFilters.includeClass[5]}" ng-click="classFilterInclude(5)">Sorcerer</div></td></tr><tr>
+		<td><div class="item" style="display:inherit;" ng-class="{'redback':spellFilters.excludeClass[6]}" ng-click="classFilterExclude(6)">Warlock</div></td>
+		<td><div class="item" style="display:inherit;" ng-class="{'greenback':spellFilters.includeClass[6]}" ng-click="classFilterInclude(6)">Warlock</div></td></tr><tr>
+		<td><div class="item" style="display:inherit;" ng-class="{'redback':spellFilters.excludeClass[7]}" ng-click="classFilterExclude(7)">Wizard</div></td>
+		<td><div class="item" style="display:inherit;" ng-class="{'greenback':spellFilters.includeClass[7]}" ng-click="classFilterInclude(7)">Wizard</div></td></tr>
+	</table>
+
+	</td>
+	<td style="width: 50%;vertical-align: top;font-size: 1.3em;">
+	<div style="position:fixed;height:720px;overflow-y:auto;border: 1px solid black;padding: 20px;margin-right:10px;">
+		<div class="label">{{spellRef.name}}</div>
+		<div>Cast Time: {{spellRef.castTime}}<span style="float:right" ng-show="spellRef.components.verbal">Verbal</span></div>
+		<div>Duration: {{spellRef.duration}}<span style="float:right" ng-show="spellRef.components.somatic">Somatic</span></div>
+		<div>Range: {{spellRef.range}}<span style="float:right" ng-show="spellRef.ritual">Ritual</span></div>
+		<div ng-show="spellRef.components.material">Material component: {{spellRef.components.material}}</div>
+		<br>
+		<div id="refDescription"></div>
+	</div>
+	</td></tr></tbody></table>
+	</div>
+	
+	<div ng-show="subtab=='creatures'">
+	
+	</div>
+</div>
+
+</div>
+</div>
+
+<script src="./stats.js"></script>
+</body>
+</html>
