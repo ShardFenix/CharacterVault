@@ -27,9 +27,26 @@ div.modal.show{
 	
 }
 
+div.prompt{
+	text-align: center;
+    font-size: 2em;
+    font-weight: bold;
+}
+
+div.choice{
+    font-size: 1.3em;
+    border-radius: 5px;
+    border: 1px solid black;
+    padding: 8px;
+    background-color: green;
+    color: white;
+    text-align: center;
+}
+
 </style>
 
 <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
+<script src="packages.js"></script>
 
 <script>
 var app=angular.module('myApp',[]);
@@ -65,7 +82,7 @@ $scope.char={
 	//These are proficiency multipliers and the attribute they benefit from
 	skills:[
 		{
-			name:'',
+			name:'Athletics',
 			mult:0,
 			attribute:'str'
 		}
@@ -80,6 +97,7 @@ $scope.char={
 		}
 	],
 	abilities:[
+	/*
 		{
 			name:'',
 			description:'',
@@ -87,9 +105,11 @@ $scope.char={
 			onShortRest:null,
 			onLongRest:function(char,abil){abil.charges=1;}
 		}
+	*/
 	],
 	proficiencies:[],//list of strings, can be items/languages/etc
 	inventory:[
+	/*
 		{
 			name:'',
 			description:'',
@@ -101,8 +121,28 @@ $scope.char={
 			finesse:false,
 			proficiencies:[]//char must have one of these to get proficiency bonus
 		}
+	*/
 	]
 };
+
+//debugging: give character every skill from packages
+for (var i=0;i<window.skills.length;i++){
+	var found=false;
+	for (var j=0;j<$scope.char.skills.length;j++){
+		if ($scope.char.skills[i].name===window.skills[i].name){
+			found=true;
+			break;
+		}
+	}
+	if (!found){
+		$scope.char.skills.push({
+			name:window.skills[i].name,
+			mult:0,
+			attr:window.skills[i].attribute
+		});
+	found=false;
+	}
+}
 
 $scope.derived={
 	modifiers:{
@@ -112,10 +152,12 @@ $scope.derived={
 		str:0,dex:0,con:0,int:0,wis:0,cha:0
 	},
 	skills:[
+	/*
 		{
 			name:'Acrobatics',
 			bonus:0
 		}
+	*/
 	],
 	initiative:0,
 	moveSpeed:30,
@@ -150,6 +192,7 @@ $scope.levelUpStart=function(){
 	//show class selection
 	$scope.currentChoices=[];
 	$scope.updateStep=-1;
+	$scope.prompt="Choose a class";
 	for (var i=0;i<packages.classes.length;i++){
 		if (!(packages.classes[i].requirements) || packages.classes[i].requirements($scope.char)){
 			$scope.currentChoices.push(packages.classes[i].classname);
@@ -231,9 +274,28 @@ var goToNextStep=function(){
 
 var setupForCurrentStep=function(){
 	var step = currentStep();
-	if (step.choices.length>1){
+	if (step.choices.length>0){
 		//setup choice selection
-		$scope.currentChoices=step.choices;
+		//first, execute any functions that are in the choice array.
+		//all choice functions take char and derived as arguments
+		$scope.currentChoices=[];
+		for (var i=0;i<step.choices.length;i++){
+			if (step.choices[i] && typeof(step.choices[i]) === 'function'){
+				var subArray = step.choices[i]($scope.char,$scope.derived,$scope.chosenClass);
+				if (subArray){
+					$scope.currentChoices=$scope.currentChoices.concat(subArray);
+				}
+			} else {
+				$scope.currentChoices.push(step.choices[i]);
+			}
+		}
+		//if, after all of this, there are no choices to make, send in something bogus
+		if ($scope.currentChoices.length==0){
+			step.action($scope.char,$scope.derived,null);
+			goToNextStep();
+		} else {
+			$scope.prompt=step.choicePrompt;
+		}
 	} else {
 		//just do the update
 		step.action($scope.char,$scope.derived,null);
@@ -279,7 +341,6 @@ $scope.selectChoice=function(choice){
 
 }]);
 </script>
-<script src="packages.js"></script>
 
 </head>
 <body>
@@ -288,7 +349,10 @@ $scope.selectChoice=function(choice){
 
 <div class="modal" ng-class="{'show':currentChoices}">
 	<div class="prompt">{{prompt}}</div>
-	<div class="choice" ng-repeat="choice in currentChoices" ng-click="selectChoice(choice)">{{choice}}</div>
+	<br>
+	<hr>
+	<br>
+	<div class="choice" ng-repeat="choice in currentChoices" ng-click="selectChoice(choice)">{{choice.name || choice}}</div>
 </div>
 
 <span class="button" ng-click="levelUpStart()">Level Up</span>

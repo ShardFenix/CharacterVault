@@ -1,4 +1,45 @@
-function listInstruments(){};
+function findItem(itemname){
+	for (var i=0;i<window.items.length;i++){
+		if (window.items[i].name===itemname){
+			return window.items[i];
+		}
+	}
+}
+
+function addProficiency(char,skillname){
+	for (var i=0;i<char.skills.length;i++){
+		if (char.skills[i].name===skillname){
+			if (char.skills[i].mult==0){
+				char.skills[i].mult=1;
+			}
+			return;
+		}
+	}
+}
+
+function addExpertise(char,skillname){
+	for (var i=0;i<char.skills.length;i++){
+		if (char.skills[i].name===skillname){
+			if (char.skills[i].mult==1){
+				char.skills[i].mult=2;
+			}
+			return;
+		}
+	}
+}
+
+function addToInventory(char, item){
+	if (!item){
+		return;
+	}
+	for (var i=0;i<char.inventory.length;i++){
+		if (char.inventory[i].name==item.name){
+			char.inventory[i].count = char.inventory[i].count+item.count;
+			return;
+		}
+	}
+	char.inventory.push(item);
+}
 
 function listSkills(){
 	var result=[];
@@ -8,23 +49,69 @@ function listSkills(){
 	return result;
 };
 
-function listNonProficientSkills(char){
+function listInstruments(){
 	var result=[];
-	for (var i=0;i<window.skills.length;i++){
-		if (char.skills[window.skills[i].name].mult==0){
-			result.push(window.skills[i].name);
+	for (var i=0;i<window.items.length;i++){
+		if (window.items[i].categories.indexOf('Instrument')!=-1){
+			result.push(window.items[i].name);
 		}
 	}
 	return result;
 }
 
-function listSimpleWeapons(){};
+function listNonProficientSkills(char){
+	var result=[];
+	for (var i=0;i<window.skills.length;i++){
+		for (var j=0;j<char.skills.length;j++){
+			if (char.skills[j].name==window.skills[i].name){
+				if (char.skills[j].mult==0) {
+					result.push(window.skills[i].name);
+				}
+				j=9999;
+			}
+		}
+	}
+	return result;
+}
 
-function findItem(name){
-	return name;
+function listSimpleWeapons(){
+	var result=[];
+	for (var i=0;i<window.items.length;i++){
+		let item=window.items[i];
+		if (item.categories.indexOf('Simple')!=-1 && item.categories.indexOf('Weapon')!=-1){
+			result.push(item.name);
+		}
+	}
+	return result;
+}
+
+function listMartialWeapons(){
+	var result=[];
+	for (var i=0;i<window.items.length;i++){
+		let item=window.items[i];
+		if (item.categories.indexOf('Martial')!=-1 && item.categories.indexOf('Weapon')!=-1){
+			result.push(item.name);
+		}
+	}
+	return result;
+}
+
+function getUnknownLanguages(char){
+	var result=[];
+	for (var i=0;i<window.languages.length;i++){
+		var found=false;
+		for (var j=0;j<char.proficiencies.length;j++){
+			if (char.proficiencies[j]==window.languages[i]){
+				found=true;
+				break;
+			}
+		}
+		if (!found){
+			result.push(window.languages[i]);
+		}
+	}
+	return result;
 };
-
-function getAllLanguages(){return window.languages;};
 
 function addSubclass(char,classname,subclass){
 	for (var i=0;i<char.classes.length;i++){
@@ -83,6 +170,46 @@ window.skills=[
 	{name:"Survival",attribute:"wis"}
 ];
 
+window.items=[
+	{
+		name:'Lyre',
+		description:'',
+		categories:['Instrument'],
+		count:1,
+		meleeRange:5,//usually 5 or 10, falsey means no attack
+		meleeDamage:'1d4',//can be static, or can be a function that gets sent char and scope
+		throwRange:[20,60],//falsey means no attack
+		throwDamage:'1d4',//can be static, or can be a function that gets sent char and scope
+		finesse:false,
+		value:200,
+		proficiencies:['Lyre']//char must have one of these to get proficiency bonus
+	},	{
+		name:'Flute',
+		description:'',
+		categories:['Instrument'],
+		count:1,
+		meleeRange:5,//usually 5 or 10, falsey means no attack
+		meleeDamage:'1d4',//can be static, or can be a function that gets sent char and scope
+		throwRange:[20,60],//falsey means no attack
+		throwDamage:'1d4',//can be static, or can be a function that gets sent char and scope
+		finesse:false,
+		value:200,
+		proficiencies:['Flute']//char must have one of these to get proficiency bonus
+	},	{
+		name:'Longsword',
+		description:'',
+		categories:['Martial','Melee','Weapon'],
+		count:1,
+		meleeRange:5,//usually 5 or 10, falsey means no attack
+		meleeDamage:'1d8 slashing (2H: 1d10)',//can be static, or can be a function that gets sent char and scope
+		throwRange:[20,60],//falsey means no attack
+		throwDamage:'1d4',//can be static, or can be a function that gets sent char and scope
+		finesse:false,
+		value:150,
+		proficiencies:['Martial Weapons','Longsword']//char must have one of these to get proficiency bonus
+	}
+];
+
 window.classes=
 [
 	{
@@ -105,45 +232,52 @@ window.classes=
 						}
 					},
 					{
-						"choices":listInstruments,
+						"choicePrompt":"Choose an instrument proficiency.",
+						"choices":[listInstruments],
 						"action":function(char,derived,choice){
 							char.proficiencies.upush(choice);
 						}
 					},
 					{
-						"choices":listInstruments,
+						"choicePrompt":"Choose an instrument proficiency.",
+						"choices":[listInstruments],
 						"action":function(char,derived,choice){
 							char.proficiencies.upush(choice);
 						}
 					},
 					{
-						"choices":listInstruments,
+						"choicePrompt":"Choose an instrument proficiency.",
+						"choices":[listInstruments],
 						"action":function(char,derived,choice){
 							char.proficiencies.upush(choice);
 						}
 					},
 					{
-						"choices":listSkills,
+						"choicePrompt":"Choose a skill proficiency.",
+						"choices":[listNonProficientSkills],
 						"action":function(char,derived,choice){
-							char.skills["choice"]=1;
+							addProficiency(char,choice);
 						}
 					},
 					{
-						"choices":listSkills,
+						"choicePrompt":"Choose a skill proficiency.",
+						"choices":[listNonProficientSkills],
 						"action":function(char,derived,choice){
-							char.skills["choice"]=1;
+							addProficiency(char,choice);
 						}
 					},
 					{
-						"choices":listSkills,
+						"choicePrompt":"Choose a skill proficiency.",
+						"choices":[listNonProficientSkills],
 						"action":function(char,derived,choice){
-							char.skills["choice"]=1;
+							addProficiency(char,choice);
 						}
 					},
 					{
-						"choices":[listSimpleWeapons,findItem("Longsword"),findItem("Rapier")],
+						"choicePrompt":"Choose a weapon to start with.",
+						"choices":[listSimpleWeapons,"Longsword","Rapier"],
 						"action":function(char,derived,choice){
-							$scope.addToInventory(choice);
+							addToInventory(char,findItem(choice));
 						}
 					}
 				]
@@ -158,7 +292,7 @@ window.classes=
 					},
 					{
 						"choicePrompt":"Select a language to learn:",
-						"choices":getAllLanguages,
+						"choices":[getUnknownLanguages],
 						"action":function(char,derived,choice){
 							char.proficiencies.push(choice);
 						}
@@ -186,7 +320,7 @@ window.classes=
 						}
 					}, {
 						"choicePrompt":"Choose a Bard College:",
-						"choices":listSpecializations["Bard"],
+						"choices":[listSpecializations],
 						"action":function(char,derived,choice){
 							addSubclass(char,"Bard",choice);
 						}
@@ -208,19 +342,19 @@ window.subclasses=
 				"updates":[
 					{
 						"choicePrompt":"Choose a skill to become proficient in:",
-						"choices":listNonProficientSkills,
+						"choices":[listNonProficientSkills],
 						"action":function(char,derived,choice){
 							setSkillProficiency(char,choice);
 						}
 					},{
 						"choicePrompt":"Choose a skill to become proficient in:",
-						"choices":listNonProficientSkills,
+						"choices":[listNonProficientSkills],
 						"action":function(char,derived,choice){
 							setSkillProficiency(char,choice);
 						}
 					},{
 						"choicePrompt":"Choose a skill to become proficient in:",
-						"choices":listNonProficientSkills,
+						"choices":[listNonProficientSkills],
 						"action":function(char,derived,choice){
 							setSkillProficiency(char,choice);
 							char.passives.push(findPassive("Cutting Words"));
