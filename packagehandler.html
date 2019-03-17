@@ -48,8 +48,9 @@ div.choice{
 
 </style>
 
-<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
-<script src="packages.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.7/angular.min.js"></script>
+<script src="./spells.js"></script>
+<script src="./packages.js"></script>
 
 <script>
 var app=angular.module('myApp',[]);
@@ -59,6 +60,7 @@ $scope.char={
 	maxHp:0,
 	hp:0,
 	level:0, //total level
+	money:0,
 	
 	classes:[
 	/*
@@ -158,6 +160,7 @@ $scope.derived={
 	/*
 		{
 			name:'Acrobatics',
+			mult:0, //used for display only
 			bonus:0
 		}
 	*/

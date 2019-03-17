@@ -1,301 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-<style>
-
-.item{
-    border: 2px groove black;
-    margin: 2px;
-    padding: 6px 4px;
-    font-size: 18px;
-	-webkit-touch-callout: none;
-    -webkit-user-select: none;
-    -khtml-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
-}
-
-.noselect{
-	-webkit-touch-callout: none;
-    -webkit-user-select: none;
-    -khtml-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
-}
-
-.item.selected{
-    background-color: #00e7ff;
-    box-shadow: 0px 0px 2px 3px #000;
-}
-
-.yellowback{
-    background-color: #ffdb77;
-}
-
-.redback{
-    background-color: #ff8888;
-}
-
-.greenback{
-    background-color: #52ff7d;
-}
-
-.greenback:hover{
-	border:2px groove #52ff7d; 
-}
-
-.green{
-	font-color:green;
-}
-.red{
-	color:red;
-}
-
-.item.grey{
-	background-color:#888;
-}
-
-.redx{
-	color:red;
-	font-weight:bold;
-	font-size:1.5em;
-	cursor:pointer;
-	width:22px;
-}
-.greenx{
-	color:green;
-	font-weight:bold;
-	font-size:1.5em;
-	cursor:pointer;
-	width:22px;
-}
-
-.slidecontainer {
-    width: 100%;
-}
-
-.slider {
-    -webkit-appearance: none;
-    width: 100%;
-    height: 15px;
-    border-radius: 5px;
-    background: #d3d3d3;
-    outline: none;
-    opacity: 0.7;
-    -webkit-transition: .2s;
-    transition: opacity .2s;
-}
-
-.slider:hover {
-    opacity: 1;
-}
-
-.slider::-webkit-slider-thumb {
-    -webkit-appearance: none;
-    appearance: none;
-    width: 25px;
-    height: 25px;
-    border-radius: 50%;
-    background: #4CAF50;
-    cursor: pointer;
-}
-
-.slider::-moz-range-thumb {
-    width: 25px;
-    height: 25px;
-    border-radius: 50%;
-    background: #4CAF50;
-    cursor: pointer;
-}
-
-button {
-    padding: 12px;
-    background-color: #00e80f;
-    border: 2px solid black;
-	font-weight:bold;
-	width:105px;
-}
-
-.header{
-	font-size:1.6em;
-	font-weight:bold;
-	text-align:center;
-}
-
-input[type="text"]{
-	font-size:1.3em;
-	padding:4px;
-}
-
-input[type="text"].small{
-	font-size:1em;
-	width:30px;
-	text-align:center;
-}
-
-input[type="text"].small.round{
-	border-radius:10px;
-	border:1px solid black;
-}
-
-input[type="text"].big{
-	font-size:2em;
-	width:50px;
-	border:2px solid black;
-	border-radius:20px;
-	padding:12px 4px;
-	cursor:pointer;
-	text-align:center;
-	margin-top:-3px;
-}
-
-input[type="text"].medium{
-	font-size:1.6em;
-	width:70px;
-	border:2px solid black;
-	border-radius:15px;
-	padding:4px;
-	cursor:pointer;
-	text-align:center;
-}
-
-.deletebutton{
-	float:right;
-	font-weight:bold;
-	font-size:34px;
-	margin-top:-8px;
-}
-
-.tab{
-	font-size:20px;
-	font-weight:bold;
-	border: 2px solid black;
-	background-color:#ffffff;
-	padding:8px 0px;
-	margin-left:-8px;
-	width:14.27%;
-	display:inline-block;
-	text-align:center;
-	cursor:pointer;
-	
-	-webkit-touch-callout: none;
-    -webkit-user-select: none;
-    -khtml-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
-}
-
-.tab.activetab{
-	background-color:#d60000;
-}
-
-.label{
-	font-weight:bold;
-	font-size:1.3em;
-	text-align:center;
-}
-
-.center{
-	text-align:center;
-}
-
-input[type='text'][disabled]{
-background-color:white;
-}
-
-.bordertitle{
-    background-color: white;
-    margin-top: -0.8em;
-    position: absolute;
-}
-
-input[type="text"].hidden{
-	border:none;
-	width:50px;
-}
-
-.top{
-	vertical-align:top;
-}
-
-.left{
-	text-align:left;
-}
-
-.right{
-	text-align:right;
-}
-
-.descriptionbox{
-	min-height:400px;
-	max-height:400px;
-	resize:none;
-	font-size:1.5em;
-}
-
-.descriptionbox2{
-	min-height:400px;
-	max-height:400px;
-	resize:none;
-	font-size:1.5em;
-	border: 3px groove #44ff68;
-}
-
-.smallbutton{
-	background-color:#7fa;
-	font-size:0.8em;
-	border:1px solid black;
-	border-radius:5px;
-	padding:4px;
-}
-
-button{
-	min-width:150px;
-	width:auto;
-}
-
-.subtract{
-    font-size: 2em;
-    position: absolute;
-    border-right: 1px solid black;
-    padding: 0px 4px;
-}
-
-.add {
-    font-size: 1.2em;
-    position: relative;
-    border-left: 1px solid black;
-    padding: 10px 1px;
-    line-height: 2em;
-    right: 24px;
-    top: -2px;
-}
-
-#refDescription{
-	width:98%;
-}
-
-#refDescription table {
-    border-collapse: collapse;
-}
-
-#refDescription td {
-    border: 1px solid black;
-    padding: 4px;
-}
-
-#refDescription br{
-	line-height:2em;
-}
-
-.leftcol{
-	min-width:60px;
-}
-
-</style>
+<link rel="stylesheet" href="./style.css">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular-animate.js"></script>
@@ -312,7 +18,7 @@ button{
 <span class="tab" ng-click="tab='combat'" ng-class="{'activetab':tab=='combat'}">Combat</span>
 <span class="tab" ng-click="tab='notes'" ng-class="{'activetab':tab=='notes'}">Notes</span>
 <span class="tab" ng-click="tab='reference'" ng-class="{'activetab':tab=='reference'}">Reference</span>
-<!--
+
 <span class="tab" ng-click="tab='raw'" ng-class="{'activetab':tab=='raw'}">Raw</span>
 <!-- -->
 </div>
@@ -324,55 +30,56 @@ button{
 <div style="width:60px;text-align:center;">
 <label><span class='label'>STR</span>
 <input type='text' class='big' disabled ng-model='modifiers.str'/>
-<input type='text' class='small round' ng-model='char.str' number ng-change='calculate()'/>
+<input type='text' class='small round' ng-model='char.attributes.str' number ng-change='calculate()'/>
 </label></div><br>
 
 <div style="width:60px;text-align:center;">
 <label><span class='label'>DEX</span>
 <input type='text' class='big' disabled ng-model='modifiers.dex'/>
-<input type='text' class='small round' ng-model='char.dex' number ng-change='calculate()'/>
+<input type='text' class='small round' ng-model='char.attributes.dex' number ng-change='calculate()'/>
 </label></div><br>
 
 <div style="width:60px;text-align:center;">
 <label><span class='label'>CON</span>
 <input type='text' class='big' disabled ng-model='modifiers.con'/>
-<input type='text' class='small round' ng-model='char.con' number ng-change='calculate()'/>
+<input type='text' class='small round' ng-model='char.attributes.con' number ng-change='calculate()'/>
 </label></div><br>
 
 <div style="width:60px;text-align:center;">
 <label><span class='label'>INT</span>
 <input type='text' class='big' disabled ng-model='modifiers.int'/>
-<input type='text' class='small round' ng-model='char.int' number ng-change='calculate()'/>
+<input type='text' class='small round' ng-model='char.attributes.int' number ng-change='calculate()'/>
 </label></div><br>
 
 <div style="width:60px;text-align:center;">
 <label><span class='label'>WIS</span>
 <input type='text' class='big' disabled ng-model='modifiers.wis'/>
-<input type='text' class='small round' ng-model='char.wis' number ng-change='calculate()'/>
+<input type='text' class='small round' ng-model='char.attributes.wis' number ng-change='calculate()'/>
 </label></div><br>
 
 <div style="width:60px;text-align:center;">
 <label><span class='label'>CHA</span>
 <input type='text' class='big' disabled ng-model='modifiers.cha'/>
-<input type='text' class='small round' ng-model='char.cha' number ng-change='calculate()'/>
+<input type='text' class='small round' ng-model='char.attributes.cha' number ng-change='calculate()'/>
 </label></div>
 
 </div>
 </td>
 
-<td style="width:700px;">
+<td style="width:700px;vertical-align:top;">
 <table style="width:100%">
 	<tr>
 		<td style="width:150px;text-align:center;" class="label">
 			<label>
 				<span class='label'>Level</span><br>
-				<input type='text' class='medium' ng-model='char.level' number ng-change='calculate()'/>
+				<input type='text' class='medium' ng-model='char.level' number />
 			</label>
+			<span class="button" ng-click="levelUpStart()">Level Up</span>
 		</td>
 		<td style="width:150px;text-align:center;">
 			<label>
 				<span class='label'>Proficiency Bonus</span><br>
-				<input type='text' class='medium' disabled ng-model='char.proficiency' ng-change='calculate()'/>
+				<input type='text' class='medium' disabled ng-model='derived.proficiency'/>
 			</label>
 		</td>
 		<td style="width:150px;text-align:center;">
@@ -384,25 +91,13 @@ button{
 		<td style="width:150px;text-align:center;">
 			<label>
 				<span class='label'>Initiative Bonus</span><br>
-				<input type='text' class='medium' ng-model='char.initiative'/>
+				<input type='text' class='medium' ng-model='derived.initiative'/>
 			</label>
 		</td>
 		<td style="width:150px;text-align:center;">
 			<label>
 				<span class='label'>Move<br>Speed</span><br>
 				<input type='text' class='medium' ng-model='char.speed'/>
-			</label>
-		</td>
-		<td style="width:150px;text-align:center;">
-			<label>
-				<span class='label'>Spell Save DC</span><br>
-				<input type='text' class='medium' ng-model='char.spelldc'/>
-			</label>
-		</td>
-		<td style="width:150px;text-align:center;">
-			<label>
-				<span class='label'>Spell Atk Bonus</span><br>
-				<input type='text' class='medium' ng-model='char.spellatk'/>
 			</label>
 		</td>
 	</tr>
@@ -413,95 +108,12 @@ button{
 <td colspan=2 class="top">
 <br>
 <div class='label' style='text-align:left;'>Skills</div>
-<span ng-show='char.skillmults.acrobatics===0' class='redx' ng-click='char.skillmults.acrobatics=1;calculate();'>&#x2716;</span>
-<span ng-show='char.skillmults.acrobatics===1' class='greenx' ng-click='char.skillmults.acrobatics=2;calculate();'>&#x2714;</span>
-<span ng-show='char.skillmults.acrobatics===2' class='greenx' ng-click='char.skillmults.acrobatics=0;calculate();'>&#x271A;</span>
-<span style="font-weight:bold;font-size:1.3em;"> {{skills.acrobatics}}</span> Acrobatics
-<br>
-<span ng-show='char.skillmults.animalhandling===0' class='redx' ng-click='char.skillmults.animalhandling=1;calculate();'>&#x2716;</span>
-<span ng-show='char.skillmults.animalhandling===1' class='greenx' ng-click='char.skillmults.animalhandling=2;calculate();'>&#x2714;</span>
-<span ng-show='char.skillmults.animalhandling===2' class='greenx' ng-click='char.skillmults.animalhandling=0;calculate();'>&#x271A;</span>
-<span style="font-weight:bold;font-size:1.3em;"> {{skills.animalhandling}}</span> Animal Handling
-<br>
-<span ng-show='char.skillmults.arcana===0' class='redx' ng-click='char.skillmults.arcana=1;calculate();'>&#x2716;</span>
-<span ng-show='char.skillmults.arcana===1' class='greenx' ng-click='char.skillmults.arcana=2;calculate();'>&#x2714;</span>
-<span ng-show='char.skillmults.arcana===2' class='greenx' ng-click='char.skillmults.arcana=0;calculate();'>&#x271A;</span>
-<span style="font-weight:bold;font-size:1.3em;"> {{skills.arcana}}</span> Arcana
-<br>
-<span ng-show='char.skillmults.athletics===0' class='redx' ng-click='char.skillmults.athletics=1;calculate();'>&#x2716;</span>
-<span ng-show='char.skillmults.athletics===1' class='greenx' ng-click='char.skillmults.athletics=2;calculate();'>&#x2714;</span>
-<span ng-show='char.skillmults.athletics===2' class='greenx' ng-click='char.skillmults.athletics=0;calculate();'>&#x271A;</span>
-<span style="font-weight:bold;font-size:1.3em;"> {{skills.athletics}}</span> Athletics
-<br>
-<span ng-show='char.skillmults.deception===0' class='redx' ng-click='char.skillmults.deception=1;calculate();'>&#x2716;</span>
-<span ng-show='char.skillmults.deception===1' class='greenx' ng-click='char.skillmults.deception=2;calculate();'>&#x2714;</span>
-<span ng-show='char.skillmults.deception===2' class='greenx' ng-click='char.skillmults.deception=0;calculate();'>&#x271A;</span>
-<span style="font-weight:bold;font-size:1.3em;"> {{skills.deception}}</span> Deception
-<br>
-<span ng-show='char.skillmults.history===0' class='redx' ng-click='char.skillmults.history=1;calculate();'>&#x2716;</span>
-<span ng-show='char.skillmults.history===1' class='greenx' ng-click='char.skillmults.history=2;calculate();'>&#x2714;</span>
-<span ng-show='char.skillmults.history===2' class='greenx' ng-click='char.skillmults.history=0;calculate();'>&#x271A;</span>
-<span style="font-weight:bold;font-size:1.3em;"> {{skills.history}}</span> History
-<br>
-<span ng-show='char.skillmults.insight===0' class='redx' ng-click='char.skillmults.insight=1;calculate();'>&#x2716;</span>
-<span ng-show='char.skillmults.insight===1' class='greenx' ng-click='char.skillmults.insight=2;calculate();'>&#x2714;</span>
-<span ng-show='char.skillmults.insight===2' class='greenx' ng-click='char.skillmults.insight=0;calculate();'>&#x271A;</span>
-<span style="font-weight:bold;font-size:1.3em;"> {{skills.insight}}</span> Insight
-<br>
-<span ng-show='char.skillmults.intimidation===0' class='redx' ng-click='char.skillmults.intimidation=1;calculate();'>&#x2716;</span>
-<span ng-show='char.skillmults.intimidation===1' class='greenx' ng-click='char.skillmults.intimidation=2;calculate();'>&#x2714;</span>
-<span ng-show='char.skillmults.intimidation===2' class='greenx' ng-click='char.skillmults.intimidation=0;calculate();'>&#x271A;</span>
-<span style="font-weight:bold;font-size:1.3em;"> {{skills.intimidation}}</span> Intimidation
-<br>
-<span ng-show='char.skillmults.investigation===0' class='redx' ng-click='char.skillmults.investigation=1;calculate();'>&#x2716;</span>
-<span ng-show='char.skillmults.investigation===1' class='greenx' ng-click='char.skillmults.investigation=2;calculate();'>&#x2714;</span>
-<span ng-show='char.skillmults.investigation===2' class='greenx' ng-click='char.skillmults.investigation=0;calculate();'>&#x271A;</span>
-<span style="font-weight:bold;font-size:1.3em;"> {{skills.investigation}}</span> Investigation
-<br>
-<span ng-show='char.skillmults.medicine===0' class='redx' ng-click='char.skillmults.medicine=1;calculate();'>&#x2716;</span>
-<span ng-show='char.skillmults.medicine===1' class='greenx' ng-click='char.skillmults.medicine=2;calculate();'>&#x2714;</span>
-<span ng-show='char.skillmults.medicine===2' class='greenx' ng-click='char.skillmults.medicine=0;calculate();'>&#x271A;</span>
-<span style="font-weight:bold;font-size:1.3em;"> {{skills.medicine}}</span> Medicine
-<br>
-<span ng-show='char.skillmults.nature===0' class='redx' ng-click='char.skillmults.nature=1;calculate();'>&#x2716;</span>
-<span ng-show='char.skillmults.nature===1' class='greenx' ng-click='char.skillmults.nature=2;calculate();'>&#x2714;</span>
-<span ng-show='char.skillmults.nature===2' class='greenx' ng-click='char.skillmults.nature=0;calculate();'>&#x271A;</span>
-<span style="font-weight:bold;font-size:1.3em;"> {{skills.nature}}</span> Nature
-<br>
-<span ng-show='char.skillmults.perception===0' class='redx' ng-click='char.skillmults.perception=1;calculate();'>&#x2716;</span>
-<span ng-show='char.skillmults.perception===1' class='greenx' ng-click='char.skillmults.perception=2;calculate();'>&#x2714;</span>
-<span ng-show='char.skillmults.perception===2' class='greenx' ng-click='char.skillmults.perception=0;calculate();'>&#x271A;</span>
-<span style="font-weight:bold;font-size:1.3em;"> {{skills.perception}}</span> Perception
-<br>
-<span ng-show='char.skillmults.performance===0' class='redx' ng-click='char.skillmults.performance=1;calculate();'>&#x2716;</span>
-<span ng-show='char.skillmults.performance===1' class='greenx' ng-click='char.skillmults.performance=2;calculate();'>&#x2714;</span>
-<span ng-show='char.skillmults.performance===2' class='greenx' ng-click='char.skillmults.performance=0;calculate();'>&#x271A;</span>
-<span style="font-weight:bold;font-size:1.3em;"> {{skills.performance}}</span> Performance
-<br>
-<span ng-show='char.skillmults.persuasion===0' class='redx' ng-click='char.skillmults.persuasion=1;calculate();'>&#x2716;</span>
-<span ng-show='char.skillmults.persuasion===1' class='greenx' ng-click='char.skillmults.persuasion=2;calculate();'>&#x2714;</span>
-<span ng-show='char.skillmults.persuasion===2' class='greenx' ng-click='char.skillmults.persuasion=0;calculate();'>&#x271A;</span>
-<span style="font-weight:bold;font-size:1.3em;"> {{skills.persuasion}}</span> Persuasion
-<br>
-<span ng-show='char.skillmults.religion===0' class='redx' ng-click='char.skillmults.religion=1;calculate();'>&#x2716;</span>
-<span ng-show='char.skillmults.religion===1' class='greenx' ng-click='char.skillmults.religion=2;calculate();'>&#x2714;</span>
-<span ng-show='char.skillmults.religion===2' class='greenx' ng-click='char.skillmults.religion=0;calculate();'>&#x271A;</span>
-<span style="font-weight:bold;font-size:1.3em;"> {{skills.religion}}</span> Religion
-<br>
-<span ng-show='char.skillmults.sleight===0' class='redx' ng-click='char.skillmults.sleight=1;calculate();'>&#x2716;</span>
-<span ng-show='char.skillmults.sleight===1' class='greenx' ng-click='char.skillmults.sleight=2;calculate();'>&#x2714;</span>
-<span ng-show='char.skillmults.sleight===2' class='greenx' ng-click='char.skillmults.sleight=0;calculate();'>&#x271A;</span>
-<span style="font-weight:bold;font-size:1.3em;"> {{skills.sleight}}</span> Sleight of Hand
-<br>
-<span ng-show='char.skillmults.stealth===0' class='redx' ng-click='char.skillmults.stealth=1;calculate();'>&#x2716;</span>
-<span ng-show='char.skillmults.stealth===1' class='greenx' ng-click='char.skillmults.stealth=2;calculate();'>&#x2714;</span>
-<span ng-show='char.skillmults.stealth===2' class='greenx' ng-click='char.skillmults.stealth=0;calculate();'>&#x271A;</span>
-<span style="font-weight:bold;font-size:1.3em;"> {{skills.stealth}}</span> Stealth
-<br>
-<span ng-show='char.skillmults.survival===0' class='redx' ng-click='char.skillmults.survival=1;calculate();'>&#x2716;</span>
-<span ng-show='char.skillmults.survival===1' class='greenx' ng-click='char.skillmults.survival=2;calculate();'>&#x2714;</span>
-<span ng-show='char.skillmults.survival===2' class='greenx' ng-click='char.skillmults.survival=0;calculate();'>&#x271A;</span>
-<span style="font-weight:bold;font-size:1.3em;"> {{skills.survival}}</span> Survival
+<div ng-repeat="skill in derived.skills">
+	<span ng-show="skill.mult===0" class='redx' ng-click="skill.mult=1;calculate();">&#x2716;</span>
+	<span ng-show="skill.mult===1" class='greenx' ng-click="skill.mult=2;calculate();">&#x2714;</span>
+	<span ng-show="skill.mult===2" class='greenx' ng-click="skill.mult=0;calculate();">&#x271A;</span>
+	<span style="font-weight:bold;font-size:1.3em;"> {{skill.bonus}}</span> {{skill.name}}
+</div>
 </td>
 
 <td style="padding-left:20px;" class="top">
@@ -513,67 +125,55 @@ button{
 			<div class="label" style="padding:8px 10px">
 				<input type='text' class='hidden right' ng-model='char.hp'/>
 				<span>&nbsp;/&nbsp;</span>
-				<input type='text' class='hidden left' ng-model='char.maxhp'/>
+				<input type='text' class='hidden left' ng-model='char.maxHp'/>
 				</div>
 		</td>
 	</tr></table>
 </div>
 <br>
-<div>
-	<table style="border:1px solid black;width:180px;"><tr>
-		<td>
-			<span class="bordertitle label">Hit Dice</span>
-			<div class="label" style="padding:2px 8px">
-				<input type='text' class='hidden right' ng-model='char.hitdiceamount'/>
-				<span>d</span>
-				<input type='text' class='hidden left' ng-model='char.hitdice'/>
-			</div>
-		</td>
-	</tr></table>
-</div>
-<br><br>
+<br>
 
 <div class='label' style='text-align:left;'>Saving Throws</div>
 <span ng-show='char.saves.str===0' class='redx' ng-click='char.saves.str=1;calculate();'>&#x2716;</span>
 <span ng-show='char.saves.str===1' class='greenx' ng-click='char.saves.str=0;calculate();'>&#x2714;</span>
-<span style="font-weight:bold;font-size:1.3em;"> {{saves.str}}</span> Strength
+<span style="font-weight:bold;font-size:1.3em;"> {{derived.saves.str}}</span> Strength
 <br>
 <span ng-show='char.saves.dex===0' class='redx' ng-click='char.saves.dex=1;calculate();'>&#x2716;</span>
 <span ng-show='char.saves.dex===1' class='greenx' ng-click='char.saves.dex=0;calculate();'>&#x2714;</span>
-<span style="font-weight:bold;font-size:1.3em;"> {{saves.dex}}</span> Dexterity
+<span style="font-weight:bold;font-size:1.3em;"> {{derived.saves.dex}}</span> Dexterity
 <br>
 <span ng-show='char.saves.con===0' class='redx' ng-click='char.saves.con=1;calculate();'>&#x2716;</span>
 <span ng-show='char.saves.con===1' class='greenx' ng-click='char.saves.con=0;calculate();'>&#x2714;</span>
-<span style="font-weight:bold;font-size:1.3em;"> {{saves.con}}</span> Constitution
+<span style="font-weight:bold;font-size:1.3em;"> {{derived.saves.con}}</span> Constitution
 <br>
 <span ng-show='char.saves.int===0' class='redx' ng-click='char.saves.int=1;calculate();'>&#x2716;</span>
 <span ng-show='char.saves.int===1' class='greenx' ng-click='char.saves.int=0;calculate();'>&#x2714;</span>
-<span style="font-weight:bold;font-size:1.3em;"> {{saves.int}}</span> Intelligence
+<span style="font-weight:bold;font-size:1.3em;"> {{derived.saves.int}}</span> Intelligence
 <br>
 <span ng-show='char.saves.wis===0' class='redx' ng-click='char.saves.wis=1;calculate();'>&#x2716;</span>
 <span ng-show='char.saves.wis===1' class='greenx' ng-click='char.saves.wis=0;calculate();'>&#x2714;</span>
-<span style="font-weight:bold;font-size:1.3em;"> {{saves.wis}}</span> Wisdom
+<span style="font-weight:bold;font-size:1.3em;"> {{derived.saves.wis}}</span> Wisdom
 <br>
 <span ng-show='char.saves.cha===0' class='redx' ng-click='char.saves.cha=1;calculate();'>&#x2716;</span>
 <span ng-show='char.saves.cha===1' class='greenx' ng-click='char.saves.cha=0;calculate();'>&#x2714;</span>
-<span style="font-weight:bold;font-size:1.3em;"> {{saves.cha}}</span> Charisma
+<span style="font-weight:bold;font-size:1.3em;"> {{derived.saves.cha}}</span> Charisma
 
 <br><br><br>
 <table><tr><td>Copper:</td><td>
 	<span class='subtract noselect' ng-click="decrCopper()">-</span>
-	<input type='text' class='medium' number ng-model='char.copper'/>
+	<span class='money'>{{getCopper()}}</span>
 	<span class='add noselect' ng-click="incrCopper()">&#x271A;</span></td></tr>
 <tr><td>Silver:</td><td>
 	<span class='subtract noselect' ng-click="decrSilver()">-</span>
-	<input type='text' class='medium' number ng-model='char.silver'/>
+	<span class='money' >{{getSilver()}}</span>
 	<span class='add noselect' ng-click="incrSilver()">&#x271A;</span></td></tr>
 <tr><td>Gold:</td><td>
 	<span class='subtract noselect' ng-click="decrGold()">-</span>
-	<input type='text' class='medium' number ng-model='char.gold'/>
+	<span class='money' >{{getGold()}}</span>
 	<span class='add noselect' ng-click="incrGold()">&#x271A;</span></td></tr>
 <tr><td>Platinum:</td><td>
 	<span class='subtract noselect' ng-click="char.platinum=char.platinum-1">-</span>
-	<input type='text' class='medium' number ng-model='char.platinum'/>
+	<span class='money' >{{getPlatinum()}}</span>
 	<span class='add noselect' ng-click="char.platinum=char.platinum+1">&#x271A;</span></td></tr>
 </table>
 
@@ -626,6 +226,7 @@ button{
 </tr></tbody></table>
 </div>
 
+<!--
 <div ng-show="tab=='abilities'">
 <table style="width:100%;">
 <thead class="header"><tr>
@@ -688,6 +289,7 @@ button{
 </div>
 <!-- End Abilities -->
 
+<!--
 <div ng-show="tab=='equipment'">
 <table style="width:100%;">
 <thead class="header"><tr>
@@ -747,7 +349,7 @@ button{
 <!-- End equipment -->
 
 
-
+<!--
 
 <div ng-show="tab=='spells'">
 <table style="width:100%;">
@@ -812,8 +414,9 @@ button{
 </tr>
 </tbody></table>
 </div>
-<!-- End Abilities -->
+<!-- End Spells -->
 
+<!--
 <div ng-show="tab=='combat'">
 <table style="width:100%;"><thead class="label center"><tr>
 <th>Abilities</th><th>Spells</th><th>Items</th><th>Spell Preview</th>
@@ -881,7 +484,6 @@ button{
 
 	<td style="vertical-align:top;">
 	<div>
-		<!--Initiative order-->
 		<form ng-submit="addInitiative()">
 			<input type='text' placeholder="Enter Name" ng-model="newInitiative"/>
 		</form>
@@ -898,6 +500,7 @@ button{
 	</tbody>
 	</table>
 </div>
+<!-- End Combat -->
 
 <div ng-show="tab=='notes'">
 	<textarea ng-model='char.notes' style="margin-left: -4px;margin-top: 10px;width: 100%;height: 800px;"></textarea>
@@ -905,10 +508,10 @@ button{
 
 <div ng-show="tab=='raw'">{{char}}</div>
 
+<!--
 <div ng-show="tab=='reference'">
 	<span class="tab" ng-click="subtab='spells'" ng-class="{'activetab':subtab=='spells'}">Spells</span>
-	<!--<span class="tab" ng-click="subtab='creatures'" ng-class="{'activetab':subtab=='creatures'}">Creatures</span>-->
-
+	
 	<div ng-show="subtab='spells'">
 	<table style="width:100%;"><thead class='label'><tr>
 		<th>Spells</th>
@@ -962,10 +565,22 @@ button{
 	
 	</div>
 </div>
+<!-- End Reference -->
+<div class="modal" ng-class="{'show':currentChoices}">
+	<div class="prompt">{{prompt}}</div>
+	<br>
+	<hr>
+	<br>
+	<div class="choice" ng-repeat="choice in currentChoices" ng-click="selectChoice(choice)">{{choice.name || choice}}</div>
+</div>
+
 
 </div>
 </div>
-
+<script src="./packages.js"></script>
+<script src="./spells.js"></script>
 <script src="./stats.js"></script>
+
+
 </body>
 </html>
