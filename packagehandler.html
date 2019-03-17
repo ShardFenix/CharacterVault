@@ -262,7 +262,7 @@ function finishLevelUp(){
 
 var goToNextStep=function(){
 	$scope.updateStep++;
-	if ($scope.chosenClass.levels[$scope.chosenLevel].updates.length==$scope.updateStep){
+	if ($scope.chosenClass.levels[$scope.chosenLevel].updates.length<=$scope.updateStep){
 		//done with this levelup. See if we can apply a subclass level
 		if ($scope.chosenClass.subclass){
 			//this means we just finished applying a subclass level. Skip to end
@@ -307,14 +307,14 @@ var setupForCurrentStep=function(){
 		}
 		//if, after all of this, there are no choices to make, send in something bogus
 		if ($scope.currentChoices.length==0){
-			step.action($scope.char,$scope.derived,null);
+			step.action($scope.char,$scope.derived,null,$scope);
 			goToNextStep();
 		} else {
 			$scope.prompt=step.choicePrompt;
 		}
 	} else {
 		//just do the update
-		step.action($scope.char,$scope.derived,null);
+		step.action($scope.char,$scope.derived,null,$scope);
 		goToNextStep();
 	}
 }
@@ -349,7 +349,7 @@ $scope.selectChoice=function(choice){
 	} else {
 		//they chose an option within a class package
 		var step = currentStep();
-		step.action($scope.char,$scope.derived,choice);
+		step.action($scope.char,$scope.derived,choice,$scope);
 		goToNextStep();
 	}
 };
