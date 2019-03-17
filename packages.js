@@ -1,3 +1,12 @@
+function hasProficiency(char,name){
+	for (var i=0;i<char.proficiencies.length;i++){
+		if (char.proficiencies[i]===name){
+			return true;
+		}
+	}
+	return false;
+}
+
 function findItem(itemname){
 	for (var i=0;i<window.items.length;i++){
 		if (window.items[i].name===itemname){
@@ -49,11 +58,13 @@ function listSkills(){
 	return result;
 };
 
-function listInstruments(){
+function listNonProficientInstruments(char){
 	var result=[];
 	for (var i=0;i<window.items.length;i++){
 		if (window.items[i].categories.indexOf('Instrument')!=-1){
-			result.push(window.items[i].name);
+			if (!hasProficiency(char,window.items[i].proficiencies[0])){
+				result.push(window.items[i].name);
+			}
 		}
 	}
 	return result;
@@ -69,6 +80,16 @@ function listNonProficientSkills(char){
 				}
 				j=9999;
 			}
+		}
+	}
+	return result;
+}
+
+function listProficientSkills(char){
+	var result=[];
+	for (var i=0;i<char.skills.length;i++){
+		if (char.skills[i].mult===1) {
+			result.push(char.skills[i].name);
 		}
 	}
 	return result;
@@ -114,9 +135,9 @@ function getUnknownLanguages(char){
 };
 
 function addSubclass(char,classname,subclass){
-	for (var i=0;i<char.classes.length;i++){
-		if (char.classes[i].name==classname){
-			char.classes[i].subclass=subclass;
+	for (var clas of char.classes){
+		if (clas.name===classname){
+			clas.subclass=subclass;
 			return;
 		}
 	}
@@ -139,11 +160,45 @@ Array.prototype.upush=function(element){
 
 function listSpecializations(classname){
 	var result=[];
-	for (var i=0;i<window.subclasses.length;i++){
-		result.push(window.subclasses[i].classname);
+	for (var subclass of window.subclasses){
+		result.push(subclass.subclass);
 	}
 	return result;
 }
+
+function findPassive(name){
+	for (var passive of window.passives){
+		if (passive.name===name){
+			return passive;
+		}
+	}
+	return null;
+}
+
+function listAllUnknownSpells(char,derived){
+	var result=[];
+	for (var spell of window.spells){
+		var found=false;
+		for (var clas of char.classes){
+			for (var cspell of clas.spells.known){
+				if (cspell.name===spell.name){
+					found=true;
+					break;
+				}
+			}
+			if (found)break;
+		}
+		if (!found){
+			result.add(spell.name);
+		}
+	}
+	return result;
+}
+	
+function addSpell(char,spellname,forClass){
+	
+}
+
 
 window.languages=['Common','Elven','Dwarven','Gnomish','Halfling','Giant','Orc','Infernal','Primordial','Abyssal','Celestial','Draconic','Deep Speech','Sylvan','Undercommon'];
 window.feats=[];
@@ -168,6 +223,28 @@ window.skills=[
 	{name:"Sleight of Hand",attribute:"dex"},
 	{name:"Stealth",attribute:"dex"},
 	{name:"Survival",attribute:"wis"}
+];
+window.passives=[
+	{
+		name:"Jack of All Trades",
+		description:"",
+		apply:function(char,$scope){
+			for (var i=0;i<char.skills.length;i++){
+				if (char.skills[i].mult==0){
+					for (var j=0;j<$scope.derived.skills.length;j++){
+						if ($scope.derived.skills[j].name === char.skills[i].name){
+							$scope.derived.skills[j].bonus += Math.floor($scope.derived.proficiency/2);
+						}
+					}
+				}
+			}
+		}
+	},{
+		name:"Song of Rest",
+		description:"You can use soothing music or oration to help revitalize your wounded allies during a short rest. If you or any friendly creatures who can hear your performance regain hit points by spending Hit Dice at the end of the short rest, each of those creatures regains an extra 1d${ladder(clevel('Bard'),0,6,9,8,13,19,17,12)} hit points.",
+		apply:null
+	}
+	
 ];
 
 window.items=[
@@ -233,21 +310,21 @@ window.classes=
 					},
 					{
 						"choicePrompt":"Choose an instrument proficiency.",
-						"choices":[listInstruments],
+						"choices":[listNonProficientInstruments],
 						"action":function(char,derived,choice){
 							char.proficiencies.upush(choice);
 						}
 					},
 					{
 						"choicePrompt":"Choose an instrument proficiency.",
-						"choices":[listInstruments],
+						"choices":[listNonProficientInstruments],
 						"action":function(char,derived,choice){
 							char.proficiencies.upush(choice);
 						}
 					},
 					{
 						"choicePrompt":"Choose an instrument proficiency.",
-						"choices":[listInstruments],
+						"choices":[listNonProficientInstruments],
 						"action":function(char,derived,choice){
 							char.proficiencies.upush(choice);
 						}
@@ -344,20 +421,55 @@ window.subclasses=
 						"choicePrompt":"Choose a skill to become proficient in:",
 						"choices":[listNonProficientSkills],
 						"action":function(char,derived,choice){
-							setSkillProficiency(char,choice);
+							addProficiency(char,choice);
 						}
 					},{
 						"choicePrompt":"Choose a skill to become proficient in:",
 						"choices":[listNonProficientSkills],
 						"action":function(char,derived,choice){
-							setSkillProficiency(char,choice);
+							addProficiency(char,choice);
 						}
 					},{
 						"choicePrompt":"Choose a skill to become proficient in:",
 						"choices":[listNonProficientSkills],
 						"action":function(char,derived,choice){
-							setSkillProficiency(char,choice);
+							addProficiency(char,choice);
 							char.passives.push(findPassive("Cutting Words"));
+						}
+					},{
+						"choicePrompt":"Choose a skill expertise (proficiency will be doubled for this skill):",
+						"choices":[listProficientSkills],
+						"action":function(char,derived,choice){
+							addExpertise(char,choice);
+						}
+					},{
+						"choicePrompt":"Choose a skill expertise (proficiency will be doubled for this skill):",
+						"choices":[listProficientSkills],
+						"action":function(char,derived,choice){
+							addExpertise(char,choice);
+						}
+					},{
+						"choicePrompt":"Choose a skill expertise (proficiency will be doubled for this skill):",
+						"choices":[listProficientSkills],
+						"action":function(char,derived,choice){
+							addExpertise(char,choice);
+						}
+					}
+				]
+			},{},{},
+			{//6
+				updates:[
+					{
+						choicePrompt:"Learn a spell from any class:",
+						choices:[listAllUnknownSpells],
+						action:function(char,derived,choice){
+							addSpell(char,choice,'Bard');
+						}
+					},{
+						choicePrompt:"Learn a spell from any class:",
+						choices:[listAllUnknownSpells],
+						action:function(char,derived,choice){
+							addSpell(char,choice,'Bard');
 						}
 					}
 				]

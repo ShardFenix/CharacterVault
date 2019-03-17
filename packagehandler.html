@@ -20,11 +20,11 @@ div.modal{
     left: 10%;
 	top: -60%;
 	transition: 0.5s ease all;
+	text-align:center;
 }
 
 div.modal.show{
 	top: 10%;
-	
 }
 
 div.prompt{
@@ -41,6 +41,9 @@ div.choice{
     background-color: green;
     color: white;
     text-align: center;
+	display: inline-block;
+    width: 44%;
+    margin: 2px 1%;
 }
 
 </style>
@@ -171,6 +174,7 @@ var packages={
 	feats:window.feats,
 	spells:window.spells,
 	races:window.races,
+	subclasses:window.subclasses,
 };
 $scope.messages=[];
 
@@ -219,8 +223,8 @@ var findClass=function(name){
 }
 
 var findSubclass=function(classname, subclass){
-	for (var i=0;i<packages.sunblasses.length;i++){
-		if (packages.subclasses[i].classname==classname && packages.subclassws[i].subclass==subclass){
+	for (var i=0;i<packages.subclasses.length;i++){
+		if (packages.subclasses[i].classname==classname && packages.subclasses[i].subclass==subclass){
 			return packages.subclasses[i];
 		}
 	}
@@ -244,13 +248,30 @@ var currentStep=function(){
 	return $scope.chosenClass.levels[$scope.chosenLevel].updates[$scope.updateStep];
 }
 
+function finishLevelUp(){
+	$scope.char.level++;
+	if ($scope.chosenLevel>0){
+		getCharacterClass($scope.chosenClassName).level=$scope.chosenLevel;
+	}
+	$scope.chosenClass=null;
+	$scope.chosenLevel=null;
+	$scope.updateStep=-1;
+	$scope.currentChoices=null;
+	$scope.chosenClassName=null;
+}
+
 var goToNextStep=function(){
 	$scope.updateStep++;
 	if ($scope.chosenClass.levels[$scope.chosenLevel].updates.length==$scope.updateStep){
 		//done with this levelup. See if we can apply a subclass level
+		if ($scope.chosenClass.subclass){
+			//this means we just finished applying a subclass level. Skip to end
+			finishLevelUp();
+			return;
+		}
 		var sc=getCharacterClass($scope.chosenClass.classname).subclass;
 		if (sc){
-			sc = findSubclass($scope.chosenClass,sc);
+			sc = findSubclass($scope.chosenClass.classname,sc);
 			if (sc){
 				$scope.updateStep=0;
 				$scope.chosenClass=sc;
@@ -259,13 +280,8 @@ var goToNextStep=function(){
 			}
 		} else {
 			//done with levelup
-			$scope.char.level++;
-			getCharacterClass($scope.chosenClassName).level=$scope.chosenLevel;
-			$scope.chosenClass=null;
-			$scope.chosenLevel=null;
-			$scope.updateStep=-1;
-			$scope.currentChoices=null;
-			$scope.chosenClassName=null;
+			finishLevelUp();
+			return;
 		}
 	} else {
 		setupForCurrentStep();
@@ -309,7 +325,7 @@ $scope.selectChoice=function(choice){
 		//they chose a class
 		$scope.chosenClassName=choice;
 		$scope.chosenClass=findClass(choice);
-		$scope.chosenLevel=nextLevel($scope.char,choice);
+		$scope.chosenLevel=nextLevel(choice);
 		$scope.updateStep=0;
 		//add the class entry on the character object
 		if ($scope.chosenLevel==0){
@@ -356,9 +372,18 @@ $scope.selectChoice=function(choice){
 </div>
 
 <span class="button" ng-click="levelUpStart()">Level Up</span>
-
+<br><br>
 {{char}}
-
+<br>
+{{derived}}
+<br><br>
+Chosen class: {{chosenClass}}
+<br>
+Chosen level: {{chosenLevel}}
+<br>
+update step: {{updateStep}}
+<br>
+Chosen class name: {{chosenClassName}}
 <br><br><br><br>
 <div ng-repeat="message in messages">{{message}}</div>
 
