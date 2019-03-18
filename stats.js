@@ -489,6 +489,7 @@ $scope.add=function(item,to){
 			return;
 		}
 	}
+	item.count=n;
 	to.push(angular.copy(item));
 }
 
@@ -655,6 +656,7 @@ $scope.updateSpellFilter=function(){
 	}
 }
 
+$scope.calculate();
 $scope.updateSpellFilter();
 
 }]);

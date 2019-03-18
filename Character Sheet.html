@@ -27,40 +27,52 @@
 
 <table style="width:100%;"><tbody><tr>
 <td style="width:100px;">
-<div style="width:60px;text-align:center;">
+<div class="attrbox" style="text-align:center;">
 <label><span class='label'>STR</span>
-<input type='text' class='big' disabled ng-model='modifiers.str'/>
-<input type='text' class='small round' ng-model='char.attributes.str' number ng-change='calculate()'/>
-</label></div><br>
+<br>
+<span class='attrmod'>{{derived.modifiers.str}}</span>
+<br>
+<input type='text' class='attrbase' ng-model='char.attributes.str' number ng-change='calculate()'/>
+</label></div>
 
-<div style="width:60px;text-align:center;">
+<div class="attrbox" style="text-align:center;">
 <label><span class='label'>DEX</span>
-<input type='text' class='big' disabled ng-model='modifiers.dex'/>
-<input type='text' class='small round' ng-model='char.attributes.dex' number ng-change='calculate()'/>
-</label></div><br>
+<br>
+<span class='attrmod'>{{derived.modifiers.dex}}</span>
+<br>
+<input type='text' class='attrbase' ng-model='char.attributes.dex' number ng-change='calculate()'/>
+</label></div>
 
-<div style="width:60px;text-align:center;">
+<div class="attrbox" style="text-align:center;">
 <label><span class='label'>CON</span>
-<input type='text' class='big' disabled ng-model='modifiers.con'/>
-<input type='text' class='small round' ng-model='char.attributes.con' number ng-change='calculate()'/>
-</label></div><br>
+<br>
+<span class='attrmod'>{{derived.modifiers.con}}</span>
+<br>
+<input type='text' class='attrbase' ng-model='char.attributes.con' number ng-change='calculate()'/>
+</label></div>
 
-<div style="width:60px;text-align:center;">
+<div class="attrbox" style="text-align:center;">
 <label><span class='label'>INT</span>
-<input type='text' class='big' disabled ng-model='modifiers.int'/>
-<input type='text' class='small round' ng-model='char.attributes.int' number ng-change='calculate()'/>
-</label></div><br>
+<br>
+<span class='attrmod'>{{derived.modifiers.int}}</span>
+<br>
+<input type='text' class='attrbase' ng-model='char.attributes.int' number ng-change='calculate()'/>
+</label></div>
 
-<div style="width:60px;text-align:center;">
+<div class="attrbox" style="text-align:center;">
 <label><span class='label'>WIS</span>
-<input type='text' class='big' disabled ng-model='modifiers.wis'/>
-<input type='text' class='small round' ng-model='char.attributes.wis' number ng-change='calculate()'/>
-</label></div><br>
+<br>
+<span class='attrmod'>{{derived.modifiers.wis}}</span>
+<br>
+<input type='text' class='attrbase' ng-model='char.attributes.wis' number ng-change='calculate()'/>
+</label></div>
 
-<div style="width:60px;text-align:center;">
+<div class="attrbox" style="text-align:center;">
 <label><span class='label'>CHA</span>
-<input type='text' class='big' disabled ng-model='modifiers.cha'/>
-<input type='text' class='small round' ng-model='char.attributes.cha' number ng-change='calculate()'/>
+<br>
+<span class='attrmod'>{{derived.modifiers.cha}}</span>
+<br>
+<input type='text' class='attrbase' ng-model='char.attributes.cha' number ng-change='calculate()'/>
 </label></div>
 
 </div>
@@ -84,7 +96,7 @@
 		</td>
 		<td style="width:150px;text-align:center;">
 			<label>
-				<span class='label'>Armor Class</span><br>
+				<span class='label'>Armor Class (AC)</span><br>
 				<input type='text' class='medium' ng-model='char.ac'/>
 			</label>
 		</td>
@@ -105,7 +117,7 @@
 <table>
 <tr>
 	
-<td colspan=2 class="top">
+<td colspan=2 class="top" style="min-width:160px;">
 <br>
 <div class='label' style='text-align:left;'>Skills</div>
 <div ng-repeat="skill in derived.skills">
@@ -209,20 +221,6 @@
 	</div>
 </td>
 
-
-<td class="top center">
-<br>
-<div style="border:1px solid black;padding:10px;">
-<div class="label bordertitle">Save/Load</div>
-<input type='text' ng-model='char.name' placeholder='Character Name'/>
-<br>
-<button ng-click="save()">Save</button>
-<br>
-<br><br><br>
-	
-<button ng-repeat='item in saveList track by $index' ng-click="load($index)">{{item.name}}</button>
-</div>
-</td>
 </tr></tbody></table>
 </div>
 
@@ -289,7 +287,7 @@
 </div>
 <!-- End Abilities -->
 
-<!--
+
 <div ng-show="tab=='equipment'">
 <table style="width:100%;">
 <thead class="header"><tr>
@@ -323,18 +321,17 @@
 
 
 <td width="20%" style="vertical-align:top;text-align:center;">
-	<input type="text" ng-model="item.name"/>
+	<input type="text" ng-model="item.name" placeholder="Item name..."/>
 	<br>
-	<input type="text" ng-model="item.count"/>
+	<input type="text" ng-model="item.count" placeholder="Quantity..."/>
 	<br>
-	<button ng-click="add(item,char.inventory)">&laquo; Inventory</button>
-	<br>
-	<button ng-click="add(item,char.proficiencies)">Proficiencies &raquo;</button>
+	<span class="button" ng-click="add(item,char.inventory)">&laquo; Inventory</span>
+	<span class="button" ng-click="add(item,char.proficiencies)">Proficiencies &raquo;</span>
 	<br>
 	<button style="display:none"></button>
 </td>
 
-<td width="20%" style="vertical-align:top;">
+<td width="20%" style="vertical-align:top;text-align:center;">
 	<input ng-model='profSearch' placeholder="Search..."
 	<div class="leftmenu">
 		<div class="greenback item" ng-repeat="item in char.proficiencies | filter:profSearch | orderBy:'name' track by item.name ">
@@ -574,6 +571,15 @@
 	<div class="choice" ng-repeat="choice in currentChoices" ng-click="selectChoice(choice)">{{choice.name || choice}}</div>
 </div>
 
+<div class="modal" ng-class="{'show':showSaveMenu}">
+	<div class="label bordertitle">Save/Load</div>
+	<input type='text' ng-model='char.name' placeholder='Character Name'/>
+	<br>
+	<button ng-click="save()">Save</button>
+	<br><br><br><br>
+	
+	<button ng-repeat='item in saveList track by $index' ng-click="load($index)">{{item.name}}</button>
+</div>
 
 </div>
 </div>

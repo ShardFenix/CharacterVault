@@ -348,3 +348,27 @@ div.choice{
     margin: 2px 1%;
 }
 
+div.attrbox{
+    background-image: url(./images/attr.png);
+    background-size: cover;
+    width: 100px;
+    height: 117px;
+    margin-bottom: 10px;
+}
+
+.attrmod{
+	font-size:3em;
+	width:50px;
+	border:none;
+	padding:12px 4px;
+	cursor:pointer;
+	text-align:center;
+	margin-top:-3px;
+}
+.attrbase{
+	border:none;
+	font-size:1em;
+	width:30px;
+	text-align:center;
+	background-color:rgba(0,0,0,0);
+}
