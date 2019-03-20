@@ -171,6 +171,7 @@ function finishLevelUp(){
 	$scope.updateStep=-1;
 	$scope.currentChoices=null;
 	$scope.chosenClassName=null;
+	$scope.calculate();
 }
 
 var goToNextStep=function(){
@@ -413,6 +414,10 @@ $scope.getPlatinum=function(){
 	return Math.floor($scope.char.money/1000);
 }
 
+$scope.unequip=function(item){
+	delete item.equipped;
+}
+
 $scope.increment=function(item){
 	item.count++;
 	event.stopPropagation();
@@ -577,6 +582,18 @@ $scope.save=function(){
 		if ($scope.saveId==-1){
 			$scope.saveId=$scope.saveList.length;
 		}
+		//remove functions from abilities and passives, since they cant be serialized
+		//this has the side-effect that the prototype object gets its function deleted
+		for (passive of $scope.char.passives){
+			delete	passive.onShortRest;
+			delete passive.onLongRest;
+			delete passive.apply;
+		}
+		for (ability of $scope.char.abilities){
+			delete	ability.onShortRest;
+			delete ability.onLongRest;
+			delete ability.apply;
+		}
 		localStorage.setItem("dnd"+$scope.saveId,JSON.stringify($scope.char));
 		$scope.loadList();
 	}
@@ -599,6 +616,25 @@ $scope.load=function(num){
 	if (typeof(Storage) !== "undefined" && (num || num==0)) {
 		$scope.char = JSON.parse(localStorage.getItem("dnd"+num));
 		$scope.saveId=num;
+		//hook up passive and ability functions, since those can't be serialized
+		for (passive of $scope.char.passives){
+			for (p of packages.passives){
+				if (p.name===passive.name){
+					passive.onShortRest=p.onShortRest;
+					passive.onLongRest=p.onLongRest;
+					passive.apply=p.apply;
+				}
+			}
+		}
+		for (passive of $scope.char.abilities){
+			for (p of packages.passives){
+				if (p.name===passive.name){
+					passive.onShortRest=p.onShortRest;
+					passive.onLongRest=p.onLongRest;
+					passive.apply=p.apply;
+				}
+			}
+		}
 		$scope.calculate();
 	}
 }
@@ -658,5 +694,6 @@ $scope.updateSpellFilter=function(){
 
 $scope.calculate();
 $scope.updateSpellFilter();
+
 
 }]);

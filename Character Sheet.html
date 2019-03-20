@@ -224,7 +224,7 @@
 </tr></tbody></table>
 </div>
 
-<!--
+
 <div ng-show="tab=='abilities'">
 <table style="width:100%;">
 <thead class="header"><tr>
@@ -300,7 +300,7 @@
 <tbody><tr>
 <td width="20%" style="vertical-align:top;">
 	<div class="leftmenu">
-		<div class="yellowback item" ng-repeat="item in char.equipment | orderBy:'name' track by item.name " ng-click="move(item,char.equipment,char.inventory)">
+		<div class="yellowback item" ng-repeat="item in char.inventory | orderBy:'name' track by $index" ng-click="unequip(item)" ng-if="item.equipped">
 			<span style="font-weight:bold;">{{item.name}}</span>
 			<span>({{item.count}})</span>
 			<span class="deletebutton" ng-click="delete(item,char.equipment,$event)">&times;</span>
@@ -311,7 +311,7 @@
 
 <td width="20%" style="vertical-align:top;">
 	<div class="leftmenu">
-		<div class="yellowback item" ng-repeat="item in char.inventory | orderBy:'name' track by item.name " ng-click="move(item,char.inventory,char.equipment)">
+		<div class="yellowback item" ng-repeat="item in char.inventory | orderBy:'name' track by $index" ng-click="item.equipped=true" ng-if="!(item.equipped)">
 			<span style="font-weight:bold;">{{item.name}}</span>
 			<span>({{item.count}})</span>
 			<span class="deletebutton" ng-click="delete(item,char.inventory,$event)">&times;</span>
@@ -326,7 +326,7 @@
 	<input type="text" ng-model="item.count" placeholder="Quantity..."/>
 	<br>
 	<span class="button" ng-click="add(item,char.inventory)">&laquo; Inventory</span>
-	<span class="button" ng-click="add(item,char.proficiencies)">Proficiencies &raquo;</span>
+	<span class="button" ng-click="char.proficiencies.upush(item.name)">Proficiencies &raquo;</span>
 	<br>
 	<button style="display:none"></button>
 </td>
@@ -334,8 +334,8 @@
 <td width="20%" style="vertical-align:top;text-align:center;">
 	<input ng-model='profSearch' placeholder="Search..."
 	<div class="leftmenu">
-		<div class="greenback item" ng-repeat="item in char.proficiencies | filter:profSearch | orderBy:'name' track by item.name ">
-			<span style="font-weight:bold;">{{item.name}}</span>
+		<div class="greenback item" ng-repeat="item in char.proficiencies | filter:profSearch ">
+			<span style="font-weight:bold;">{{item}}</span>
 			<span class="deletebutton" ng-click="delete(item,char.proficiencies,$event)">&times;</span>
 		</div>
 	</div>
