@@ -82,34 +82,40 @@
 <table style="width:100%">
 	<tr>
 		<td style="width:150px;text-align:center;" class="label">
-			<label>
-				<span class='label'>Level</span><br>
-				<input type='text' class='medium' ng-model='char.level' number />
-			</label>
+			<div>
+				<label>
+					<span class='label'>Level</span><br>
+					<input type='text' class='statbox' ng-model='char.level' number />
+				</label>
+			</div>
 			<span class="button" ng-click="levelUpStart()">Level Up</span>
 		</td>
+		<td style="width:100px;text-align:center;">
+			<div class="acbox">
+				<label>
+					<br>
+					<span class='label'>AC</span>
+					<br>
+					<input type='text' style="font-size:2.2em;background-color:rgba(0,0,0,0)" class='statmod' ng-model='char.ac'/>
+				</label>
+			</div>
+		</td>
 		<td style="width:150px;text-align:center;">
 			<label>
-				<span class='label'>Proficiency Bonus</span><br>
-				<input type='text' class='medium' disabled ng-model='derived.proficiency'/>
+				<span class='label'>Proficiency<br>Bonus</span><br>
+				<input type='text' class='statbox' disabled ng-model='derived.proficiency'/>
 			</label>
 		</td>
 		<td style="width:150px;text-align:center;">
 			<label>
-				<span class='label'>Armor Class (AC)</span><br>
-				<input type='text' class='medium' ng-model='char.ac'/>
-			</label>
-		</td>
-		<td style="width:150px;text-align:center;">
-			<label>
-				<span class='label'>Initiative Bonus</span><br>
-				<input type='text' class='medium' ng-model='derived.initiative'/>
+				<span class='label'>Initiative<br>Bonus</span><br>
+				<input type='text' class='statbox' ng-model='derived.initiative'/>
 			</label>
 		</td>
 		<td style="width:150px;text-align:center;">
 			<label>
 				<span class='label'>Move<br>Speed</span><br>
-				<input type='text' class='medium' ng-model='char.speed'/>
+				<input type='text' class='statbox' ng-model='char.speed'/>
 			</label>
 		</td>
 	</tr>

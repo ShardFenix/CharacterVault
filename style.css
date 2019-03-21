@@ -356,6 +356,32 @@ div.attrbox{
     margin-bottom: 10px;
 }
 
+div.acbox{
+    background-image: url(./images/ac.png);
+    background-size: cover;
+    width: 100px;
+    height: 115px;
+}
+
+input.statbox {
+    background-image: url(./images/statbox.png);
+    background-size: cover;
+    border: none;
+    width: 96px;
+    height: 45px;
+    text-align: center;
+    font-size: 2em;
+}
+
+.statmod{
+    font-size: 2em;
+    width: 50px;
+    border: none;
+    padding: 12px 4px;
+    cursor: pointer;
+    text-align: center;
+    margin-top: -3px;
+}
 .attrmod{
 	font-size:3em;
 	width:50px;
