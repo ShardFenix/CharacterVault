@@ -8,9 +8,17 @@ function hasProficiency(char,name){
 }
 
 function findItem(itemname){
-	for (var i=0;i<window.items.length;i++){
-		if (window.items[i].name===itemname){
-			return window.items[i];
+	for (var item of window.items){
+		if (item.name===itemname){
+			return item;
+		}
+	}
+}
+
+function findAbility(name){
+	for (var abil of window.abilities){
+		if (abil.name===name){
+			return abil;
 		}
 	}
 }
@@ -195,6 +203,30 @@ function listAllUnknownSpells(char,derived){
 	return result;
 }
 
+function listLearnableSpellsForClass(char,classname){
+	var result=[];
+	for (var spell of window.spells){
+		var found=false;
+		for (var clas of char.classes){
+			if (clas.name==classname){
+				for (var cspell of clas.spells.known){
+					if (cspell.name===spell.name){
+						found=true;
+						break;
+					}
+				}
+			}
+//TODO UNFINISHED
+			
+			if (found)break;
+		}
+		if (!found){
+			result.add(spell.name);
+		}
+	}
+	return result;
+}
+
 function getAttributesBelow20(char){
 	var result=[];
 	if (char.attributes.str<20){
@@ -238,7 +270,7 @@ function getUnknownFeats(char){
 	return result;
 }
 
-window.languages=['Language: Common','Language: Elven','Language: Dwarven','Language: Gnomish','Language: Halfling','Language: Giant','Language: Orc','Language: Infernal','Language: Primordial','Language: Abyssal','Language: Celestial','Language: Draconic','Language: Deep Speech','Language: Sylvan','Language: Undercommon'];
+window.languages=['Language: Common','Language: Elven','Language: Dwarven','Language: Gnomish','Language: Halfling','Language: Giant','Language: Orc','Language: Infernal','Language: Primordial','Language: Abyssal','Language: Celestial','Language: Draconic','Language: Deep Speech','Language: Sylvan','Language: Undercommon',"Language: Thieves' Cant","Language: Druidic"];
 window.feats=[];
 window.spells=[];
 window.races=[];
@@ -265,30 +297,171 @@ window.skills=[
 
 window.abilities=[
 	{
+		name:"Lv 1 Spell (Bard)",
+		maxChargesFunction:function(char,derived,scope){
+			for (var c of char.classes){
+				if (c.name==="Bard"){
+					return Math.min(c.level+1,4);
+				}
+			}
+		},
+		description:"",
+		onLongRest:function(char,derived,scope){
+			this.charges=this.maxCharges;
+		}
+	},{
+		name:"Lv 2 Spell (Bard)",
+		maxChargesFunction:function(char,derived,scope){
+			for (var c of char.classes){
+				if (c.name==="Bard"){
+					if (c.level<3)return 0;
+					if (c.level===4)return 2;
+					return 3;
+				}
+			}
+		},
+		description:"",
+		onLongRest:function(char,derived,scope){
+			this.charges=this.maxCharges;
+		}
+	},{
+		name:"Lv 3 Spell (Bard)",
+		maxChargesFunction:function(char,derived,scope){
+			for (var c of char.classes){
+				if (c.name==="Bard"){
+					if (c.level<5)return 0;
+					if (c.level===5)return 2;
+					return 3;
+				}
+			}
+		},
+		description:"",
+		onLongRest:function(char,derived,scope){
+			this.charges=this.maxCharges;
+		}
+	},{
+		name:"Lv 4 Spell (Bard)",
+		maxChargesFunction:function(char,derived,scope){
+			for (var c of char.classes){
+				if (c.name==="Bard"){
+					if (c.level<7)return 0;
+					if (c.level===7)return 1;
+					if (c.level===8)return 2;
+					return 3;
+				}
+			}
+		},
+		description:"",
+		onLongRest:function(char,derived,scope){
+			this.charges=this.maxCharges;
+		}
+	},{
+		name:"Lv 5 Spell (Bard)",
+		maxChargesFunction:function(char,derived,scope){
+			for (var c of char.classes){
+				if (c.name==="Bard"){
+					if (c.level<9)return 0;
+					if (c.level===9)return 1;
+					if (c.level<18)return 2;
+					return 3;
+				}
+			}
+		},
+		description:"",
+		onLongRest:function(char,derived,scope){
+			this.charges=this.maxCharges;
+		}
+	},{
+		name:"Lv 6 Spell (Bard)",
+		maxChargesFunction:function(char,derived,scope){
+			for (var c of char.classes){
+				if (c.name==="Bard"){
+					if (c.level<11)return 0;
+					if (c.level<19)return 1;
+					return 2;
+				}
+			}
+		},
+		description:"",
+		onLongRest:function(char,derived,scope){
+			this.charges=this.maxCharges;
+		}
+	},{
+		name:"Lv 7 Spell (Bard)",
+		maxChargesFunction:function(char,derived,scope){
+			for (var c of char.classes){
+				if (c.name==="Bard"){
+					if (c.level<13)return 0;
+					if (c.level<20)return 1;
+					return 2;
+				}
+			}
+		},
+		description:"",
+		onLongRest:function(char,derived,scope){
+			this.charges=this.maxCharges;
+		}
+	},{
+		name:"Lv 8 Spell (Bard)",
+		maxChargesFunction:function(char,derived,scope){
+			for (var c of char.classes){
+				if (c.name==="Bard"){
+					if (c.level<15)return 0;
+					return 1;
+				}
+			}
+		},
+		description:"",
+		onLongRest:function(char,derived,scope){
+			this.charges=this.maxCharges;
+		}
+	},{
+		name:"Lv 9 Spell (Bard)",
+		maxChargesFunction:function(char,derived,scope){
+			for (var c of char.classes){
+				if (c.name==="Bard"){
+					if (c.level<17)return 0;
+					return 1;
+				}
+			}
+		},
+		description:"",
+		onLongRest:function(char,derived,scope){
+			this.charges=this.maxCharges;
+		}
+	},{
 		name:"Bardic Inspiration (d6)",
 		description:"As a bonus action, choose one creature other than yourself within 60 feet of you who can hear you. That creature gains one Bardic Inspiration die, a d6.\nOnce within the next 10 minutes, the creature can roll the die and add the number rolled to one ability check, attack roll, or saving throw it makes. The creature can wait until after it rolls the d20 before deciding to use the Bardic Inspiration die, but must decide before the DM says whether the roll succeeds or fails. Once the Bardic Inspiration die is rolled, it is lost. A creature can have only one Bardic Inspiration die at a time.",
-		charges:1,
+		maxChargesFunction:function(char,derived,scope){
+			return Math.max(1,derived.modifiers.cha);
+		},
 		onLongRest:function(char,derived,scope){
 			this.charges=derived.modifiers.cha;
 		}
 	},{
 		name:"Bardic Inspiration (d8)",
 		description:"As a bonus action, choose one creature other than yourself within 60 feet of you who can hear you. That creature gains one Bardic Inspiration die, a d8.\nOnce within the next 10 minutes, the creature can roll the die and add the number rolled to one ability check, attack roll, or saving throw it makes. The creature can wait until after it rolls the d20 before deciding to use the Bardic Inspiration die, but must decide before the DM says whether the roll succeeds or fails. Once the Bardic Inspiration die is rolled, it is lost. A creature can have only one Bardic Inspiration die at a time.",
-		charges:1,
+		maxChargesFunction:function(char,derived,scope){
+			return Math.max(1,derived.modifiers.cha);
+		},
 		onShortRest:function(char,derived,scope){
 			this.charges=derived.modifiers.cha;
 		}
 	},{
 		name:"Bardic Inspiration (d10)",
 		description:"As a bonus action, choose one creature other than yourself within 60 feet of you who can hear you. That creature gains one Bardic Inspiration die, a d10.\nOnce within the next 10 minutes, the creature can roll the die and add the number rolled to one ability check, attack roll, or saving throw it makes. The creature can wait until after it rolls the d20 before deciding to use the Bardic Inspiration die, but must decide before the DM says whether the roll succeeds or fails. Once the Bardic Inspiration die is rolled, it is lost. A creature can have only one Bardic Inspiration die at a time.",
-		charges:1,
+		maxChargesFunction:function(char,derived,scope){
+			return Math.max(1,derived.modifiers.cha);
+		},
 		onShortRest:function(char,derived,scope){
 			this.charges=derived.modifiers.cha;
 		}
 	},{
 		name:"Bardic Inspiration (d12)",
 		description:"As a bonus action, choose one creature other than yourself within 60 feet of you who can hear you. That creature gains one Bardic Inspiration die, a d12.\nOnce within the next 10 minutes, the creature can roll the die and add the number rolled to one ability check, attack roll, or saving throw it makes. The creature can wait until after it rolls the d20 before deciding to use the Bardic Inspiration die, but must decide before the DM says whether the roll succeeds or fails. Once the Bardic Inspiration die is rolled, it is lost. A creature can have only one Bardic Inspiration die at a time.",
-		charges:1,
+		maxChargesFunction:function(char,derived,scope){
+			return Math.max(1,derived.modifiers.cha);
+		},
 		onShortRest:function(char,derived,scope){
 			this.charges=derived.modifiers.cha;
 		}
@@ -298,17 +471,15 @@ window.abilities=[
 window.passives=[
 	{
 		name:"Jack of All Trades",
-		description:"",
+		description:"You can add half your proficiency bonus, rounded down, to any ability check you make that doesn't already include your proficiency bonus.",
 		apply:function(char,$scope){
-			for (var i=0;i<char.skills.length;i++){
-				if (char.skills[i].mult==0){
-					for (var j=0;j<$scope.derived.skills.length;j++){
-						if ($scope.derived.skills[j].name === char.skills[i].name){
-							$scope.derived.skills[j].bonus += Math.floor($scope.derived.proficiency/2);
-						}
-					}
+			let bonus=Math.floor($scope.derived.proficiency/2);
+			for (var skill of $scope.derived.skills){
+				if (skill.mult==0){
+					skill.bonus += bonus;
 				}
 			}
+			$scope.derived.initiative+=bonus;
 		}
 	},{
 		name:"Song of Rest",
@@ -377,6 +548,9 @@ window.classes=
 							char.proficiencies.push("Hand Crossbows");
 							char.saves.dex=1;
 							char.saves.cha=1;
+							angular.copy(findAbility("Bardic Inspiration (d6)"));
+							char.abilities.upush(findAbility("Bardic Inspiration (d6)"));
+							char.abilities.upush(findAbility("Lv 1 Spell (Bard)"));
 						}
 					},
 					{
@@ -426,6 +600,13 @@ window.classes=
 						"choices":[listSimpleWeapons,"Longsword","Rapier"],
 						"action":function(char,derived,choice){
 							addToInventory(char,findItem(choice));
+						}
+					},
+					{
+						"choicePrompt":"Choose a spell.",
+						"choices":[listSpells],
+						"action":function(char,derived,choice){
+							addSpell(char,choice,"Bard");
 						}
 					}
 				]

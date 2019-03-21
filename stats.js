@@ -90,6 +90,8 @@ var packages={
 	spells:window.spells,
 	races:window.races,
 	subclasses:window.subclasses,
+	abilities:window.abilities,
+	passives:window.passives
 };
 
 $scope.chosenClass=null;
@@ -380,6 +382,20 @@ $scope.calculate=function(){
 	$scope.derived.saves.int = $scope.derived.modifiers.int + $scope.char.saves.int*$scope.derived.proficiency;
 	$scope.derived.saves.wis = $scope.derived.modifiers.wis + $scope.char.saves.wis*$scope.derived.proficiency;
 	$scope.derived.saves.cha = $scope.derived.modifiers.cha + $scope.char.saves.cha*$scope.derived.proficiency;
+	
+	//find max charges of abilities that have a function for it
+	for (var abil of $scope.char.abilities){
+		if (abil.maxChargesFunction){
+			abil.maxCharges=abil.maxChargesFunction($scope.char,$scope.derived,$scope);
+		}
+	}
+	
+	//passives can add to your derived stats
+	for (var passive of $scope.char.passives){
+		if (passive.apply){
+			passive.apply($scope.char,$scope);
+		}
+	}
 }
 
 $scope.incrCopper=function(){
@@ -456,6 +472,74 @@ $scope.delete=function(item,from,event){
 		}
 	}
 	return true;
+}
+	
+$scope.checkForAbilities=function(name){
+	for (var abil of packages.abilities){
+		if (abil.name===name){
+			$scope.newability.description=abil.description;
+			return;
+		}
+	}
+}
+
+$scope.checkForPassives=function(name){
+	for (var p of packages.passives){
+		if (p.name===name){
+			$scope.newpassive.description=p.description;
+			return;
+		}
+	}
+}
+
+/**
+ * Try to find an ability with the given name in packages and return it.
+ * Otherwise, return null.
+ */
+function findAbility(name){
+	for (var abil of packages.abilities){
+		if (abil.name===name){
+			return abil;
+		}
+	}
+	return null;
+}
+
+$scope.addAbility=function(newability){
+	var abil = findAbility(newability.name);
+	if (abil){
+		abil=angular.copy(abil);
+		if (abil.maxChargesFunction){
+			abil.maxCharges=abil.maxChargesFunction($scope.char,$scope.derived);
+		}
+		abil.charges=0;
+		$scope.char.abilities.push(abil);
+	} else {
+		abil={
+			name:newability.name,
+			maxCharges:newability.maxCharges,
+			charges:0,
+			description: newability.description
+		};
+		$scope.char.abilities.push(abil);
+	}
+	$scope.newability={name:'',description:'',maxCharges:0};
+}
+
+$scope.addPassive=function(newpassive){
+	var abil = findPassive(newpassive.name);
+	if (abil){
+		abil=angular.copy(abil);
+		$scope.char.passives.upush(abil);
+	} else {
+		$scope.char.passives.push(angular.copy(newpassive));
+	}
+	$scope.newpassive={name:'',description:''};
+	$scope.calculate();
+}
+
+$scope.addCharge=function(abil){
+	abil.charges=Math.min(abil.maxCharges,abil.charges+1);
 }
 
 $scope.move=function(item,from,to){

@@ -208,14 +208,14 @@
 <div style="padding:10px;border:1px solid black;">
 	<span class="label bordertitle" style="margin-top:-24px;">Add Passive Ability</span>
 	<label>Name
-		<input type="text" ng-model="newpassive.name"/>
+		<input type="text" ng-model="newpassive.name" ng-change="checkForPassives(newpassive.name)"/>
 	</label>
 	<br>
 	<label>Description
 	<textarea class="descriptionbox" ng-hide="tooltip" ng-model="newpassive.description" style="width:100%;min-height:400px;max-height:400px;"></textarea>
 	<textarea class="descriptionbox2" ng-show="tooltip" ng-model="tooltip" style="width:100%;min-height:400px;"></textarea>
 	</label>
-	<button ng-click="add(newpassive,char.passives)">Add to Passives</button>
+	<button ng-click="addPassive(newpassive)">Add to Passives</button>
 	<br>
 	<button style="display:none"></button>
 	</div>
@@ -236,43 +236,39 @@
 <tbody><tr>
 <td width="20%" style="vertical-align:top;">
 	<div class="leftmenu">
-		<div class="greenback item" ng-repeat="item in char.stock | orderBy:'name' track by item.name "
-				ng-click="move(item,char.stock,char.used)"
+		<div class="greenback item" ng-repeat="item in char.abilities | orderBy:'name' track by item.name "
+				ng-click="item.charges=item.charges-1"
+				ng-if="item.charges>0"
 				ng-mouseenter="highlightAbility(item)" ng-mouseleave="$parent.tooltip=null">
 			<span style="font-weight:bold;">{{item.name}}</span>
-			<span>({{item.count}})</span>
-			<span class="deletebutton" ng-click="increment(item,$event)">&plus;</span>
+			<span>({{item.charges}})</span>
 		</div>
 	</div>
 </td>
 
 <td width="20%" style="vertical-align:top;">
 	<div class="leftmenu">
-		<div class="redback item" ng-repeat="item in char.used | orderBy:'name' track by item.name"
-				ng-click="move(item,char.used,char.stock)" 
+		<div class="redback item" ng-repeat="item in char.abilities | orderBy:'name' track by item.name"
+				ng-click="addCharge(item)" 
+				ng-if="item.maxCharges-item.charges>0"
 				ng-mouseenter="highlightAbility(item)" ng-mouseleave="$parent.tooltip=null">
 			<span style="font-weight:bold;">{{item.name}}</span>
-			<span>({{item.count}})</span>
-			<span class="deletebutton" ng-click="delete(item,char.used,$event)">&times;</span>
+			<span>({{item.maxCharges-item.charges}})</span>
+			<span class="deletebutton" ng-click="delete(item,char.abilities,$event)">&times;</span>
 		</span>
 	</div>
 </td>
 
 <td width="20%" style="vertical-align:top;text-align:center;">
-	<input type="text" ng-model="newability.name"/>
+	<input type="text" ng-model="newability.name" ng-change="checkForAbilities(newability.name)"/>
 	<br>
-	<input type="text" ng-model="newability.count"/>
+	<input type="text" ng-model="newability.maxCharges"/>
 	<br><br>
-	<label style="font-size:20px;">
-		<input type="checkbox" ng-model="newability.shortRest"/>
-		Recovers on short rest
-	</label>
-	<br><br>
-	<button ng-click="add(newability,char.used)">Add to Abilities</button>
+	<span class="button" ng-click="addAbility(newability)">Add to Abilities</span>
 	<br>
-	<button ng-click="moveShortRest(char.used,char.stock)">Short Rest</button>
+	<span class="button" ng-click="shortRest()">Short Rest</span>
 	<br>
-	<button ng-click="moveAll(char.used,char.stock)">Long Rest</button>
+	<span class="button" ng-click="longRest()">Long Rest</span>
 	<br>
 	<br>
 	<br>
