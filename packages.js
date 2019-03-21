@@ -1,6 +1,6 @@
 function hasProficiency(char,name){
-	for (var i=0;i<char.proficiencies.length;i++){
-		if (char.proficiencies[i]===name){
+	for (let prof of char.proficiencies){
+		if (prof===name){
 			return true;
 		}
 	}
@@ -8,7 +8,7 @@ function hasProficiency(char,name){
 }
 
 function findItem(itemname){
-	for (var item of window.items){
+	for (let item of window.items){
 		if (item.name===itemname){
 			return item;
 		}
@@ -16,9 +16,17 @@ function findItem(itemname){
 }
 
 function findAbility(name){
-	for (var abil of window.abilities){
+	for (let abil of window.abilities){
 		if (abil.name===name){
 			return abil;
+		}
+	}
+}
+
+function findSpell(name){
+	for (let spell of window.spells){
+		if (spell.name===name){
+			return spell;
 		}
 	}
 }
@@ -183,6 +191,22 @@ function findPassive(name){
 	return null;
 }
 
+//list all the spells the user knows and can replace for another spell upon leveling up
+function listUnlearnableSpells(char,derived,$scope){
+	var result=[];
+	let classname=$scope.chosenClassName;
+	for (let c of char.classes){
+		if (c.name===classname){
+			for (let spell of c.spells){
+				if (spell.level>0){
+					result.push(spell.name);
+				}
+			}
+		}
+	}
+	return result;
+}
+
 function listAllUnknownSpells(char,derived){
 	var result=[];
 	for (var spell of window.spells){
@@ -203,25 +227,65 @@ function listAllUnknownSpells(char,derived){
 	return result;
 }
 
-function listLearnableSpellsForClass(char,classname){
+/**
+ * Based on which class the user picked ($scope.chosenClassName),
+ * list all the spells they can currently learn from that class.
+ */
+function listLearnableSpellsForClass(char,derived,$scope){
 	var result=[];
+	let classname=$scope.chosenClassName;
+	//find the right class
+	let clas={};
+	for (var c of char.classes){
+		if (c.name===classname){
+			clas=c;
+			break;
+		}
+	}
+	//find the highest level they can cast on this class
+	let highest=0;
+	for (let abil of char.abilities){
+		if (abil.name==="Lv 1 Spell ("+classname+")" && highest<1){
+			highest=1;
+		}if (abil.name==="Lv 2 Spell ("+classname+")" && highest<2){
+			highest=2;
+		}if (abil.name==="Lv 3 Spell ("+classname+")" && highest<3){
+			highest=3;
+		}if (abil.name==="Lv 4 Spell ("+classname+")" && highest<4){
+			highest=4;
+		}if (abil.name==="Lv 5 Spell ("+classname+")" && highest<5){
+			highest=5;
+		}if (abil.name==="Lv 6 Spell ("+classname+")" && highest<6){
+			highest=6;
+		}if (abil.name==="Lv 7 Spell ("+classname+")" && highest<7){
+			highest=7;
+		}if (abil.name==="Lv 8 Spell ("+classname+")" && highest<8){
+			highest=8;
+		}if (abil.name==="Lv 9 Spell ("+classname+")" && highest<9){
+			highest=9;
+			break;
+		}
+	}
+	
 	for (var spell of window.spells){
-		var found=false;
-		for (var clas of char.classes){
-			if (clas.name==classname){
-				for (var cspell of clas.spells.known){
-					if (cspell.name===spell.name){
-						found=true;
-						break;
-					}
-				}
+		//check if they can learn a spell of this level (and exclude cantrips)
+		if (spell.level>highest || spell.level===0){
+			continue;
+		}
+		//check that the spell belongs to this class
+		if (spell.classes.indexOf(classname)==-1){
+			continue;
+		}
+		let found=false;
+		for (var cspell of clas.spells){
+			//check if they already know this spell
+			if (cspell.name===spell.name){
+				found=true;
+				break;
 			}
-//TODO UNFINISHED
-			
-			if (found)break;
 		}
 		if (!found){
-			result.add(spell.name);
+			result.push(spell.name);
 		}
 	}
 	return result;
@@ -251,7 +315,11 @@ function getAttributesBelow20(char){
 }
 
 function addSpell(char,spellname,forClass){
-	
+	for (let c of char.classes){
+		if (c.name===forClass){
+			c.spells.push(findSpell(spellname));
+		}
+	}
 }
 
 function getUnknownFeats(char){
@@ -268,6 +336,57 @@ function getUnknownFeats(char){
 		}
 	}
 	return result;
+}
+
+var helper={
+	chooseSpell:{
+						"choicePrompt":"Choose a spell.",
+						"choices":[listLearnableSpellsForClass],
+						"action":function(char,derived,choice,$scope){
+							addSpell(char,choice,$scope.chosenClassName);
+						}
+					},
+	unlearnSpell:{
+						"choicePrompt":"Choose a spell to unlearn:",
+						"choices":[listUnlearnableSpells],
+						"action":function(char,derived,choice,$scope){
+							for (let clas of char.classes){
+								if (clas.name===$scope.chosenClassName){
+									for (let i=0;i<clas.spells.length;i++){
+										if (clas.spells[i].name===choice){
+											clas.spells.splice(i,1);
+											return;
+										}
+									}
+								}
+							}
+						}
+					},
+	learnSkillProficiency:{
+						"choicePrompt":"Choose a skill proficiency.",
+						"choices":[listNonProficientSkills],
+						"action":function(char,derived,choice){
+							addProficiency(char,choice);
+						}
+					},
+	increaseAttribute:{
+						"choicePrompt":"Choose one:",
+						"choices":[getAttributesBelow20],
+						"action":function(char,derived,choice,$scope){
+							switch (choice){
+								case "+1 Strength":char.attributes.str+=1;break;
+								case "+1 Dexterity":char.attributes.dex+=1;break;
+								case "+1 Constitution":char.attributes.con+=1;
+									if (char.attributes.con%2==0){
+										char.maxHp+=char.level;
+										char.hp+=char.level;
+									}break;
+								case "+1 Intelligence":char.attributes.int+=1;break;
+								case "+1 Wisdom":char.attributes.wis+=1;break;
+								case "+1 Charisma":char.attributes.cha+=1;break;
+							}
+						}
+					}
 }
 
 window.languages=['Language: Common','Language: Elven','Language: Dwarven','Language: Gnomish','Language: Halfling','Language: Giant','Language: Orc','Language: Infernal','Language: Primordial','Language: Abyssal','Language: Celestial','Language: Draconic','Language: Deep Speech','Language: Sylvan','Language: Undercommon',"Language: Thieves' Cant","Language: Druidic"];
@@ -483,8 +602,19 @@ window.passives=[
 		}
 	},{
 		name:"Song of Rest",
-		description:"You can use soothing music or oration to help revitalize your wounded allies during a short rest. If you or any friendly creatures who can hear your performance regain hit points by spending Hit Dice at the end of the short rest, each of those creatures regains an extra 1d${ladder(clevel('Bard'),0,6,9,8,13,19,17,12)} hit points.",
-		apply:null
+		description:"You can use soothing music or oration to help revitalize your wounded allies during a short rest. If you or any friendly creatures who can hear your performance regain hit points by spending Hit Dice at the end of the short rest, each of those creatures regains an extra 1d${ladder(clevel('Bard'),0,6,9,8,13,19,17,12)} hit points."
+	},{
+		name:"Cutting Words",
+		description:"You learn how to use your wit to distract, confuse, and otherwise sap the confidence and competence of others. When a creature that you can see within 60 feet of you makes an attack roll, an ability check, or a damage roll, you can use your reaction to expend one of your uses of Bardic Inspiration, rolling a Bardic Inspiration die and subtracting the number rolled from the creature's roll. You can choose to use this feature after the creature makes its roll, but before the DM determines whether the attack roll or ability check succeeds or fails, or before the creature deals its damage. The creature is immune if it can't hear you or if it's immune to being charmed."
+	},{
+		name:"Countercharm",
+		description:"You use musical notes or words of power to disrupt mind-influencing effects. As an action, you can start a performance that lasts until the end of your next turn. During that time, you and any friendly creatures within 30 feet of you have advantage on saving throws against being frightened or charmed. A creature must be able to hear you to gain this benefit. The performance ends early if you are incapacitated or silenced or if you voluntarily end it (no action required)."
+	},{
+		name:"Peerless Skill",
+		description:"When you make an ability check, you can expend one use of Bardic Inspiration. Roll a Bardic Inspiration die and add the number rolled to your ability check. You can choose to do so after you roll the die for the ability check, but before the DM tells you whether you succeed or fail."
+	},{
+		name:"Superior Inspiration",
+		description:"When you roll initiative and have no uses of Bardic Inspiration left, you regain one use."
 	}
 	
 ];
@@ -540,6 +670,7 @@ window.classes=
 						"choices":[],
 						"action":function(char,derived,choice){
 							char.maxHp=8;
+							char.hp=8;
 							char.proficiencies.push("Light Armor");
 							char.proficiencies.push("Simple Weapons");
 							char.proficiencies.push("Rapiers");
@@ -574,27 +705,9 @@ window.classes=
 							char.proficiencies.upush(choice);
 						}
 					},
-					{
-						"choicePrompt":"Choose a skill proficiency.",
-						"choices":[listNonProficientSkills],
-						"action":function(char,derived,choice){
-							addProficiency(char,choice);
-						}
-					},
-					{
-						"choicePrompt":"Choose a skill proficiency.",
-						"choices":[listNonProficientSkills],
-						"action":function(char,derived,choice){
-							addProficiency(char,choice);
-						}
-					},
-					{
-						"choicePrompt":"Choose a skill proficiency.",
-						"choices":[listNonProficientSkills],
-						"action":function(char,derived,choice){
-							addProficiency(char,choice);
-						}
-					},
+					helper.learnSkillProficiency,
+					helper.learnSkillProficiency,
+					helper.learnSkillProficiency,
 					{
 						"choicePrompt":"Choose a weapon to start with.",
 						"choices":[listSimpleWeapons,"Longsword","Rapier"],
@@ -602,13 +715,10 @@ window.classes=
 							addToInventory(char,findItem(choice));
 						}
 					},
-					{
-						"choicePrompt":"Choose a spell.",
-						"choices":[listSpells],
-						"action":function(char,derived,choice){
-							addSpell(char,choice,"Bard");
-						}
-					}
+					helper.chooseSpell,
+					helper.chooseSpell,
+					helper.chooseSpell,
+					helper.chooseSpell
 				]
 			},	{ // 1
 				"updates":[
@@ -617,15 +727,13 @@ window.classes=
 						"choices":[1,2,3,4,5,6,7,8],
 						"action":function(char,derived,choice){
 							char.hpMax+=choice;
+							char.hp+=choice;
 						}
 					},
-					{
-						"choicePrompt":"Select a language to learn:",
-						"choices":[getUnknownLanguages],
-						"action":function(char,derived,choice){
-							char.proficiencies.push(choice);
-						}
-					}
+					helper.chooseSpell,
+					helper.chooseSpell,
+					helper.chooseSpell,
+					helper.chooseSpell
 				]
 			}, { // 2
 				"updates":[
@@ -637,7 +745,19 @@ window.classes=
 							char.passives.push(findPassive("Jack of All Trades"));
 							char.passives.push(findPassive("Song of Rest"));
 						}
-					}
+					},
+					helper.chooseSpell,
+					{
+						"choicePrompt":"Do you want to replace one of your known Bard spells?",
+						"choices":["Yes","No"],
+						"action":function(char,derived,choice,$scope){
+							if (choice==="No"){
+								$scope.updateStep+=90;//exit this level up
+							}
+						}
+					},
+					helper.unlearnSpell,
+					helper.chooseSpell
 				]
 			}, { // 3
 				"updates":[
@@ -671,34 +791,10 @@ window.classes=
 								$scope.updateStep+=2;
 							}
 						}
-					}, {
-						"choicePrompt":"Choose one:",
-						"choices":[getAttributesBelow20],
-						"action":function(char,derived,choice,$scope){
-							switch (choice){
-								case "+1 Strength":char.attributes.str+=1;break;
-								case "+1 Dexterity":char.attributes.dex+=1;break;
-								case "+1 Constitution":char.attributes.con+=1;break;
-								case "+1 Intelligence":char.attributes.int+=1;break;
-								case "+1 Wisdom":char.attributes.wis+=1;break;
-								case "+1 Charisma":char.attributes.cha+=1;break;
-							}
-						}
-					}, {
-						"choicePrompt":"Choose one:",
-						"choices":[getAttributesBelow20],
-						"action":function(char,derived,choice,$scope){
-							switch (choice){
-								case "+1 Strength":char.attributes.str+=1;break;
-								case "+1 Dexterity":char.attributes.dex+=1;break;
-								case "+1 Constitution":char.attributes.con+=1;break;
-								case "+1 Intelligence":char.attributes.int+=1;break;
-								case "+1 Wisdom":char.attributes.wis+=1;break;
-								case "+1 Charisma":char.attributes.cha+=1;break;
-							}
-							$scope.updateStep++;
-						}
-					}, {
+					},
+					helper.increaseAttribute,
+					helper.increaseAttribute,
+					{
 						"choicePrompt":"Choose a Feat",
 						"choices":[getUnknownFeats],
 						"action":function(char,derived,choice){

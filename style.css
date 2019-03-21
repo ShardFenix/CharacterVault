@@ -312,17 +312,19 @@ span.button {
     display: inline-block;
 }
 
-div.modal{
+div.modal {
     position: absolute;
     background-color: white;
     box-shadow: 0 0 2px 1px black;
     width: 74%;
-    height: 50%;
+    height: auto;
     padding: 3%;
     left: 10%;
-	top: -60%;
-	transition: 0.5s ease all;
-	text-align:center;
+    top: -60%;
+    transition: 0.5s ease all;
+    text-align: center;
+    min-height: 50%;
+    z-index: 2;
 }
 
 div.modal.show{
@@ -346,6 +348,7 @@ div.choice{
 	display: inline-block;
     width: 44%;
     margin: 2px 1%;
+	cursor:pointer;
 }
 
 div.attrbox{

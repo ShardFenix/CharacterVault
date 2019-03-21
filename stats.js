@@ -213,7 +213,7 @@ var setupForCurrentStep=function(){
 		$scope.currentChoices=[];
 		for (var i=0;i<step.choices.length;i++){
 			if (step.choices[i] && typeof(step.choices[i]) === 'function'){
-				var subArray = step.choices[i]($scope.char,$scope.derived,$scope.chosenClass);
+				var subArray = step.choices[i]($scope.char,$scope.derived,$scope);
 				if (subArray){
 					$scope.currentChoices=$scope.currentChoices.concat(subArray);
 				}
@@ -249,12 +249,7 @@ $scope.selectChoice=function(choice){
 				name:$scope.chosenClass.classname,
 				level:1,
 				subclass:null,
-				spells:{
-					known:[],
-					prepared:[],
-					slotsMax:[],//each index is max number of available slots for that level
-					slotsAvailable:[]
-				}
+				spells:[]
 			});
 		} else {
 		// update the existing class entry
