@@ -98,7 +98,9 @@ $scope.chosenClass=null;
 $scope.chosenLevel=null;
 $scope.updateStep=-1;
 $scope.currentChoices=null;
-$scope.chosenClassName=null;
+$scope.chosenClassName=null
+
+$scope.choiceQueue=[]; //used for choices that are made outside of a levelup (like subfeats)
 
 $scope.charBackup={}; //in case something in the js fails
 
@@ -107,13 +109,14 @@ $scope.revert=function(){
 }
 
 $scope.levelUpStart=function(){
+	$scope.char.level++;
 	$scope.charBackup=angular.copy($scope.char);
 	//show class selection
 	$scope.currentChoices=[];
 	$scope.updateStep=-1;
 	$scope.prompt="Choose a class";
 	for (var i=0;i<packages.classes.length;i++){
-		if (!(packages.classes[i].requirements) || packages.classes[i].requirements($scope.char)){
+		if (!(packages.classes[i].requirement) || packages.classes[i].requirement($scope.char)){
 			$scope.currentChoices.push(packages.classes[i].classname);
 		}
 	}
@@ -163,8 +166,27 @@ var currentStep=function(){
 	return $scope.chosenClass.levels[$scope.chosenLevel].updates[$scope.updateStep];
 }
 
+function checkChoiceQueue(){
+	if ($scope.choiceQueue.length>0){
+		$scope.currentChoices=[];
+		let step=$scope.choiceQueue[0];
+		for (var i=0;i<step.choices.length;i++){
+			if (step.choices[i] && typeof(step.choices[i]) === 'function'){
+				var subArray = step.choices[i]($scope.char,$scope);
+				if (subArray){
+					$scope.currentChoices=$scope.currentChoices.concat(subArray);
+				}
+			} else {
+				$scope.currentChoices.push(step.choices[i]);
+			}
+		}
+		$scope.currentChoice=$scope.choiceQueue[0];
+		return true;
+	}
+	return false;
+}
+
 function finishLevelUp(){
-	$scope.char.level++;
 	if ($scope.chosenLevel>0){
 		getCharacterClass($scope.chosenClassName).level=$scope.chosenLevel;
 	}
@@ -173,7 +195,9 @@ function finishLevelUp(){
 	$scope.updateStep=-1;
 	$scope.currentChoices=null;
 	$scope.chosenClassName=null;
-	$scope.calculate();
+	if (!checkChoiceQueue()){
+		$scope.calculate();
+	}
 }
 
 var goToNextStep=function(){
@@ -213,7 +237,7 @@ var setupForCurrentStep=function(){
 		$scope.currentChoices=[];
 		for (var i=0;i<step.choices.length;i++){
 			if (step.choices[i] && typeof(step.choices[i]) === 'function'){
-				var subArray = step.choices[i]($scope.char,$scope.derived,$scope);
+				var subArray = step.choices[i]($scope.char,$scope);
 				if (subArray){
 					$scope.currentChoices=$scope.currentChoices.concat(subArray);
 				}
@@ -237,6 +261,15 @@ var setupForCurrentStep=function(){
 
 $scope.selectChoice=function(choice){
 	$scope.currentChoices=null;
+	if ($scope.currentChoice!=null){
+		//chose something outside of a levelup
+		$scope.currentChoice.action($scope.char,$scope.derived,choice,$scope);
+		$scope.choiceQueue.splice(0,1);
+		if (!checkChoiceQueue()){
+			$scope.calculate();
+		}
+		return;
+	}
 	if ($scope.chosenClass===null){
 		//they chose a class
 		$scope.chosenClassName=choice;
@@ -381,7 +414,7 @@ $scope.calculate=function(){
 	//find max charges of abilities that have a function for it
 	for (var abil of $scope.char.abilities){
 		if (abil.maxChargesFunction){
-			abil.maxCharges=abil.maxChargesFunction($scope.char,$scope.derived,$scope);
+			abil.maxCharges=abil.maxChargesFunction($scope.char,$scope);
 		}
 	}
 	
@@ -505,7 +538,7 @@ $scope.addAbility=function(newability){
 	if (abil){
 		abil=angular.copy(abil);
 		if (abil.maxChargesFunction){
-			abil.maxCharges=abil.maxChargesFunction($scope.char,$scope.derived);
+			abil.maxCharges=abil.maxChargesFunction($scope.char,$scope);
 		}
 		abil.charges=0;
 		$scope.char.abilities.push(abil);
@@ -548,7 +581,7 @@ $scope.move=function(item,from,to){
 			}
 		}
 		if (!found){
-			to.push({name:item.name,count:1,shortRest:item.shortRest,description:item.description});
+			to.push({name:item.name,count:1,description:item.description});
 		}
 	}
 	item.count--;

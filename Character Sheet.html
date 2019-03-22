@@ -141,9 +141,9 @@
 		<td>
 			<span class="bordertitle label">Hit Points</span>
 			<div class="label" style="padding:8px 10px">
-				<input type='text' class='hidden right' ng-model='char.hp'/>
+				<input type='text' class='hidden right' ng-model='char.hp' number/>
 				<span>&nbsp;/&nbsp;</span>
-				<input type='text' class='hidden left' ng-model='char.maxHp'/>
+				<input type='text' class='hidden left' ng-model='char.maxHp' number/>
 				</div>
 		</td>
 	</tr></table>
@@ -585,6 +585,7 @@
 
 </div>
 </div>
+<script src="./items.js"></script>
 <script src="./packages.js"></script>
 <script src="./spells.js"></script>
 <script src="./stats.js"></script>
