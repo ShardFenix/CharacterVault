@@ -83,7 +83,7 @@ var helper={
 						"action":function(char,derived,choice){
 							addExpertise(char,choice);
 						}
-					}
+					},
 	increaseAttribute:{
 						"choicePrompt":"Choose one:",
 						"choices":[getAttributesBelow20],
@@ -1070,7 +1070,11 @@ window.classes=
 		"levels":[
 			{
 				"updates":[
-					helper.chooseWeaponProficiency
+					helper.hitDice8,
+					helper.attributeOrFeat,
+					helper.increaseAttribute,
+					helper.increaseAttribute,
+					helper.chooseFeat
 				]
 			}
 		]
