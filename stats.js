@@ -109,6 +109,9 @@ $scope.revert=function(){
 }
 
 $scope.levelUpStart=function(){
+	if ($scope.currentChoices && $scope.currentChoices.length>0){
+		return;
+	}
 	$scope.char.level++;
 	$scope.charBackup=angular.copy($scope.char);
 	//show class selection
@@ -122,45 +125,6 @@ $scope.levelUpStart=function(){
 	}
 };
 
-var getCharacterClass=function(className){
-	for (var i=0;i<$scope.char.classes.length;i++){
-		if ($scope.char.classes[i].name==className){
-			return $scope.char.classes[i];
-		}
-	}
-	return null;
-}
-
-var findClass=function(name){
-	for (var i=0;i<packages.classes.length;i++){
-		if (packages.classes[i].classname==name){
-			return packages.classes[i];
-		}
-	}
-	return null;
-}
-
-var findSubclass=function(classname, subclass){
-	for (var i=0;i<packages.subclasses.length;i++){
-		if (packages.subclasses[i].classname==classname && packages.subclasses[i].subclass==subclass){
-			return packages.subclasses[i];
-		}
-	}
-	return null;
-}
-
-//return the next level the character is eligible to receive from the given class
-var nextLevel=function(classname){
-	for (var i=0;i<$scope.char.classes.length;i++){
-		if ($scope.char.classes[i].name==classname){
-			return 1 + $scope.char.classes[i].level;
-		}
-	}
-	if ($scope.char.classes.length==0){
-		return 0;
-	}
-	return 1;
-}
 
 var currentStep=function(){
 	return $scope.chosenClass.levels[$scope.chosenLevel].updates[$scope.updateStep];
@@ -188,7 +152,7 @@ function checkChoiceQueue(){
 
 function finishLevelUp(){
 	if ($scope.chosenLevel>0){
-		getCharacterClass($scope.chosenClassName).level=$scope.chosenLevel;
+		getCharacterClass($scope.char,$scope.chosenClassName).level=$scope.chosenLevel;
 	}
 	$scope.chosenClass=null;
 	$scope.chosenLevel=null;
@@ -209,7 +173,7 @@ var goToNextStep=function(){
 			finishLevelUp();
 			return;
 		}
-		var sc=getCharacterClass($scope.chosenClass.classname).subclass;
+		var sc=getCharacterClass($scope.char,$scope.chosenClass.classname).subclass;
 		if (sc){
 			sc = findSubclass($scope.chosenClass.classname,sc);
 			if (sc){
@@ -274,7 +238,7 @@ $scope.selectChoice=function(choice){
 		//they chose a class
 		$scope.chosenClassName=choice;
 		$scope.chosenClass=findClass(choice);
-		$scope.chosenLevel=nextLevel(choice);
+		$scope.chosenLevel=nextLevel($scope.char,choice);
 		$scope.updateStep=0;
 		//add the class entry on the character object
 		if ($scope.chosenLevel==0){
@@ -286,7 +250,7 @@ $scope.selectChoice=function(choice){
 			});
 		} else {
 		// update the existing class entry
-			getCharacterClass($scope.chosenClass.classname).level+=1;
+			getCharacterClass($scope.char,$scope.chosenClass.classname).level+=1;
 		}
 		//setup the first update step
 		setupForCurrentStep();
@@ -361,6 +325,16 @@ $scope.combatRelevant=function(item){
 		return true;
 	}
 	return false;
+}
+
+//should be in API, but needs access to scope
+function classLevel(className){
+	for (let clas of $scope.char.classes){
+		if (clas.name===className){
+			return clas.level;
+		}
+	}
+	return 0;
 }
 	
 //calculate the derived stat values (bonuses, saving throws, skills, etc)
@@ -520,19 +494,6 @@ $scope.checkForPassives=function(name){
 	}
 }
 
-/**
- * Try to find an ability with the given name in packages and return it.
- * Otherwise, return null.
- */
-function findAbility(name){
-	for (var abil of packages.abilities){
-		if (abil.name===name){
-			return abil;
-		}
-	}
-	return null;
-}
-
 $scope.addAbility=function(newability){
 	var abil = findAbility(newability.name);
 	if (abil){
@@ -676,6 +637,7 @@ $scope.highlightAbility=function(abil){
 		while (token!=-1){
 			var endtoken=desc.indexOf("}");
 			var expression = desc.substring(token+2,endtoken);
+			expression=expression.replace(/clevel/mg,""+$scope.char.level);
 			expression=eval(expression);
 			desc=desc.substring(0,token)+expression+desc.substring(endtoken+1);
 			token=desc.indexOf('${');
