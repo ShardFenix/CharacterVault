@@ -320,16 +320,52 @@ div.modal {
     height: auto;
     padding: 3%;
     left: 10%;
-    top: -60%;
+    top: -70%;
     transition: 0.5s ease all;
     text-align: center;
     min-height: 50%;
     z-index: 2;
 }
-
 div.modal.show{
 	top: 10%;
 }
+
+div.leftModal {
+    position: absolute;
+    background-color: white;
+    box-shadow: 0 0 2px 1px black;
+    width: 53%;
+    height: auto;
+    padding: 3%;
+    left: -70%;
+    top: 0%;
+    transition: 0.5s ease all;
+    text-align: center;
+    min-height: 99%;
+    z-index: 2;
+}
+div.leftModal.show{
+	left:0%;
+}
+
+div.rightModal {
+    position: absolute;
+    background-color: white;
+    box-shadow: 0 0 2px 1px black;
+    width: 35%;
+    height: auto;
+    padding: 3%;
+    left: 110%;
+    top: 0%;
+    transition: 0.5s ease all;
+    text-align: center;
+    min-height: 99%;
+    z-index: 2;
+}
+div.rightModal.show{
+	left:59%;
+}
+
 
 div.prompt{
 	text-align: center;

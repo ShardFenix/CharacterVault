@@ -127,7 +127,10 @@ $scope.levelUpStart=function(){
 
 
 var currentStep=function(){
-	return $scope.chosenClass.levels[$scope.chosenLevel].updates[$scope.updateStep];
+	if ($scope.chosenClass.levels[$scope.chosenLevel].updates){
+		return $scope.chosenClass.levels[$scope.chosenLevel].updates[$scope.updateStep];
+	}
+	return null;
 }
 
 function checkChoiceQueue(){
@@ -180,7 +183,12 @@ var goToNextStep=function(){
 				$scope.updateStep=0;
 				$scope.chosenClass=sc;
 				$scope.currentChoices=null;
-				setupForCurrentStep();
+				if ($scope.chosenClass.levels[$scope.chosenLevel].updates
+				    && $scope.chosenClass.levels[$scope.chosenLevel].updates.length>$scope.updateStep){
+					setupForCurrentStep();
+				} else {
+					finishLevelUp();
+				}
 			}
 		} else {
 			//done with levelup
@@ -194,6 +202,7 @@ var goToNextStep=function(){
 
 var setupForCurrentStep=function(){
 	var step = currentStep();
+	if (!step){return;}
 	if (step.choices.length>0){
 		//setup choice selection
 		//first, execute any functions that are in the choice array.

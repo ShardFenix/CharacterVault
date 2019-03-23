@@ -243,10 +243,14 @@ function listUnlearnableSpells(char,$scope){
 
 function listAllUnknownSpells(char,scope){
 	var result=[];
+	let highest=highestSpellLevel(char);
 	for (var spell of window.spells){
+		if (spell.level>highest){
+			continue;
+		}
 		var found=false;
 		for (var clas of char.classes){
-			for (var cspell of clas.spells.known){
+			for (var cspell of clas.spells){
 				if (cspell.name===spell.name){
 					found=true;
 					break;
@@ -255,7 +259,7 @@ function listAllUnknownSpells(char,scope){
 			if (found)break;
 		}
 		if (!found){
-			result.add(spell.name);
+			result.push(spell.name);
 		}
 	}
 	return result;
@@ -344,6 +348,37 @@ function listUnknownCantripsForClass(char,classname){
 	return result;
 }
 
+function highestSpellLevel(char){
+	if (spellSlots9(char)>0){
+		return 9;
+	}
+	if (spellSlots8(char)>0){
+		return 8;
+	}
+	if (spellSlots7(char)>0){
+		return 7;
+	}
+	if (spellSlots6(char)>0){
+		return 6;
+	}
+	if (spellSlots5(char)>0){
+		return 5;
+	}
+	if (spellSlots4(char)>0){
+		return 4;
+	}
+	if (spellSlots3(char)>0){
+		return 3;
+	}
+	if (spellSlots2(char)>0){
+		return 2;
+	}
+	if (spellSlots1(char)>0){
+		return 1;
+	}
+	return 0;
+}
+
 /**
  * Based on which class the user picked ($scope.chosenClassName),
  * list all the spells they can currently learn from that class.
@@ -360,29 +395,7 @@ function listLearnableSpellsForClass(char,$scope){
 		}
 	}
 	//find the highest level they can cast on this class
-	let highest=0;
-	for (let abil of char.abilities){
-		if (abil.name==="Lv 1 Spell ("+classname+")" && highest<1){
-			highest=1;
-		}if (abil.name==="Lv 2 Spell ("+classname+")" && highest<2){
-			highest=2;
-		}if (abil.name==="Lv 3 Spell ("+classname+")" && highest<3){
-			highest=3;
-		}if (abil.name==="Lv 4 Spell ("+classname+")" && highest<4){
-			highest=4;
-		}if (abil.name==="Lv 5 Spell ("+classname+")" && highest<5){
-			highest=5;
-		}if (abil.name==="Lv 6 Spell ("+classname+")" && highest<6){
-			highest=6;
-		}if (abil.name==="Lv 7 Spell ("+classname+")" && highest<7){
-			highest=7;
-		}if (abil.name==="Lv 8 Spell ("+classname+")" && highest<8){
-			highest=8;
-		}if (abil.name==="Lv 9 Spell ("+classname+")" && highest<9){
-			highest=9;
-			break;
-		}
-	}
+	let highest=highestSpellLevel(char);
 	
 	for (var spell of window.spells){
 		//check if they can learn a spell of this level (and exclude cantrips)
@@ -540,4 +553,87 @@ function ladder(value, ...breakpoints){
 		return breakpoints[breakpoints.length-1];
 	}
 	return value;
+}
+
+//used for determining spell slots
+function countCasterLevels(char){
+	let sum=0;
+	for (let clas of char.classes){
+		switch (clas.name){
+			case "Wizard":
+			case "Bard":
+			case "Druid":
+			case "Sorcerer":
+			case "Cleric":
+				sum+=clas.level;break;
+			case "Paladin":
+			case "Ranger":
+				sum+=(clas.level/2);break;
+			case "Fighter":
+			case "Rogue":
+				sum+=(clas.level/3);break;
+		}
+	}
+	return Math.floor(sum);
+}
+
+function spellSlots1(char){
+	let casterLevel=countCasterLevels(char);
+	return Math.min(casterLevel+1,4);
+}
+
+function spellSlots2(char){
+	let casterLevel=countCasterLevels(char);
+	if (casterLevel<3)return 0;
+	if (casterLevel===4)return 2;
+	return 3;
+}
+
+function spellSlots3(char){
+	let casterLevel=countCasterLevels(char);
+	if (casterLevel<5)return 0;
+	if (casterLevel===5)return 2;
+	return 3;
+}
+
+function spellSlots4(char){
+	let casterLevel=countCasterLevels(char);
+	if (casterLevel<7)return 0;
+	if (casterLevel===7)return 1;
+	if (casterLevel===8)return 2;
+	return 3;
+}
+
+function spellSlots5(char){
+	let casterLevel=countCasterLevels(char);
+	if (casterLevel<9)return 0;
+	if (casterLevel===9)return 1;
+	if (casterLevel<18)return 2;
+	return 3;
+}
+
+function spellSlots6(char){
+	let casterLevel=countCasterLevels(char);
+	if (casterLevel<11)return 0;
+	if (casterLevel<19)return 1;
+	return 2;
+}
+
+function spellSlots7(char){
+	let casterLevel=countCasterLevels(char);
+	if (casterLevel<13)return 0;
+	if (casterLevel<20)return 1;
+	return 2;
+}
+
+function spellSlots8(char){
+	let casterLevel=countCasterLevels(char);
+	if (casterLevel<15)return 0;
+	return 1;
+}
+
+function spellSlots9(char){
+	let casterLevel=countCasterLevels(char);
+	if (casterLevel<17)return 0;
+	return 1;
 }
