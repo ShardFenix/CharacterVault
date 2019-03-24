@@ -191,6 +191,7 @@ input[type="text"].medium{
 	font-weight:bold;
 	font-size:1.3em;
 	text-align:center;
+	font-family:'Cinzel Decorative';
 }
 
 .center{
@@ -335,13 +336,14 @@ div.leftModal {
     background-color: white;
     box-shadow: 0 0 2px 1px black;
     width: 53%;
-    height: auto;
     padding: 3%;
     left: -70%;
     top: 0%;
     transition: 0.5s ease all;
     text-align: center;
-    min-height: 99%;
+    min-height: 90%;
+	max-height:90%;
+	overflow-y:scroll;
     z-index: 2;
 }
 div.leftModal.show{
@@ -353,24 +355,31 @@ div.rightModal {
     background-color: white;
     box-shadow: 0 0 2px 1px black;
     width: 35%;
-    height: auto;
     padding: 3%;
     left: 110%;
     top: 0%;
     transition: 0.5s ease all;
     text-align: center;
-    min-height: 99%;
+    min-height: 90%;
+	max-height:90%;
+	overflow-y:scroll;
     z-index: 2;
 }
 div.rightModal.show{
 	left:59%;
 }
 
+.tipDescription{
+	text-align:left;
+	white-space:pre-wrap;
+	font-size:1.2em;
+}
 
 div.prompt{
 	text-align: center;
     font-size: 2em;
     font-weight: bold;
+	font-family:'Cinzel Decorative';
 }
 
 div.choice{

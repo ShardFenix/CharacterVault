@@ -1,4 +1,4 @@
-var app=angular.module('myApp',[]);
+var app=angular.module('myApp',['ngSanitize']);
 
 app.directive('number', ['$parse', function($parse) {
     return {
@@ -61,6 +61,17 @@ $scope.derived={
 	ac:10,
 	proficiency:2
 }
+
+//load all spell slot abilities onto new characters
+addAbility($scope.char,"Lv 1 Spell");
+addAbility($scope.char,"Lv 2 Spell");
+addAbility($scope.char,"Lv 3 Spell");
+addAbility($scope.char,"Lv 4 Spell");
+addAbility($scope.char,"Lv 5 Spell");
+addAbility($scope.char,"Lv 6 Spell");
+addAbility($scope.char,"Lv 7 Spell");
+addAbility($scope.char,"Lv 8 Spell");
+addAbility($scope.char,"Lv 9 Spell");
 
 //debug: give this character every skill
 for (var i=0;i<window.skills.length;i++){
@@ -233,6 +244,9 @@ var setupForCurrentStep=function(){
 }
 
 $scope.selectChoice=function(choice){
+	if (choice.name){
+		choice=choice.name;
+	}
 	$scope.currentChoices=null;
 	if ($scope.currentChoice!=null){
 		//chose something outside of a levelup
@@ -457,10 +471,19 @@ $scope.moveAll=function(from,to){
 	}
 }
 
-$scope.moveShortRest=function(from,to){
-	for (var i=from.length-1;i>=0;i--) {
-		if (from[i].shortRest){
-			$scope.move(from[i],from,to);
+$scope.shortRest=function(){
+	for (let abil of $scope.char.abilities) {
+		if (typeof abil.onShortRest === 'function'){
+			abil.onShortRest($scope.char,$scope);
+		}
+	}
+}
+
+$scope.longRest=function(){
+	$scope.shortRest();
+	for (let abil of $scope.char.abilities) {
+		if (typeof abil.onLongRest === 'function'){
+			abil.onLongRest($scope.char,$scope);
 		}
 	}
 }
@@ -658,6 +681,25 @@ $scope.highlightAbility=function(abil){
 $scope.showRef=function(item){
 	document.getElementById('refDescription').innerHTML=item.description;
 	$scope.spellRef=item;
+}
+
+var tipPromise=null;
+
+$scope.clearTip=function(){
+//	tipPromise=$timeout(function(){$scope.tip=null;},1000);
+}
+
+$scope.renewTip=function(){
+	if (tipPromise){
+		$timeout.cancel(tipPromise);
+	}
+}
+
+$scope.setTip=function(choice){
+	if (tipPromise){
+		$timeout.cancel(tipPromise);
+	}
+	$scope.tip=choice;
 }
 
 $scope.save=function(){

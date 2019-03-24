@@ -2,9 +2,11 @@
 <html>
 <head>
 <link rel="stylesheet" href="./style.css">
+<link href="https://fonts.googleapis.com/css?family=Cinzel+Decorative:700" rel="stylesheet">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular-animate.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular-sanitize.js"></script>
 </head>
 <body style="background-color:#ffffff;">
 <div ng-app="myApp">
@@ -81,7 +83,7 @@
 <td style="width:700px;vertical-align:top;">
 <table style="width:100%">
 	<tr>
-		<td style="width:150px;text-align:center;" class="label">
+		<td style="width:150px;text-align:center;">
 			<div>
 				<label>
 					<span class='label'>Level</span><br>
@@ -296,7 +298,7 @@
 <th>Equipped</th>
 <th>Inventory</th>
 <th></th>
-<th>Profociencies and Languages</th>
+<th>Proficiencies and Languages</th>
 </tr>
 
 <tbody><tr>
@@ -560,17 +562,72 @@
 	</td></tr></tbody></table>
 	</div>
 	
-	<div ng-show="subtab=='creatures'">
-	
 	</div>
 </div>
 <!-- End Reference -->
-<div class="modal" ng-class="{'show':currentChoices}">
+
+<!-- Levelup Modal -->
+<div class="leftModal" ng-class="{'show':currentChoices}">
 	<div class="prompt">{{prompt}}</div>
 	<br>
 	<hr>
 	<br>
-	<div class="choice" ng-repeat="choice in currentChoices" ng-click="selectChoice(choice)">{{choice.name || choice}}</div>
+	<div class="choice" ng-repeat="choice in currentChoices track by $index" ng-click="selectChoice(choice)"
+			ng-mouseenter="setTip(choice)" ng-mouseleave="clearTip()">{{choice.name || choice}}</div>
+</div>
+
+<!-- Tooltip Modal-->
+<div class="rightModal" ng-class="{'show':currentChoices}" ng-mouseenter="renewTip()" ng-mouseleave="clearTip()">
+	<div>
+		<div class="label">{{tip.name || tip}}</div>
+		<hr>
+		<!-- Spell metadata -->
+		<div ng-show="tip.level>=0" style="text-align:left">
+			<div>
+				Cast Time: {{tip.castTime}}
+				<span style="float:right" ng-show="tip.components.verbal">Verbal</span>
+			</div>
+			<div>
+				Duration: {{tip.duration}}
+				<span style="float:right" ng-show="tip.components.somatic">Somatic</span>
+			</div>
+			<div>
+				Range: {{tip.range}}
+				<span style="float:right" ng-show="tip.ritual">Ritual</span>
+			</div>
+			<div ng-show="tip.components.material">
+				Material component: {{tip.components.material}}
+			</div>
+			<br>
+		</div>
+		<!-- Item metadata -->
+		<div ng-show="tip.value" style="text-align:left;">
+			<div style="display:flex;">
+				<div style="width:49%;text-align:left;">
+					<div ng-show="tip.damage1">
+						1H Damage: {{tip.damage1}} {{tip.damageType}}
+					</div>
+					<div ng-show="tip.damage2">
+						2H Damage: {{tip.damage2}} {{tip.damageType}}
+					</div>
+					<div ng-show="tip.attackRange">
+						Range: {{tip.attackRange[0]}}ft / {{tip.attackRange[1]}}ft
+					</div>
+					<div ng-show="tip.ac">
+						AC: {{tip.ac}}
+					</div>
+				</div>
+				<div style="width:49%;text-align:right;">
+					<div ng-show="tip.finesse">Finesse</div>
+					<div ng-show="tip.heavy">Heavy</div>
+					<div ng-show="tip.reach">Reach</div>
+					<div ng-show="tip.throwRange">Thrown</div>
+				</div>
+			</div>
+			<br>
+		</div>
+		<div ng-bind-html='tip.description' class="tipDescription"></div>
+	</div>
 </div>
 
 <div class="modal" ng-class="{'show':showSaveMenu}">
@@ -586,6 +643,7 @@
 </div>
 </div>
 <script src="./api.js"></script>
+<script src="./feats.js"></script>
 <script src="./items.js"></script>
 <script src="./packages.js"></script>
 <script src="./spells.js"></script>

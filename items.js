@@ -3,49 +3,244 @@ window.items=[
 		name:'Lyre',
 		description:'',
 		categories:['Instrument'],
-		count:1,
-		meleeRange:5,//usually 5 or 10, falsey means no attack
-		meleeDamage:'1d4',//can be static, or can be a function that gets sent char and scope
-		throwRange:[20,60],//falsey means no attack
-		throwDamage:'1d4',//can be static, or can be a function that gets sent char and scope
-		finesse:false,
 		value:200,
-		proficiencies:['Lyre']//char must have one of these to get proficiency bonus
+		proficiencies:['Lyre']
 	},	{
 		name:'Flute',
 		description:'',
 		categories:['Instrument'],
-		count:1,
-		meleeRange:5,
-		meleeDamage:'1d4',
-		throwRange:[20,60],
-		throwDamage:'1d4',
-		finesse:false,
 		value:200,
 		proficiencies:['Flute']
-	},	{
+	},{
 		name:'Longsword',
 		description:'',
 		categories:['Martial','Melee','Weapon'],
 		count:1,
-		meleeRange:5,
-		meleeDamage:'1d8 slashing (2H: 1d10)',
-		throwRange:[20,60],
-		throwDamage:'1d4',
-		finesse:false,
+		damage1:'1d8',
+		damage2:'1d10',
+		damageType:"Slashing",
 		value:150,
-		proficiencies:['Martial Weapons','Longsword']
+		proficiencies:['Martial Weapons','Longswords']
 	},{
+		name:'Dagger',
+		description:'',
+		categories:['Simple','Melee','Weapon'],
+		count:1,
+		damage1:'1d4',
+		damageType:"Piercing",
+		finesse:true,
+		throwRange:[20,60],
+		value:200,
+		proficiencies:['Simple Weapons','Daggers']
+	},{
+		name:'Shield',
+		description:'A shield is made from wood or metal and is carried in one hand. Wielding a shield increases your Armor Class by 2. You can benefit from only one shield at a time.',
+		categories:['Shield'],
+		count:1,
+		value:1000,
+		proficiencies:['Shields']
+	},{
+		name:'Light Crossbow',
+		description:'',
+		categories:['Simple','Ranged','Weapon'],
+		count:1,
+		damage2:'1d8',
+		damageType:"Piercing",
+		attackRange:[80,320],
+		value:2500,
+		proficiencies:['Simple Weapons','Light Crossbows']
+	},{
+		name:'Greatsword',
+		description:'',
+		categories:['Martial','Melee','Weapon'],
+		count:1,
+		damage2:'2d6',
+		damageType:"Slashing",
+		value:5000,
+		heavy:true,
+		proficiencies:['Martial Weapons','Greatsword']
+	},{
+		name:'Warhammer',
+		description:'',
+		categories:['Martial','Melee','Weapon'],
+		count:1,
+		damage1:'1d8',
+		damage2:'1d10',
+		damageType:"Bludgeoning",
+		value:1500,
+		proficiencies:['Martial Weapons','Greatsword']
+	},{
+		name:'Glaive',
+		description:'',
+		categories:['Martial','Melee','Weapon'],
+		count:1,
+		damage2:'1d10',
+		damageType:"Slashing",
+		value:2000,
+		heavy:true,
+		reach:true,
+		proficiencies:['Martial Weapons','Polearm']
+	},{
+		name:'Halberd',
+		description:'',
+		categories:['Martial','Melee','Weapon'],
+		count:1,
+		damage2:'1d10',
+		damageType:"Slashing",
+		value:2000,
+		heavy:true,
+		reach:true,
+		proficiencies:['Martial Weapons','Polearm']
+	},{
+		name:'Mace',
+		description:'',
+		categories:['Simple','Melee','Weapon'],
+		count:1,
+		damage1:'1d6',
+		damageType:"Bludgeoning",
+		value:500,
+		proficiencies:['Simple Weapons','Mace']
+	},
+	//armors
+	{
+		name:'Breastplate',
+		description:'This armor consists of a fitted metal chest piece worn with supple leather. Although it leaves the legs and arms relatively unprotected, this armor provides good protection for the wearer\'s vital organs while leaving the wearer relatively unencumbered.',
+		ac:'14 + Dex (max +2)',
+		categories:['Armor'],
+		count:1,
+		value:40000,
+		proficiencies:['Medium Armor']
+	},{
+		name:'Chain Mail',
+		description:'Made of interlocking metal rings, chain mail includes a layer of quilted fabric worn underneath the mail to prevent chafing and to cushion the impact of blows. The suit includes gauntlets.\nThe wearer has disadvantage on Stealth (Dexterity) checks.\nIf the wearer has a Strength score lower than 13, their speed is reduced by 10 feet.',
+		ac:'16',
+		categories:['Armor'],
+		count:1,
+		value:7500,
+		proficiencies:['Heavy Armor']
+	},{
+		name:'Chain Shirt',
+		description:'Made of interlocking metal rings, a chain shirt is worn between layers of clothing or leather. This armor offers modest protection to the wearer\'s upper body and allows the sound of the rings rubbing against one another to be muffled by outer layers.',
+		ac:'13 + Dex (max +2)',
+		categories:['Armor'],
+		count:1,
+		value:5000,
+		proficiencies:['Medium Armor']
+	},{
+		name:'Half Plate Armor',
+		description:'Half plate consists of shaped metal plates that cover most of the wearer\'s body. It does not include leg protection beyond simple greaves that are attached with leather straps.\nThe wearer has disadvantage on Stealth (Dexterity) checks.',
+		ac:'15 + Dex (max +2)',
+		categories:['Armor'],
+		count:1,
+		value:75000,
+		proficiencies:['Medium Armor']
+	},{
+		name:'Hide Armor',
+		description:'This crude armor consists of thick furs and pelts. It is commonly worn by barbarian tribes, evil humanoids, and other folk who lack access to the tools and materials needed to create better armor.',
+		ac:'12 + Dex (max +2)',
+		categories:['Armor'],
+		count:1,
+		value:1000,
+		proficiencies:['Medium Armor']
+	},{
+		name:'Leather Armor',
+		description:'The breastplate and shoulder protectors of this armor are made of leather that has been stiffened by being boiled in oil. The rest of the armor is made of softer and more flexible materials.',
+		ac:'11 + Dex',
+		categories:['Armor'],
+		count:1,
+		value:1000,
+		proficiencies:['Light Armor']
+	},{
+		name:'Padded Armor',
+		description:'Padded armor consists of quilted layers of cloth and batting.\nThe wearer has disadvantage on Stealth (Dexterity) checks.',
+		ac:'11 + Dex',
+		categories:['Armor'],
+		count:1,
+		value:500,
+		proficiencies:['Light Armor']
+	},{
+		name:'Plate Armor',
+		description:'Plate consists of shaped, interlocking metal plates to cover the entire body. A suit of plate includes gauntlets, heavy leather boots, a visored helmet, and thick layers of padding underneath the armor. Buckles and straps distribute the weight over the body.\nThe wearer has disadvantage on Stealth (Dexterity) checks.\nIf the wearer has a Strength score lower than 15, their speed is reduced by 10 feet.',
+		ac:'18',
+		categories:['Armor'],
+		count:1,
+		value:150000,
+		proficiencies:['Heavy Armor']
+	},{
+		name:'Ring Mail',
+		description:'This armor is leather armor with heavy rings sewn into it. The rings help reinforce the armor against blows from swords and axes. Ring mail is inferior to chain mail, and it\'s usually worn only by those who can\'t afford better armor.\nThe wearer has disadvantage on Stealth (Dexterity) checks.',
+		ac:'14',
+		categories:['Armor'],
+		count:1,
+		value:3000,
+		proficiencies:['Heavy Armor']
+	},{
+		name:'Scale Mail',
+		description:'This armor consists of a coat and leggings (and perhaps a separate skirt) of leather covered with overlapping pieces of metal, much like the scales of a fish. The suit includes gauntlets.\nThe wearer has disadvantage on Stealth (Dexterity) checks.',
+		ac:'14 + Dex (max +2)',
+		categories:['Armor'],
+		count:1,
+		value:5000,
+		proficiencies:['Medium Armor']
+	},{
+		name:'Splint Armor',
+		description:'This armor is made of narrow vertical strips of metal riveted to a backing of leather that is worn over cloth padding. Flexible chain mail protects the joints.\nThe wearer has disadvantage on Stealth (Dexterity) checks.\nIf the wearer has a Strength score lower than 15, their speed is reduced by 10 feet.',
+		ac:'17',
+		categories:['Armor'],
+		count:1,
+		value:20000,
+		proficiencies:['Heavy Armor']
+	},{
+		name:'Studded Leather Armor',
+		description:'Made from tough but flexible leather, studded leather is reinforced with close-set rivets or spikes.',
+		ac:'12 + Dex',
+		categories:['Armor'],
+		count:1,
+		value:4500,
+		proficiencies:['Light Armor']
+	}
+	//ammo
+	,{
+		name:'Bolt',
+		description:'Ammunition needed to use crossbows.',
+		categories:['Ammunition'],
+		count:1,
+		value:5
+	},{
+		name:'Bullet',
+		description:'Ammunition needed to use slings.',
+		categories:['Ammunition'],
+		count:1,
+		value:1
+	},{
+		name:'Arrow',
+		description:'Ammunition needed to use bows.',
+		categories:['Ammunition'],
+		count:1,
+		value:5
+	},
+	//misc
+	{
+		name:"Holy Symbol",
+		description:"A holy symbol is a representation of a god or pantheon.\nA cleric or paladin can use a holy symbol as a spellcasting focus, using it in place of any material components which do not list a cost. To use the symbol in this way, the caster must hold it in hand, wear it visibly, or bear it on a shield.",
+		categories:["Spellcasting Focus"],
+		count:1,
+		value:100
+	},
+	//magical
+	{
 		name:'The Scroll of Beginnings',
-		description:'The Scroll of Beginnings is the only artifact left over from the forming of the plane. It\'s theorized that the text contained within determines the nature of reality, and the scroll may even have the ability to change its own text, rewriting reality in the process.\nWhen you read the scroll as an action, make an Intelligence saving throw, DC 20. If you succeed, you cast Wish at 9th level using no components, choosing any of the effects listed in the spell description. You do not suffer the normal stress for choosing an effect other than duplicating another spell.\nThe Scroll of Beginnings is consumed when you successfully read it.',
+		description:'The Scroll of Beginnings is the only artifact left over from the forming of the plane. It\'s theorized that the text contained within determines the nature of reality, and the scroll may even have the ability to change its own text, rewriting reality in the process.\nWhen you read the scroll as an action, make an Intelligence saving throw, DC 20. If you succeed, you cast Wish at 9th level, choosing any of the effects listed in the spell description. You do not suffer the normal stress for choosing an effect other than duplicating another spell.\nThe Scroll of Beginnings is consumed when you successfully read it.',
 		categories:['Wondrous','Artifact'],
 		count:1,
-		meleeRange:0,
-		meleeDamage:'1',
-		throwRange:[5,10],
-		throwDamage:'1',
-		finesse:false,
 		value:5500000,
 		proficiencies:['Language: Primordial']
+	},{
+		name:'The Mirari',
+		description:'This crystal orb glows with a warm energy. Wherever you walk, plants bloom around you, even reviving wilted plants in a matter of seconds.\nWhenever you cast a spell of 3rd level or lower, if that spell is only capable of targeting one creature at the level you cast it at, you can duplicate that spell targeting a second creature.\nThis effect can\'t be used again until you finish a long rest.',
+		categories:['Wondrous','Artifact'],
+		count:1,
+		value:10000,
+		proficiencies:['Language: Common']
 	}
 ];

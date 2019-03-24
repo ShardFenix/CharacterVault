@@ -1,3 +1,12 @@
+//this is used for classes who know every spell but must prepare them instead
+function learnAllClassSpells(char,$scope){
+	for (let spell of window.spells){
+		if (spell.classes.includes($scope.chosenClassName)){
+			addSpell(char,spell.name,$scope.chosenClassName);
+		}
+	}
+}
+
 function hasProficiency(char,name){
 	for (let prof of char.proficiencies){
 		if (prof===name){
@@ -16,12 +25,21 @@ function isProficientWith(char,item){
 	return false;
 }
 
-function findItem(itemname){
+function findItem(itemname, count){
 	for (let item of window.items){
 		if (item.name===itemname){
-			return item;
+			let i=angular.copy(item);
+			if (count){
+				i.count=count;
+			}
+			return i;
 		}
 	}
+	//if no item is found, create one with that name
+	return {
+		name:itemname,
+		count:count
+	};
 }
 
 function findAbility(name){
@@ -150,7 +168,7 @@ function listSimpleWeapons(){
 	for (var i=0;i<window.items.length;i++){
 		let item=window.items[i];
 		if (item.categories.indexOf('Simple')!=-1 && item.categories.indexOf('Weapon')!=-1){
-			result.push(item.name);
+			result.push(item);
 		}
 	}
 	return result;
@@ -161,7 +179,7 @@ function listMartialWeapons(){
 	for (var i=0;i<window.items.length;i++){
 		let item=window.items[i];
 		if (item.categories.indexOf('Martial')!=-1 && item.categories.indexOf('Weapon')!=-1){
-			result.push(item.name);
+			result.push(item);
 		}
 	}
 	return result;
@@ -208,10 +226,12 @@ Array.prototype.upush=function(element){
 	}
 };
 
-function listSpecializations(classname){
+function listSpecializations(char,$scope){
 	var result=[];
-	for (var subclass of window.subclasses){
-		result.push(subclass.subclass);
+	for (let subclass of window.subclasses){
+		if (subclass.classname===$scope.chosenClassName){
+			result.push(subclass.subclass);
+		}
 	}
 	return result;
 }
@@ -233,7 +253,7 @@ function listUnlearnableSpells(char,$scope){
 		if (c.name===classname){
 			for (let spell of c.spells){
 				if (spell.level>0){
-					result.push(spell.name);
+					result.push(spell);
 				}
 			}
 		}
@@ -259,7 +279,7 @@ function listAllUnknownSpells(char,scope){
 			if (found)break;
 		}
 		if (!found){
-			result.push(spell.name);
+			result.push(spell);
 		}
 	}
 	return result;
@@ -285,7 +305,7 @@ function listAllUnknownCantrips(char,$scope){
 			if (found){break;}
 		}
 		if (!found){
-			result.push(spell.name);
+			result.push(spell);
 		}
 	}
 	return result;
@@ -342,7 +362,7 @@ function listUnknownCantripsForClass(char,classname){
 			}
 		}
 		if (!found){
-			result.push(spell.name);
+			result.push(spell);
 		}
 	}
 	return result;
@@ -415,7 +435,7 @@ function listLearnableSpellsForClass(char,$scope){
 			}
 		}
 		if (!found){
-			result.push(spell.name);
+			result.push(spell);
 		}
 	}
 	return result;
@@ -480,7 +500,7 @@ function getUnknownFeats(char){
 			}
 		}
 		if (!found){
-			result.push(feat.name);
+			result.push(feat);
 		}
 	}
 	return result;
@@ -553,6 +573,15 @@ function ladder(value, ...breakpoints){
 		return breakpoints[breakpoints.length-1];
 	}
 	return value;
+}
+
+function getClassLevel(char,classname){
+	for (let clas of char.classes){
+		if (clas.name===classname){
+			return clas.level;
+		}
+	}
+	return 0;
 }
 
 //used for determining spell slots
