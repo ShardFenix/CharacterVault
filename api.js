@@ -230,7 +230,7 @@ function listSpecializations(char,$scope){
 	var result=[];
 	for (let subclass of window.subclasses){
 		if (subclass.classname===$scope.chosenClassName){
-			result.push(subclass.subclass);
+			result.push(subclass);
 		}
 	}
 	return result;
@@ -555,7 +555,21 @@ function nextLevel(char,className){
 }
 
 function addPassive(char,name){
-	char.passives.push(findPassive(name));
+	let p = findPassive(name);
+	if (p){
+		char.passives.push(p);
+	} else {
+		console.error("Passive not found: "+name);
+	}
+}
+
+function removePassive(char,name){
+	for (let i=0;i<char.passives.length;i++){
+		if (char.passives[i].name===name){
+			char.passives.splice(i,1);
+			return;
+		}
+	}
 }
 
 /**

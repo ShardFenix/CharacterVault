@@ -41,6 +41,17 @@ var helper={
 							scope.updateStep+=2;
 						}
 					},
+	chooseRaceFeat:{ //same as above, but dont skip 2 steps
+						"choicePrompt":"Choose a Feat",
+						"choices":[getUnknownFeats],
+						"action":function(char,derived,choice,scope){
+							let f = angular.copy(findFeat(choice));
+							char.passives.push(f);
+							if (f.onPickup){
+								f.onPickup(char,scope);
+							}
+						}
+					},
 	chooseSpell:{
 						"choicePrompt":"Choose a spell.",
 						"choices":[listLearnableSpellsForClass],
@@ -134,11 +145,7 @@ var helper={
 							switch (choice){
 								case "+1 Strength":char.attributes.str+=1;break;
 								case "+1 Dexterity":char.attributes.dex+=1;break;
-								case "+1 Constitution":char.attributes.con+=1;
-									if (char.attributes.con%2==0){
-										char.maxHp+=char.level;
-										char.hp+=char.level;
-									}break;
+								case "+1 Constitution":char.attributes.con+=1;break;
 								case "+1 Intelligence":char.attributes.int+=1;break;
 								case "+1 Wisdom":char.attributes.wis+=1;break;
 								case "+1 Charisma":char.attributes.cha+=1;break;
@@ -149,37 +156,28 @@ var helper={
 						"choicePrompt":"What did you roll for your hit dice?",
 						"choices":[1,2,3,4,5,6],
 						"action":function(char,derived,choice){
-							let conMod=Math.floor(char.attributes.con/2)-5;
 							char.maxHp+=choice;
-							char.hp+=choice;
 						}
 					},
 	hitDice8:{
 						"choicePrompt":"What did you roll for your hit dice?",
 						"choices":[1,2,3,4,5,6,7,8],
 						"action":function(char,derived,choice){
-							let conMod=Math.floor(char.attributes.con/2)-5;
 							char.maxHp+=choice;
-							char.hp+=choice;
 						}
 					},
 	hitDice10:{
 						"choicePrompt":"What did you roll for your hit dice?",
 						"choices":[1,2,3,4,5,6,7,8,9,10],
 						"action":function(char,derived,choice){
-							let conMod=Math.floor(char.attributes.con/2)-5;
 							char.maxHp+=choice;
-							char.hp+=choice;
 						}
 					},
 	hitDice12:{
 						"choicePrompt":"What did you roll for your hit dice?",
 						"choices":[1,2,3,4,5,6,7,8,9,10,11,12],
 						"action":function(char,derived,choice){
-							let conMod=Math.floor(char.attributes.con/2)-5;
-							choice+=conMod;
 							char.maxHp+=choice;
-							char.hp+=choice;
 						}
 					}
 };
@@ -264,7 +262,6 @@ function openPack(char,packname){
 window.languages=['Language: Common','Language: Elven','Language: Dwarven','Language: Gnomish','Language: Halfling','Language: Giant','Language: Orc','Language: Infernal','Language: Primordial','Language: Abyssal','Language: Celestial','Language: Draconic','Language: Deep Speech','Language: Sylvan','Language: Undercommon',"Language: Thieves' Cant","Language: Druidic"];
 
 
-window.races=[];
 window.skills=[
 	{name:"Acrobatics",attribute:"dex"},
 	{name:"Animal Handling",attribute:"wis"},
@@ -510,7 +507,6 @@ window.classes=
 						"choices":[],
 						"action":function(char,derived,choice){
 							char.maxHp=8;
-							char.hp=8;
 							char.proficiencies.push("Light Armor");
 							char.proficiencies.push("Simple Weapons");
 							char.proficiencies.push("Rapiers");
@@ -748,15 +744,15 @@ window.classes=
 		]
 	},
 	{
-		"classname":"Cleric",
-		"levels":[
+		classname:"Cleric",
+		name:"Cleric",
+		levels:[
 			{ //1, first player level
 				"updates":[
 					{
 						"choices":[],
 						"action":function(char,derived,choice,$scope){
 							char.maxHp=8;
-							char.hp=8;
 							char.proficiencies.push("Light Armor");
 							char.proficiencies.push("Simple Weapons");
 							char.proficiencies.push("Medium Armor");
@@ -857,7 +853,7 @@ window.classes=
 					{
 						"choices":[],
 						"action":function(char,derived,choice){
-							addPassive(char,"Channel Divinity");
+							addAbility(char,"Channel Divinity");
 						}
 					}
 				]
@@ -1020,9 +1016,11 @@ window.classes=
 window.subclasses=
 [
 	{
-		"classname":"Bard",
-		"subclass":"College of Lore",
-		"levels":[
+		classname:"Bard",
+		name:"College of Lore",
+		subclass:"College of Lore",
+		description:"Bards of the College of Lore know something about most things, collecting bits of knowledge from sources as diverse as scholarly tomes and peasant tales. Whether singing folk ballads in taverns or elaborate compositions in royal courts, these bards use their gifts to hold audiences spellbound. When the applause dies down, the audience members might find themselves questioning everything they held to be true, from their faith in the priesthood of the local temple to their loyalty to the king.\nThe loyalty of these bards lies in the pursuit of beauty and truth, not in fealty to a monarch or following the tenets of a deity. A noble who keeps such a bard as a herald or advisor knows that the bard would rather be honest than politic.\nThe college's members gather in libraries and sometimes in actual colleges, complete with classrooms and dormitories, to share their lore with one another. They also meet at festivals or affairs of state, where they can expose corruption, unravel lies, and poke fun at self-important figures of authority.",
+		levels:[
 			{},{},{},
 			{ // 3
 				"updates":[
@@ -1071,8 +1069,9 @@ window.subclasses=
 	},
 	{
 		classname:"Cleric",
+		name:"Life Domain",
 		subclass:"Life Domain",
-		description:"The Life domain focuses on the vibrant positive energy—one of the fundamental forces of the universe—that sustains all life. The gods of life promote vitality and health through healing the sick and wounded, caring for those in need, and driving away the forces of death and undeath. Almost any non-evil deity can claim influence over this domain, particularly agricultural deities (such as Chauntea, Arawai, and Demeter), sun gods (such as Lathander, Pelor, and Re-Horakhty), gods of healing or endurance (such as Ilmater, Mishakal, Apollo, and Diancecht), and gods of home and community (such as Hestia, Hathor, and Boldrei).",
+		description:"The Life domain focuses on the vibrant positive energy - one of the fundamental forces of the universe - that sustains all life. The gods of life promote vitality and health through healing the sick and wounded, caring for those in need, and driving away the forces of death and undeath. Almost any non-evil deity can claim influence over this domain, particularly agricultural deities (such as Chauntea, Arawai, and Demeter), sun gods (such as Lathander, Pelor, and Re-Horakhty), gods of healing or endurance (such as Ilmater, Mishakal, Apollo, and Diancecht), and gods of home and community (such as Hestia, Hathor, and Boldrei).",
 		levels:[{},
 			{//1
 				updates:[

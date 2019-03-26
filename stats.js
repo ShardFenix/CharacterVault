@@ -28,6 +28,8 @@ $scope.spellFilters={
 	excludeClass:[false,false,false,false,false,false,false,false]
 }
 
+$scope.showSaveMenu=true;
+
 $scope.char={
 	maxHp:0,
 	hp:0,
@@ -55,6 +57,7 @@ $scope.derived={
 	saves:{
 		str:0,dex:0,con:0,int:0,wis:0,cha:0
 	},
+	maxHp:0,//con modifier and some feats/passives may increase this
 	skills:[],
 	initiative:0,
 	moveSpeed:30,
@@ -362,16 +365,8 @@ function classLevel(className){
 	
 //calculate the derived stat values (bonuses, saving throws, skills, etc)
 $scope.calculate=function(){
-	if ($scope.char.level){
-		//get highest class level. This determines proficiency
-		var highest=0;
-		for (var clas of $scope.char.classes){
-			if (clas.level>highest){
-				highest=clas.level;
-			}
-		}
-		$scope.derived.proficiency=Math.floor((highest+7)/4);
-	}
+	let oldMaxHp=$scope.derived.maxHp;
+	$scope.derived.proficiency=Math.floor(($scope.char.level+7)/4);
 	if (!Number.isNaN(parseInt($scope.char.attributes.str))){
 		$scope.derived.modifiers.str = Math.floor(parseInt($scope.char.attributes.str)/2)-5;
 	}
@@ -400,7 +395,8 @@ $scope.calculate=function(){
 	}
 	
 	$scope.derived.initiative=$scope.derived.modifiers.dex;
-	
+	$scope.derived.maxHp=$scope.char.maxHp + ($scope.derived.modifiers.con * $scope.char.level);
+	 
 	$scope.derived.saves.str = $scope.derived.modifiers.str + $scope.char.saves.str*$scope.derived.proficiency;
 	$scope.derived.saves.dex = $scope.derived.modifiers.dex + $scope.char.saves.dex*$scope.derived.proficiency;
 	$scope.derived.saves.con = $scope.derived.modifiers.con + $scope.char.saves.con*$scope.derived.proficiency;
@@ -421,6 +417,8 @@ $scope.calculate=function(){
 			passive.apply($scope.char,$scope);
 		}
 	}
+	let hpDiff = $scope.derived.maxHp-oldMaxHp;
+	$scope.char.hp+=hpDiff;
 }
 
 $scope.incrCopper=function(){
@@ -702,6 +700,29 @@ $scope.setTip=function(choice){
 	$scope.tip=choice;
 }
 
+$scope.newChar=function(){
+	$scope.showSaveMenu=false;
+	let choices=[];
+	for (let race of window.races){
+		choices.push(race);
+	}
+	$scope.currentChoice={
+		choicePrompt:"Choose a Race",
+		choices:choices,
+		action:function(char,derived,choice,scope){
+			for (let race of window.races){
+				if (race.name===choice){
+					if (race.onPickup){
+						race.onPickup(char,scope);
+					}
+					return;
+				}
+			}
+		}
+	};
+	$scope.currentChoices=choices;
+}
+
 $scope.save=function(){
 	if (typeof(Storage) !== "undefined") {
 		if ($scope.saveId==-1){
@@ -718,6 +739,7 @@ $scope.save=function(){
 			delete	ability.onShortRest;
 			delete ability.onLongRest;
 			delete ability.apply;
+			delete ability.maxChargesFunction;
 		}
 		localStorage.setItem("dnd"+$scope.saveId,JSON.stringify($scope.char));
 		$scope.loadList();
@@ -725,7 +747,7 @@ $scope.save=function(){
 }
 
 $scope.loadList=function(){
-$scope.saveList=[];
+	$scope.saveList=[];
 	if (typeof(Storage) !== "undefined") {
 		for (var i=0;i<10;i++){
 			var jsonString = localStorage.getItem("dnd"+i);
@@ -743,23 +765,39 @@ $scope.load=function(num){
 		$scope.saveId=num;
 		//hook up passive and ability functions, since those can't be serialized
 		for (passive of $scope.char.passives){
+			let found=false;
 			for (p of packages.passives){
 				if (p.name===passive.name){
 					passive.onShortRest=p.onShortRest;
 					passive.onLongRest=p.onLongRest;
 					passive.apply=p.apply;
+					break;
+					found=true;
+				}
+			}
+			if (!found){
+				for (p of packages.feats){
+					if (p.name===passive.name){
+						passive.onShortRest=p.onShortRest;
+						passive.onLongRest=p.onLongRest;
+						passive.apply=p.apply;
+						break;
+					}
 				}
 			}
 		}
 		for (passive of $scope.char.abilities){
-			for (p of packages.passives){
-				if (p.name===passive.name){
-					passive.onShortRest=p.onShortRest;
-					passive.onLongRest=p.onLongRest;
-					passive.apply=p.apply;
+			for (a of packages.passives){
+				if (a.name===passive.name){
+					passive.onShortRest=a.onShortRest;
+					passive.onLongRest=a.onLongRest;
+					passive.apply=a.apply;
+					passive.maxChargesFunction=a.maxChargesFunction;
+					break;
 				}
 			}
 		}
+		$scope.showSaveMenu=false;
 		$scope.calculate();
 	}
 }

@@ -1,16 +1,62 @@
 window.items=[
 	{
-		name:'Lyre',
+		name:'Club',
 		description:'',
-		categories:['Instrument'],
-		value:200,
-		proficiencies:['Lyre']
-	},	{
-		name:'Flute',
+		categories:['Simple','Melee','Weapon'],
+		count:1,
+		damage1:'1d4',
+		damageType:"Bludgeoning",
+		value:10,
+		proficiencies:['Simple Weapons','Clubs']
+	},{
+		name:'Sickle',
 		description:'',
-		categories:['Instrument'],
-		value:200,
-		proficiencies:['Flute']
+		categories:['Simple','Melee','Weapon'],
+		count:1,
+		damage1:'1d4',
+		damageType:"Slashing",
+		value:100,
+		proficiencies:['Simple Weapons','Sickle']
+	},{
+		name:'Spear',
+		description:'',
+		categories:['Simple','Melee','Weapon'],
+		count:1,
+		damage1:'1d6',
+		damage2:'1d8',
+		damageType:"Piercing",
+		throwRange:[20,60],
+		value:100,
+		proficiencies:['Simple Weapons','Spears']
+	},{
+		name:'Sling',
+		description:'',
+		categories:['Simple','Ranged','Weapon'],
+		count:1,
+		damage2:'1d4',
+		damageType:"Bludgeoning",
+		throwRange:[30,120],
+		value:10,
+		proficiencies:['Simple Weapons','Slings']
+	},{
+		name:'Greatclub',
+		description:'',
+		categories:['Simple','Melee','Weapon'],
+		count:1,
+		damage2:'1d8',
+		damageType:"Bludgeoning",
+		value:20,
+		proficiencies:['Simple Weapons','Greatclubs']
+	},{
+		name:'Quarterstaff',
+		description:'',
+		categories:['Simple','Melee','Weapon'],
+		count:1,
+		damage1:'1d6',
+		damage2:'1d8',
+		damageType:"Bludgeoning",
+		value:20,
+		proficiencies:['Simple Weapons','Staves']
 	},{
 		name:'Longsword',
 		description:'',
@@ -32,6 +78,47 @@ window.items=[
 		throwRange:[20,60],
 		value:200,
 		proficiencies:['Simple Weapons','Daggers']
+	},{
+		name:'Light Hammer',
+		description:'',
+		categories:['Simple','Melee','Weapon'],
+		count:1,
+		damage1:'1d4',
+		damageType:"Bludgeoning",
+		throwRange:[20,60],
+		value:200,
+		proficiencies:['Simple Weapons','Light Hammers']
+	},{
+		name:'Handaxe',
+		description:'',
+		categories:['Simple','Melee','Weapon'],
+		count:1,
+		damage1:'1d6',
+		damageType:"Slashing",
+		throwRange:[20,60],
+		value:500,
+		proficiencies:['Simple Weapons','Handaxes']
+	},{
+		name:'Javelin',
+		description:'',
+		categories:['Simple','Melee','Weapon'],
+		count:1,
+		damage1:'1d6',
+		damageType:"Piercing",
+		throwRange:[30,120],
+		value:500,
+		proficiencies:['Simple Weapons','Javelins']
+	},{
+		name:'Dart',
+		description:'',
+		categories:['Simple','Ranged','Weapon'],
+		count:1,
+		damage1:'1d4',
+		damageType:"Piercing",
+		finesse:true,
+		throwRange:[20,60],
+		value:200,
+		proficiencies:['Simple Weapons','Darts']
 	},{
 		name:'Shield',
 		description:'A shield is made from wood or metal and is carried in one hand. Wielding a shield increases your Armor Class by 2. You can benefit from only one shield at a time.',
@@ -58,7 +145,7 @@ window.items=[
 		damageType:"Slashing",
 		value:5000,
 		heavy:true,
-		proficiencies:['Martial Weapons','Greatsword']
+		proficiencies:['Martial Weapons','Greatswords']
 	},{
 		name:'Warhammer',
 		description:'',
@@ -68,7 +155,7 @@ window.items=[
 		damage2:'1d10',
 		damageType:"Bludgeoning",
 		value:1500,
-		proficiencies:['Martial Weapons','Greatsword']
+		proficiencies:['Martial Weapons','Warhammers']
 	},{
 		name:'Glaive',
 		description:'',
@@ -79,7 +166,7 @@ window.items=[
 		value:2000,
 		heavy:true,
 		reach:true,
-		proficiencies:['Martial Weapons','Polearm']
+		proficiencies:['Martial Weapons','Polearms','Glaives']
 	},{
 		name:'Halberd',
 		description:'',
@@ -90,7 +177,7 @@ window.items=[
 		value:2000,
 		heavy:true,
 		reach:true,
-		proficiencies:['Martial Weapons','Polearm']
+		proficiencies:['Martial Weapons','Polearms','Halberds']
 	},{
 		name:'Mace',
 		description:'',
@@ -99,7 +186,166 @@ window.items=[
 		damage1:'1d6',
 		damageType:"Bludgeoning",
 		value:500,
-		proficiencies:['Simple Weapons','Mace']
+		proficiencies:['Simple Weapons','Maces']
+	},{
+		name:'Battleaxe',
+		description:'',
+		categories:['Martial','Melee','Weapon'],
+		count:1,
+		damage1:'1d8',
+		damage2:'1d10',
+		damageType:"Slashing",
+		value:1000,
+		proficiencies:['Martial Weapons','Battleaxes']
+	},{
+		name:'Flail',
+		description:'',
+		categories:['Martial','Melee','Weapon'],
+		count:1,
+		damage1:'1d8',
+		damageType:"Bludgeoning",
+		value:1000,
+		proficiencies:['Martial Weapons','Flails']
+	},{
+		name:'Greataxe',
+		description:'',
+		categories:['Martial','Melee','Weapon'],
+		count:1,
+		damage2:'1d12',
+		damageType:"Slashing",
+		value:3000,
+		heavy:true,
+		proficiencies:['Martial Weapons','Greataxes']
+	},{
+		name:'Hand Crossbow',
+		description:'',
+		categories:['Martial','Ranged','Weapon'],
+		count:1,
+		damage1:'1d6',
+		damageType:"Piercing",
+		attackRange:[30,120],
+		value:7500,
+		proficiencies:['Martial Weapons','Hand Crossbows']
+	},{
+		name:'Heavy Crossbow',
+		description:'',
+		categories:['Martial','Ranged','Weapon'],
+		count:1,
+		damage2:'1d10',
+		damageType:"Piercing",
+		attackRange:[100,400],
+		value:5000,
+		proficiencies:['Martial Weapons','Heavy Crossbows']
+	},{
+		name:'Longbow',
+		description:'',
+		categories:['Martial','Ranged','Weapon'],
+		count:1,
+		damage2:'1d8',
+		damageType:"Piercing",
+		attackRange:[150,600],
+		value:5000,
+		heavy:true,
+		proficiencies:['Martial Weapons','Longbows']
+	},{
+		name:'Shortbow',
+		description:'',
+		categories:['Simple','Ranged','Weapon'],
+		count:1,
+		damage2:'1d6',
+		damageType:"Piercing",
+		attackRange:[80,320],
+		value:2500,
+		proficiencies:['Simple Weapons','Shortbows']
+	},{
+		name:'Maul',
+		description:'',
+		categories:['Martial','Melee','Weapon'],
+		count:1,
+		damage2:'2d6',
+		damageType:"Bludgeoning",
+		value:1000,
+		heavy:true,
+		proficiencies:['Martial Weapons','Mauls']
+	},{
+		name:'Morningstar',
+		description:'',
+		categories:['Martial','Melee','Weapon'],
+		count:1,
+		damage1:'1d8',
+		damageType:"Piercing",
+		value:1500,
+		proficiencies:['Martial Weapons','Morningstars']
+	},{
+		name:'Pike',
+		description:'',
+		categories:['Martial','Melee','Weapon'],
+		count:1,
+		damage2:'1d10',
+		damageType:"Piercing",
+		reach:true,
+		value:500,
+		heavy:true,
+		proficiencies:['Martial Weapons','Polearms','Pikes']
+	},{
+		name:'Rapier',
+		description:'',
+		categories:['Martial','Melee','Weapon'],
+		count:1,
+		damage1:'1d8',
+		damageType:"Piercing",
+		finesse:true,
+		value:2500,
+		proficiencies:['Martial Weapons','Rapiers']
+	},{
+		name:'Scimitar',
+		description:'',
+		categories:['Martial','Melee','Weapon'],
+		count:1,
+		damage1:'1d6',
+		damageType:"Slashing",
+		finesse:true,
+		value:2500,
+		proficiencies:['Martial Weapons','Scimitars']
+	},{
+		name:'Shortsword',
+		description:'',
+		categories:['Martial','Melee','Weapon'],
+		count:1,
+		damage1:'1d6',
+		damageType:"Piercing",
+		finesse:true,
+		value:1000,
+		proficiencies:['Martial Weapons','Shortswords']
+	},{
+		name:'Trident',
+		description:'',
+		categories:['Martial','Melee','Weapon'],
+		count:1,
+		damage1:'1d6',
+		damage2:'1d8',
+		damageType:"Piercing",
+		throwRange:[20,60],
+		value:2500,
+		proficiencies:['Martial Weapons','Tridents']
+	},{
+		name:'War Pick',
+		description:'',
+		categories:['Martial','Melee','Weapon'],
+		count:1,
+		damage1:'1d8',
+		damageType:"Piercing",
+		value:500,
+		proficiencies:['Martial Weapons','Picks']
+	},{
+		name:'Katana',
+		description:'',
+		categories:['Martial','Melee','Weapon'],
+		count:1,
+		damage2:'1d8',
+		damageType:"Slashing",
+		value:2500,
+		proficiencies:['Martial Weapons','Katanas']
 	},
 	//armors
 	{
@@ -219,6 +465,20 @@ window.items=[
 		count:1,
 		value:5
 	},
+	//instruments/tools
+	{
+		name:'Lyre',
+		description:'',
+		categories:['Instrument'],
+		value:200,
+		proficiencies:['Lyre']
+	},	{
+		name:'Flute',
+		description:'',
+		categories:['Instrument'],
+		value:200,
+		proficiencies:['Flute']
+	},
 	//misc
 	{
 		name:"Holy Symbol",
@@ -242,5 +502,12 @@ window.items=[
 		count:1,
 		value:10000,
 		proficiencies:['Language: Common']
+	},{
+		name:'Hover Boots',
+		description:'Brass and Gilt adorn the metallic wings that decorate these boots. You may walk horizontally on air or liquid for up to half your movement speed before beginning to fall.',
+		categories:['Wondrous','Clothing'],
+		count:1,
+		value:40000,
+		proficiencies:[]
 	}
 ];

@@ -8,7 +8,7 @@
 <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular-animate.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular-sanitize.js"></script>
 </head>
-<body style="background-color:#ffffff;">
+<body style="background-color:#ffffff;width:100vw;overflow-x:hidden;">
 <div ng-app="myApp">
 <div ng-controller="MyController" ng-cloak>
 
@@ -145,7 +145,7 @@
 			<div class="label" style="padding:8px 10px">
 				<input type='text' class='hidden right' ng-model='char.hp' number/>
 				<span>&nbsp;/&nbsp;</span>
-				<input type='text' class='hidden left' ng-model='char.maxHp' number/>
+				<input type='text' class='hidden left' disabled ng-model='derived.maxHp' number/>
 				</div>
 		</td>
 	</tr></table>
@@ -631,6 +631,8 @@
 </div>
 
 <div class="modal" ng-class="{'show':showSaveMenu}">
+	<div class="label bordertitle">Create New Character</div>
+	<span class="button" ng-click="newChar()">Create</span>
 	<div class="label bordertitle">Save/Load</div>
 	<input type='text' ng-model='char.name' placeholder='Character Name'/>
 	<br>
@@ -645,6 +647,7 @@
 <script src="./api.js"></script>
 <script src="./feats.js"></script>
 <script src="./items.js"></script>
+<script src="./races.js"></script>
 <script src="./packages.js"></script>
 <script src="./spells.js"></script>
 <script src="./stats.js"></script>

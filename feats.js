@@ -52,13 +52,9 @@ window.feats=[
 	},{
 			name:"Durable",
 			description:"Hardy and resilient, you gain the following benefits:\n\u2022 Increase your Constitution score by 1, to a maximum of 20.\n\u2022 When you roll a Hit Die to regain hit points, the minimum number of hit points you regain from the roll equals twice your Constitution modifier (minimum of 2).",
-			onPickup:function(char,scope){
+			onPickup:function(char,$scope){
 				if (char.attributes.con<20){
 					char.attributes.con+=1;
-					if (char.attributes.con%2===0){
-						char.maxHp+=char.level;
-						char.hp+=char.level;
-					}
 				}
 			}
 	},{
@@ -379,25 +375,31 @@ window.feats=[
 				);
 			}
 	},{
-			name:"Tavern Brawler",
+			name:"Tavern Brawler (Str)",
+			identity:"Tavern Brawler",
+			description:"Accustomed to rough-and-tumble fighting using whatever weapons happen to be at hand, you gain the following benefits:\n\u2022 Increase your Strength or Constitution by 1, to a maximum of 20.\n\u2022 You are proficient with improvised weapons.\n\u2022 Your unarmed strike uses a d4 for damage.\n\u2022 When you hit a creature with an unarmed strike or an improvised weapon on your turn, you can use a bonus action to attempt to grapple the target.",
+			onPickup:function(char,scope){
+				addProficiency(char,"Improvised Weapons");
+				if (char.attributes.str<20){
+					char.attributes.str+=1;
+				}
+			}
+	},{
+			name:"Tavern Brawler (Con)",
+			identity:"Tavern Brawler",
 			description:"Accustomed to rough-and-tumble fighting using whatever weapons happen to be at hand, you gain the following benefits:\n\u2022 Increase your Strength or Constitution by 1, to a maximum of 20.\n\u2022 You are proficient with improvised weapons.\n\u2022 Your unarmed strike uses a d4 for damage.\n\u2022 When you hit a creature with an unarmed strike or an improvised weapon on your turn, you can use a bonus action to attempt to grapple the target.",
 			onPickup:function(char,scope){
 				addProficiency(char,"Improvised Weapons");
 				if (char.attributes.con<20){
 					char.attributes.con+=1;
-					if (char.attributes.con%2==0){
-						char.hp+=char.level;
-						char.maxHp+=char.level;
-					}
 				}
 			}
 	},{
 		//TODO: Add logic in stats.js to look for this during a levelup.
 			name:"Tough",
 			description:"Your hit point maximum increases by an amount equal to twice your level when you gain this feat. Whenever you gain a level thereafter, your hit point maximum increases by an additional 2 hit points.",
-			onPickup:function(char,scope){
-				char.maxHp+=char.level*2;
-				char.hp+=char.level*2;
+			apply:function(char,$scope){
+				$scope.derived.maxHp+=char.level*2;
 			}
 	},{
 			name:"War Caster",
