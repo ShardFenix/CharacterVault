@@ -473,7 +473,10 @@ function addSpell(char,spellname,forClass){
 }
 
 function addAbility(char,name){
-	char.abilities.push(angular.copy(findAbility(name)));
+	let abil = findAbility(name);
+	if (abil){
+		char.abilities.push(angular.copy(abil));
+	}
 }
 
 function removeAbility(char,name){

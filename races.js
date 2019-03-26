@@ -12,12 +12,12 @@ window.races=[
 					choices:["+1 to each attribute","+2 attribute points, 1 feat, 1 proficiency"],
 					action:function(char,derived,choice,$scope){
 						if (choice==="+1 to each attribute"){
-							char.str+=1;
-							char.dex+=1;
-							char.con+=1;
-							char.int+=1;
-							char.wis+=1;
-							char.cha+=1;
+							char.attributes.str+=1;
+							char.attributes.dex+=1;
+							char.attributes.con+=1;
+							char.attributes.int+=1;
+							char.attributes.wis+=1;
+							char.attributes.cha+=1;
 						} else {
 							$scope.choiceQueue.push(helper.increaseAttribute);
 							$scope.choiceQueue.push(helper.increaseAttribute);
@@ -35,8 +35,8 @@ window.races=[
 			char.proficiencies.push("Language: Common");
 			char.proficiencies.push("Language: Infernal");
 			char.speed=30;
-			char.int+=1;
-			char.cha+=2;
+			char.attributes.int+=1;
+			char.attributes.cha+=2;
 			addPassive(char,"Resistance to Fire");
 			addPassive(char,"Darkvision");
 			//race abilities
@@ -51,7 +51,7 @@ window.races=[
 			char.proficiencies.push("Language: Common");
 			char.proficiencies.push("Language: Elvish");
 			char.speed=30;
-			char.cha+=2;
+			char.attributes.cha+=2;
 			addPassive(char,"Darkvision");
 			addPassive(char,"Fey Ancestry");
 			//race abilities
