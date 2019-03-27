@@ -499,10 +499,11 @@ window.passives=[
 window.classes=
 [
 	{
-		"classname":"Bard",
-		"levels":[
+		classname:"Bard",
+		name:"Bard",
+		levels:[
 			{ //1, first player level
-				"updates":[
+				updates:[
 					{
 						"choices":[],
 						"action":function(char,derived,choice){
@@ -999,8 +1000,10 @@ window.classes=
 			}
 		]
 	},{
-		"classname":"Debug",
-		"levels":[
+		classname:"Debug",
+		name:"Debug",
+		description:"Used for testing things.",
+		levels:[
 			{
 				"updates":[
 					{

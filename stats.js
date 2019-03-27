@@ -108,11 +108,12 @@ var packages={
 	passives:window.passives
 };
 
-$scope.chosenClass=null;
+$scope.inSubclass=false;
 $scope.chosenLevel=null;
 $scope.updateStep=-1;
 $scope.currentChoices=null;
-$scope.chosenClassName=null
+$scope.currentPackage=null;
+$scope.chosenClassName=null;
 
 $scope.choiceQueue=[]; //used for choices that are made outside of a levelup (like subfeats)
 
@@ -131,21 +132,13 @@ $scope.levelUpStart=function(){
 	//show class selection
 	$scope.currentChoices=[];
 	$scope.updateStep=-1;
-	$scope.prompt="Choose a class";
+	$scope.prompt="Choose a Class";
 	for (var i=0;i<packages.classes.length;i++){
 		if (!(packages.classes[i].requirement) || packages.classes[i].requirement($scope.char)){
-			$scope.currentChoices.push(packages.classes[i].classname);
+			$scope.currentChoices.push(packages.classes[i]);
 		}
 	}
 };
-
-
-var currentStep=function(){
-	if ($scope.chosenClass.levels[$scope.chosenLevel].updates){
-		return $scope.chosenClass.levels[$scope.chosenLevel].updates[$scope.updateStep];
-	}
-	return null;
-}
 
 function checkChoiceQueue(){
 	if ($scope.choiceQueue.length>0){
@@ -161,7 +154,8 @@ function checkChoiceQueue(){
 				$scope.currentChoices.push(step.choices[i]);
 			}
 		}
-		$scope.currentChoice=$scope.choiceQueue[0];
+		$scope.currentStep=$scope.choiceQueue[0];
+		$scope.choiceQueue.splice(0,1);
 		return true;
 	}
 	return false;
@@ -171,122 +165,161 @@ function finishLevelUp(){
 	if ($scope.chosenLevel>0){
 		getCharacterClass($scope.char,$scope.chosenClassName).level=$scope.chosenLevel;
 	}
-	$scope.chosenClass=null;
+	$scope.inSubclass=false;
 	$scope.chosenLevel=null;
 	$scope.updateStep=-1;
 	$scope.currentChoices=null;
 	$scope.chosenClassName=null;
+	$scope.currentPackage=0;
+	$scope.currentStep=null;
 	if (!checkChoiceQueue()){
 		$scope.calculate();
 	}
 }
 
-var goToNextStep=function(){
-	$scope.updateStep++;
-	if ($scope.chosenClass.levels[$scope.chosenLevel].updates.length<=$scope.updateStep){
-		//done with this levelup. See if we can apply a subclass level
-		if ($scope.chosenClass.subclass){
-			//this means we just finished applying a subclass level. Skip to end
-			finishLevelUp();
-			return;
-		}
-		var sc=getCharacterClass($scope.char,$scope.chosenClass.classname).subclass;
-		if (sc){
-			sc = findSubclass($scope.chosenClass.classname,sc);
-			if (sc){
-				$scope.updateStep=0;
-				$scope.chosenClass=sc;
-				$scope.currentChoices=null;
-				if ($scope.chosenClass.levels[$scope.chosenLevel].updates
-				    && $scope.chosenClass.levels[$scope.chosenLevel].updates.length>$scope.updateStep){
-					setupForCurrentStep();
-				} else {
-					finishLevelUp();
-				}
-			}
-		} else {
-			//done with levelup
-			finishLevelUp();
-			return;
-		}
-	} else {
-		setupForCurrentStep();
-	}
-}
-
+/**
+ * Bu this time, it is assumed that $scope.currentChoice has been set to
+ * an array of updates.
+ */
 var setupForCurrentStep=function(){
-	var step = currentStep();
-	if (!step){return;}
-	if (step.choices.length>0){
+	$scope.currentStep=$scope.currentPackage[$scope.updateStep];
+	if ($scope.currentStep.choices.length>0){
 		//setup choice selection
 		//first, execute any functions that are in the choice array.
 		//all choice functions take char and derived as arguments
 		$scope.currentChoices=[];
-		for (var i=0;i<step.choices.length;i++){
-			if (step.choices[i] && typeof(step.choices[i]) === 'function'){
-				var subArray = step.choices[i]($scope.char,$scope);
+		for (var i=0;i<$scope.currentStep.choices.length;i++){
+			if ($scope.currentStep.choices[i] && typeof($scope.currentStep.choices[i]) === 'function'){
+				var subArray = $scope.currentStep.choices[i]($scope.char,$scope);
 				if (subArray){
 					$scope.currentChoices=$scope.currentChoices.concat(subArray);
 				}
 			} else {
-				$scope.currentChoices.push(step.choices[i]);
+				$scope.currentChoices.push($scope.currentStep.choices[i]);
 			}
 		}
 		//if, after all of this, there are no choices to make, send in something bogus
 		if ($scope.currentChoices.length==0){
-			step.action($scope.char,$scope.derived,null,$scope);
-			goToNextStep();
+			$scope.selectChoice('');
 		} else {
-			$scope.prompt=step.choicePrompt;
+			$scope.prompt=$scope.currentStep.choicePrompt;
 		}
 	} else {
 		//just do the update
-		step.action($scope.char,$scope.derived,null,$scope);
-		goToNextStep();
+		$scope.selectChoice('');
 	}
 }
 
 $scope.selectChoice=function(choice){
-	if (choice.name){
-		choice=choice.name;
-	}
 	$scope.currentChoices=null;
-	if ($scope.currentChoice!=null){
-		//chose something outside of a levelup
-		$scope.currentChoice.action($scope.char,$scope.derived,choice,$scope);
-		$scope.choiceQueue.splice(0,1);
+	if (choice.levels){
+		//they chose a class or subclass
+		if (choice.subclass){
+			//they chose a subclass
+			$scope.inSubclass=true;
+			$scope.updateStep=0;
+			$scope.currentPackage=choice.levels[$scope.chosenLevel].updates;
+			//add subclass to character
+			getCharacterClass($scope.char,choice.classname).subclass=choice.name;
+			$scope.currentPackage=choice.levels[$scope.chosenLevel].updates;
+			setupForCurrentStep();
+			return;
+		} else {
+			//they chose a class
+			$scope.chosenLevel=nextLevel($scope.char,choice.name);
+			$scope.chosenClassName=choice.name;
+			$scope.updateStep=0;
+			//add the class entry on the character object
+			if ($scope.chosenLevel==0){
+				$scope.char.classes.push({
+					name:$scope.chosenClassName,
+					level:1,
+					subclass:null,
+					spells:[]
+				});
+			} else {
+				// update the existing class entry
+				getCharacterClass($scope.char,$scope.chosenClassName).level+=1;
+			}
+			$scope.currentPackage=choice.levels[$scope.chosenLevel].updates;
+			setupForCurrentStep();
+			return;
+		} 
+	} else if ($scope.currentPackage) {
+		//they chose a step inside a package
+		if (choice.name){
+			choice=choice.name;
+		}
+		$scope.currentStep.action($scope.char,$scope.derived,choice,$scope);
+		$scope.updateStep+=1;
+		if ($scope.currentPackage.length<=$scope.updateStep){
+			//see if we need to start doing the subclass
+			if ($scope.inSubclass){
+				finishLevelUp();
+				return;
+			} else {
+				//start leveling up their subclass
+				$scope.inSubclass=true;
+				let sc=getCharacterClass($scope.char,$scope.chosenClassName).subclass;
+				if (sc){
+					sc = findSubclass($scope.chosenClassName,sc);
+					if (sc){
+						$scope.updateStep=0;
+						$scope.currentPackage=null;
+						if (sc.levels.length>$scope.chosenLevel){
+							$scope.currentPackage=sc.levels[$scope.chosenLevel].updates;
+							if ($scope.currentPackage && $scope.currentPackage.length>$scope.updateStep){
+								setupForCurrentStep();
+								return;
+							}
+						}
+					}
+				}
+				//done with levelup
+				finishLevelUp();
+				return;
+			}
+		} else {
+			$scope.currentStep=$scope.currentPackage[$scope.updateStep];
+			setupForCurrentStep();
+			return;
+		}
+	} else {
+		//they chose something outside of a class/subclass package
+		if (choice.name){
+			choice=choice.name;
+		}
+		$scope.currentStep.action($scope.char,$scope.derived,choice,$scope);
+		$scope.currentStep=null;
 		if (!checkChoiceQueue()){
 			$scope.calculate();
 		}
-		return;
 	}
-	if ($scope.chosenClass===null){
-		//they chose a class
-		$scope.chosenClassName=choice;
-		$scope.chosenClass=findClass(choice);
-		$scope.chosenLevel=nextLevel($scope.char,choice);
-		$scope.updateStep=0;
-		//add the class entry on the character object
-		if ($scope.chosenLevel==0){
-			$scope.char.classes.push({
-				name:$scope.chosenClass.classname,
-				level:1,
-				subclass:null,
-				spells:[]
-			});
-		} else {
-		// update the existing class entry
-			getCharacterClass($scope.char,$scope.chosenClass.classname).level+=1;
+}
+
+$scope.newChar=function(){
+	$scope.showSaveMenu=false;
+	let choices=[];
+	for (let race of window.races){
+		choices.push(race);
+	}
+	$scope.currentStep={
+		choicePrompt:"Choose a Race",
+		choices:choices,
+		action:function(char,derived,choice,scope){
+			for (let race of window.races){
+				if (race.name===choice){
+					if (race.onPickup){
+						race.onPickup(char,scope);
+					}
+					checkChoiceQueue();
+					return;
+				}
+			}
 		}
-		//setup the first update step
-		setupForCurrentStep();
-	} else {
-		//they chose an option within a class package
-		var step = currentStep();
-		step.action($scope.char,$scope.derived,choice,$scope);
-		goToNextStep();
-	}
-};
+	};
+	$scope.currentChoices=choices;
+}
 /**********************************
 Done with package handler
 **********************************/
@@ -698,29 +731,6 @@ $scope.setTip=function(choice){
 		$timeout.cancel(tipPromise);
 	}
 	$scope.tip=choice;
-}
-
-$scope.newChar=function(){
-	$scope.showSaveMenu=false;
-	let choices=[];
-	for (let race of window.races){
-		choices.push(race);
-	}
-	$scope.currentChoice={
-		choicePrompt:"Choose a Race",
-		choices:choices,
-		action:function(char,derived,choice,scope){
-			for (let race of window.races){
-				if (race.name===choice){
-					if (race.onPickup){
-						race.onPickup(char,scope);
-					}
-					return;
-				}
-			}
-		}
-	};
-	$scope.currentChoices=choices;
 }
 
 $scope.save=function(){
