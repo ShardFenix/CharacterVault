@@ -283,224 +283,12 @@ window.skills=[
 	{name:"Survival",attribute:"wis"}
 ];
 
-window.abilities=[
-	{
-		name:"Lv 1 Spell",
-		maxChargesFunction:spellSlots1,
-		description:"",
-		onLongRest:function(char,scope){
-			this.charges=this.maxCharges;
-		}
-	},{
-		name:"Lv 2 Spell",
-		maxChargesFunction:spellSlots2,
-		description:"",
-		onLongRest:function(char,scope){
-			this.charges=this.maxCharges;
-		}
-	},{
-		name:"Lv 3 Spell",
-		maxChargesFunction:spellSlots3,
-		description:"",
-		onLongRest:function(char,scope){
-			this.charges=this.maxCharges;
-		}
-	},{
-		name:"Lv 4 Spell",
-		maxChargesFunction:spellSlots4,
-		description:"",
-		onLongRest:function(char,scope){
-			this.charges=this.maxCharges;
-		}
-	},{
-		name:"Lv 5 Spell",
-		maxChargesFunction:spellSlots5,
-		description:"",
-		onLongRest:function(char,scope){
-			this.charges=this.maxCharges;
-		}
-	},{
-		name:"Lv 6 Spell",
-		maxChargesFunction:spellSlots6,
-		description:"",
-		onLongRest:function(char,scope){
-			this.charges=this.maxCharges;
-		}
-	},{
-		name:"Lv 7 Spell",
-		maxChargesFunction:spellSlots7,
-		description:"",
-		onLongRest:function(char,scope){
-			this.charges=this.maxCharges;
-		}
-	},{
-		name:"Lv 8 Spell",
-		maxChargesFunction:spellSlots8,
-		description:"",
-		onLongRest:function(char,scope){
-			this.charges=this.maxCharges;
-		}
-	},{
-		name:"Lv 9 Spell",
-		maxChargesFunction:spellSlots9,
-		description:"",
-		onLongRest:function(char,scope){
-			this.charges=this.maxCharges;
-		}
-	},{
-		name:"Superiority d6 (Martial Adept)",
-		description:"You can use one of your Maneuvers, rolling a d6 for it.",
-		maxCharges:1,
-		onShortRest:function(char,scope){
-			this.charges=1;
-		}
-	},{
-		name:"Bardic Inspiration (d6)",
-		description:"As a bonus action, choose one creature other than yourself within 60 feet of you who can hear you. That creature gains one Bardic Inspiration die, a d6.\nOnce within the next 10 minutes, the creature can roll the die and add the number rolled to one ability check, attack roll, or saving throw it makes. The creature can wait until after it rolls the d20 before deciding to use the Bardic Inspiration die, but must decide before the DM says whether the roll succeeds or fails. Once the Bardic Inspiration die is rolled, it is lost. A creature can have only one Bardic Inspiration die at a time.",
-		maxChargesFunction:function(char,scope){
-			return Math.max(1,scope.derived.modifiers.cha);
-		},
-		onLongRest:function(char,scope){
-			this.charges=scope.derived.modifiers.cha;
-		}
-	},{
-		name:"Bardic Inspiration (d8)",
-		description:"As a bonus action, choose one creature other than yourself within 60 feet of you who can hear you. That creature gains one Bardic Inspiration die, a d8.\nOnce within the next 10 minutes, the creature can roll the die and add the number rolled to one ability check, attack roll, or saving throw it makes. The creature can wait until after it rolls the d20 before deciding to use the Bardic Inspiration die, but must decide before the DM says whether the roll succeeds or fails. Once the Bardic Inspiration die is rolled, it is lost. A creature can have only one Bardic Inspiration die at a time.",
-		maxChargesFunction:function(char,scope){
-			return Math.max(1,scope.derived.modifiers.cha);
-		},
-		onShortRest:function(char,scope){
-			this.charges=scope.derived.modifiers.cha;
-		}
-	},{
-		name:"Bardic Inspiration (d10)",
-		description:"As a bonus action, choose one creature other than yourself within 60 feet of you who can hear you. That creature gains one Bardic Inspiration die, a d10.\nOnce within the next 10 minutes, the creature can roll the die and add the number rolled to one ability check, attack roll, or saving throw it makes. The creature can wait until after it rolls the d20 before deciding to use the Bardic Inspiration die, but must decide before the DM says whether the roll succeeds or fails. Once the Bardic Inspiration die is rolled, it is lost. A creature can have only one Bardic Inspiration die at a time.",
-		maxChargesFunction:function(char,scope){
-			return Math.max(1,scope.derived.modifiers.cha);
-		},
-		onShortRest:function(char,scope){
-			this.charges=scope.derived.modifiers.cha;
-		}
-	},{
-		name:"Bardic Inspiration (d12)",
-		description:"As a bonus action, choose one creature other than yourself within 60 feet of you who can hear you. That creature gains one Bardic Inspiration die, a d12.\nOnce within the next 10 minutes, the creature can roll the die and add the number rolled to one ability check, attack roll, or saving throw it makes. The creature can wait until after it rolls the d20 before deciding to use the Bardic Inspiration die, but must decide before the DM says whether the roll succeeds or fails. Once the Bardic Inspiration die is rolled, it is lost. A creature can have only one Bardic Inspiration die at a time.",
-		maxChargesFunction:function(char,scope){
-			return Math.max(1,scope.derived.modifiers.cha);
-		},
-		onShortRest:function(char,scope){
-			this.charges=scope.derived.modifiers.cha;
-		}
-	},{
-		name:"Lucky",
-		description:"You have inexplicable luck that seems to kick in at just the right moment.\nWhenever you make an attack roll, an ability check, or a saving throw, you can spend one luck point to roll an additional d20. You can choose to spend one of your luck points after you roll the die, but before the outcome is determined. You choose which of the d20s is used for the attack roll, ability check, or saving throw.\nYou can also spend one luck point when an attack roll is made against you. Roll a d20, and then choose whether the attack uses the attacker's roll or yours. If more than one creature spends a luck point to influence the outcome of a roll, the points cancel each other out; no additional dice are rolled.\nYou regain your expended luck points when you finish a long rest.",
-		maxCharges:3,
-		charges:3,
-		onLongRest:function(char,scope){
-			this.charges=3;
-		}
-	},{
-		name:"Channel Divinity",
-		description:"You gain the ability to channel divine energy directly from your deity, using that energy to fuel magical effects.\nWhen you use your Channel Divinity, you choose which effect to create. You must then finish a short or long rest to use your Channel Divinity again.\nSome Channel Divinity effects require saving throws. When you use such an effect from this class, the DC equals your cleric spell save DC.",
-		maxChargesFunction:function(char){
-			let lvl = getClassLevel(char,"Cleric");
-			if (lvl>=18) return 3;
-			if (lvl>=6) return 2;
-			if (lvl>=2) return 1;
-			return 0;
-		},
-		charges:1,
-		onShortRest:function(char,scope){
-			this.charges=this.maxCharges;
-		}
-	},{
-		name:"Divine Intervention",
-		description:"You can call on your deity to intervene on your behalf when your need is great.\nImploring your deity's aid requires you to use your action. Describe the assistance you seek, and roll percentile dice. If you roll a number equal to or lower than your cleric level, your deity intervenes. The DM chooses the nature of the intervention; the effect of any cleric spell or cleric domain spell would be appropriate. If your deity intervenes, you can't use this feature again for 7 days. Otherwise, you can use it again after you finish a long rest.",
-		maxCharges:1,
-		charges:1,
-		onLongRest:function(char,scope){
-			this.charges=this.maxCharges;
-		}
-	},{
-		name:"Improved Divine Intervention",
-		description:"You can call on your deity to intervene on your behalf when your need is great.\nImploring your deity's aid requires you to use your action. Describe the assistance you seek. Your deity intervenes. The DM chooses the nature of the intervention; the effect of any cleric spell or cleric domain spell would be appropriate. You can't use this feature again for 7 days.",
-		maxCharges:1,
-		charges:1,
-		onLongRest:function(char,scope){
-			this.charges=this.maxCharges;
-		}
-	}
-];
-
-window.passives=[
-	{
-		name:"Jack of All Trades",
-		description:"You can add half your proficiency bonus, rounded down, to any ability check you make that doesn't already include your proficiency bonus.",
-		apply:function(char,scope){
-			let bonus=Math.floor(scope.derived.proficiency/2);
-			for (var skill of scope.derived.skills){
-				if (skill.mult==0){
-					skill.bonus += bonus;
-				}
-			}
-			scope.derived.initiative+=bonus;
-		}
-	},{
-		name:"Song of Rest",
-		description:"You can use soothing music or oration to help revitalize your wounded allies during a short rest. If you or any friendly creatures who can hear your performance regain hit points by spending Hit Dice at the end of the short rest, each of those creatures regains an extra 1d${ladder(classLevel('Bard'),0,6,9,8,13,19,17,12)} hit points."
-	},{
-		name:"Cutting Words",
-		description:"You learn how to use your wit to distract, confuse, and otherwise sap the confidence and competence of others. When a creature that you can see within 60 feet of you makes an attack roll, an ability check, or a damage roll, you can use your reaction to expend one of your uses of Bardic Inspiration, rolling a Bardic Inspiration die and subtracting the number rolled from the creature's roll. You can choose to use this feature after the creature makes its roll, but before the DM determines whether the attack roll or ability check succeeds or fails, or before the creature deals its damage. The creature is immune if it can't hear you or if it's immune to being charmed."
-	},{
-		name:"Countercharm",
-		description:"You use musical notes or words of power to disrupt mind-influencing effects. As an action, you can start a performance that lasts until the end of your next turn. During that time, you and any friendly creatures within 30 feet of you have advantage on saving throws against being frightened or charmed. A creature must be able to hear you to gain this benefit. The performance ends early if you are incapacitated or silenced or if you voluntarily end it (no action required)."
-	},{
-		name:"Peerless Skill",
-		description:"When you make an ability check, you can expend one use of Bardic Inspiration. Roll a Bardic Inspiration die and add the number rolled to your ability check. You can choose to do so after you roll the die for the ability check, but before the DM tells you whether you succeed or fail."
-	},{
-		name:"Superior Inspiration",
-		description:"When you roll initiative and have no uses of Bardic Inspiration left, you regain one use."
-	},{
-		name:"Turn Undead",
-		description:"Using your Channel Divinity action, you present your holy symbol and speak a prayer censuring the undead. Each undead that can see or hear you within 30 feet of you must make a Wisdom saving throw. If the creature fails its saving throw, it is turned for 1 minute or until it takes any damage.\nA turned creature must spend its turns trying to move as far away from you as it can, and it can't willingly move to a space within 30 feet of you. It also can't take reactions. For its action, it can use only the Dash action or try to escape from an effect that prevents it from moving. If there's nowhere to move, the creature can use the Dodge action."
-	},{
-		name:"Destroy Undead (CR 1/2)",
-		description:"When an undead of CR 1/2 or lower fails its saving throw against your Turn Undead feature, the creature is instantly destroyed."
-	},{
-		name:"Destroy Undead (CR 1)",
-		description:"When an undead of CR 1 or lower fails its saving throw against your Turn Undead feature, the creature is instantly destroyed."
-	},{
-		name:"Destroy Undead (CR 2)",
-		description:"When an undead of CR 2 or lower fails its saving throw against your Turn Undead feature, the creature is instantly destroyed."
-	},{
-		name:"Destroy Undead (CR 3)",
-		description:"When an undead of CR 3 or lower fails its saving throw against your Turn Undead feature, the creature is instantly destroyed."
-	},{
-		name:"Destroy Undead (CR 4)",
-		description:"When an undead of CR 4 or lower fails its saving throw against your Turn Undead feature, the creature is instantly destroyed."
-	},{
-		name:"Disciple of Life",
-		description:"Whenever you use a spell of 1st level or higher to restore hit points to a creature, the creature regains additional hit points equal to 2 + the spell's level."
-	},{
-		name:"Preserve Life",
-		description:"Using your Channel Divinity action, you present your holy symbol and evoke healing energy that can restore a number of hit points equal to five times your cleric level. Choose any creatures within 30 feet of you, and divide those hit points among them. This feature can restore a creature to no more than half of its hit point maximum. You can't use this feature on an undead or a construct."
-	},{
-		name:"Blessed Healer",
-		description:"When you cast a spell of 1st level or higher that restores hit points to a creature other than you, you regain hit points equal to 2 + the spell's level."
-	},{
-		name:"Divine Strike",
-		description:"Once on each of your turns when you hit a creature with a weapon attack, you can cause the attack to deal an extra ${ladder(clevel,8,1,14,2)}d8 radiant damage to the target."
-	},{
-		name:"Supreme Healing",
-		description:"When you would normally roll one or more dice to restore hit points with a spell, you instead use the highest number possible for each die."
-	}
-	
-];
-
 window.classes=
 [
 	{
 		classname:"Bard",
 		name:"Bard",
+		description:"In the worlds of D&D, words and music are not just vibrations of air, but vocalizations with power all their own. The bard is a master of song, speech, and the magic they contain. Bards say that the multiverse was spoken into existence, that the words of the gods gave it shape, and that echoes of these primordial Words of Creation still resound throughout the cosmos. The music of bards is an attempt to snatch and harness those echoes, subtly woven into their spells and powers.\nThe greatest strength of bards is their sheer versatility. Many bards prefer to stick to the sidelines in combat, using their magic to inspire their allies and hinder their foes from a distance. But bards are capable of defending themselves in melee if necessary, using their magic to bolster their swords and armor. Their spells lean toward charms and illusions rather than blatantly destructive spells. They have a wide-ranging knowledge of many subjects and a natural aptitude that lets them do almost anything well. Bards become masters of the talents they set their minds to perfecting, from musical performance to esoteric knowledge.",
 		levels:[
 			{ //1, first player level
 				updates:[
@@ -573,7 +361,7 @@ window.classes=
 						"choices":["Yes","No"],
 						"action":function(char,derived,choice,scope){
 							if (choice==="No"){
-								scope.updateStep+=90;//exit this level up
+								scope.updateStep+=2;//exit this level up
 							}
 						}
 					},
@@ -589,7 +377,19 @@ window.classes=
 						"action":function(char,derived,choice){
 							addSubclass(char,"Bard",choice);
 						}
-					}
+					},
+					helper.chooseSpell,
+					{
+						"choicePrompt":"Do you want to replace one of your known Bard spells?",
+						"choices":["Yes","No"],
+						"action":function(char,derived,choice,scope){
+							if (choice==="No"){
+								scope.updateStep+=2;//exit this level up
+							}
+						}
+					},
+					helper.unlearnSpell,
+					helper.chooseSpell
 				]
 			}, { // 4
 				"updates":[
@@ -597,7 +397,19 @@ window.classes=
 					helper.attributeOrFeat,
 					helper.chooseFeat,
 					helper.increaseAttribute,
-					helper.increaseAttribute
+					helper.increaseAttribute,
+					helper.chooseSpell,
+					{
+						"choicePrompt":"Do you want to replace one of your known Bard spells?",
+						"choices":["Yes","No"],
+						"action":function(char,derived,choice,scope){
+							if (choice==="No"){
+								scope.updateStep+=2;//exit this level up
+							}
+						}
+					},
+					helper.unlearnSpell,
+					helper.chooseSpell
 				]
 			},{//5
 				"updates":[
@@ -609,7 +421,19 @@ window.classes=
 							removeAbility(char,"Bardic Inspiration (d6)");
 							addAbility(char,"Bardic Inspiration (d8)");
 						}
-					}
+					},
+					helper.chooseSpell,
+					{
+						"choicePrompt":"Do you want to replace one of your known Bard spells?",
+						"choices":["Yes","No"],
+						"action":function(char,derived,choice,scope){
+							if (choice==="No"){
+								scope.updateStep+=2;//exit this level up
+							}
+						}
+					},
+					helper.unlearnSpell,
+					helper.chooseSpell
 				]
 			},{//6
 				"updates":[
@@ -619,11 +443,35 @@ window.classes=
 						"action":function(char,derived){
 							addPassive(char,"Countercharm");
 						}
-					}
+					},
+					helper.chooseSpell,
+					{
+						"choicePrompt":"Do you want to replace one of your known Bard spells?",
+						"choices":["Yes","No"],
+						"action":function(char,derived,choice,scope){
+							if (choice==="No"){
+								scope.updateStep+=2;//exit this level up
+							}
+						}
+					},
+					helper.unlearnSpell,
+					helper.chooseSpell
 				]
 			},{//7
 				"updates":[
-					helper.hitDice8
+					helper.hitDice8,
+					helper.chooseSpell,
+					{
+						"choicePrompt":"Do you want to replace one of your known Bard spells?",
+						"choices":["Yes","No"],
+						"action":function(char,derived,choice,scope){
+							if (choice==="No"){
+								scope.updateStep+=2;//exit this level up
+							}
+						}
+					},
+					helper.unlearnSpell,
+					helper.chooseSpell
 				]
 			},{//8
 				"updates":[
@@ -631,11 +479,35 @@ window.classes=
 					helper.attributeOrFeat,
 					helper.chooseFeat,
 					helper.increaseAttribute,
-					helper.increaseAttribute
+					helper.increaseAttribute,
+					helper.chooseSpell,
+					{
+						"choicePrompt":"Do you want to replace one of your known Bard spells?",
+						"choices":["Yes","No"],
+						"action":function(char,derived,choice,scope){
+							if (choice==="No"){
+								scope.updateStep+=2;//exit this level up
+							}
+						}
+					},
+					helper.unlearnSpell,
+					helper.chooseSpell
 				]
 			},{//9
 				"updates":[
-					helper.hitDice8
+					helper.hitDice8,
+					helper.chooseSpell,
+					{
+						"choicePrompt":"Do you want to replace one of your known Bard spells?",
+						"choices":["Yes","No"],
+						"action":function(char,derived,choice,scope){
+							if (choice==="No"){
+								scope.updateStep+=2;//exit this level up
+							}
+						}
+					},
+					helper.unlearnSpell,
+					helper.chooseSpell
 				]
 			},{//10
 				"updates":[
@@ -661,11 +533,35 @@ window.classes=
 						action:function(char,derived,choice){
 							addSpell(char,choice,'Bard');
 						}
-					}
+					},
+					helper.chooseSpell,
+					{
+						"choicePrompt":"Do you want to replace one of your known Bard spells?",
+						"choices":["Yes","No"],
+						"action":function(char,derived,choice,scope){
+							if (choice==="No"){
+								scope.updateStep+=2;//exit this level up
+							}
+						}
+					},
+					helper.unlearnSpell,
+					helper.chooseSpell
 				]
 			},{//11
 				"updates":[
-					helper.hitDice8
+					helper.hitDice8,
+					helper.chooseSpell,
+					{
+						"choicePrompt":"Do you want to replace one of your known Bard spells?",
+						"choices":["Yes","No"],
+						"action":function(char,derived,choice,scope){
+							if (choice==="No"){
+								scope.updateStep+=2;//exit this level up
+							}
+						}
+					},
+					helper.unlearnSpell,
+					helper.chooseSpell
 				]
 			},{//12
 				"updates":[
@@ -673,15 +569,51 @@ window.classes=
 					helper.attributeOrFeat,
 					helper.chooseFeat,
 					helper.increaseAttribute,
-					helper.increaseAttribute
+					helper.increaseAttribute,
+					helper.chooseSpell,
+					{
+						"choicePrompt":"Do you want to replace one of your known Bard spells?",
+						"choices":["Yes","No"],
+						"action":function(char,derived,choice,scope){
+							if (choice==="No"){
+								scope.updateStep+=2;//exit this level up
+							}
+						}
+					},
+					helper.unlearnSpell,
+					helper.chooseSpell
 				]
 			},{//13
 				"updates":[
-					helper.hitDice8
+					helper.hitDice8,
+					helper.chooseSpell,
+					{
+						"choicePrompt":"Do you want to replace one of your known Bard spells?",
+						"choices":["Yes","No"],
+						"action":function(char,derived,choice,scope){
+							if (choice==="No"){
+								scope.updateStep+=2;//exit this level up
+							}
+						}
+					},
+					helper.unlearnSpell,
+					helper.chooseSpell
 				]
 			},{//14
 				"updates":[
-					helper.hitDice8
+					helper.hitDice8,
+					helper.chooseSpell,
+					{
+						"choicePrompt":"Do you want to replace one of your known Bard spells?",
+						"choices":["Yes","No"],
+						"action":function(char,derived,choice,scope){
+							if (choice==="No"){
+								scope.updateStep+=2;//exit this level up
+							}
+						}
+					},
+					helper.unlearnSpell,
+					helper.chooseSpell
 				]
 			},{//15
 				"updates":[
@@ -692,7 +624,19 @@ window.classes=
 							removeAbility(char,"Bardic Inspiration (d10)");
 							addAbility(char,"Bardic Inspiration(d12)");
 						}
-					}
+					},
+					helper.chooseSpell,
+					{
+						"choicePrompt":"Do you want to replace one of your known Bard spells?",
+						"choices":["Yes","No"],
+						"action":function(char,derived,choice,scope){
+							if (choice==="No"){
+								scope.updateStep+=2;//exit this level up
+							}
+						}
+					},
+					helper.unlearnSpell,
+					helper.chooseSpell
 				]
 			},{//16
 				"updates":[
@@ -700,11 +644,35 @@ window.classes=
 					helper.attributeOrFeat,
 					helper.chooseFeat,
 					helper.increaseAttribute,
-					helper.increaseAttribute
+					helper.increaseAttribute,
+					helper.chooseSpell,
+					{
+						"choicePrompt":"Do you want to replace one of your known Bard spells?",
+						"choices":["Yes","No"],
+						"action":function(char,derived,choice,scope){
+							if (choice==="No"){
+								scope.updateStep+=2;//exit this level up
+							}
+						}
+					},
+					helper.unlearnSpell,
+					helper.chooseSpell
 				]
 			},{//17
 				"updates":[
-					helper.hitDice8
+					helper.hitDice8,
+					helper.chooseSpell,
+					{
+						"choicePrompt":"Do you want to replace one of your known Bard spells?",
+						"choices":["Yes","No"],
+						"action":function(char,derived,choice,scope){
+							if (choice==="No"){
+								scope.updateStep+=2;//exit this level up
+							}
+						}
+					},
+					helper.unlearnSpell,
+					helper.chooseSpell
 				]
 			},{//18
 				"updates":[
@@ -721,7 +689,19 @@ window.classes=
 						action:function(char,derived,choice){
 							addSpell(char,choice,'Bard');
 						}
-					}
+					},
+					helper.chooseSpell,
+					{
+						"choicePrompt":"Do you want to replace one of your known Bard spells?",
+						"choices":["Yes","No"],
+						"action":function(char,derived,choice,scope){
+							if (choice==="No"){
+								scope.updateStep+=2;//exit this level up
+							}
+						}
+					},
+					helper.unlearnSpell,
+					helper.chooseSpell
 				]
 			},{//19
 				"updates":[
@@ -729,7 +709,19 @@ window.classes=
 					helper.attributeOrFeat,
 					helper.chooseFeat,
 					helper.increaseAttribute,
-					helper.increaseAttribute
+					helper.increaseAttribute,
+					helper.chooseSpell,
+					{
+						"choicePrompt":"Do you want to replace one of your known Bard spells?",
+						"choices":["Yes","No"],
+						"action":function(char,derived,choice,scope){
+							if (choice==="No"){
+								scope.updateStep+=2;//exit this level up
+							}
+						}
+					},
+					helper.unlearnSpell,
+					helper.chooseSpell
 				]
 			},{//20
 				"updates":[
@@ -739,7 +731,19 @@ window.classes=
 						action:function(char){
 							addPassive(char,"Superior Inspiration");
 						}
-					}
+					},
+					helper.chooseSpell,
+					{
+						"choicePrompt":"Do you want to replace one of your known Bard spells?",
+						"choices":["Yes","No"],
+						"action":function(char,derived,choice,scope){
+							if (choice==="No"){
+								scope.updateStep+=2;//exit this level up
+							}
+						}
+					},
+					helper.unlearnSpell,
+					helper.chooseSpell
 				]
 			}
 		]
@@ -747,6 +751,7 @@ window.classes=
 	{
 		classname:"Cleric",
 		name:"Cleric",
+		description:"Divine magic, as the name suggests, is the power of the gods, flowing from them into the world. Clerics are conduits for that power, manifesting it as miraculous effects. The gods don't grant this power to everyone who seeks it, but only to those chosen to fulfill a high calling.\nHarnessing divine magic doesn't rely on study or training. A cleric might learn formulaic prayers and ancient rites, but the ability to cast cleric spells relies on devotion and an intuitive sense of a deity's wishes.\nClerics combine the helpful magic of healing and inspiring their allies with spells that harm and hinder foes. They can provoke awe and dread, lay curses of plague or poison, and even call down flames from heaven to consume their enemies. For those evildoers who will benefit most from a mace to the head, clerics depend on their combat training to let them wade into melee with the power of the gods on their side.",
 		levels:[
 			{ //1, first player level
 				"updates":[
@@ -1000,15 +1005,510 @@ window.classes=
 			}
 		]
 	},{
-		classname:"Debug",
-		name:"Debug",
-		description:"Used for testing things.",
+		classname:"Monk",
+		name:"Monk",
+		description:"Monks make careful study of a magical energy that most monastic traditions call ki. This energy is an element of the magic that suffuses the multiverse—specifically, the element that flows through living bodies. Monks harness this power within themselves to create magical effects and exceed their bodies' physical capabilities, and some of their special attacks can hinder the flow of ki in their opponents. Using this energy, monks channel uncanny speed and strength into their unarmed strikes. As they gain experience, their martial training and their mastery of ki gives them more power over their bodies and the bodies of their foes.",
 		levels:[
-			{
+			{ //1, first player level
 				"updates":[
 					{
-						choices:[findItem("Greatsword"),findItem("Longsword"),findItem("Dagger"),findItem("Halberd")],
-						action:function(){}
+						"choices":[],
+						"action":function(char,derived,choice,$scope){
+							char.maxHp=8;
+							char.proficiencies.push("Shortswords");
+							char.proficiencies.push("Simple Weapons");
+							char.saves.str=1;
+							char.saves.dex=1;
+							addToInventory(findItem("Dart",10));
+							addPassive(char,"Martial Arts");
+							addPassive(char,"Unarmored Movement");
+						}
+					},{
+						choicePrompt:"Choose a starting weapon:",
+						choices:[findItem("Shortsword"),listSimpleWeapons],
+						action:function(char,derived,choice){
+							addToInventory(char,findItem(choice));
+						}
+					},{
+						choicePrompt:"Choose a pack:",
+						choices:[findItem("Dungeoneer's Pack"),findItem("Explorer's Pack")],
+						action:function(char,derived,choice){
+							addToInventory(char,findItem(choice));
+						}
+					},{
+						"choicePrompt":"Choose two skill proficiencies:",
+						"choices":[function(char){
+							let result=[];
+							for (let skill of char.skills){
+								if (skill.mult===0){
+									if (["Acrobatics","Athletics","History","Insight","Religion","Stealth"].indexOf(skill.name)!=-1){
+										result.push(skill.name);
+									}
+								}
+							}
+							return result;
+						}],
+						"action":function(char,derived,choice){
+							addProficiency(char,choice);
+						}
+					},{
+						"choicePrompt":"Choose two skill proficiencies:",
+						"choices":[function(char){
+							let result=[];
+							for (let skill of char.skills){
+								if (skill.mult===0){
+									if (["Acrobatics","Athletics","History","Insight","Religion","Stealth"].indexOf(skill.name)!=-1){
+										result.push(skill.name);
+									}
+								}
+							}
+							return result;
+						}],
+						"action":function(char,derived,choice){
+							addProficiency(char,choice);
+						}
+					}
+				]
+			},	{ // 1
+				"updates":[
+					helper.hitDice8,
+					{
+						"choices":[],
+						"action":function(char,derived,choice){
+							addPassive(char,"Martial Arta");
+							addPassive(char,"Unarmored Defense");
+						}
+					}
+				]
+			}, { // 2
+				"updates":[
+					helper.hitDice8,
+					{
+						"choices":[],
+						"action":function(char,derived,choice){
+							addPassive(char,"Flurry of Blows");
+							addPassive(char,"Patient Defense");
+							addPassive(char,"Step of the Wind");
+							addPassive(char,"Unarmored Movement");
+						}
+					}
+				]
+			}, { // 3
+				"updates":[
+					helper.hitDice8,
+					{
+						choices:[],
+						action:function(char,derived,choice){
+							addPassive(char,"Deflect Missiles");
+						}
+					},{
+						choicePrompt:"Choose a Monastic Tradition",
+						choices:[listSpecializations],
+						action:function(char,derived,choice){
+							addSubclass(char,"Monk",choice);
+						}
+					}
+				]
+			}, { // 4
+				"updates":[
+					helper.hitDice8,
+					helper.attributeOrFeat,
+					helper.chooseFeat,
+					helper.increaseAttribute,
+					helper.increaseAttribute
+				]
+			},{//5
+				"updates":[
+					helper.hitDice8,
+					{
+						"choices":[],
+						"action":function(char,derived){
+							addPassive(char,"Slow Fall");
+							addPassive(char,"Stunning Strike");
+						}
+					}
+				]
+			},{//6
+				"updates":[
+					helper.hitDice8
+				]
+			},{//7
+				"updates":[
+					helper.hitDice8,
+					{
+						"choices":[],
+						"action":function(char,derived){
+							addPassive(char,"Evasion");
+							addPassive(char,"Stillness of Mind");
+						}
+					}
+				]
+			},{//8
+				"updates":[
+					helper.hitDice8,
+					helper.attributeOrFeat,
+					helper.chooseFeat,
+					helper.increaseAttribute,
+					helper.increaseAttribute
+				]
+			},{//9
+				"updates":[
+					helper.hitDice8,
+					{
+						"choices":[],
+						"action":function(char,derived){
+							addPassive(char,"Parkour");
+						}
+					}
+				]
+			},{//10
+				"updates":[
+					helper.hitDice8,
+					{
+						"choices":[],
+						"action":function(char){
+							addPassive(char,"Purity of Body");
+						}
+					}
+				]
+			},{//11
+				"updates":[
+					helper.hitDice8
+				]
+			},{//12
+				"updates":[
+					helper.hitDice8,
+					helper.attributeOrFeat,
+					helper.chooseFeat,
+					helper.increaseAttribute,
+					helper.increaseAttribute
+				]
+			},{//13
+				"updates":[
+					helper.hitDice8,
+					{
+						"choices":[],
+						"action":function(char){
+							addPassive(char,"Tongue of the Sun and Moon");
+						}
+					}
+				]
+			},{//14
+				"updates":[
+					helper.hitDice8,
+					{
+						"choices":[],
+						"action":function(char){
+							addPassive(char,"Diamond Soul");
+						}
+					}
+				]
+			},{//15
+				"updates":[
+					helper.hitDice8,
+					{
+						"choices":[],
+						"action":function(char){
+							addPassive(char,"Timeless Body");
+						}
+					}
+				]
+			},{//16
+				"updates":[
+					helper.hitDice8,
+					helper.attributeOrFeat,
+					helper.chooseFeat,
+					helper.increaseAttribute,
+					helper.increaseAttribute
+				]
+			},{//17
+				"updates":[
+					helper.hitDice8
+				]
+			},{//18
+				"updates":[
+					helper.hitDice8,
+					{
+						"choices":[],
+						"action":function(char){
+							addPassive(char,"Empty Body");
+						}
+					}
+				]
+			},{//19
+				"updates":[
+					helper.hitDice8,
+					helper.attributeOrFeat,
+					helper.chooseFeat,
+					helper.increaseAttribute,
+					helper.increaseAttribute
+				]
+			},{//20
+				"updates":[
+					helper.hitDice8,
+					{
+						"choices":[],
+						"action":function(char){
+							addPassive(char,"Perfect Soul");
+						}
+					}
+				]
+			}
+		]
+	},{
+		classname:"Wizard",
+		name:"Wizard",
+		description:"",
+		levels:[
+			{ //1, first player level
+				"updates":[
+					{
+						"choices":[],
+						"action":function(char,derived,choice,$scope){
+							char.maxHp=6;
+							char.proficiencies.push("Daggers");
+							char.proficiencies.push("Darts");
+							char.proficiencies.push("Slings");
+							char.proficiencies.push("Quarterstaffs");
+							char.proficiencies.push("Light Crossbows");
+							char.saves.int=1;
+							char.saves.wis=1;
+							addToInventory(findItem("Spellbook"));
+							addAbility(char,"Arcane Recovery");
+						}
+					},{
+						choicePrompt:"Choose a starting weapon:",
+						choices:[findItem("Quarterstaff"),findItem("Dagger")],
+						action:function(char,derived,choice){
+							addToInventory(char,findItem(choice));
+						}
+					},{
+						choicePrompt:"Choose a pack:",
+						choices:[findItem("Scholar's Pack"),findItem("Explorer's Pack")],
+						action:function(char,derived,choice){
+							addToInventory(char,findItem(choice));
+						}
+					},{
+						choicePrompt:"Choose one:",
+						choices:[findItem("Component Pouch"),findItem("Arcane Focus")],
+						action:function(char,derived,choice){
+							addToInventory(char,findItem(choice));
+						}
+					},{
+						"choicePrompt":"Choose two skill proficiencies:",
+						"choices":[function(char){
+							let result=[];
+							for (let skill of char.skills){
+								if (skill.mult===0){
+									if (["Arcana","History","Insight","Investigation","Medicine","Religion"].indexOf(skill.name)!=-1){
+										result.push(skill.name);
+									}
+								}
+							}
+							return result;
+						}],
+						"action":function(char,derived,choice){
+							addProficiency(char,choice);
+						}
+					},{
+						"choicePrompt":"Choose two skill proficiencies:",
+						"choices":[function(char){
+							let result=[];
+							for (let skill of char.skills){
+								if (skill.mult===0){
+									if (["Arcana","History","Insight","Investigation","Medicine","Religion"].indexOf(skill.name)!=-1){
+										result.push(skill.name);
+									}
+								}
+							}
+							return result;
+						}],
+						"action":function(char,derived,choice){
+							addProficiency(char,choice);
+						}
+					},
+					helper.chooseWizardCantrip,
+					helper.chooseWizardCantrip,
+					helper.chooseWizardCantrip,
+					helper.chooseSpell,
+					helper.chooseSpell,
+					helper.chooseSpell,
+					helper.chooseSpell,
+					helper.chooseSpell,
+					helper.chooseSpell
+				]
+			},	{ // 1
+				"updates":[
+					helper.hitDice6,
+					{
+						"choices":[],
+						"action":function(char,derived,choice){
+							addAbility(char,"Arcane Recovery");
+						}
+					},
+					helper.chooseWizardCantrip,
+					helper.chooseWizardCantrip,
+					helper.chooseWizardCantrip,
+					helper.chooseSpell,
+					helper.chooseSpell,
+					helper.chooseSpell,
+					helper.chooseSpell,
+					helper.chooseSpell,
+					helper.chooseSpell
+				]
+			}, { // 2
+				"updates":[
+					helper.hitDice6,
+					helper.chooseSpell,
+					helper.chooseSpell,
+					{
+						"choicePrompt":"Choose an Arcane Tradition:",
+						"choices":[listSpecializations],
+						"action":function(char,derived,choice){
+							addSubclass(char,"Wizard",choice);
+						}
+					}
+				]
+			}, { // 3
+				"updates":[
+					helper.hitDice6,
+					helper.chooseSpell,
+					helper.chooseSpell
+				]
+			}, { // 4
+				"updates":[
+					helper.hitDice6,
+					helper.attributeOrFeat,
+					helper.chooseFeat,
+					helper.increaseAttribute,
+					helper.increaseAttribute,
+					helper.chooseWizardCantrip,
+					helper.chooseSpell,
+					helper.chooseSpell
+				]
+			},{//5
+				"updates":[
+					helper.hitDice6,
+					helper.chooseSpell,
+					helper.chooseSpell
+				]
+			},{//6
+				"updates":[
+					helper.hitDice6,
+					helper.chooseSpell,
+					helper.chooseSpell
+				]
+			},{//7
+				"updates":[
+					helper.hitDice6,
+					helper.chooseSpell,
+					helper.chooseSpell
+				]
+			},{//8
+				"updates":[
+					helper.hitDice6,
+					helper.attributeOrFeat,
+					helper.chooseFeat,
+					helper.increaseAttribute,
+					helper.increaseAttribute,
+					helper.chooseSpell,
+					helper.chooseSpell
+				]
+			},{//9
+				"updates":[
+					helper.hitDice6,
+					helper.chooseSpell,
+					helper.chooseSpell
+				]
+			},{//10
+				"updates":[
+					helper.hitDice6,
+					helper.chooseWizardCantrip,
+					helper.chooseSpell,
+					helper.chooseSpell
+				]
+			},{//11
+				"updates":[
+					helper.hitDice6,
+					helper.chooseSpell,
+					helper.chooseSpell
+				]
+			},{//12
+				"updates":[
+					helper.hitDice6,
+					helper.attributeOrFeat,
+					helper.chooseFeat,
+					helper.increaseAttribute,
+					helper.increaseAttribute,
+					helper.chooseSpell,
+					helper.chooseSpell
+				]
+			},{//13
+				"updates":[
+					helper.hitDice6,
+					helper.chooseSpell,
+					helper.chooseSpell
+				]
+			},{//14
+				"updates":[
+					helper.hitDice6,
+					helper.chooseSpell,
+					helper.chooseSpell
+				]
+			},{//15
+				"updates":[
+					helper.hitDice6,
+					helper.chooseSpell,
+					helper.chooseSpell
+				]
+			},{//16
+				"updates":[
+					helper.hitDice6,
+					helper.attributeOrFeat,
+					helper.chooseFeat,
+					helper.increaseAttribute,
+					helper.increaseAttribute,
+					helper.chooseSpell,
+					helper.chooseSpell
+				]
+			},{//17
+				"updates":[
+					helper.hitDice6,
+					helper.chooseSpell,
+					helper.chooseSpell
+				]
+			},{//18
+				"updates":[
+					helper.hitDice6,
+					helper.chooseSpell,
+					helper.chooseSpell,
+					{
+						"choices":[],
+						"action":function(char){
+							addPassive(char,"Spell Mastery");
+						}
+					}
+				]
+			},{//19
+				"updates":[
+					helper.hitDice6,
+					helper.attributeOrFeat,
+					helper.chooseFeat,
+					helper.increaseAttribute,
+					helper.increaseAttribute,
+					helper.chooseSpell,
+					helper.chooseSpell
+				]
+			},{//20
+				"updates":[
+					helper.hitDice6,
+					helper.chooseSpell,
+					helper.chooseSpell,
+					{
+						"choices":[],
+						"action":function(char){
+							addPassive(char,"Signature Spells");
+						}
 					}
 				]
 			}
@@ -1125,6 +1625,138 @@ window.subclasses=
 					}
 				]
 			}
+		]
+	},{
+		classname:"Monk",
+		name:"Ninjutsu",
+		subclass:"Ninjutsu",
+		description:"Ninjas are masters of subterfuge, masters of evading detection. They are often hired by powerful political figures for spying and/or assassination duties. In combat, ninjas are masters of dextrous close-quarters combat, being easily able to strike swiftly with deadly accuracy and slipping away from attackers.",
+		levels:[{},{},{},
+			{//3
+				updates:[
+					{
+						choices:[],
+						action:function(char,derived,choice,$scope){
+							addPassive(char,"Way of the Mantis");
+							addPassive(char,"Shadow Form");
+						}
+					}
+				]
+			},{},{},{ //6
+				updates:[
+					{
+						choices:[],
+						action:function(char){
+							addPassive(char,"Master of Infiltration");
+						}
+					}
+				]
+			},{},{},{},{},
+			{//11
+				updates:[
+					{
+						choices:[],
+						action:function(char,derived,choice){
+							addPassive(char,"Shadow Strike");
+						}
+					}
+				]
+			},{},{},{},{},{},
+			{//17
+				updates:[
+					{
+						choices:[],
+						action:function(char){
+							addPassive(char,"Desperate Strike");
+						}
+					}
+				]
+			},{},{},{}
+		]
+	},{
+		classname:"Monk",
+		name:"Way of Enlightenment",
+		subclass:"Way of Enlightenment",
+		description:"Monks on the Path of Enlightenment seek to become one with the world around them. Through intense study and meditation, enlightened monks are able to feel their surroundings, not only in place but in time. This path rewards monks who manage their Ki points well.",
+		levels:[{},{},{},
+			{//3
+				updates:[
+					{
+						choices:[],
+						action:function(char,derived,choice,$scope){
+							addPassive(char,"Supernatural Awareness");
+							addPassive(char,"Bonus Reaction");
+						}
+					}
+				]
+			},{},{},{ //6
+				updates:[
+					{
+						choices:[],
+						action:function(char){
+							addPassive(char,"See the Code");
+						}
+					}
+				]
+			},{},{},{},{},
+			{//11
+				updates:[
+					{
+						choices:[],
+						action:function(char,derived,choice){
+							addPassive(char,"Zen Meditation");
+						}
+					}
+				]
+			},{},{},{},{},{},
+			{//17
+				updates:[
+					{
+						choices:[],
+						action:function(char){
+							addPassive(char,"Enlightened Strike");
+						}
+					}
+				]
+			},{},{},{}
+		]
+	},{
+		classname:"Wizard",
+		name:"Divination",
+		subclass:"Divination",
+		description:"The counsel of a diviner is sought by royalty and commoners alike, for all seek a clearer understanding of the past, present, and future. As a diviner, you strive to part the veils of space, time, and consciousness so that you can see clearly. You work to master spells of discernment, remote viewing, supernatural knowledge, and foresight.",
+		levels:[{},{},
+			{//2
+				updates:[
+					{
+						choices:[],
+						action:function(char,derived,choice,$scope){
+							addPassive(char,"Divination Savant");
+							addPassive(char,"Portent");
+							addAbility(char,"Foretelling Roll");
+						}
+					}
+				]
+			},{},{},{},{ //6
+				updates:[
+					{
+						choices:[],
+						action:function(char){
+							addPassive(char,"Expert Divination");
+						}
+					}
+				]
+			},{},{},{},
+			{//10
+				updates:[
+					{
+						choices:[],
+						action:function(char,derived,choice){
+							addAbility(char,"The Third Eye");
+						}
+					}
+				]
+			},{},{},{},{},{},{},{},{},{},{}
 		]
 	}
 ];

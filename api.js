@@ -592,6 +592,10 @@ function ladder(value, ...breakpoints){
 	return value;
 }
 
+function classLevel(char,classname){
+	return getClassLevel(char,classname);
+}
+
 function getClassLevel(char,classname){
 	for (let clas of char.classes){
 		if (clas.name===classname){
