@@ -738,18 +738,23 @@ $scope.save=function(){
 		if ($scope.saveId==-1){
 			$scope.saveId=$scope.saveList.length;
 		}
-		//remove functions from abilities and passives, since they cant be serialized
-		//this has the side-effect that the prototype object gets its function deleted
-		for (passive of $scope.char.passives){
+		//passives, spells, and abilities can be compressed by removing everything but their name and description.
+		//We can restore them on load.
+		for (let passive of $scope.char.passives){
 			delete	passive.onShortRest;
 			delete passive.onLongRest;
 			delete passive.apply;
 		}
-		for (ability of $scope.char.abilities){
+		for (let ability of $scope.char.abilities){
 			delete	ability.onShortRest;
 			delete ability.onLongRest;
 			delete ability.apply;
 			delete ability.maxChargesFunction;
+		}
+		for (let clas of $scope.char.classes){
+			for (let spell of clas.spells){
+				delete spell.description;
+			}
 		}
 		localStorage.setItem("dnd"+$scope.saveId,JSON.stringify($scope.char));
 		$scope.loadList();
@@ -774,41 +779,38 @@ $scope.load=function(num){
 		$scope.char = JSON.parse(localStorage.getItem("dnd"+num));
 		$scope.saveId=num;
 		//hook up passive and ability functions, since those can't be serialized
-		for (passive of $scope.char.passives){
+		for (let passive of $scope.char.passives){
 			let found=false;
-			for (p of packages.passives){
+			let p = findPassive(passive.name);
+			if (p){
+				passive.onShortRest=p.onShortRest;
+				passive.onLongRest=p.onLongRest;
+				passive.apply=p.apply;
+				continue;
+			}
+			for (let p of packages.feats){
 				if (p.name===passive.name){
 					passive.onShortRest=p.onShortRest;
 					passive.onLongRest=p.onLongRest;
 					passive.apply=p.apply;
 					break;
-					found=true;
-				}
-			}
-			if (!found){
-				for (p of packages.feats){
-					if (p.name===passive.name){
-						passive.onShortRest=p.onShortRest;
-						passive.onLongRest=p.onLongRest;
-						passive.apply=p.apply;
-						break;
-					}
 				}
 			}
 		}
-		for (passive of $scope.char.abilities){
-			for (a of packages.passives){
-				if (a.name===passive.name){
-					passive.onShortRest=a.onShortRest;
-					passive.onLongRest=a.onLongRest;
-					passive.apply=a.apply;
-					passive.maxChargesFunction=a.maxChargesFunction;
-					break;
-				}
+		for (let ability of $scope.char.abilities){
+			let a = findAbility(ability.name);
+			if (a){
+				ability.onShortRest=a.onShortRest;
+				ability.onLongRest=a.onLongRest;
+				ability.apply=a.apply;
+				ability.maxChargesFunction=a.maxChargesFunction;
 			}
 		}
 		$scope.showSaveMenu=false;
+		//calculate breaks HP on loaded creatures
+		let hp=$scope.char.hp;
 		$scope.calculate();
+		$scope.char.hp=hp;
 	}
 }
 

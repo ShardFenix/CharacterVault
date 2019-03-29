@@ -1,7 +1,7 @@
 window.races=[
 	{
 		name:"Human",
-		description:"",
+		description:"Attributes: +1 to each, or distribute +2 and gain a feat and a skill proficiency.\nLanguages: Common and one extra of your choice.",
 		onPickup:function(char,scope){
 			char.proficiencies.push("Language: Common");
 			char.speed=30;
@@ -55,9 +55,72 @@ window.races=[
 			addPassive(char,"Darkvision");
 			addPassive(char,"Fey Ancestry");
 			//race abilities
+			scope.choiceQueue.push(helper.increaseAttribute);
+			scope.choiceQueue.push(helper.increaseAttribute);
 			scope.choiceQueue.push(helper.learnLanguage);
 			scope.choiceQueue.push(helper.learnSkillProficiency);
 			scope.choiceQueue.push(helper.learnSkillProficiency);
+		}
+	},{
+		name:"Half-Orc",
+		description:"",
+		onPickup:function(char,scope){
+			char.proficiencies.push("Language: Common");
+			char.proficiencies.push("Language: Orc");
+			char.speed=30;
+			char.attributes.str+=2;
+			char.attributes.con+=1;
+			addPassive(char,"Darkvision");
+			addPassive(char,"Savage Attack");
+			addAbility(char,"Relentless Endurance");
+			addProficiency(char,"Intimidation");
+		}
+	},{
+		name:"Elf (Drow)",
+		description:"",
+		onPickup:function(char,scope){
+			char.proficiencies.push("Language: Common");
+			char.proficiencies.push("Language: Elvish");
+			char.speed=30;
+			char.attributes.dex+=2;
+			char.attributes.cha+=1;
+			addPassive(char,"Superior Darkvision");
+			addPassive(char,"Fey Ancestry");
+			addPassive(char,"Trance");
+			addPassive(char,"Sunlight Sensitivity");
+			addProficiency(char,"Perception");
+			char.proficiencies.upush("Rapiers");
+			char.proficiencies.upush("Shortswords");
+			char.proficiencies.upush("Hand Crossbows");
+			addAbility("Dancing Lights (Cantrip)");
+			addAbility("Faerie Fire");
+			addAbility("Darkness");
+		}
+	},{
+		name:"Elf (High)",
+		description:"",
+		onPickup:function(char,scope){
+			char.proficiencies.push("Language: Common");
+			char.proficiencies.push("Language: Elvish");
+			char.speed=30;
+			char.attributes.dex+=2;
+			char.attributes.cha+=1;
+			addPassive(char,"Darkvision");
+			addPassive(char,"Fey Ancestry");
+			addPassive(char,"Trance");
+			addProficiency(char,"Perception");
+			char.proficiencies.upush("Longswords");
+			char.proficiencies.upush("Shortswords");
+			char.proficiencies.upush("Shortbows");
+			char.proficiencies.upush("Longbows");
+			scope.choiceQueue.push({
+				choicePrompt:"Choose a Cantrip",
+				choices:[listUnknownWizardCantrips],
+				action:function(char,derived,choice,scope){
+					let spell = findSpell(choice);
+					char.abilities.push(spell);
+				}
+			});
 		}
 	}
 ];

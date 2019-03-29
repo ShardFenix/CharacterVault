@@ -181,6 +181,17 @@ window.abilities=[
 		onLongRest:function(char,scope){
 			this.charges=this.maxCharges;
 		}
+	},{
+		name:"Rage",
+		description:"In battle, you fight with primal ferocity. On your turn, you can enter a rage as a bonus action.\nWhile raging, you gain the following benefits if you aren't wearing heavy armor:\n\u2022 You have advantage on Strength checks and Strength saving throws.\n\u2022 When you make a melee weapon attack using Strength, you gain a +${ladder(classLevel($scope.char,'Barbarian'),1,2,9,3,16,4)} bonus to the damage roll. This bonus increases as you level.\n\u2022 You have resistance to bludgeoning, piercing, and slashing damage.\n\u2022 If you are able to cast spells, you can't cast them or concentrate on them while raging.\n\nYour rage lasts for 1 minute. It ends early if you are knocked unconscious or if your turn ends and you haven't attacked a hostile creature since your last turn or taken damage since then. You can also end your rage on your turn as a bonus action.\n\nOnce you have raged the maximum number of times for your barbarian level, you must finish a long rest before you can rage again. You may rage 2 times at 1st level, 3 at 3rd, 4 at 6th, 5 at 12th, and 6 at 17th.",
+		charges:2,
+		maxCharges:2,
+		maxChargesFunction:function(char){
+			return ladder(classLevel(char,'Barbarian'),1,2,3,3,6,4,12,5,17,6);
+		},
+		onLongRest:function(){
+			this.charges=this.maxCharges;
+		}
 	}
 ];
 
@@ -346,6 +357,51 @@ window.passives=[
 	},{
 		name:"Expert Divination",
 		description:"When you cast a divination spell of 2nd level or higher using a spell slot, you regain one expended spell slot. The slot you regain must be of a level lower than the spell you cast and can't be higher than 5th level."
+	},{
+		name:"Unarmored Defense",
+		description:"While you are not wearing any armor, your Armor Class equals 10 + your Dexterity modifier + your Constitution modifier."
+	},{
+		name:"Danger Sense",
+		description:"You gain an uncanny sense of when things nearby aren't as they should be, giving you an edge when you dodge away from danger. You have advantage on Dexterity saving throws against effects that you can see, such as traps and spells. To gain this benefit, you can't be blinded, deafened, or incapacitated."
+	},{
+		name:"Reckless Attack",
+		description:"You can throw aside all concern for defense to attack with fierce desperation. When you make your first attack on your turn, you can decide to attack recklessly. Doing so gives you advantage on melee weapon attack rolls using Strength during this turn, but attack rolls against you have advantage until your next turn."
+	},{
+		name:"Extra Attacks x1",
+		description:"You can attack twice when you take the attack action on your turn."
+	},{
+		name:"Extra Attacks x2",
+		description:"You can attack three times when you take the attack action on your turn."
+	},{
+		name:"Extra Attacks x3",
+		description:"You can attack four times when you take the attack action on your turn."
+	},{
+		name:"Fast Movement",
+		description:"Your speed increases by 10 feet while you aren't wearing heavy armor."
+	},{
+		name:"Feral Instinct",
+		description:"Your instincts are so honed that you have advantage on initiative rolls.\n\nAdditionally, if you are surprised at the beginning of combat and aren't incapacitated, you can act normally on your first turn, but only if you enter your rage before doing anything else on that turn."
+	},{
+		name:"Brutal Critical (x1)",
+		description:"You can roll one additional weapon damage die when determining the extra damage for a critical hit with a melee attack."
+	},{
+		name:"Brutal Critical (x2)",
+		description:"You can roll two additional weapon damage die when determining the extra damage for a critical hit with a melee attack."
+	},{
+		name:"Brutal Critical (x3)",
+		description:"You can roll three additional weapon damage die when determining the extra damage for a critical hit with a melee attack."
+	},{
+		name:"Relentless Rage",
+		description:"Your rage can keep you fighting despite grievous wounds. If you drop to 0 hit points while you're raging and don't die outright, you can make a DC 10 Constitution saving throw. If you succeed, you drop to 1 hit point instead.\n\nEach time you use this feature after the first, the DC increases by 5. When you finish a short or long rest, the DC resets to 10."
+	},{
+		name:"Persistent Rage",
+		description:"Your rage is so fierce that it ends early only if you fall unconscious or if you choose to end it."
+	},{
+		name:"Indomitable Might",
+		description:"If your total for a Strength check is less than your Strength score, you can use that score in place of the total."
+	},{
+		name:"Primal Champion",
+		description:"Your Strength and Constitution scores increase by 4. Your maximum for those scores is now 24."
 	}
 	
 ];

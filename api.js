@@ -580,16 +580,15 @@ function removePassive(char,name){
  * return the first result that value is greater than or equal to.
  */
 function ladder(value, ...breakpoints){
+	let curr=0;
 	for (let i=0;i<breakpoints.length;i+=2){
-		if (value>=breakpoints[i]){
-			return breakpoints[i+1];
+		if (value<breakpoints[i]){
+			return curr;
+		} else {
+			curr=breakpoints[i+1];
 		}
 	}
-	//if breakpoints is odd, the last value is the return value.
-	if (breakpoints.length%2==1){
-		return breakpoints[breakpoints.length-1];
-	}
-	return value;
+	return curr;
 }
 
 function classLevel(char,classname){
