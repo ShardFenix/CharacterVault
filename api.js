@@ -38,7 +38,7 @@ function findItem(itemname, count){
 	//if no item is found, create one with that name
 	return {
 		name:itemname,
-		count:count
+		count:count?count:1
 	};
 }
 
@@ -369,34 +369,37 @@ function listUnknownCantripsForClass(char,classname){
 }
 
 function highestSpellLevel(char){
-	if (spellSlots9(char)>0){
-		return 9;
+	//find their highest caster level
+	let highest=0;
+	for (let clas of char.classes){
+		switch (clas.name){
+			case "Wizard":
+			case "Bard":
+			case "Druid":
+			case "Sorcerer":
+			case "Cleric":
+				let value = (clas.level+1)/2;
+				if (value>highest){
+					highest=value;
+				}
+				break;
+			case "Paladin":
+			case "Ranger":
+				let value = ladder(clas.level,2,1,5,2,9,3,13,4,17,5);
+				if (value>highest){
+					highest=value;
+				}
+				break;
+			case "Fighter":
+			case "Rogue":
+				let value = ladder(clas.level,3,1,7,2,13,3,19,4);
+				if (value>highest){
+					highest=value;
+				}
+				break;
+		}
 	}
-	if (spellSlots8(char)>0){
-		return 8;
-	}
-	if (spellSlots7(char)>0){
-		return 7;
-	}
-	if (spellSlots6(char)>0){
-		return 6;
-	}
-	if (spellSlots5(char)>0){
-		return 5;
-	}
-	if (spellSlots4(char)>0){
-		return 4;
-	}
-	if (spellSlots3(char)>0){
-		return 3;
-	}
-	if (spellSlots2(char)>0){
-		return 2;
-	}
-	if (spellSlots1(char)>0){
-		return 1;
-	}
-	return 0;
+	return highest;
 }
 
 /**
@@ -634,8 +637,8 @@ function spellSlots1(char){
 function spellSlots2(char){
 	let casterLevel=countCasterLevels(char);
 	if (casterLevel<3)return 0;
-	if (casterLevel===4)return 2;
-	return 3;
+	if (casterLevel===3)return 2;
+	return 4;
 }
 
 function spellSlots3(char){

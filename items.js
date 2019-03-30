@@ -1,3 +1,7 @@
+let instrumentDescription=function(){
+	return "If you have proficiency with a given musical instrument, you can add your proficiency bonus to any ability checks you make to play music with the instrument.nA bard can use a musical instrument as a spellcasting focus, substituting it for any material component that does not list a cost.\nEach type of musical instrument requires a separate proficiency.\n\nProficiency with a musical instrument indicates you are familiar with the techniques used to play it. You also have knowledge of some songs commonly performed with that instrument.\n\u2022 History. Your expertise aids you in recalling lore related to your instrument.\n\u2022 Performance. Your ability to put on a good show is improved when you incorporate an instrument into your act.\n\u2022 Compose a Tune. As part of a long rest, you can compose a new tune and lyrics for your instrument. You might use this ability to impress a noble or spread scandalous rumors with a catchy tune.";
+}
+
 window.items=[
 	{
 		name:'Club',
@@ -467,17 +471,65 @@ window.items=[
 	},
 	//instruments/tools
 	{
-		name:'Lyre',
-		description:'',
+		name:'Bagpipes',
+		description:instrumentDescription(),
 		categories:['Instrument'],
-		value:200,
-		proficiencies:['Lyre']
-	},	{
+		value:3000,
+		proficiencies:['Bagpipes']
+	},{
+		name:'Drum',
+		description:instrumentDescription(),
+		categories:['Instrument'],
+		value:600,
+		proficiencies:['Drum']
+	},{
+		name:'Dulcimer',
+		description:instrumentDescription(),
+		categories:['Instrument'],
+		value:2500,
+		proficiencies:['Dulcimer']
+	},{
 		name:'Flute',
-		description:'',
+		description:instrumentDescription(),
 		categories:['Instrument'],
 		value:200,
 		proficiencies:['Flute']
+	},{
+		name:'Horn',
+		description:instrumentDescription(),
+		categories:['Instrument'],
+		value:300,
+		proficiencies:['Horn']
+	},{
+		name:'Lute',
+		description:instrumentDescription(),
+		categories:['Instrument'],
+		value:3500,
+		proficiencies:['Lute']
+	},{
+		name:'Lyre',
+		description:instrumentDescription(),
+		categories:['Instrument'],
+		value:200,
+		proficiencies:['Lyre']
+	},{
+		name:'Panflute',
+		description:instrumentDescription(),
+		categories:['Instrument'],
+		value:1200,
+		proficiencies:['Panflute']
+	},{
+		name:'Shawm',
+		description:instrumentDescription(),
+		categories:['Instrument'],
+		value:200,
+		proficiencies:['Shawm']
+	},{
+		name:'Viol',
+		description:instrumentDescription(),
+		categories:['Instrument'],
+		value:3000,
+		proficiencies:['Viol']
 	},
 	//misc
 	{

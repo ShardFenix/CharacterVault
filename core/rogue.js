@@ -122,7 +122,7 @@ window.classes.push(
 						"action":function(char,derived,choice){
 							addPassive(char,"Sneak Attack");
 						}
-					}
+					},
 					helper.chooseExpertise,
 					helper.chooseExpertise
 				]

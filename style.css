@@ -1,5 +1,5 @@
 .item{
-    border: 2px groove black;
+    box-shadow: 0 0 3px 0px black;
     margin: 2px;
     padding: 6px 4px;
     font-size: 18px;
@@ -34,11 +34,12 @@
 }
 
 .greenback{
-    background-color: #52ff7d;
+    background-color: green;
+	color:white;
 }
 
 .greenback:hover{
-	border:2px groove #52ff7d; 
+	
 }
 
 .green{
@@ -107,11 +108,18 @@
 
 button {
     padding: 12px;
-    background-color: #00e80f;
+    background-color: green;
     border: 2px solid black;
 	font-weight:bold;
 	width:105px;
+	color: white;
+    border-radius: 5px;
+    cursor: pointer;
+    display: inline-block;
+	min-width:150px;
+	width:auto;
 }
+
 
 .header{
 	font-size:1.6em;
@@ -225,6 +233,16 @@ input[type="text"].hidden{
 	text-align:right;
 }
 
+div.half{
+	width:calc(50% - 28px);
+	padding:14px;
+}
+
+.modal>div.half{
+	width:calc(48.5% - 28px);
+	padding:14px;
+}
+
 .descriptionbox{
 	min-height:400px;
 	max-height:400px;
@@ -246,11 +264,6 @@ input[type="text"].hidden{
 	border:1px solid black;
 	border-radius:5px;
 	padding:4px;
-}
-
-button{
-	min-width:150px;
-	width:auto;
 }
 
 span.money{
@@ -446,3 +459,4 @@ input.statbox {
 	text-align:center;
 	background-color:rgba(0,0,0,0);
 }
+

@@ -203,7 +203,7 @@
 <br>
 	<div class="label center">Abilities</div>
 	<div class="item greenback" ng-repeat="item in char.passives"
-			ng-mouseenter="highlightAbility(item)" ng-mouseleave="$parent.tooltip=null">{{item.name}}</div>
+			ng-mouseenter="setTip(item)" ng-mouseleave="clearTip()">{{item.name}}</div>
 </td>
 
 </tr>
@@ -220,8 +220,7 @@
 	</label>
 	<br>
 	<label>Description
-	<textarea class="descriptionbox" ng-hide="tooltip" ng-model="newpassive.description" style="width:100%;min-height:400px;max-height:400px;"></textarea>
-	<textarea class="descriptionbox2" ng-show="tooltip" ng-model="tooltip" style="width:100%;min-height:400px;"></textarea>
+	<textarea class="descriptionbox" ng-model="newpassive.description" style="width:100%;min-height:400px;max-height:400px;"></textarea>
 	</label>
 	<button ng-click="addPassive(newpassive)">Add to Passives</button>
 	<br>
@@ -247,7 +246,7 @@
 		<div class="greenback item" ng-repeat="item in char.abilities | orderBy:'name' track by item.name "
 				ng-click="item.charges=item.charges-1"
 				ng-if="item.charges>0"
-				ng-mouseenter="highlightAbility(item)" ng-mouseleave="$parent.tooltip=null">
+				ng-mouseenter="setTip(item)" ng-mouseleave="clearTip()">
 			<span style="font-weight:bold;">{{item.name}}</span>
 			<span>({{item.charges}})</span>
 		</div>
@@ -259,7 +258,7 @@
 		<div class="redback item" ng-repeat="item in char.abilities | orderBy:'name' track by item.name"
 				ng-click="addCharge(item)" 
 				ng-if="item.maxCharges-item.charges>0"
-				ng-mouseenter="highlightAbility(item)" ng-mouseleave="$parent.tooltip=null">
+				ng-mouseenter="setTip(item)" ng-mouseleave="clearTip()">
 			<span style="font-weight:bold;">{{item.name}}</span>
 			<span>({{item.maxCharges-item.charges}})</span>
 			<span class="deletebutton" ng-click="delete(item,char.abilities,$event)">&times;</span>
@@ -284,8 +283,7 @@
 	<button style="display:none"></button>
 </td>
 <td>
-<textarea class="descriptionbox" ng-hide="tooltip" ng-model="newability.description" style="width:100%;min-height:400px;"></textarea>
-<textarea class="descriptionbox2" ng-show="tooltip" ng-model="tooltip" style="width:100%;min-height:400px;"></textarea>
+<textarea class="descriptionbox" ng-model="newability.description" style="width:100%;min-height:400px;"></textarea>
 </td>
 </tr></tbody></table>
 </div>
@@ -304,7 +302,8 @@
 <tbody><tr>
 <td width="20%" style="vertical-align:top;">
 	<div class="leftmenu">
-		<div class="yellowback item" ng-repeat="item in char.inventory | orderBy:'name' track by $index" ng-click="unequip(item)" ng-if="item.equipped">
+		<div class="yellowback item" ng-repeat="item in char.inventory | orderBy:'name' track by $index" ng-click="unequip(item)" ng-if="item.equipped"
+		ng-mouseenter="setTip(item)" ng-mouseleave="clearTip()">
 			<span style="font-weight:bold;">{{item.name}}</span>
 			<span>({{item.count}})</span>
 			<span class="deletebutton" ng-click="delete(item,char.equipment,$event)">&times;</span>
@@ -315,7 +314,8 @@
 
 <td width="20%" style="vertical-align:top;">
 	<div class="leftmenu">
-		<div class="yellowback item" ng-repeat="item in char.inventory | orderBy:'name' track by $index" ng-click="item.equipped=true" ng-if="!(item.equipped)">
+		<div class="yellowback item" ng-repeat="item in char.inventory | orderBy:'name' track by $index" ng-click="item.equipped=true" ng-if="!(item.equipped)"
+		ng-mouseenter="setTip(item)" ng-mouseleave="clearTip()">
 			<span style="font-weight:bold;">{{item.name}}</span>
 			<span>({{item.count}})</span>
 			<span class="deletebutton" ng-click="delete(item,char.inventory,$event)">&times;</span>
@@ -516,16 +516,18 @@
 	<table style="width:100%;"><thead class='label'><tr>
 		<th>Spells</th>
 		<th>Filters</th>
-		<th>Description</th>
+		<th>&nbsp;</th>
 	</tr></thead><tbody><tr>
 	<td style="width:340px;max-width:340px;display:inherit;vertical-align:top;">
-		<input style="width:340px;" type="text" ng-model="spellSearch" placeholder="Filter..."/>
-		<div class="item greenback" ng-repeat="spell in filteredSpellList | filter:spellSearch"
-			ng-click="showRef(spell)">{{spell.name}} ({{spell.level}})</div>
+		<div style="overflow-y:scroll;height: calc(100vh - 150px);">
+			<input style="width:340px;" type="text" ng-model="spellSearch" placeholder="Filter..."/>
+			<div class="item greenback" ng-repeat="spell in filteredSpellList | filter:spellSearch"
+					ng-mouseenter="setTip(spell)" ng-mouseleave="clearTip()">{{spell.name}} ({{spell.level}})</div>
+		</div>
 	</td>
 	<td style="width:25%;vertical-align:top;">
 	<br>
-		<span class="item" ng-repeat="i in [0,1,2,3,4,5,6,7,8,9]" style="margin:0px -2px 0px 0px;padding:8px 10px;"
+		<span class="item" ng-repeat="i in [0,1,2,3,4,5,6,7,8,9]" style="padding:8px 10px;"
 				ng-class="{'greenback':spellFilters.levels[i]}"
 				ng-click="spellFilters.levels[i]=!spellFilters.levels[i];updateSpellFilter()">{{i}}</span>
 <br><br><table><tr>
@@ -548,17 +550,8 @@
 	</table>
 
 	</td>
-	<td style="width: 50%;vertical-align: top;font-size: 1.3em;">
-	<div style="position:fixed;height:720px;overflow-y:auto;border: 1px solid black;padding: 20px;margin-right:10px;">
-		<div class="label">{{spellRef.name}}</div>
-		<div>Cast Time: {{spellRef.castTime}}<span style="float:right" ng-show="spellRef.components.verbal">Verbal</span></div>
-		<div>Duration: {{spellRef.duration}}<span style="float:right" ng-show="spellRef.components.somatic">Somatic</span></div>
-		<div>Range: {{spellRef.range}}<span style="float:right" ng-show="spellRef.ritual">Ritual</span></div>
-		<div ng-show="spellRef.components.material">Material component: {{spellRef.components.material}}</div>
-		<br>
-		<div id="refDescription"></div>
-	</div>
-	</td></tr></tbody></table>
+	<td style="width: 50%;vertical-align: top;font-size: 1.3em;"></td>
+	</tr></tbody></table>
 	</div>
 	
 </div>
@@ -575,7 +568,7 @@
 </div>
 
 <!-- Tooltip Modal-->
-<div class="rightModal" ng-class="{'show':currentChoices}" ng-mouseenter="renewTip()" ng-mouseleave="clearTip()">
+<div class="rightModal" ng-class="{'show':currentChoices || tip}" ng-mouseenter="renewTip()" ng-mouseleave="clearTip()">
 	<div>
 		<div class="label">{{tip.name || tip}}</div>
 		<hr>
@@ -624,20 +617,23 @@
 			</div>
 			<br>
 		</div>
-		<div ng-bind-html='tip.description' class="tipDescription"></div>
+		<div ng-bind-html='evalTooltip(tip)' class="tipDescription"></div>
 	</div>
 </div>
 
-<div class="modal" ng-class="{'show':showSaveMenu}">
-	<div class="label bordertitle">Create New Character</div>
-	<span class="button" ng-click="newChar()">Create</span>
-	<div class="label bordertitle">Save/Load</div>
-	<input type='text' ng-model='char.name' placeholder='Character Name'/>
-	<br>
-	<button ng-click="save()">Save</button>
-	<br><br><br><br>
-	
-	<button ng-repeat='item in saveList track by $index' ng-click="load($index)">{{item.name}}</button>
+<div class="modal" style="display:flex;" ng-class="{'show':showSaveMenu}">
+	<div class="half center">
+		<div class="label">Create New Character</div>
+		<span class="button" ng-click="newChar()">Create</span>
+	</div>
+	<div class="half center">
+		<div class="label">Save/Load</div>
+		<input type='text' ng-model='char.name' placeholder='Character Name'/>
+		<br>
+		<span class="button large" ng-click="save()">Save</span>
+		<br><br><br><br>
+		<span class="button large" ng-repeat='item in saveList track by $index' ng-click="load($index)">{{item.name}}</span>
+	</div>
 </div>
 
 </div>

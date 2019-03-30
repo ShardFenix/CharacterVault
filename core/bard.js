@@ -19,31 +19,27 @@ window.classes.push(
 							char.saves.dex=1;
 							char.saves.cha=1;
 							addAbility(char,"Bardic Inspiration (d6)");
+							addToInventory(char,findItem("Leather Armor"));
+							addToInventory(char,findItem("Dagger"));
 						}
 					},
 					helper.learnInstrument,
-					{
-						"choicePrompt":"Choose an instrument proficiency.",
-						"choices":[listNonProficientInstruments],
-						"action":function(char,derived,choice){
-							char.proficiencies.upush(choice);
-						}
-					},
-					{
-						"choicePrompt":"Choose an instrument proficiency.",
-						"choices":[listNonProficientInstruments],
-						"action":function(char,derived,choice){
-							char.proficiencies.upush(choice);
-						}
-					},
+					helper.learnInstrument,
+					helper.learnInstrument,
 					helper.learnSkillProficiency,
 					helper.learnSkillProficiency,
 					helper.learnSkillProficiency,
 					{
-						"choicePrompt":"Choose a weapon to start with.",
+						"choicePrompt":"Choose a weapon to start with",
 						"choices":[listSimpleWeapons,findItem("Longsword"),findItem("Rapier")],
 						"action":function(char,derived,choice){
 							addToInventory(char,findItem(choice));
+						}
+					},{
+						"choicePrompt":"Choose a pack",
+						"choices":[findItem("Diplomat's Pack"),findItem("Entertainer's Pack")],
+						"action":function(char,derived,choice){
+							openPack(char,choice);
 						}
 					},
 					helper.chooseSpell,

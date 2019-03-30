@@ -159,6 +159,10 @@ function checkChoiceQueue(){
 		return true;
 	}
 	return false;
+	if (tipPromise){
+		$timeout.cancel(tipPromise);
+	}
+	$scope.tip=null;
 }
 
 function finishLevelUp(){
@@ -175,6 +179,10 @@ function finishLevelUp(){
 	if (!checkChoiceQueue()){
 		$scope.calculate();
 	}
+	if (tipPromise){
+		$timeout.cancel(tipPromise);
+	}
+	$scope.tip=null;
 }
 
 /**
@@ -230,7 +238,7 @@ $scope.selectChoice=function(choice){
 			$scope.chosenClassName=choice.name;
 			$scope.updateStep=0;
 			//add the class entry on the character object
-			if ($scope.chosenLevel==0){
+			if ($scope.chosenLevel===0 || ($scope.chosenLevel===1 && $scope.char.level>1)){
 				$scope.char.classes.push({
 					name:$scope.chosenClassName,
 					level:1,
@@ -693,20 +701,21 @@ $scope.selectSpell=function(spell){
 	}
 }
 
-$scope.highlightAbility=function(abil){
-	if (abil && abil.description){
-		var desc=abil.description;
-		var token=desc.indexOf('${');
+$scope.evalTooltip=function(tip){
+	if (tip && tip.description){
+		let desc=tip.description;
+		let token=desc.indexOf('${');
 		while (token!=-1){
-			var endtoken=desc.indexOf("}");
-			var expression = desc.substring(token+2,endtoken);
+			let endtoken=desc.indexOf("}");
+			let expression = desc.substring(token+2,endtoken);
 			expression=expression.replace(/clevel/mg,""+$scope.char.level);
 			expression=eval(expression);
 			desc=desc.substring(0,token)+expression+desc.substring(endtoken+1);
 			token=desc.indexOf('${');
 		}
-		$scope.tooltip=desc;
+		return desc;
 	}
+	return '';
 }
 
 $scope.showRef=function(item){
@@ -717,7 +726,7 @@ $scope.showRef=function(item){
 var tipPromise=null;
 
 $scope.clearTip=function(){
-//	tipPromise=$timeout(function(){$scope.tip=null;},1000);
+	tipPromise=$timeout(function(){$scope.tip=null;},1000);
 }
 
 $scope.renewTip=function(){

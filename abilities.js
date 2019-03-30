@@ -76,7 +76,7 @@ window.abilities=[
 			return Math.max(1,scope.derived.modifiers.cha);
 		},
 		onLongRest:function(char,scope){
-			this.charges=scope.derived.modifiers.cha;
+			this.charges=this.maxCharges;
 		}
 	},{
 		name:"Bardic Inspiration (d8)",
@@ -85,7 +85,7 @@ window.abilities=[
 			return Math.max(1,scope.derived.modifiers.cha);
 		},
 		onShortRest:function(char,scope){
-			this.charges=scope.derived.modifiers.cha;
+			this.charges=this.maxCharges;
 		}
 	},{
 		name:"Bardic Inspiration (d10)",
@@ -94,7 +94,7 @@ window.abilities=[
 			return Math.max(1,scope.derived.modifiers.cha);
 		},
 		onShortRest:function(char,scope){
-			this.charges=scope.derived.modifiers.cha;
+			this.charges=this.maxCharges;
 		}
 	},{
 		name:"Bardic Inspiration (d12)",
@@ -103,7 +103,7 @@ window.abilities=[
 			return Math.max(1,scope.derived.modifiers.cha);
 		},
 		onShortRest:function(char,scope){
-			this.charges=scope.derived.modifiers.cha;
+			this.charges=this.maxCharges;
 		}
 	},{
 		name:"Lucky",
