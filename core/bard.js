@@ -42,6 +42,8 @@ window.classes.push(
 							openPack(char,choice);
 						}
 					},
+					helper.chooseBardCantrip,
+					helper.chooseBardCantrip,
 					helper.chooseSpell,
 					helper.chooseSpell,
 					helper.chooseSpell,
@@ -50,6 +52,8 @@ window.classes.push(
 			},	{ // 1
 				"updates":[
 					helper.hitDice8,
+					helper.chooseBardCantrip,
+					helper.chooseBardCantrip,
 					helper.chooseSpell,
 					helper.chooseSpell,
 					helper.chooseSpell,
@@ -108,6 +112,7 @@ window.classes.push(
 					helper.chooseFeat,
 					helper.increaseAttribute,
 					helper.increaseAttribute,
+					helper.chooseBardCantrip,
 					helper.chooseSpell,
 					{
 						"choicePrompt":"Do you want to replace one of your known Bard spells?",
@@ -244,6 +249,7 @@ window.classes.push(
 							addSpell(char,choice,'Bard');
 						}
 					},
+					helper.chooseBardCantrip,
 					helper.chooseSpell,
 					{
 						"choicePrompt":"Do you want to replace one of your known Bard spells?",

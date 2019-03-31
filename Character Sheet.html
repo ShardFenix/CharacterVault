@@ -16,7 +16,7 @@
 <span class="tab" ng-click="tab='stats'" ng-class="{'activetab':tab=='stats'}">Stats</span>
 <span class="tab" ng-click="tab='abilities'" ng-class="{'activetab':tab=='abilities'}">Abilities</span>
 <span class="tab" ng-click="tab='equipment'" ng-class="{'activetab':tab=='equipment'}">Equipment</span>
-<span class="tab" ng-click="tab='spells'" ng-class="{'activetab':tab=='spells'}">Spells</span>
+<span class="tab" ng-click="tab='spells';loadSpells()" ng-class="{'activetab':tab=='spells'}">Spells</span>
 <span class="tab" ng-click="tab='combat'" ng-class="{'activetab':tab=='combat'}">Combat</span>
 <span class="tab" ng-click="tab='notes'" ng-class="{'activetab':tab=='notes'}">Notes</span>
 <span class="tab" ng-click="tab='reference'" ng-class="{'activetab':tab=='reference'}">Reference</span>
@@ -350,8 +350,6 @@
 <!-- End equipment -->
 
 
-<!--
-
 <div ng-show="tab=='spells'">
 <table style="width:100%;">
 <thead class="header"><tr>
@@ -359,9 +357,9 @@
 <th></th></tr>
 <tbody><tr>
 <td width="20%" style="vertical-align:top;">
-	<div class="leftmenu" ng-mouseleave="endRawSpellPreview()">
+	<div class="leftmenu">
 		<div class="label">Cantrips</div>
-		<div class="greenback item" ng-repeat="spell in char.spells | orderBy:'name' track by spell.name"
+		<div class="greenback item" ng-repeat="spell in listSpells(char) | orderBy:'name' track by spell.name"
 				ng-click="selectSpell(spell)" ng-class="{'selected':chosenspell==spell}" ng-if="spell.level==0"
 				ng-mouseenter="rawSpellPreview(spell)">
 			<span style="font-weight:bold;">{{spell.name}}</span>
@@ -564,7 +562,10 @@
 	<hr>
 	<br>
 	<div class="choice" ng-repeat="choice in currentChoices track by $index" ng-click="selectChoice(choice)"
-			ng-mouseenter="setTip(choice)" ng-mouseleave="clearTip()">{{choice.name || choice}}</div>
+			ng-mouseenter="setTip(choice)" ng-mouseleave="clearTip()">
+			{{choice.name || choice}}
+			<span ng-show="choice.level">({{choice.level}})</span>
+	</div>
 </div>
 
 <!-- Tooltip Modal-->

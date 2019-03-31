@@ -371,6 +371,7 @@ function listUnknownCantripsForClass(char,classname){
 function highestSpellLevel(char){
 	//find their highest caster level
 	let highest=0;
+	let value=0;
 	for (let clas of char.classes){
 		switch (clas.name){
 			case "Wizard":
@@ -378,21 +379,21 @@ function highestSpellLevel(char){
 			case "Druid":
 			case "Sorcerer":
 			case "Cleric":
-				let value = (clas.level+1)/2;
+				value = (clas.level+1)/2;
 				if (value>highest){
 					highest=value;
 				}
 				break;
 			case "Paladin":
 			case "Ranger":
-				let value = ladder(clas.level,2,1,5,2,9,3,13,4,17,5);
+				value = ladder(clas.level,2,1,5,2,9,3,13,4,17,5);
 				if (value>highest){
 					highest=value;
 				}
 				break;
 			case "Fighter":
 			case "Rogue":
-				let value = ladder(clas.level,3,1,7,2,13,3,19,4);
+				value = ladder(clas.level,3,1,7,2,13,3,19,4);
 				if (value>highest){
 					highest=value;
 				}

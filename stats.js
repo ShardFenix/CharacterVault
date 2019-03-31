@@ -65,6 +65,37 @@ $scope.derived={
 	proficiency:2
 }
 
+//cache the player's spells for the spell screen
+$scope.spellList=[];
+
+$scope.loadSpells=function(){
+	for (let clas of $scope.char.classes){
+		for (let spell of clas.spells){
+			let s = angular.copy(spell);
+			s.casterClass=clas.name;
+			switch (s.casterClass){
+				case "Wizard":
+				case "Rogue":
+				case "Fighter":
+					s.attackBonus = $scope.derived.proficiency + $scope.derived.modifiers.int;
+					break;
+				case "Bard":
+				case "Warlock":
+				case "Sorcerer":
+				case "Paladin":
+					s.attackBonus = $scope.derived.proficiency + $scope.derived.modifiers.cha;
+					break;
+				case "Druid":
+				case "Cleric":
+					s.attackBonus = $scope.derived.proficiency + $scope.derived.modifiers.wis;
+					break;
+			}
+			s.saveDc = 8 + s.attackBonus;
+			$scope.spellList.push(s);
+		}
+	}
+}
+
 //load all spell slot abilities onto new characters
 addAbility($scope.char,"Lv 1 Spell");
 addAbility($scope.char,"Lv 2 Spell");
@@ -218,20 +249,17 @@ var setupForCurrentStep=function(){
 	}
 }
 
+$scope.oldUpdateStep=0;
+
 $scope.selectChoice=function(choice){
 	$scope.currentChoices=null;
 	if (choice.levels){
 		//they chose a class or subclass
 		if (choice.subclass){
 			//they chose a subclass
-			$scope.inSubclass=true;
-			$scope.updateStep=0;
-			$scope.currentPackage=choice.levels[$scope.chosenLevel].updates;
 			//add subclass to character
 			getCharacterClass($scope.char,choice.classname).subclass=choice.name;
-			$scope.currentPackage=choice.levels[$scope.chosenLevel].updates;
-			setupForCurrentStep();
-			return;
+			nextStep();
 		} else {
 			//they chose a class
 			$scope.chosenLevel=nextLevel($scope.char,choice.name);
@@ -259,39 +287,7 @@ $scope.selectChoice=function(choice){
 			choice=choice.name;
 		}
 		$scope.currentStep.action($scope.char,$scope.derived,choice,$scope);
-		$scope.updateStep+=1;
-		if ($scope.currentPackage.length<=$scope.updateStep){
-			//see if we need to start doing the subclass
-			if ($scope.inSubclass){
-				finishLevelUp();
-				return;
-			} else {
-				//start leveling up their subclass
-				$scope.inSubclass=true;
-				let sc=getCharacterClass($scope.char,$scope.chosenClassName).subclass;
-				if (sc){
-					sc = findSubclass($scope.chosenClassName,sc);
-					if (sc){
-						$scope.updateStep=0;
-						$scope.currentPackage=null;
-						if (sc.levels.length>$scope.chosenLevel){
-							$scope.currentPackage=sc.levels[$scope.chosenLevel].updates;
-							if ($scope.currentPackage && $scope.currentPackage.length>$scope.updateStep){
-								setupForCurrentStep();
-								return;
-							}
-						}
-					}
-				}
-				//done with levelup
-				finishLevelUp();
-				return;
-			}
-		} else {
-			$scope.currentStep=$scope.currentPackage[$scope.updateStep];
-			setupForCurrentStep();
-			return;
-		}
+		nextStep();
 	} else {
 		//they chose something outside of a class/subclass package
 		if (choice.name){
@@ -302,6 +298,42 @@ $scope.selectChoice=function(choice){
 		if (!checkChoiceQueue()){
 			$scope.calculate();
 		}
+	}
+}
+
+function nextStep(){
+	$scope.updateStep+=1;
+	if ($scope.currentPackage.length<=$scope.updateStep){
+		//see if we need to start doing the subclass
+		if ($scope.inSubclass){
+			finishLevelUp();
+			return;
+		} else {
+			//start leveling up their subclass
+			$scope.inSubclass=true;
+			let sc=getCharacterClass($scope.char,$scope.chosenClassName).subclass;
+			if (sc){
+				sc = findSubclass($scope.chosenClassName,sc);
+				if (sc){
+					$scope.updateStep=0;
+					$scope.currentPackage=null;
+					if (sc.levels.length>$scope.chosenLevel){
+						$scope.currentPackage=sc.levels[$scope.chosenLevel].updates;
+						if ($scope.currentPackage && $scope.currentPackage.length>$scope.updateStep){
+							setupForCurrentStep();
+							return;
+						}
+					}
+				}
+			}
+			//done with levelup
+			finishLevelUp();
+			return;
+		}
+	} else {
+		$scope.currentStep=$scope.currentPackage[$scope.updateStep];
+		setupForCurrentStep();
+		return;
 	}
 }
 
