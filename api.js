@@ -472,9 +472,12 @@ function hasSpell(char,spellName){
 }
 
 function addSpell(char,spellname,forClass){
-	for (let c of char.classes){
-		if (c.name===forClass){
-			c.spells.push(findSpell(spellname));
+	let s = findSpell(spellname);
+	if (s){
+		for (let c of char.classes){
+			if (c.name===forClass){
+				c.spells.push(angular.copy(s));
+			}
 		}
 	}
 }

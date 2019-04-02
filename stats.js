@@ -677,81 +677,25 @@ $scope.add=function(item,to){
 $scope.saveId=-1;
 $scope.saveList=[];
 
-$scope.rawSpellPreview=function(spell){
-	if (!spell || $scope.chosenspell){
-		return;
-	}
-	var desc = spell.description;
-	var token=desc.indexOf('${');
-	while (token!=-1){
-		var endtoken=desc.indexOf("}");
-		var expression = desc.substring(token+2,endtoken);
-		expression=expression.replace(/slevel/mg,""+spell.level);
-		expression=eval(expression);
-		desc=desc.substring(0,token)+expression+desc.substring(endtoken+1);
-		token=desc.indexOf('${');
-	}
-	$scope.tooltip=desc;
-}
-
-$scope.endRawSpellPreview=function(){
-	if ($scope.chosenspell){
-		$scope.spellPreview($scope.chosenspell.level);
-		return;
-	}
-	$scope.tooltip=null;
-}
-
-$scope.spellPreview=function(spell, level){
-	if (!($scope.chosenspell)){
-		return;
-	}
-	if (level<$scope.chosenspell.level){
-		$scope.tooltip=$scope.chosenspell.name+' can only be cast at level '+$scope.chosenspell.level+' or higher.';
-		return;
-	}
-	let desc = $scope.chosenspell.description;
-	if (desc){
-		let token=desc.indexOf('${');
-		while (token!=-1){
-			let endtoken=desc.indexOf("}");
-			let expression = desc.substring(token+2,endtoken);
-			expression=expression.replace(/slevel/mg,""+level);
-			expression=expression.replace(/clevel/mg,""+$scope.char.level);
-			expression=eval(expression);
-			desc=desc.substring(0,token)+expression+desc.substring(endtoken+1);
-			token=desc.indexOf('${');
-		}
-	} else {
-		console.log("No description for "+$scope.chosenspell);
-	}
-	$scope.tooltip=desc;
-}
-
 $scope.selectSpell=function(spell){
-	$scope.chosenspell=spell;
-	if (spell) {
-		$scope.spellPreview(spell.level);
-	} else {
-		$scope.tooltip=null;
-	}
+	$scope.chosenSpell=spell;
 }
 
 $scope.evalTooltip=function(tip){
 	if (tip && tip.description){
 		let desc=tip.description;
-		if (tip.level && $scope.chosenspell && tip.level<$scope.chosenspell.level){
-			return $scope.chosenspell.name+' can only be cast at level '+$scope.chosenspell.level+' or higher.';
+		if (tip.level && $scope.chosenSpell && tip.level<$scope.chosenSpell.level){
+			return $scope.chosenSpell.name+' can only be cast at level '+$scope.chosenSpell.level+' or higher.';
 		}
 		let token=desc.indexOf('${');
 		while (token!=-1){
 			let endtoken=desc.indexOf("}");
 			let expression = desc.substring(token+2,endtoken);
-			expression=expression.replace(/clevel/mg,""+$scope.char.level);
+			expression=expression.replace(/clevel/mg,$scope.char.level);
 			if ($scope.spellLevel){
-				expression=expression.replace(/slevel/mg,""+$scope.spellLevel);
+				expression=expression.replace(/slevel/mg,$scope.spellLevel);
 			} else {
-				expression=expression.replace(/slevel/mg,""+tip.level?tip.level:0);
+				expression=expression.replace(/slevel/mg,tip.level?tip.level:0);
 			}
 			expression=eval(expression);
 			desc=desc.substring(0,token)+expression+desc.substring(endtoken+1);

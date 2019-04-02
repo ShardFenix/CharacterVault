@@ -211,6 +211,7 @@
 </td>
 
 <td style="vertical-align:top;">
+<span class="button" ng-click="showSaveMenu=true;">Save/Load</span>
 <br><br><br>
 <br><br>
 <div style="padding:10px;border:1px solid black;">
@@ -366,8 +367,8 @@
 				<br><br>
 		<div class="label">Cantrips</div>
 		<div class="greenback item" ng-repeat="spell in knownSpells | orderBy:'name' track by spell.name"
-				ng-click="selectSpell(spell)" ng-class="{'selected':chosenspell==spell}" ng-if="spell.level==0"
-				ng-mouseenter="rawSpellPreview(spell)" ng-show="knownSpellLevelFilter[0]">
+				ng-click="selectSpell(spell)" ng-class="{'selected':chosenSpell==spell}" ng-if="spell.level==0"
+				ng-show="knownSpellLevelFilter[0]">
 			<span style="font-weight:bold;">{{spell.name}}</span>
 			<span class="deletebutton" ng-click="delete(spell,char.spells,$event)">&times;</span>			
 		</div>
@@ -375,7 +376,7 @@
 		<div ng-repeat="lv in [1,2,3,4,5,6,7,8,9]" ng-show="knownSpellLevelFilter[lv]">
 			<div class="label">Level {{lv}}</div>
 			<div class="greenback item" ng-repeat="spell in knownSpells | orderBy:'name' track by spell.name"
-					ng-click="selectSpell(spell)" ng-class="{'selected':chosenspell==spell}" ng-if="spell.level==lv"
+					ng-click="selectSpell(spell)" ng-class="{'selected':chosenSpell==spell}" ng-if="spell.level==lv"
 					>
 				<span style="font-weight:bold;">{{spell.name}}</span>
 				<span class="deletebutton" ng-click="delete(spell,char.spells,$event)">&times;</span>			
@@ -388,11 +389,11 @@
 <td width="25%" style="vertical-align:top;">
 <div class="label">Spell Preview</div>
 <div class="greenback item" ng-repeat="lv in [0,1,2,3,4,5,6,7,8,9]"
-		ng-mouseenter="spellPreview(lv)"
-		ng-mouseleave="spellPreview(chosenspell.level)"
+		ng-mouseenter="setTip(chosenSpell,lv)"
+		ng-mouseleave="setTip(chosenSpell)"
 		ng-class="{'grey':chosenspell.level>lv}">Level {{lv}}</div>
 		<br>
-<div class="redback item" ng-click='selectSpell(null)'>Clear Selection</div>
+<div class="redback item" ng-click='selectSpell(null);clearTip()'>Clear Selection</div>
 </td>
 
 <td style="vertical-align:top;">
@@ -618,6 +619,12 @@
 			<br>
 		</div>
 		<div ng-bind-html='evalTooltip(tip)' class="tipDescription"></div>
+		<br>
+		<div ng-show="tip.saveDc" style="text-align:left;">
+			<span class="footnote">Spell Attack Bonus: +{{tip.attackBonus}}.</span>
+			<br>
+			<span class="footnote">Spell Save DC: {{tip.saveDc}}.</span>
+		</div>
 	</div>
 </div>
 

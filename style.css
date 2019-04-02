@@ -460,4 +460,12 @@ input.statbox {
 	text-align:center;
 	background-color:rgba(0,0,0,0);
 }
-
+.footnote{
+	font-size:1.3em;
+	font-weight:bold;
+}
+i{
+	color:green;
+	font-weight:bold;
+	font-style:normal;
+}
