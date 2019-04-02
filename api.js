@@ -430,15 +430,7 @@ function listLearnableSpellsForClass(char,$scope){
 		if (spell.classes.indexOf(classname)==-1){
 			continue;
 		}
-		let found=false;
-		for (var cspell of clas.spells){
-			//check if they already know this spell
-			if (cspell.name===spell.name){
-				found=true;
-				break;
-			}
-		}
-		if (!found){
+		if (!hasSpell(char,spell.name)){
 			result.push(spell);
 		}
 	}
@@ -466,6 +458,17 @@ function getAttributesBelow20(char){
 		result.push("+1 Charisma");
 	}
 	return result;
+}
+
+function hasSpell(char,spellName){
+	for (let clas of char.classes){
+		for (let spell of clas.spells){
+			if (spell.name===spellName){
+				return true;
+			}
+		}
+	}
+	return false;
 }
 
 function addSpell(char,spellname,forClass){

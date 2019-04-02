@@ -353,24 +353,30 @@
 <div ng-show="tab=='spells'">
 <table style="width:100%;">
 <thead class="header"><tr>
-<th>Known Spells<th></th>
-<th></th></tr>
+<th>Known Spells</th>
+<th></th>
+<th>Add New Spell</th></tr>
 <tbody><tr>
-<td width="20%" style="vertical-align:top;">
-	<div class="leftmenu">
+<td width="30%" style="vertical-align:top;">
+	<div class="leftmenu" style="overflow-y:auto;height:calc(100vh - 150px);">
+	<br>
+		<span class="item" ng-repeat="i in [0,1,2,3,4,5,6,7,8,9]" style="padding:8px 10px;"
+				ng-class="{'greenback':knownSpellLevelFilter[i]}"
+				ng-click="knownSpellLevelFilter[i]=!knownSpellLevelFilter[i]">{{i}}</span>
+				<br><br>
 		<div class="label">Cantrips</div>
-		<div class="greenback item" ng-repeat="spell in listSpells(char) | orderBy:'name' track by spell.name"
+		<div class="greenback item" ng-repeat="spell in knownSpells | orderBy:'name' track by spell.name"
 				ng-click="selectSpell(spell)" ng-class="{'selected':chosenspell==spell}" ng-if="spell.level==0"
-				ng-mouseenter="rawSpellPreview(spell)">
+				ng-mouseenter="rawSpellPreview(spell)" ng-show="knownSpellLevelFilter[0]">
 			<span style="font-weight:bold;">{{spell.name}}</span>
 			<span class="deletebutton" ng-click="delete(spell,char.spells,$event)">&times;</span>			
 		</div>
 		<br>
-		<div ng-repeat="lv in [1,2,3,4,5,6,7,8,9]">
+		<div ng-repeat="lv in [1,2,3,4,5,6,7,8,9]" ng-show="knownSpellLevelFilter[lv]">
 			<div class="label">Level {{lv}}</div>
-			<div class="greenback item" ng-repeat="spell in char.spells | orderBy:'name' track by spell.name"
+			<div class="greenback item" ng-repeat="spell in knownSpells | orderBy:'name' track by spell.name"
 					ng-click="selectSpell(spell)" ng-class="{'selected':chosenspell==spell}" ng-if="spell.level==lv"
-					ng-mouseenter="rawSpellPreview(spell)">
+					>
 				<span style="font-weight:bold;">{{spell.name}}</span>
 				<span class="deletebutton" ng-click="delete(spell,char.spells,$event)">&times;</span>			
 			</div>
@@ -379,22 +385,7 @@
 	</div>
 </td>
 
-<td width="20%" style="vertical-align:top;text-align:center;">
-
-<span class="label">Spell Name</span>
-<br>
-	<input type="text" placeholder="Spell Name" ng-model="newspell.name"/>
-<br></br>
-<span class="label">Spell Level</span>
-</br>
-	<input type="text" placeholder="Spell Level" ng-model="newspell.level"/>
-	<br></br>
-	<button ng-click="add(newspell,char.spells)">Add to Spells</button>
-	<br>
-	<button style="display:none"></button>
-</td>
-
-<td style="vertical-align:top;">
+<td width="25%" style="vertical-align:top;">
 <div class="label">Spell Preview</div>
 <div class="greenback item" ng-repeat="lv in [0,1,2,3,4,5,6,7,8,9]"
 		ng-mouseenter="spellPreview(lv)"
@@ -405,9 +396,17 @@
 </td>
 
 <td style="vertical-align:top;">
-<span class="label">Spell Description</span>
-<textarea class="descriptionbox" ng-hide="tooltip" ng-model="newspell.description" style="width:100%;min-height:400px;"></textarea>
-<textarea class="descriptionbox2" ng-show="tooltip" ng-model="tooltip" style="width:100%;min-height:400px;"></textarea>
+	<span class="label">Spell Name</span>
+	<br>
+	<input type="text" placeholder="Spell Name" ng-model="newspell.name"/>
+	<br></br>
+	<span class="label">Spell Level</span>
+	</br>
+	<input type="text" placeholder="Spell Level" ng-model="newspell.level"/>
+	<br>
+	<span class="label">Spell Description</span>
+	<textarea class="descriptionbox" ng-model="newspell.description" style="width:100%;min-height:400px;"></textarea>
+	<button ng-click="add(newspell,char.spells)">Add to Spells</button>
 
 </td>
 </tr>
@@ -520,7 +519,7 @@
 		<div style="overflow-y:scroll;height: calc(100vh - 150px);">
 			<input style="width:340px;" type="text" ng-model="spellSearch" placeholder="Filter..."/>
 			<div class="item greenback" ng-repeat="spell in filteredSpellList | filter:spellSearch"
-					ng-mouseenter="setTip(spell)" ng-mouseleave="clearTip()">{{spell.name}} ({{spell.level}})</div>
+					ng-mouseenter="setTip(spell,spell.level)" ng-mouseleave="clearTip()">{{spell.name}} ({{spell.level}})</div>
 		</div>
 	</td>
 	<td style="width:25%;vertical-align:top;">

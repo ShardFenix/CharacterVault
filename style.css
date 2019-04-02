@@ -21,7 +21,7 @@
 }
 
 .item.selected{
-    background-color: #00e7ff;
+    background-color: #1b5b90;
     box-shadow: 0px 0px 2px 3px #000;
 }
 
@@ -30,7 +30,8 @@
 }
 
 .redback{
-    background-color: #ff8888;
+    background-color: #c11717;
+    color: white;
 }
 
 .greenback{

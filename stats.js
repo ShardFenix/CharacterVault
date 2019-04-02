@@ -66,9 +66,11 @@ $scope.derived={
 }
 
 //cache the player's spells for the spell screen
-$scope.spellList=[];
+$scope.knownSpells=[];
+$scope.knownSpellLevelFilter=[true,true,true,true,true,true,true,true,true,true];
 
 $scope.loadSpells=function(){
+	$scope.knownSpells=[];
 	for (let clas of $scope.char.classes){
 		for (let spell of clas.spells){
 			let s = angular.copy(spell);
@@ -91,7 +93,7 @@ $scope.loadSpells=function(){
 					break;
 			}
 			s.saveDc = 8 + s.attackBonus;
-			$scope.spellList.push(s);
+			$scope.knownSpells.push(s);
 		}
 	}
 }
@@ -248,8 +250,6 @@ var setupForCurrentStep=function(){
 		$scope.selectChoice('');
 	}
 }
-
-$scope.oldUpdateStep=0;
 
 $scope.selectChoice=function(choice){
 	$scope.currentChoices=null;
@@ -702,7 +702,7 @@ $scope.endRawSpellPreview=function(){
 	$scope.tooltip=null;
 }
 
-$scope.spellPreview=function(level){
+$scope.spellPreview=function(spell, level){
 	if (!($scope.chosenspell)){
 		return;
 	}
@@ -710,16 +710,20 @@ $scope.spellPreview=function(level){
 		$scope.tooltip=$scope.chosenspell.name+' can only be cast at level '+$scope.chosenspell.level+' or higher.';
 		return;
 	}
-	var desc = $scope.chosenspell.description;
-	var token=desc.indexOf('${');
-	while (token!=-1){
-		var endtoken=desc.indexOf("}");
-		var expression = desc.substring(token+2,endtoken);
-		expression=expression.replace(/slevel/mg,""+level);
-		expression=expression.replace(/clevel/mg,""+$scope.char.level);
-		expression=eval(expression);
-		desc=desc.substring(0,token)+expression+desc.substring(endtoken+1);
-		token=desc.indexOf('${');
+	let desc = $scope.chosenspell.description;
+	if (desc){
+		let token=desc.indexOf('${');
+		while (token!=-1){
+			let endtoken=desc.indexOf("}");
+			let expression = desc.substring(token+2,endtoken);
+			expression=expression.replace(/slevel/mg,""+level);
+			expression=expression.replace(/clevel/mg,""+$scope.char.level);
+			expression=eval(expression);
+			desc=desc.substring(0,token)+expression+desc.substring(endtoken+1);
+			token=desc.indexOf('${');
+		}
+	} else {
+		console.log("No description for "+$scope.chosenspell);
 	}
 	$scope.tooltip=desc;
 }
@@ -736,11 +740,19 @@ $scope.selectSpell=function(spell){
 $scope.evalTooltip=function(tip){
 	if (tip && tip.description){
 		let desc=tip.description;
+		if (tip.level && $scope.chosenspell && tip.level<$scope.chosenspell.level){
+			return $scope.chosenspell.name+' can only be cast at level '+$scope.chosenspell.level+' or higher.';
+		}
 		let token=desc.indexOf('${');
 		while (token!=-1){
 			let endtoken=desc.indexOf("}");
 			let expression = desc.substring(token+2,endtoken);
 			expression=expression.replace(/clevel/mg,""+$scope.char.level);
+			if ($scope.spellLevel){
+				expression=expression.replace(/slevel/mg,""+$scope.spellLevel);
+			} else {
+				expression=expression.replace(/slevel/mg,""+tip.level?tip.level:0);
+			}
 			expression=eval(expression);
 			desc=desc.substring(0,token)+expression+desc.substring(endtoken+1);
 			token=desc.indexOf('${');
@@ -758,7 +770,7 @@ $scope.showRef=function(item){
 var tipPromise=null;
 
 $scope.clearTip=function(){
-	tipPromise=$timeout(function(){$scope.tip=null;},1000);
+	tipPromise=$timeout(function(){$scope.tip=null;$scope.spellLevel=null;},1000);
 }
 
 $scope.renewTip=function(){
@@ -767,11 +779,16 @@ $scope.renewTip=function(){
 	}
 }
 
-$scope.setTip=function(choice){
+$scope.setTip=function(choice,spellLevel){
 	if (tipPromise){
 		$timeout.cancel(tipPromise);
 	}
 	$scope.tip=choice;
+	if (spellLevel){
+		$scope.spellLevel=spellLevel;
+	} else {
+		$scope.spellLevel=null;
+	}
 }
 
 $scope.save=function(){
@@ -792,6 +809,7 @@ $scope.save=function(){
 			delete ability.apply;
 			delete ability.maxChargesFunction;
 		}
+		//spell descriptions take up a lot of space.
 		for (let clas of $scope.char.classes){
 			for (let spell of clas.spells){
 				delete spell.description;
@@ -845,6 +863,14 @@ $scope.load=function(num){
 				ability.onLongRest=a.onLongRest;
 				ability.apply=a.apply;
 				ability.maxChargesFunction=a.maxChargesFunction;
+			}
+		}
+		for (let clas of $scope.char.classes){
+			for (let spell of clas.spells){
+				let pSpell = findSpell(spell.name);
+				if (pSpell){
+					spell.description=pSpell.description;
+				}
 			}
 		}
 		$scope.showSaveMenu=false;
