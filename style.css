@@ -177,12 +177,13 @@ input[type="text"].medium{
 	font-weight:bold;
 	border: 2px solid black;
 	background-color:#ffffff;
-	padding:8px 0px;
+	padding:6px 0px;
 	margin-left:-8px;
-	width:14.27%;
+	width:14%;
 	display:inline-block;
 	text-align:center;
 	cursor:pointer;
+	font-family: 'Cinzel Decorative';
 	
 	-webkit-touch-callout: none;
     -webkit-user-select: none;

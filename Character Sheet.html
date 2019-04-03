@@ -20,7 +20,7 @@
 <span class="tab" ng-click="tab='combat'" ng-class="{'activetab':tab=='combat'}">Combat</span>
 <span class="tab" ng-click="tab='notes'" ng-class="{'activetab':tab=='notes'}">Notes</span>
 <span class="tab" ng-click="tab='reference'" ng-class="{'activetab':tab=='reference'}">Reference</span>
-
+<!--
 <span class="tab" ng-click="tab='raw'" ng-class="{'activetab':tab=='raw'}">Raw</span>
 <!-- -->
 </div>
@@ -390,8 +390,7 @@
 <div class="label">Spell Preview</div>
 <div class="greenback item" ng-repeat="lv in [0,1,2,3,4,5,6,7,8,9]"
 		ng-mouseenter="setTip(chosenSpell,lv)"
-		ng-mouseleave="setTip(chosenSpell)"
-		ng-class="{'grey':chosenspell.level>lv}">Level {{lv}}</div>
+		ng-class="{'grey':chosenSpell.level>lv}">Level {{lv}}</div>
 		<br>
 <div class="redback item" ng-click='selectSpell(null);clearTip()'>Clear Selection</div>
 </td>
@@ -415,56 +414,31 @@
 </div>
 <!-- End Spells -->
 
-<!--
+
 <div ng-show="tab=='combat'">
 <table style="width:100%;"><thead class="label center"><tr>
-<th>Abilities</th><th>Spells</th><th>Items</th><th>Spell Preview</th>
-<th ng-hide="tooltip">Initiative Order</th><th ng-show="tooltip">Description</th>
+	<th>Abilities</th>
+	<th>Spells</th>
+	<th>Initiative Order</th>
 </tr></thead>
 <tbody><tr>
-	<td width="17%" style="vertical-align:top;">
-		<div class="leftmenu">
-			<div class="greenback item" ng-repeat="item in char.stock | orderBy:'name' track by item.name "
-					ng-click="move(item,char.stock,char.used)"
-					ng-mouseenter="highlightAbility(item)" ng-mouseleave="$parent.tooltip=null">
+	<td width="30%" style="vertical-align:top;">
+		<div class="leftmenu" style="overflow-y:auto;height:calc(100vh - 150px);">
+			<div class="greenback item" ng-repeat="item in char.abilities | orderBy:'name' track by item.name "
+					ng-click="item.charges=item.charges-1"
+					ng-if="item.charges>0"
+					ng-mouseenter="setTip(item)" ng-mouseleave="clearTip()">
 				<span style="font-weight:bold;">{{item.name}}</span>
-				<span>({{item.count}})</span>
-				<span class="deletebutton" ng-click="increment(item,$event)">&plus;</span>
+				<span>({{item.charges}})</span>
 			</div>
-		</div>
-	</td>
-
-	<td width="17%" style="vertical-align:top;">
-		<div class="leftmenu" ng-mouseleave="endRawSpellPreview()">
-			<div class="label">Cantrips</div>
-			<div class="greenback item" ng-repeat="spell in char.spells | orderBy:'name' track by spell.name"
-					ng-click="selectSpell(spell)" ng-class="{'selected':chosenspell==spell}" ng-if="spell.level==0"
-					ng-mouseenter="rawSpellPreview(spell)">
-				<span style="font-weight:bold;">{{spell.name}}</span>
-				<span class="deletebutton" ng-click="delete(spell,char.spells,$event)">&times;</span>			
-			</div>
+			
 			<br>
-			<div ng-repeat='lv in [1,2,3,4,5,6,7,8,9]'>
-				<div class="label" ng-show="spellLevelAvailable(lv)">Level {{lv}}</div>
-				<div class="greenback item" ng-show="spellLevelAvailable(spell.level)" ng-repeat="spell in char.spells | orderBy:'name' track by spell.name"
-						ng-click="selectSpell(spell)" ng-class="{'selected':chosenspell==spell}" ng-if="spell.level==lv"
-						ng-mouseenter="rawSpellPreview(spell)">
-					<span style="font-weight:bold;">{{spell.name}}</span>
-					<span class="deletebutton" ng-click="delete(spell,char.spells,$event)">&times;</span>			
-				</div>
-				<br>
-			</div>
-		</div>
-	</td>
-
-	<td width="20%" style="vertical-align:top;">
-		<div class="leftmenu">
-			<div class="yellowback item" ng-repeat="item in char.equipment | orderBy:'name' track by item.name" ng-if="combatRelevant(item)">
+			<div class="label">Items</div>
+			<div class="yellowback item" ng-repeat="item in char.equipment | orderBy:'name' track by item.name" ng-if="combatRelevant(item)" ng-mouseenter="setTip(item)">
 				<span style="font-weight:bold;">{{item.name}}</span>
 				<span>({{item.count}})</span>
-				<span class="deletebutton" ng-click="delete(item,char.equipment,$event)">&times;</span>
 			</div>
-			<div class="yellowback item" ng-repeat="item in char.inventory | orderBy:'name' track by item.name" ng-if="combatRelevant(item)">
+			<div class="yellowback item" ng-repeat="item in char.inventory | orderBy:'name' track by item.name" ng-if="combatRelevant(item)" ng-mouseenter="setTip(item)">
 				<span style="font-weight:bold;">{{item.name}}</span>
 				<span>({{item.count}})</span>
 				<span class="deletebutton" ng-click="delete(item,char.inventory,$event)">&times;</span>
@@ -472,16 +446,32 @@
 		</div>
 	</td>
 
-	<td style="vertical-align:top;">
-	<div class="greenback item" ng-repeat="lv in [0,1,2,3,4,5,6,7,8,9]"
-		ng-mouseenter="spellPreview(lv)"
-		ng-mouseleave="spellPreview(chosenspell.level)"
-		ng-class="{'grey':chosenspell.level>lv}">Level {{lv}}</div>
-		<br>
-	<div class="redback item" ng-click='selectSpell(null)'>Clear Selection</div>
+	<td width="30%" style="vertical-align:top;">
+		<div class="leftmenu" style="overflow-y:auto;height:calc(100vh - 150px);">
+			<br>
+			<span class="item" ng-repeat="i in [0,1,2,3,4,5,6,7,8,9]" style="padding:8px 10px;"
+					ng-class="{'greenback':combatSpellLevelFilter[i]}"
+					ng-click="combatSpellLevelFilter[i]=!combatSpellLevelFilter[i]">{{i}}</span>
+					<br><br>
+			<div class="label">Cantrips</div>
+			<div class="greenback item" ng-repeat="spell in knownSpells | orderBy:'name' track by spell.name"
+					ng-click="selectSpell(spell)" ng-if="spell.level==0"
+					ng-show="combatSpellLevelFilter[0]">
+				<span style="font-weight:bold;">{{spell.name}}</span>
+				<span class="deletebutton" ng-click="delete(spell,char.spells,$event)">&times;</span>			
+			</div>
+			<br>
+			<div ng-repeat="lv in [1,2,3,4,5,6,7,8,9]" ng-show="highestSlot()>=lv && combatSpellLevelFilter[lv]">
+				<div class="label">Level {{lv}}</div>
+				<div class="greenback item" ng-repeat="spell in knownSpells | orderBy:'name' track by spell.name" ng-if="spell.level<=lv" ng-mouseenter="setTip(spell,lv)" ng-mouseleave="clearTip()">
+					<span style="font-weight:bold;">{{spell.name}}</span>
+				</div>
+				<br>
+			</div>
+		</div>
 	</td>
 
-	<td style="vertical-align:top;">
+	<td width="40%" style="vertical-align:top;">
 	<div>
 		<form ng-submit="addInitiative()">
 			<input type='text' placeholder="Enter Name" ng-model="newInitiative"/>
@@ -617,6 +607,7 @@
 				</div>
 			</div>
 			<br>
+			<span class="footnote" ng-show="isWeapon(tip)">Your attack bonus with this item is +{{attackBonus(tip)}}</span>
 		</div>
 		<div ng-bind-html='evalTooltip(tip)' class="tipDescription"></div>
 		<br>

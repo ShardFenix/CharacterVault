@@ -68,6 +68,7 @@ $scope.derived={
 //cache the player's spells for the spell screen
 $scope.knownSpells=[];
 $scope.knownSpellLevelFilter=[true,true,true,true,true,true,true,true,true,true];
+$scope.combatSpellLevelFilter=[true,true,true,true,true,true,true,true,true,true];
 
 $scope.loadSpells=function(){
 	$scope.knownSpells=[];
@@ -415,17 +416,6 @@ $scope.spellLevelAvailable=function(level){
 	return false;
 }
 
-$scope.combatRelevant=function(item){
-	if (item.name.indexOf('Bolt')!=-1 || item.name.indexOf('Arrow')!=-1 || item.name.indexOf('Bullet')!=-1) {
-		return true;
-	}
-	//item name contains (number)d(number)
-	if (/\d+d\d+/.test(item.name)){
-		return true;
-	}
-	return false;
-}
-
 //should be in API, but needs access to scope
 function classLevel(className){
 	for (let clas of $scope.char.classes){
@@ -559,6 +549,21 @@ $scope.longRest=function(){
 	}
 }
 
+$scope.highestSlot=function(){
+	let highest=0;
+	for (let abil of $scope.char.abilities){
+		if (/Lv \d Spell/.test(abil.name)){
+			if (abil.charges>0){
+				let lv = parseInt(abil.name.charAt(3));
+				if (lv>highest){
+					highest=lv;
+				}
+			}
+		}
+	}
+	return highest;
+}
+
 $scope.delete=function(item,from,event){
 	for (var i=0;i<from.length;i++){
 		if (from[i].name==item.name){
@@ -679,6 +684,7 @@ $scope.saveList=[];
 
 $scope.selectSpell=function(spell){
 	$scope.chosenSpell=spell;
+	$scope.setTip(spell);
 }
 
 $scope.evalTooltip=function(tip){
@@ -706,9 +712,62 @@ $scope.evalTooltip=function(tip){
 	return '';
 }
 
-$scope.showRef=function(item){
-	document.getElementById('refDescription').innerHTML=item.description;
-	$scope.spellRef=item;
+
+$scope.combatRelevant=function(item){
+	if ($scope.isWeapon(item)) {
+		return true;
+	}
+	return false;
+}
+
+$scope.isWeapon=function(item){
+	if (item && item.categories && item.categories.includes("Weapon")){
+		return true;
+	}
+	return false;
+}
+
+$scope.attackBonus=function(item){
+	if (!$scope.isWeapon(item)){
+		return 0;
+	}
+	let total=0;
+	//check if char has proficiency
+	if (isProficientWith($scope.char,item)){
+		total+=$scope.derived.proficiency;
+	}
+	//check whether str or dex should be used
+	let canUseStr=false;
+	let canUseDex=false;
+	if (item.categories.includes("Melee")){
+		canUseStr=true;
+	}
+	if (item.categories.includes("Ranged")){
+		canUseDex=true;
+	}
+	if (item.finesse){
+		canUseDex=true;
+	}
+	//monk weapon and the player is a monk
+	if (getClassLevel($scope.char,"Monk")>0 && item.proficiencies.includes("Shortswords") || 
+			(item.categories.includes("Simple") && item.categories.includes("Melee")
+			&& item.heavy===false && !item.damage2)){
+				canUseDex=true;
+			}
+	
+	if (!canUseStr){
+		total+=$scope.derived.modifiers.dex;
+	} else if (!canUseDex){
+		total+=$scope.derived.modifiers.str;
+	} else {
+		//both are usable. Use the highest one
+		if ($scope.derived.modifiers.dex > $scope.derived.modifiers.str){
+			total+=$scope.derived.modifiers.dex;
+		} else {
+			total+=$scope.derived.modifiers.str;
+		}
+	}
+	return total;
 }
 
 var tipPromise=null;
