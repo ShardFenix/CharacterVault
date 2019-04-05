@@ -192,6 +192,14 @@ window.abilities=[
 		onLongRest:function(){
 			this.charges=this.maxCharges;
 		}
+	},{
+		name:"Wild Shape",
+		description:"You can use your action to magically assume the shape of a beast that you have seen before. You can use this feature twice. You regain expended uses when you finish a short or long rest.\nYour druid level determines the beasts you can transform into, as shown in the Beast Shapes table.\nYou can stay in a beast shape for a number of hours equal to half your druid level (rounded down). You then revert to your normal form unless you expend another use of this feature. You can revert to your normal form earlier by using a bonus action on your turn. You automatically revert if you fall unconscious, drop to 0 hit points, or die.\n\nWhile you are transformed, the following rules apply:\n\u2022 Your game statistics are replaced by the statistics of the beast, but you retain your alignment, personality, and Intelligence, Wisdom, and Charisma scores. You also retain all of your skill and saving throw proficiencies, in addition to gaining those of the creature. If the creature has the same proficiency as you and the bonus in its stat block is higher than yours, use the creature's bonus instead of yours. If the creature has any legendary or lair actions, you can't use them.\n\u2022 When you transform, you assume the beast's hit points and Hit Dice. When you revert to your normal form, you return to the number of hit points you had before you transformed. However, if you revert as a result of dropping to 0 hit points, any excess damage carries over to your normal form. For example, if you take 10 damage in animal form and have only 1 hit point left, you revert and take 9 damage. As long as the excess damage doesn't reduce your normal form to 0 hit points, you aren't knocked unconscious.\n\u2022 You can't cast spells, and your ability to speak or take any action that requires hands is limited to the capabilities of your beast form. Transforming doesn't break your concentration on a spell you've already cast, however, or prevent you from taking actions that are part of a spell, such as call lightning, that you've already cast.\n\u2022 You retain the benefit of any features from your class, race, or other source and can use them if the new form is physically capable of doing so. However, you can't use any of your special senses, such as darkvision, unless your new form also has that sense.\n\u2022 You choose whether your equipment falls to the ground in your space, merges into your new form, or is worn by it. Worn equipment functions as normal, but the DM decides whether it is practical for the new form to wear a piece of equipment, based on the creature's shape and size. Your equipment doesn't change size or shape to match the new form, and any equipment that the new form can't wear must either fall to the ground or merge with it. Equipment that merges with the form has no effect until you leave the form.",
+		charges:2,
+		maxCharges:2,
+		onShortRest:function(){
+			this.charges=this.maxCharges;
+		}
 	}
 ];
 
@@ -402,6 +410,57 @@ window.passives=[
 	},{
 		name:"Primal Champion",
 		description:"Your Strength and Constitution scores increase by 4. Your maximum for those scores is now 24."
+	},{
+		name:"Timeless Body",
+		description:"The primal magic that you wield causes you to age more slowly. For every 10 years that pass, your body ages only 1 year."
+	},{
+		name:"Archdruid",
+		description:"You can use your Wild Shape an unlimited number of times.\nAdditionally, you can ignore the verbal and somatic components of your druid spells, as well as any material components that lack a cost and aren't consumed by a spell. You gain this benefit in both your normal shape and your beast shape from Wild Shape."
+	},{
+		name:"Combat Wild Shape",
+		description:"You gain the ability to use Wild Shape on your turn as a bonus action, rather than as an action.\nAdditionally, while you are transformed by Wild Shape, you can use a bonus action to expend one spell slot to regain 1d8 hit points per level of the spell slot expended."
+	},{
+		name:"Circle Forms",
+		description:"The rites of your circle grant you the ability to transform into more dangerous animal forms. You can use your Wild Shape to transform into a beast with a challenge rating as high as ${ladder(classLevel($scope.char,'Druid'),1,1,6,2,9,3,12,4,15,5,18,6)} (you ignore the Max. CR column of the Beast Shapes table, but must abide by the other limitations there).\n\nStarting at 6th level, you can transform into a beast with a challenge rating as high as your druid level divided by 3, rounded down."
+	},{
+		name:"Primal Strike",
+		description:"Your attacks in beast form count as magical for the purpose of overcoming resistance and immunity to nonmagical attacks and damage."
+	},{
+		name:"Elemental Wild Shape",
+		description:"You can expend two uses of Wild Shape at the same time to transform into an air elemental, an earth elemental, a fire elemental, or a water elemental."
+	},{
+		name:"Thousand Forms",
+		description:"You have learned to use magic to alter your physical form in more subtle ways. You can cast the alter self spell at will."
+	},{
+		name:"Whirlwind",
+		description:"When you enter a rage, you may instead make it a Whirlwind. While whirlwinding, you continuously spin your weapons around you, striking any objects and creatures that may be nearby. You gain the following benefits while spinning:\n\n\u2022 At the end of every 20 feet of continuous movement, you may immediately take an attack on a target in your melee range. This doesn't count towards your attacks per round.\n\u2022 Other creatures can't make opportunity attacks against you.\n\u2022 You lose any resistances granted by Rage, but all melee attacks against you have disadvantage."
+	},{
+		name:"Slice and Dice",
+		description:"While whirlwinding, whenever you move into melee range of a creature, or a creature moves within melee range of you, you may have that creature take damage equal to your weapon damage. A creature damaged this way can't be damaged by it again until your next turn."
+	},{
+		name:"Storm of Steel",
+		description:"You spin so rapidly that your weapons create a swirling shield as they move. While whirlwinding, you have +2 to AC, and the damage dealt by Slice and Dice is increased by your strength modifier."
+	},{
+		name:"Spin to Win",
+		description:"Whenever you bring a creature to 0 hit points, you gain 20 additional walking speed until the end of your next turn."
+	},{
+		name:"",
+		description:""
+	},{
+		name:"",
+		description:""
+	},{
+		name:"",
+		description:""
+	},{
+		name:"",
+		description:""
+	},{
+		name:"",
+		description:""
+	},{
+		name:"",
+		description:""
 	}
 	
 ];

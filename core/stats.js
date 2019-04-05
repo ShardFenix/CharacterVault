@@ -415,16 +415,6 @@ $scope.spellLevelAvailable=function(level){
 	}
 	return false;
 }
-
-//should be in API, but needs access to scope
-function classLevel(className){
-	for (let clas of $scope.char.classes){
-		if (clas.name===className){
-			return clas.level;
-		}
-	}
-	return 0;
-}
 	
 //calculate the derived stat values (bonuses, saving throws, skills, etc)
 $scope.calculate=function(){

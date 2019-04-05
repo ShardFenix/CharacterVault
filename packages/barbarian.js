@@ -243,17 +243,16 @@ window.classes.push(
 window.subclasses.push(
 	{
 		classname:"Barbarian",
-		name:"Zealot",
-		subclass:"Zealot",
-		description:"",
+		name:"Whirlwind",
+		subclass:"Whirlwind",
+		description:"You achieve glory in combat the only way you know how - spinning. Barbarians who follow the Path of the Whirlwind throw caution to the... wind, and swing their oversized weapons in every possible direction, as well as some impossible directions, creating a whirlwind of carnage.",
 		levels:[{},{},{},
 			{//3
 				updates:[
 					{
 						choices:[],
 						action:function(char,derived,choice,$scope){
-							addPassive(char,"Way of the Mantis");
-							addPassive(char,"Shadow Form");
+							addPassive(char,"Whirlwind");
 						}
 					}
 				]
@@ -262,31 +261,32 @@ window.subclasses.push(
 					{
 						choices:[],
 						action:function(char){
-							addPassive(char,"Master of Infiltration");
+							addPassive(char,"Slice and Dice");
 						}
 					}
 				]
-			},{},{},{},{},
-			{//11
+			},{},{},{},
+			{//10
 				updates:[
 					{
 						choices:[],
 						action:function(char,derived,choice){
-							addPassive(char,"Shadow Strike");
+							addPassive(char,"Storm of Steel");
 						}
 					}
 				]
-			},{},{},{},{},{},
-			{//17
+			},{},{},{},
+			{//14
 				updates:[
 					{
 						choices:[],
 						action:function(char){
-							addPassive(char,"Desperate Strike");
+							addPassive(char,"Spin to Win");
 						}
 					}
 				]
-			},{},{},{}
+
+			},{},{},{},{},{},{}
 		]
 	}
 );
