@@ -252,7 +252,7 @@ window.subclasses.push(
 					{
 						choices:[],
 						action:function(char,derived,choice,$scope){
-							addPassive(char,"Whirlwind");
+							addAbility(char,"Whirlwind");
 						}
 					}
 				]

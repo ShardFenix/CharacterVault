@@ -112,6 +112,7 @@ window.classes.push(
 						"choices":[],
 						"action":function(char,derived,choice){
 							addAbility(char,"Channel Divinity");
+							addAbility(char,"Turn Undead");
 						}
 					}
 				]
@@ -281,7 +282,7 @@ window.subclasses.push(
 					{
 						choices:[],
 						action:function(char){
-							addPassive(char,"Preserve Life");
+							addAbility(char,"Preserve Life");
 						}
 					}
 				]

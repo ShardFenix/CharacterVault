@@ -200,6 +200,85 @@ window.abilities=[
 		onShortRest:function(){
 			this.charges=this.maxCharges;
 		}
+	},{
+		name:"Natural Recovery",
+		description:"You can regain some of your magical energy by sitting in meditation and communing with nature. During a short rest, you choose expended spell slots to recover. The spell slots can have a combined level that is equal to or less than half your druid level (rounded up), and none of the slots can be 6th level or higher. You can't use this feature again until you finish a long rest.",
+		charges:1,
+		maxCharges:1,
+		onLongRest:function(){
+			this.charges=1;
+		}
+	},{
+		name:"Spirit Totem",
+		description:"You can call forth nature spirits to influence the world around you. As a bonus action, you can magically summon an incorporeal spirit to a point you can see within 60 feet of you. The spirit creates an aura in a 30-foot radius around that point. It counts as neither a creature nor an object, though it has the spectral appearance of the creature it represents.\nAs a bonus action, you can move the spirit up to 60 feet to a point you can see.\nThe spirit persists for 1 minute or until you're incapacitated. Once you use this feature, you can't use it again until you finish a short or long rest.\nThe effect of the spirit's aura depends on the type of spirit you summon from the options below.\n\n\u2022 Bear Spirit. The bear spirit grants you and your allies its might and endurance. Each creature of your choice in the aura when the spirit appears gains temporary hit points equal to 5 + your druid level. In addition, you and your allies gain advantage on Strength checks and Strength saving throws while in the aura.\n\u2022 Hawk Spirit. The hawk spirit is a consummate hunter, aiding you and your allies with its keen sight. When a creature makes an attack roll against a target in the spirit's aura, you can use your reaction to grant advantage to that attack roll. In addition, you and your allies have advantage on Wisdom (Perception) checks while in the aura.\n\u2022 Unicorn Spirit. The unicorn spirit lends its protection to those nearby. You and your allies gain advantage on all ability checks made to detect creatures in the spirit's aura. In addition, if you cast a spell using a spell slot that restores hit points to any creature inside or outside the aura, each creature of your choice in the aura also regains hit points equal to your druid level.",
+		charges:1,
+		maxCharges:1,
+		onShortRest:function(){
+			this.charges=1;
+		}
+	},{
+		name:"Faithful Summons",
+		description:"The nature spirits you commune with protect you when you are the most defenseless. If you are reduced to 0 hit points or are incapacitated against your will, you can immediately gain the benefits of conjure animals as if it were cast using a 9th-level spell slot. It summons four beasts of your choice that are challenge rating 2 or lower. The conjured beasts appear within 20 feet of you. If they receive no commands from you, they protect you from harm and attack your foes. The spell lasts for 1 hour, requiring no concentration, or until you dismiss it (no action required).\nOnce you use this feature, you can't use it again until you finish a long rest.",
+		charges:1,
+		maxCharges:1,
+		onLongRest:function(){
+			this.charges=1;
+		}
+	},{
+		name:"Flurry of Blows",
+		description:"Immediately after you take the Attack action on your turn, you can spend 1 ki point to make two unarmed strikes as a bonus action.",
+		resourceName:'Ki Point',
+		resourceCost:1
+	},{
+		name:"Patient Defense",
+		description:"You can spend 1 ki point to take the Dodge action as a bonus action on your turn.",
+		resourceName:'Ki Point',
+		resourceCost:1
+	},{
+		name:"Step of the Wind",
+		description:"You can spend 1 ki point to take the Disengage or Dash action as a bonus action on your turn, and your jump distance is doubled for the turn.",
+		resourceName:'Ki Point',
+		resourceCost:1
+	},{
+		name:"Whirlwind",
+		description:"When you enter a rage, you may make it a Whirlwind. While whirlwinding, you continuously spin your weapons around you, striking any objects and creatures that may be nearby. You gain the following while spinning, in lieu of your rage bonuses:\n\n\u2022 You cannot take the Attack action on your turn, you can't cast spells, and you can't make opportunity attacks.\n\u2022 Other creatures can't make opportunity attacks against you.\n\u2022 Melee attacks against you have disadvantage.\n\u2022 At the end of every 15 feet of continuous movement, you may immediately make a free melee attack on a target in your melee range. The attack does half damage.\n\u2022 At the end of each of your turns, if you moved less than 15 feet since your last turn, the whirlwind ends.",
+		resourceName:"Rage",
+		resourceCost:1
+	},{
+		name:"Elemental Wild Shape",
+		description:"You can expend two uses of Wild Shape at the same time to transform into an air elemental, an earth elemental, a fire elemental, or a water elemental.",
+		resourceName:'Wild Shape',
+		resourceCost:2
+	},{
+		name:"Empty Body",
+		description:"You can use your action to spend 4 ki points to become invisible for 1 minute. During that time, you also have resistance to all damage but force damage.",
+		resourceName:"Ki Point",
+		resourceCost:4
+	},{
+		name:"Ki Astral Projection",
+		description:"You can spend 8 ki points to cast the astral projection spell, without needing material components. When you do so, you can't take any other creatures with you.",
+		resourceName:"Ki Point",
+		resourceCost:8
+	},{
+		name:"Stunning Strike",
+		description:"You can interfere with the flow of ki in an opponent's body, and also frustrate your DM. When you hit another creature with a melee weapon attack, you can spend 1 ki point to attempt a stunning strike. The target must succeed on a Constitution saving throw or be stunned until the end of your next turn.",
+		resourceName:"Ki Point",
+		resourceCost:1
+	},{
+		name:"Preserve Life",
+		description:"Using your Channel Divinity action, you present your holy symbol and evoke healing energy that can restore a number of hit points equal to five times your cleric level. Choose any creatures within 30 feet of you, and divide those hit points among them. This feature can restore a creature to no more than half of its hit point maximum. You can't use this feature on an undead or a construct.",
+		resourceName:"Channel Divinity",
+		resourceCost:1
+	},{
+		name:"Turn Undead",
+		description:"Using your Channel Divinity action, you present your holy symbol and speak a prayer censuring the undead. Each undead that can see or hear you within 30 feet of you must make a Wisdom saving throw. If the creature fails its saving throw, it is turned for 1 minute or until it takes any damage.\nA turned creature must spend its turns trying to move as far away from you as it can, and it can't willingly move to a space within 30 feet of you. It also can't take reactions. For its action, it can use only the Dash action or try to escape from an effect that prevents it from moving. If there's nowhere to move, the creature can use the Dodge action.",
+		resourceName:"Channel Divinity",
+		resourceCost:1
+	},{
+		name:"Cutting Words",
+		description:"You learn how to use your wit to distract, confuse, and otherwise sap the confidence and competence of others. When a creature that you can see within 60 feet of you makes an attack roll, an ability check, or a damage roll, you can use your reaction to expend one of your uses of Bardic Inspiration, rolling a Bardic Inspiration die and subtracting the number rolled from the creature's roll. You can choose to use this feature after the creature makes its roll, but before the DM determines whether the attack roll or ability check succeeds or fails, or before the creature deals its damage. The creature is immune if it can't hear you or if it's immune to being charmed.",
+		resourceName:"Bardic Inspiration (d6)",
+		resourceCost:1
 	}
 ];
 
@@ -220,9 +299,6 @@ window.passives=[
 		name:"Song of Rest",
 		description:"You can use soothing music or oration to help revitalize your wounded allies during a short rest. If you or any friendly creatures who can hear your performance regain hit points by spending Hit Dice at the end of the short rest, each of those creatures regains an extra 1d${ladder(getClassLevel($scope.char,'Bard'),0,6,9,8,13,19,17,12)} hit points."
 	},{
-		name:"Cutting Words",
-		description:"You learn how to use your wit to distract, confuse, and otherwise sap the confidence and competence of others. When a creature that you can see within 60 feet of you makes an attack roll, an ability check, or a damage roll, you can use your reaction to expend one of your uses of Bardic Inspiration, rolling a Bardic Inspiration die and subtracting the number rolled from the creature's roll. You can choose to use this feature after the creature makes its roll, but before the DM determines whether the attack roll or ability check succeeds or fails, or before the creature deals its damage. The creature is immune if it can't hear you or if it's immune to being charmed."
-	},{
 		name:"Countercharm",
 		description:"You use musical notes or words of power to disrupt mind-influencing effects. As an action, you can start a performance that lasts until the end of your next turn. During that time, you and any friendly creatures within 30 feet of you have advantage on saving throws against being frightened or charmed. A creature must be able to hear you to gain this benefit. The performance ends early if you are incapacitated or silenced or if you voluntarily end it (no action required)."
 	},{
@@ -231,9 +307,6 @@ window.passives=[
 	},{
 		name:"Superior Inspiration",
 		description:"When you roll initiative and have no uses of Bardic Inspiration left, you regain one use."
-	},{
-		name:"Turn Undead",
-		description:"Using your Channel Divinity action, you present your holy symbol and speak a prayer censuring the undead. Each undead that can see or hear you within 30 feet of you must make a Wisdom saving throw. If the creature fails its saving throw, it is turned for 1 minute or until it takes any damage.\nA turned creature must spend its turns trying to move as far away from you as it can, and it can't willingly move to a space within 30 feet of you. It also can't take reactions. For its action, it can use only the Dash action or try to escape from an effect that prevents it from moving. If there's nowhere to move, the creature can use the Dodge action."
 	},{
 		name:"Destroy Undead (CR 1/2)",
 		description:"When an undead of CR 1/2 or lower fails its saving throw against your Turn Undead feature, the creature is instantly destroyed."
@@ -253,9 +326,6 @@ window.passives=[
 		name:"Disciple of Life",
 		description:"Whenever you use a spell of 1st level or higher to restore hit points to a creature, the creature regains additional hit points equal to 2 + the spell's level."
 	},{
-		name:"Preserve Life",
-		description:"Using your Channel Divinity action, you present your holy symbol and evoke healing energy that can restore a number of hit points equal to five times your cleric level. Choose any creatures within 30 feet of you, and divide those hit points among them. This feature can restore a creature to no more than half of its hit point maximum. You can't use this feature on an undead or a construct."
-	},{
 		name:"Blessed Healer",
 		description:"When you cast a spell of 1st level or higher that restores hit points to a creature other than you, you regain hit points equal to 2 + the spell's level."
 	},{
@@ -268,15 +338,6 @@ window.passives=[
 		name:"Martial Arts",
 		description:"Your practice of martial arts gives you mastery of combat styles that use unarmed strikes and monk weapons, which are shortswords and any simple melee weapons that don't have the two-handed or heavy property.\nYou gain the following benefits while you are unarmed or wielding only monk weapons and you aren't wearing armor or wielding a shield.\n\u2022You can use Dexterity instead of Strength for the attack and damage rolls of your unarmed strikes and monk weapons.\n\u2022You can roll a d4 in place of the normal damage of your unarmed strike or monk weapon. This die changes as you gain monk levels, as shown in the Martial Arts column of the Monk table.\n\u2022When you use the Attack action with an unarmed strike or a monk weapon on your turn, you can make one unarmed strike as a bonus action. For example, if you take the Attack action and attack with a quarterstaff, you can also make an unarmed strike as a bonus action, assuming you haven't already taken a bonus action this turn."
 	},{
-		name:"Flurry of Blows",
-		description:"Immediately after you take the Attack action on your turn, you can spend 1 ki point to make two unarmed strikes as a bonus action."
-	},{
-		name:"Patient Defense",
-		description:"You can spend 1 ki point to take the Dodge action as a bonus action on your turn."
-	},{
-		name:"Step of the Wind",
-		description:"You can spend 1 ki point to take the Disengage or Dash action as a bonus action on your turn, and your jump distance is doubled for the turn."
-	},{
 		name:"Unarmored Movement",
 		description:"Your speed increases by ${ladder(clevel,2,10,6,15,10,20,14,25,18,30)} feet while you are not wearing armor or wielding a shield."
 	},{
@@ -285,9 +346,6 @@ window.passives=[
 	},{
 		name:"Slow Fall",
 		description:"You can use your reaction when you fall to reduce any falling damage you take by an amount equal to five times your monk level."
-	},{
-		name:"Stunning Strike",
-		description:"You can interfere with the flow of ki in an opponent's body, and also frustrate your DM. When you hit another creature with a melee weapon attack, you can spend 1 ki point to attempt a stunning strike. The target must succeed on a Constitution saving throw or be stunned until the end of your next turn."
 	},{
 		name:"Ki-Empowered Strikes",
 		description:"Your unarmed strikes count as magical for the purpose of overcoming resistance and immunity to nonmagical attacks and damage."
@@ -320,9 +378,6 @@ window.passives=[
 	},{
 		name:"Timeless Body",
 		description:"Your ki sustains you so that you suffer none of the frailty of old age, and you can't be aged magically. You can still die of old age, however. In addition, you no longer need food or water."
-	},{
-		name:"Empty Body",
-		description:"You can use your action to spend 4 ki points to become invisible for 1 minute. During that time, you also have resistance to all damage but force damage.\nAdditionally, you can spend 8 ki points to cast the astral projection spell, without needing material components. When you do so, you can't take any other creatures with you."
 	},{
 		name:"Perfect Soul",
 		description:"When you roll for initiative and have no ki points remaining, you regain 4 ki points."
@@ -426,14 +481,8 @@ window.passives=[
 		name:"Primal Strike",
 		description:"Your attacks in beast form count as magical for the purpose of overcoming resistance and immunity to nonmagical attacks and damage."
 	},{
-		name:"Elemental Wild Shape",
-		description:"You can expend two uses of Wild Shape at the same time to transform into an air elemental, an earth elemental, a fire elemental, or a water elemental."
-	},{
 		name:"Thousand Forms",
 		description:"You have learned to use magic to alter your physical form in more subtle ways. You can cast the alter self spell at will."
-	},{
-		name:"Whirlwind",
-		description:"When you enter a rage, you may make it a Whirlwind. While whirlwinding, you continuously spin your weapons around you, striking any objects and creatures that may be nearby. You gain the following while spinning, in lieu of your rage bonuses:\n\n\u2022 You cannot take the Attack action on your turn, you can't cast spells, and you can't make opportunity attacks.\n\u2022 Other creatures can't make opportunity attacks against you.\n\u2022 Melee attacks against you have disadvantage.\n\u2022 At the end of every 15 feet of continuous movement, you may immediately make a free melee attack on a target in your melee range. The attack does half damage.\n\u2022 At the end of each of your turns, if you moved less than 15 feet since your last turn, the whirlwind ends."
 	},{
 		name:"Slice and Dice",
 		description:"While whirlwinding, whenever you move into melee range of a creature, or a creature moves within melee range of you, you may have that creature take damage equal to your weapon damage. A creature damaged this way can't be damaged by it again this turn."
@@ -443,6 +492,45 @@ window.passives=[
 	},{
 		name:"Spin to Win",
 		description:"Whenever you bring a creature to 0 hit points during your turn, you can move up to 30 additional feet this turn."
+	},{
+		name:"Land's Stride",
+		description:"Moving through nonmagical difficult terrain costs you no extra movement. You can also pass through nonmagical plants without being slowed by them and without taking damage from them if they have thorns, spines, or a similar hazard.\nIn addition, you have advantage on saving throws against plants that are magically created or manipulated to impede movement, such those created by the entangle spell."
+	},{
+		name:"Nature's Ward",
+		description:"You can't be charmed or frightened by elementals or fey, and you are immune to poison and disease."
+	},{
+		name:"Nature's Sanctuary",
+		description:"Creatures of the natural world sense your connection to nature and become hesitant to attack you. When a beast or plant creature attacks you, that creature must make a Wisdom saving throw against your druid spell save DC. On a failed save, the creature must choose a different target, or the attack automatically misses. On a successful save, the creature is immune to this effect for 24 hours.\n\nThe creature is aware of this effect before it makes its attack against you."
+	},{
+		name:"Speech of the Woods",
+		description:"You gain the ability to converse with beasts and many fey.\n\nYou learn to speak, read, and write Sylvan. In addition, beasts can understand your speech, and you gain the ability to decipher their noises and motions. Most beasts lack the intelligence to convey or understand sophisticated concepts, but a friendly beast could relay what it has seen or heard in the recent past. This ability doesn't grant you friendship with beasts, though you can combine this ability with gifts to curry favor with them as you would with any nonplayer character."
+	},{
+		name:"Mighty Summoner",
+		description:"Beasts and fey that you conjure are more resilient than normal. Any beast or fey summoned or created by a spell that you cast gains the following benefits:\n\u2022 The creature appears with more hit points than normal: 2 extra hit points per Hit Die it has.\n\u2022 The damage from its natural weapons is considered magical for the purpose of overcoming immunity and resistance to nonmagical attacks and damage."
+	},{
+		name:"Guardian Spirit",
+		description:"Your Spirit Totem safeguards the beasts and fey that you call forth with your magic. When a beast or fey that you summoned or created with a spell ends its turn in your Spirit Totem aura, that creature regains a number of hit points equal to half your druid level."
+	},{
+		name:"",
+		description:""
+	},{
+		name:"",
+		description:""
+	},{
+		name:"",
+		description:""
+	},{
+		name:"",
+		description:""
+	},{
+		name:"",
+		description:""
+	},{
+		name:"",
+		description:""
+	},{
+		name:"",
+		description:""
 	},{
 		name:"",
 		description:""

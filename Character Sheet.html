@@ -245,7 +245,7 @@
 <td width="20%" style="vertical-align:top;">
 	<div class="leftmenu">
 		<div class="greenback item" ng-repeat="item in char.abilities | orderBy:'name' track by item.name "
-				ng-click="item.charges=item.charges-1"
+				ng-click="decrementCharges(item)"
 				ng-if="item.charges>0"
 				ng-mouseenter="setTip(item)" ng-mouseleave="clearTip()">
 			<span style="font-weight:bold;">{{item.name}}</span>
@@ -360,13 +360,14 @@
 <tbody><tr>
 <td width="30%" style="vertical-align:top;">
 	<div class="leftmenu" style="overflow-y:auto;height:calc(100vh - 150px);">
-	<br>
-		<span class="item" ng-repeat="i in [0,1,2,3,4,5,6,7,8,9]" style="padding:8px 10px;"
+		<input type="text" ng-model="combatSpellFilter" placeholder="Filter spells..."/>
+	<br><br>
+			<span class="item" ng-repeat="i in [0,1,2,3,4,5,6,7,8,9]" style="padding:8px 10px;"
 				ng-class="{'greenback':knownSpellLevelFilter[i]}"
 				ng-click="knownSpellLevelFilter[i]=!knownSpellLevelFilter[i]">{{i}}</span>
 				<br><br>
 		<div class="label">Cantrips</div>
-		<div class="greenback item" ng-repeat="spell in knownSpells | orderBy:'name' track by spell.name"
+		<div class="greenback item" ng-repeat="spell in knownSpells | filter:combatSpellFilter | orderBy:'name' track by spell.name"
 				ng-click="selectSpell(spell)" ng-class="{'selected':chosenSpell==spell}" ng-if="spell.level==0"
 				ng-show="knownSpellLevelFilter[0]">
 			<span style="font-weight:bold;">{{spell.name}}</span>
@@ -375,7 +376,7 @@
 		<br>
 		<div ng-repeat="lv in [1,2,3,4,5,6,7,8,9]" ng-show="knownSpellLevelFilter[lv]">
 			<div class="label">Level {{lv}}</div>
-			<div class="greenback item" ng-repeat="spell in knownSpells | orderBy:'name' track by spell.name"
+			<div class="greenback item" ng-repeat="spell in knownSpells | filter:combatSpellFilter | orderBy:'name' track by spell.name"
 					ng-click="selectSpell(spell)" ng-class="{'selected':chosenSpell==spell}" ng-if="spell.level==lv"
 					>
 				<span style="font-weight:bold;">{{spell.name}}</span>
@@ -425,7 +426,7 @@
 	<td width="30%" style="vertical-align:top;">
 		<div class="leftmenu" style="overflow-y:auto;height:calc(100vh - 150px);">
 			<div class="greenback item" ng-repeat="item in char.abilities | orderBy:'name' track by item.name "
-					ng-click="item.charges=item.charges-1"
+					ng-click="decrementCharges(item)"
 					ng-if="item.charges>0"
 					ng-mouseenter="setTip(item)" ng-mouseleave="clearTip()">
 				<span style="font-weight:bold;">{{item.name}}</span>

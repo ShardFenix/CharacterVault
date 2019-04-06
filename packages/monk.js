@@ -81,9 +81,10 @@ window.classes.push(
 					{
 						"choices":[],
 						"action":function(char,derived,choice){
-							addPassive(char,"Flurry of Blows");
-							addPassive(char,"Patient Defense");
-							addPassive(char,"Step of the Wind");
+							addAbility(char,"Flurry of Blows");
+							addAbility(char,"Patient Defense");
+							addAbility(char,"Step of the Wind");
+							addAbility(char,"Ki Point");
 							addPassive(char,"Unarmored Movement");
 						}
 					}
@@ -119,7 +120,7 @@ window.classes.push(
 						"choices":[],
 						"action":function(char,derived){
 							addPassive(char,"Slow Fall");
-							addPassive(char,"Stunning Strike");
+							addAbility(char,"Stunning Strike");
 						}
 					}
 				]
@@ -226,7 +227,8 @@ window.classes.push(
 					{
 						"choices":[],
 						"action":function(char){
-							addPassive(char,"Empty Body");
+							addAbility(char,"Empty Body");
+							addAbility(char,"Ki Astral Projection");
 						}
 					}
 				]

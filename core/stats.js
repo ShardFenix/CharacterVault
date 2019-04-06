@@ -464,6 +464,8 @@ $scope.calculate=function(){
 		}
 	}
 	
+	$scope.calculateSharedResources();
+	
 	//passives can add to your derived stats
 	for (var passive of $scope.char.passives){
 		if (passive.apply){
@@ -483,6 +485,9 @@ $scope.incrSilver=function(){
 $scope.incrGold=function(){
 	$scope.char.money+=100;
 }
+$scope.incrPlat=function(){
+	$scope.char.money+=1000;
+}
 
 $scope.decrCopper=function(){
 	$scope.char.money-=1;
@@ -492,6 +497,9 @@ $scope.decrSilver=function(){
 }
 $scope.decrGold=function(){
 	$scope.char.money-=100;
+}
+$scope.decrPlat=function(){
+	$scope.char.money-=1000;
 }
 $scope.getCopper=function(){
 	return $scope.char.money%10;
@@ -516,6 +524,34 @@ $scope.increment=function(item){
 	event.preventDefault();
 }
 
+$scope.decrementCharges=function(item){
+	if (item.resourceName){
+		//some abilities share a resource, so we decrement them all
+		for (let abil of $scope.char.abilities){
+			if (abil.name===item.resourceName){
+				abil.charges-=item.resourceCost?item.resourceCost:1;
+				break;
+			}
+		}
+	} else {
+		item.charges-=1;
+	}
+	$scope.calculateSharedResources();
+}
+
+$scope.calculateSharedResources=function(){
+	for (let item of $scope.char.abilities){
+		if (item.resourceName){
+			for (let abil of $scope.char.abilities){
+				if (abil.name===item.resourceName){
+					item.charges=Math.floor(abil.charges/item.resourceCost);
+					break;
+				}
+			}
+		}
+	}
+}
+
 $scope.moveAll=function(from,to){
 	while (from.length>0) {
 		$scope.move(from[0],from,to);
@@ -528,15 +564,19 @@ $scope.shortRest=function(){
 			abil.onShortRest($scope.char,$scope);
 		}
 	}
+	$scope.calculateSharedResources();
 }
 
 $scope.longRest=function(){
-	$scope.shortRest();
 	for (let abil of $scope.char.abilities) {
+		if (typeof abil.onShortRest === 'function'){
+			abil.onShortRest($scope.char,$scope);
+		}
 		if (typeof abil.onLongRest === 'function'){
 			abil.onLongRest($scope.char,$scope);
 		}
 	}
+	$scope.calculateSharedResources();
 }
 
 $scope.highestSlot=function(){
@@ -627,6 +667,7 @@ $scope.addPassive=function(newpassive){
 
 $scope.addCharge=function(abil){
 	abil.charges=Math.min(abil.maxCharges,abil.charges+1);
+	$scope.calculateSharedResources();
 }
 
 $scope.move=function(item,from,to){

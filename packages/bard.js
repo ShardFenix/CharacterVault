@@ -484,12 +484,26 @@ window.subclasses.push(
 					{
 						"choices":[],
 						"action":function(char){
-							addPassive(char,"Cutting Words");
+							addAbility(char,"Cutting Words");
 						}
-					},
-
+					}
 				]
-			},{},{},
+			},{},
+			{//5
+				updates:[
+					{
+						"choices":[],
+						"action":function(char){
+							for (let abil of char.abilities){
+								if (abil.name==='Cutting Words'){
+									abil.resourceName="Bardic Inspiration (d8)";
+									return;
+								}
+							}
+						}
+					}
+				]
+			},
 			{//6
 				updates:[
 					{
@@ -506,7 +520,22 @@ window.subclasses.push(
 						}
 					}
 				]
-			},{},{},{},{},{},{},{},
+			},{},{},{},
+			{//10
+				updates:[
+					{
+						"choices":[],
+						"action":function(char){
+							for (let abil of char.abilities){
+								if (abil.name==='Cutting Words'){
+									abil.resourceName="Bardic Inspiration (d10)";
+									return;
+								}
+							}
+						}
+					}
+				]
+			},{},{},{},
 			{//14
 				updates:[
 					{
@@ -516,7 +545,21 @@ window.subclasses.push(
 						}
 					}
 				]
-			}
+			},{//15
+				updates:[
+					{
+						choices:[],
+						action:function(char){
+							for (let abil of char.abilities){
+								if (abil.name==='Cutting Words'){
+									abil.resourceName="Bardic Inspiration (d12)";
+									return;
+								}
+							}
+						}
+					}
+				]
+			},{},{},{},{},{}
 		]
 	}
 );

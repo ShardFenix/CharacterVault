@@ -471,12 +471,24 @@ function hasSpell(char,spellName){
 	return false;
 }
 
-function addSpell(char,spellname,forClass){
-	let s = findSpell(spellname);
+/**
+ * 'spell' can either be the name of a spell, or a spell object.
+ */
+function addSpell(char,spell,forClass){
+	var s=spell;
+	if (typeof spell === 'string'){
+		s = findSpell(spell);
+		if (s){
+			s=angular.copy(s);
+		}
+	}
 	if (s){
+		if (hasSpell(char,s.name)){
+			return;
+		}
 		for (let c of char.classes){
 			if (c.name===forClass){
-				c.spells.push(angular.copy(s));
+				c.spells.push(s);
 			}
 		}
 	}
@@ -567,12 +579,15 @@ function nextLevel(char,className){
 	return 1;
 }
 
-function addPassive(char,name){
-	let p = findPassive(name);
-	if (p){
-		char.passives.push(p);
+function addPassive(char,p){
+	var passive=p;
+	if (typeof p === 'string'){
+		passive = findPassive(p);
+	}
+	if (passive){
+		char.passives.push(passive);
 	} else {
-		console.error("Passive not found: "+name);
+		console.error("Passive not found: "+p);
 	}
 }
 
