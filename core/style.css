@@ -21,7 +21,6 @@
 }
 
 .item.selected{
-    background-color: #1b5b90;
     box-shadow: 0px 0px 2px 3px #000;
 }
 
@@ -41,6 +40,9 @@
 
 .greenback:hover{
 	
+}
+.greenback.prepared{
+	background-color: #1b5b90;
 }
 
 .green{
@@ -465,8 +467,17 @@ input.statbox {
 	font-size:1.3em;
 	font-weight:bold;
 }
+
 i{
 	color:green;
 	font-weight:bold;
 	font-style:normal;
+}
+
+.preparedSpell{
+	float:right;
+	font-size:0.7em;
+	cursor:pointer;
+	padding: 9px 4px;
+    margin-top: -6px;
 }

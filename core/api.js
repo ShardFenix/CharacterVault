@@ -1,7 +1,7 @@
 //this is used for classes who know every spell but must prepare them instead
 function learnAllClassSpells(char,$scope){
 	for (let spell of window.spells){
-		if (spell.classes.includes($scope.chosenClassName)){
+		if (spell.level>0 && spell.classes.includes($scope.chosenClassName)){
 			addSpell(char,spell.name,$scope.chosenClassName);
 		}
 	}
@@ -473,6 +473,8 @@ function hasSpell(char,spellName){
 
 /**
  * 'spell' can either be the name of a spell, or a spell object.
+ * If the player already has the spell on that class, this will not add another copy,
+ * However, it will add the new spell's alwaysPrepared property.
  */
 function addSpell(char,spell,forClass){
 	var s=spell;
@@ -483,11 +485,31 @@ function addSpell(char,spell,forClass){
 		}
 	}
 	if (s){
-		if (hasSpell(char,s.name)){
-			return;
+		//these classes have every spell prepared all the time
+		if (s.level===0
+			|| forClass==='Bard'
+			|| forClass==='Sorcerer'
+			|| forClass==='Fighter'
+			|| forClass==='Rogue'
+			|| forClass==='Ranger'
+			|| forClass==='Warlock'){
+			s.alwaysPrepared=true;
+		}
+		if (s.alwaysPrepared){
+			s.prepared=true;
 		}
 		for (let c of char.classes){
 			if (c.name===forClass){
+				//see if they have the spell already
+				for (let classSpell of c.spells){
+					if (classSpell.name===s.name){
+						if (s.alwaysPrepared){
+							classSpell.alwaysPrepared=true;
+							classSpell.prepared=true;
+						}
+						return;
+					}
+				}
 				c.spells.push(s);
 			}
 		}

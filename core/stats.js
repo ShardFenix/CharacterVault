@@ -73,8 +73,9 @@ $scope.combatSpellLevelFilter=[true,true,true,true,true,true,true,true,true,true
 $scope.loadSpells=function(){
 	$scope.knownSpells=[];
 	for (let clas of $scope.char.classes){
+		clas.preparations=clas.level+$scope.derived.modifiers.wis;
 		for (let spell of clas.spells){
-			let s = angular.copy(spell);
+			let s = spell;//angular.copy(spell);
 			s.casterClass=clas.name;
 			switch (s.casterClass){
 				case "Wizard":
@@ -260,6 +261,7 @@ $scope.selectChoice=function(choice){
 			//they chose a subclass
 			//add subclass to character
 			getCharacterClass($scope.char,choice.classname).subclass=choice.name;
+			$scope.currentStep.action($scope.char,$scope.derived,choice,$scope);
 			nextStep();
 		} else {
 			//they chose a class
@@ -537,6 +539,15 @@ $scope.decrementCharges=function(item){
 		item.charges-=1;
 	}
 	$scope.calculateSharedResources();
+}
+
+$scope.prepSpell=function(spell,event){
+	if (spell.alwaysPrepared){
+		return;
+	}
+	spell.prepared=!spell.prepared;
+	event.stopPropagation();
+	event.preventDefault();
 }
 
 $scope.calculateSharedResources=function(){

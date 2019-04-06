@@ -99,7 +99,7 @@ window.classes.push(
 					{
 						"choicePrompt":"Choose a Divine Domain:",
 						"choices":[listSpecializations],
-						"action":function(char,derived,choice){
+						"action":function(char,derived,choice,$scope){
 							learnAllClassSpells(char,$scope);
 							addSubclass(char,"Cleric",choice);
 						}
