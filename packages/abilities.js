@@ -433,16 +433,16 @@ window.passives=[
 		description:"You have learned to use magic to alter your physical form in more subtle ways. You can cast the alter self spell at will."
 	},{
 		name:"Whirlwind",
-		description:"When you enter a rage, you may instead make it a Whirlwind. While whirlwinding, you continuously spin your weapons around you, striking any objects and creatures that may be nearby. You gain the following benefits while spinning:\n\n\u2022 At the end of every 20 feet of continuous movement, you may immediately take an attack on a target in your melee range. This doesn't count towards your attacks per round.\n\u2022 Other creatures can't make opportunity attacks against you.\n\u2022 You lose any resistances granted by Rage, but all melee attacks against you have disadvantage."
+		description:"When you enter a rage, you may make it a Whirlwind. While whirlwinding, you continuously spin your weapons around you, striking any objects and creatures that may be nearby. You gain the following while spinning, in lieu of your rage bonuses:\n\n\u2022 You cannot take the Attack action on your turn, you can't cast spells, and you can't make opportunity attacks.\n\u2022 Other creatures can't make opportunity attacks against you.\n\u2022 Melee attacks against you have disadvantage.\n\u2022 At the end of every 15 feet of continuous movement, you may immediately make a free melee attack on a target in your melee range. The attack does half damage.\n\u2022 At the end of each of your turns, if you moved less than 15 feet since your last turn, the whirlwind ends."
 	},{
 		name:"Slice and Dice",
-		description:"While whirlwinding, whenever you move into melee range of a creature, or a creature moves within melee range of you, you may have that creature take damage equal to your weapon damage. A creature damaged this way can't be damaged by it again until your next turn."
+		description:"While whirlwinding, whenever you move into melee range of a creature, or a creature moves within melee range of you, you may have that creature take damage equal to your weapon damage. A creature damaged this way can't be damaged by it again this turn."
 	},{
 		name:"Storm of Steel",
 		description:"You spin so rapidly that your weapons create a swirling shield as they move. While whirlwinding, you have +2 to AC, and the damage dealt by Slice and Dice is increased by your strength modifier."
 	},{
 		name:"Spin to Win",
-		description:"Whenever you bring a creature to 0 hit points, you gain 20 additional walking speed until the end of your next turn."
+		description:"Whenever you bring a creature to 0 hit points during your turn, you can move up to 30 additional feet this turn."
 	},{
 		name:"",
 		description:""

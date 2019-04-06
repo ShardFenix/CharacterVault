@@ -17,7 +17,7 @@
 <span class="tab" ng-click="tab='abilities'" ng-class="{'activetab':tab=='abilities'}">Abilities</span>
 <span class="tab" ng-click="tab='equipment'" ng-class="{'activetab':tab=='equipment'}">Equipment</span>
 <span class="tab" ng-click="tab='spells';loadSpells()" ng-class="{'activetab':tab=='spells'}">Spells</span>
-<span class="tab" ng-click="tab='combat'" ng-class="{'activetab':tab=='combat'}">Combat</span>
+<span class="tab" ng-click="tab='combat';loadSpells()" ng-class="{'activetab':tab=='combat'}">Combat</span>
 <span class="tab" ng-click="tab='notes'" ng-class="{'activetab':tab=='notes'}">Notes</span>
 <span class="tab" ng-click="tab='reference'" ng-class="{'activetab':tab=='reference'}">Reference</span>
 <!--
@@ -448,13 +448,14 @@
 
 	<td width="30%" style="vertical-align:top;">
 		<div class="leftmenu" style="overflow-y:auto;height:calc(100vh - 150px);">
-			<br>
+			<input type="text" placeholder="Filter spells..." ng-model="combatSpellFilter" />
+			<br><br>
 			<span class="item" ng-repeat="i in [0,1,2,3,4,5,6,7,8,9]" style="padding:8px 10px;"
 					ng-class="{'greenback':combatSpellLevelFilter[i]}"
 					ng-click="combatSpellLevelFilter[i]=!combatSpellLevelFilter[i]">{{i}}</span>
 					<br><br>
 			<div class="label">Cantrips</div>
-			<div class="greenback item" ng-repeat="spell in knownSpells | orderBy:'name' track by spell.name"
+			<div class="greenback item" ng-repeat="spell in knownSpells | filter:combatSpellFilter | orderBy:'name' track by spell.name"
 					ng-click="selectSpell(spell)" ng-if="spell.level==0"
 					ng-show="combatSpellLevelFilter[0]">
 				<span style="font-weight:bold;">{{spell.name}}</span>
@@ -463,7 +464,7 @@
 			<br>
 			<div ng-repeat="lv in [1,2,3,4,5,6,7,8,9]" ng-show="highestSlot()>=lv && combatSpellLevelFilter[lv]">
 				<div class="label">Level {{lv}}</div>
-				<div class="greenback item" ng-repeat="spell in knownSpells | orderBy:'name' track by spell.name" ng-if="spell.level<=lv" ng-mouseenter="setTip(spell,lv)" ng-mouseleave="clearTip()">
+				<div class="greenback item" ng-repeat="spell in knownSpells | filter:combatSpellFilter | orderBy:'name' track by spell.name" ng-if="spell.level<=lv" ng-mouseenter="setTip(spell,lv)" ng-mouseleave="clearTip()">
 					<span style="font-weight:bold;">{{spell.name}}</span>
 				</div>
 				<br>
