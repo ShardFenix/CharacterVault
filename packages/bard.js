@@ -563,3 +563,76 @@ window.subclasses.push(
 		]
 	}
 );
+
+window.abilities.append([
+	{
+		name:"Bardic Inspiration (d6)",
+		description:"As a bonus action, choose one creature other than yourself within 60 feet of you who can hear you. That creature gains one Bardic Inspiration die, a d6.\nOnce within the next 10 minutes, the creature can roll the die and add the number rolled to one ability check, attack roll, or saving throw it makes. The creature can wait until after it rolls the d20 before deciding to use the Bardic Inspiration die, but must decide before the DM says whether the roll succeeds or fails. Once the Bardic Inspiration die is rolled, it is lost. A creature can have only one Bardic Inspiration die at a time.",
+		maxChargesFunction:function(char,scope){
+			return Math.max(1,scope.derived.modifiers.cha);
+		},
+		onLongRest:function(char,scope){
+			this.charges=this.maxCharges;
+		}
+	},{
+		name:"Bardic Inspiration (d8)",
+		description:"As a bonus action, choose one creature other than yourself within 60 feet of you who can hear you. That creature gains one Bardic Inspiration die, a d8.\nOnce within the next 10 minutes, the creature can roll the die and add the number rolled to one ability check, attack roll, or saving throw it makes. The creature can wait until after it rolls the d20 before deciding to use the Bardic Inspiration die, but must decide before the DM says whether the roll succeeds or fails. Once the Bardic Inspiration die is rolled, it is lost. A creature can have only one Bardic Inspiration die at a time.",
+		maxChargesFunction:function(char,scope){
+			return Math.max(1,scope.derived.modifiers.cha);
+		},
+		onShortRest:function(char,scope){
+			this.charges=this.maxCharges;
+		}
+	},{
+		name:"Bardic Inspiration (d10)",
+		description:"As a bonus action, choose one creature other than yourself within 60 feet of you who can hear you. That creature gains one Bardic Inspiration die, a d10.\nOnce within the next 10 minutes, the creature can roll the die and add the number rolled to one ability check, attack roll, or saving throw it makes. The creature can wait until after it rolls the d20 before deciding to use the Bardic Inspiration die, but must decide before the DM says whether the roll succeeds or fails. Once the Bardic Inspiration die is rolled, it is lost. A creature can have only one Bardic Inspiration die at a time.",
+		maxChargesFunction:function(char,scope){
+			return Math.max(1,scope.derived.modifiers.cha);
+		},
+		onShortRest:function(char,scope){
+			this.charges=this.maxCharges;
+		}
+	},{
+		name:"Bardic Inspiration (d12)",
+		description:"As a bonus action, choose one creature other than yourself within 60 feet of you who can hear you. That creature gains one Bardic Inspiration die, a d12.\nOnce within the next 10 minutes, the creature can roll the die and add the number rolled to one ability check, attack roll, or saving throw it makes. The creature can wait until after it rolls the d20 before deciding to use the Bardic Inspiration die, but must decide before the DM says whether the roll succeeds or fails. Once the Bardic Inspiration die is rolled, it is lost. A creature can have only one Bardic Inspiration die at a time.",
+		maxChargesFunction:function(char,scope){
+			return Math.max(1,scope.derived.modifiers.cha);
+		},
+		onShortRest:function(char,scope){
+			this.charges=this.maxCharges;
+		}
+	},{
+		name:"Cutting Words",
+		description:"You learn how to use your wit to distract, confuse, and otherwise sap the confidence and competence of others. When a creature that you can see within 60 feet of you makes an attack roll, an ability check, or a damage roll, you can use your reaction to expend one of your uses of Bardic Inspiration, rolling a Bardic Inspiration die and subtracting the number rolled from the creature's roll. You can choose to use this feature after the creature makes its roll, but before the DM determines whether the attack roll or ability check succeeds or fails, or before the creature deals its damage. The creature is immune if it can't hear you or if it's immune to being charmed.",
+		resourceName:"Bardic Inspiration (d6)",
+		resourceCost:1
+	}
+]);
+
+window.passives.append([
+	{
+		name:"Jack of All Trades",
+		description:"You can add half your proficiency bonus, rounded down, to any ability check you make that doesn't already include your proficiency bonus.",
+		apply:function(char,scope){
+			let bonus=Math.floor(scope.derived.proficiency/2);
+			for (var skill of scope.derived.skills){
+				if (skill.mult==0){
+					skill.bonus += bonus;
+				}
+			}
+			scope.derived.initiative+=bonus;
+		}
+	},{
+		name:"Song of Rest",
+		description:"You can use soothing music or oration to help revitalize your wounded allies during a short rest. If you or any friendly creatures who can hear your performance regain hit points by spending Hit Dice at the end of the short rest, each of those creatures regains an extra 1d${ladder(getClassLevel($scope.char,'Bard'),0,6,9,8,13,19,17,12)} hit points."
+	},{
+		name:"Countercharm",
+		description:"You use musical notes or words of power to disrupt mind-influencing effects. As an action, you can start a performance that lasts until the end of your next turn. During that time, you and any friendly creatures within 30 feet of you have advantage on saving throws against being frightened or charmed. A creature must be able to hear you to gain this benefit. The performance ends early if you are incapacitated or silenced or if you voluntarily end it (no action required)."
+	},{
+		name:"Peerless Skill",
+		description:"When you make an ability check, you can expend one use of Bardic Inspiration. Roll a Bardic Inspiration die and add the number rolled to your ability check. You can choose to do so after you roll the die for the ability check, but before the DM tells you whether you succeed or fail."
+	},{
+		name:"Superior Inspiration",
+		description:"When you roll initiative and have no uses of Bardic Inspiration left, you regain one use."
+	}
+]);

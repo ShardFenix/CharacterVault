@@ -301,3 +301,38 @@ window.subclasses.push(
 		]
 	}
 );
+
+window.abilities.append([
+	{
+		name:"Foretelling Roll",
+		description:"You can replace any attack roll, saving throw, or ability check made by you or a creature that you can see with one of the foretelling rolls you made with Portent during your last long rest. You must choose to do so before the roll, and you can replace a roll in this way only once per turn.",
+		maxChargesFunction:function(char,scope){
+			return getClassLevel(char,'Wizard')>=14?3:2;
+		},
+		charges:2,
+		onLongRest:function(char,scope){
+			this.charges=this.maxCharges;
+		}
+	},{
+		name:"The Third Eye",
+		description:"You can use your action to increase your powers of perception. When you do so, choose one of the following benefits, which lasts until you are incapacitated or you take a short or long rest. You can't use the feature again until you finish a rest.\n\u2022 Darkvision. You gain darkvision out to a range of 60 feet.\n\u2022 Ethereal Sight. You can see into the Ethereal Plane within 60 feet of you.\n\u2022 Greater Comprehension. You can read any language.\n\u2022 See Invisibility. You can see invisible creatures and objects within 10 feet of you that are within line of sight.",
+		maxCharges:1,
+		charges:1,
+		onLongRest:function(char,scope){
+			this.charges=this.maxCharges;
+		}
+	}
+]);
+
+window.passives.append([
+	{
+		name:"Divination Savant",
+		description:"The gold and time you must spend to copy a divination spell into your spellbook is halved."
+	},{
+		name:"Portent",
+		description:"Glimpses of the future begin to press in on your awareness. When you finish a long rest, roll ${getClassLevel($scope.char,'Wizard')>=14?'three':'two'} d20s and record the numbers rolled. You can replace any attack roll, saving throw, or ability check made by you or a creature that you can see with one of these foretelling rolls. You must choose to do so before the roll, and you can replace a roll in this way only once per turn.\nEach foretelling roll can be used only once. When you finish a long rest, you lose any unused foretelling rolls."
+	},{
+		name:"Expert Divination",
+		description:"When you cast a divination spell of 2nd level or higher using a spell slot, you regain one expended spell slot. The slot you regain must be of a level lower than the spell you cast and can't be higher than 5th level."
+	}
+]);

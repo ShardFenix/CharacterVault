@@ -18,8 +18,6 @@ window.classes.push(
 							char.saves.con=1;
 							char.saves.cha=1;
 							addToInventory(findItem("Dagger",2));
-							addPassive(char,"Martial Arts");
-							addPassive(char,"Unarmored Movement");
 						}
 					},{
 						choicePrompt:"Choose a starting weapon:",
@@ -529,3 +527,111 @@ window.subclasses.push(
 		]
 	}
 );
+
+window.abilities.append([
+	{
+		name:"Sorcery Point",
+		description:"You can spend Sorcery points on Metamagic.",
+		maxChargesFunction:function(char,scope){
+			return getClassLevel(char,'Sorcerer');
+		},
+		charges:1,
+		onLongRest:function(char,scope){
+			this.charges=this.maxCharges;
+		}
+	},{
+		name:"Favored by the Gods",
+		description:"If you fail a saving throw or miss with an attack roll, you can roll 2d4 and add it to the total, possibly changing the outcome. Once you use this feature, you can't use it again until you finish a short or long rest.",
+		charges:1,
+		maxCharges:1,
+		onShortRest:function(){
+			this.charges=this.maxCharges;
+		}
+	},{
+		name:"Unearthly Recovery",
+		description:"You gain the ability to overcome grievous injuries. As a bonus action when you have fewer than half of your hit points remaining, you can regain a number of hit points equal to half your hit point maximum.\nOnce you use this feature, you can't use it again until you finish a long rest.",
+		charges:1,
+		maxCharges:1,
+		onLongRest:function(){
+			this.charges=this.maxCharges;
+		}
+	},{
+		name:"Create Lv 1 Slot",
+		description:"You spend 2 Sorcery Points as a bonus action to create a level 1 spell slot. This slot lasts until you take a long rest.",
+		resourceName:"Sorcery Point",
+		resourceCost:2
+	},{
+		name:"Create Lv 2 Slot",
+		description:"You spend 3 Sorcery Points as a bonus action to create a level 2 spell slot. This slot lasts until you take a long rest.",
+		resourceName:"Sorcery Point",
+		resourceCost:3
+	},{
+		name:"Create Lv 3 Slot",
+		description:"You spend 5 Sorcery Points as a bonus action to create a level 3 spell slot. This slot lasts until you take a long rest.",
+		resourceName:"Sorcery Point",
+		resourceCost:5
+	},{
+		name:"Create Lv 4 Slot",
+		description:"You spend 6 Sorcery Points as a bonus action to create a level 4 spell slot. This slot lasts until you take a long rest.",
+		resourceName:"Sorcery Point",
+		resourceCost:6
+	},{
+		name:"Create Lv 5 Slot",
+		description:"You spend 7 Sorcery Points as a bonus action to create a level 5 spell slot. This slot lasts until you take a long rest.",
+		resourceName:"Sorcery Point",
+		resourceCost:5
+	},{
+		name:"Careful Spell",
+		description:"When you cast a spell that forces other creatures to make a saving throw, you can protect some of those creatures from the spell's full force. To do so, you spend 1 sorcery point and choose a number of those creatures up to your Charisma modifier (minimum of one creature). A chosen creature automatically succeeds on its saving throw against the spell.",
+		resourceName:"Sorcery Point",
+		resourceCost:1
+	},{
+		name:"Distant Spell",
+		description:"When you cast a spell that has a range of 5 feet or greater, you can spend 1 sorcery point to double the range of the spell.\n\nWhen you cast a spell that has a range of touch, you can spend 1 sorcery point to make the range of the spell 30 feet.",
+		resourceName:"Sorcery Point",
+		resourceCost:1
+	},{
+		name:"Empowered Spell",
+		description:"When you roll damage for a spell, you can spend 1 sorcery point to reroll a number of the damage dice up to your Charisma modifier (minimum of one). You must use the new rolls.\n\nYou can use Empowered Spell even if you have already used a different Metamagic option during the casting of the spell.",
+		resourceName:"Sorcery Point",
+		resourceCost:1
+	},{
+		name:"Extended Spell",
+		description:"When you cast a spell that has a duration of 1 minute or longer, you can spend 1 sorcery point to double its duration, to a maximum duration of 24 hours.",
+		resourceName:"Sorcery Point",
+		resourceCost:1
+	},{
+		name:"Heightened Spell",
+		description:"When you cast a spell that forces a creature to make a saving throw to resist its effects, you can spend 3 sorcery points to give one target of the spell disadvantage on its first saving throw made against the spell.",
+		resourceName:"Sorcery Point",
+		resourceCost:3
+	},{
+		name:"Quickened Spell",
+		description:"When you cast a spell that has a casting time of 1 action, you can spend 2 sorcery points to change the casting time to 1 bonus action for this casting.",
+		resourceName:"Sorcery Point",
+		resourceCost:2
+	},{
+		name:"Subtle Spell",
+		description:"When you cast a spell, you can spend 1 sorcery point to cast it without any somatic or verbal components.",
+		resourceName:"Sorcery Point",
+		resourceCost:1
+	},{
+		name:"Twinned Spell",
+		description:"When you cast a spell that doesn't have a range of self and is incapable of targeting more than one creature at the spell's current level, you can spend a number of sorcery points equal to the spell's level to target a second creature in range with the same spell (1 sorcery point if the spell is a cantrip).\n\nTo be eligible, a spell must be incapable of targeting more than one creature at the spell's current level. For example, magic missile and scorching ray aren't eligible, but ray of frost and chromatic orb are.",
+		resourceName:"Sorcery Point",
+		resourceCost:1
+	}
+]);
+
+window.passives.append([
+	{
+		name:"Empowered Healing",
+		description:"The divine energy coursing through you can empower healing spells. Whenever you or an ally within 5 feet of you rolls dice to determine the number of hit points a spell restores, you can spend 1 sorcery point to reroll any number of those dice once, provided you aren't incapacitated. You can use this feature only once per turn."
+	},{
+		name:"Otherworldly Wings",
+		description:"You can use a bonus action to manifest a pair of spectral wings from your back. While the wings are present, you have a flying speed of 30 feet. The wings last until you're incapacitated, you die, or you dismiss them as a bonus action.\nThe affinity you chose for your Divine Magic feature determines the appearance of the spectral wings: eagle wings for good or law, bat wings for evil or chaos, and dragonfly wings for neutrality."
+	},{
+		name:"Flexible Casting",
+		description:"As a bonus action on your turn, you can expend one spell slot and gain a number of sorcery points equal to that slot's level."
+	}
+]);

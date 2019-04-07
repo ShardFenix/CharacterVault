@@ -1,3 +1,26 @@
+Array.prototype.upush=function(element){
+	if (element && element.name) {
+		for (var i=0;i<this.length;i++){
+			if (element.name==this[i].name){
+				return;
+			}
+		}
+		this.push(element);
+	} else {
+		if (this.indexOf(element)==-1){
+			this.push(element);
+		}
+	}
+};
+
+Array.prototype.append=function(otherArray){
+	if (Array.isArray(otherArray)){
+		for (let element of otherArray){
+			this.push(element);
+		}
+	}
+}
+
 //this is used for classes who know every spell but must prepare them instead
 function learnAllClassSpells(char,$scope){
 	for (let spell of window.spells){
@@ -211,21 +234,6 @@ function addSubclass(char,classname,subclass){
 				clas.subclass=subclass;
 			}
 			return;
-		}
-	}
-};
-
-Array.prototype.upush=function(element){
-	if (element && element.name) {
-		for (var i=0;i<this.length;i++){
-			if (element.name==this[i].name){
-				return;
-			}
-		}
-		this.push(element);
-	} else {
-		if (this.indexOf(element)==-1){
-			this.push(element);
 		}
 	}
 };

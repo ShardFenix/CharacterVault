@@ -319,3 +319,78 @@ window.subclasses.push(
 		]
 	}
 );
+
+window.abilities.append([
+	{
+		name:"Channel Divinity",
+		description:"You gain the ability to channel divine energy directly from your deity, using that energy to fuel magical effects.\nWhen you use your Channel Divinity, you choose which effect to create. You must then finish a short or long rest to use your Channel Divinity again.\nSome Channel Divinity effects require saving throws. When you use such an effect from this class, the DC equals your cleric spell save DC.",
+		maxChargesFunction:function(char){
+			let lvl = getClassLevel(char,"Cleric");
+			if (lvl>=18) return 3;
+			if (lvl>=6) return 2;
+			if (lvl>=2) return 1;
+			return 0;
+		},
+		charges:1,
+		onShortRest:function(char,scope){
+			this.charges=this.maxCharges;
+		}
+	},{
+		name:"Divine Intervention",
+		description:"You can call on your deity to intervene on your behalf when your need is great.\nImploring your deity's aid requires you to use your action. Describe the assistance you seek, and roll percentile dice. If you roll a number equal to or lower than your cleric level, your deity intervenes. The DM chooses the nature of the intervention; the effect of any cleric spell or cleric domain spell would be appropriate. If your deity intervenes, you can't use this feature again for 7 days. Otherwise, you can use it again after you finish a long rest.",
+		maxCharges:1,
+		charges:1,
+		onLongRest:function(char,scope){
+			this.charges=this.maxCharges;
+		}
+	},{
+		name:"Improved Divine Intervention",
+		description:"You can call on your deity to intervene on your behalf when your need is great.\nImploring your deity's aid requires you to use your action. Describe the assistance you seek. Your deity intervenes. The DM chooses the nature of the intervention; the effect of any cleric spell or cleric domain spell would be appropriate. You can't use this feature again for 7 days.",
+		maxCharges:1,
+		charges:1,
+		onLongRest:function(char,scope){
+			this.charges=this.maxCharges;
+		}
+	},{
+		name:"Preserve Life",
+		description:"Using your Channel Divinity action, you present your holy symbol and evoke healing energy that can restore a number of hit points equal to five times your cleric level. Choose any creatures within 30 feet of you, and divide those hit points among them. This feature can restore a creature to no more than half of its hit point maximum. You can't use this feature on an undead or a construct.",
+		resourceName:"Channel Divinity",
+		resourceCost:1
+	},{
+		name:"Turn Undead",
+		description:"Using your Channel Divinity action, you present your holy symbol and speak a prayer censuring the undead. Each undead that can see or hear you within 30 feet of you must make a Wisdom saving throw. If the creature fails its saving throw, it is turned for 1 minute or until it takes any damage.\nA turned creature must spend its turns trying to move as far away from you as it can, and it can't willingly move to a space within 30 feet of you. It also can't take reactions. For its action, it can use only the Dash action or try to escape from an effect that prevents it from moving. If there's nowhere to move, the creature can use the Dodge action.",
+		resourceName:"Channel Divinity",
+		resourceCost:1
+	}
+]);
+
+window.passives.append([
+	{
+		name:"Destroy Undead (CR 1/2)",
+		description:"When an undead of CR 1/2 or lower fails its saving throw against your Turn Undead feature, the creature is instantly destroyed."
+	},{
+		name:"Destroy Undead (CR 1)",
+		description:"When an undead of CR 1 or lower fails its saving throw against your Turn Undead feature, the creature is instantly destroyed."
+	},{
+		name:"Destroy Undead (CR 2)",
+		description:"When an undead of CR 2 or lower fails its saving throw against your Turn Undead feature, the creature is instantly destroyed."
+	},{
+		name:"Destroy Undead (CR 3)",
+		description:"When an undead of CR 3 or lower fails its saving throw against your Turn Undead feature, the creature is instantly destroyed."
+	},{
+		name:"Destroy Undead (CR 4)",
+		description:"When an undead of CR 4 or lower fails its saving throw against your Turn Undead feature, the creature is instantly destroyed."
+	},{
+		name:"Disciple of Life",
+		description:"Whenever you use a spell of 1st level or higher to restore hit points to a creature, the creature regains additional hit points equal to 2 + the spell's level."
+	},{
+		name:"Blessed Healer",
+		description:"When you cast a spell of 1st level or higher that restores hit points to a creature other than you, you regain hit points equal to 2 + the spell's level."
+	},{
+		name:"Divine Strike",
+		description:"Once on each of your turns when you hit a creature with a weapon attack, you can cause the attack to deal an extra ${ladder(clevel,8,1,14,2)}d8 radiant damage to the target."
+	},{
+		name:"Supreme Healing",
+		description:"When you would normally roll one or more dice to restore hit points with a spell, you instead use the highest number possible for each die."
+	}
+]);
