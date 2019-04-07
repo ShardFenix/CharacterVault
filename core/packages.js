@@ -54,7 +54,7 @@ var helper={
 					},
 	chooseSpell:{
 						"choicePrompt":"Choose a spell.",
-						"choices":[listLearnableSpellsForClass],
+						"choices":[listLearnableSpells],
 						"action":function(char,derived,choice,scope){
 							addSpell(char,choice,scope.chosenClassName);
 						}

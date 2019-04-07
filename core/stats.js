@@ -259,8 +259,6 @@ $scope.selectChoice=function(choice){
 		//they chose a class or subclass
 		if (choice.subclass){
 			//they chose a subclass
-			//add subclass to character
-			getCharacterClass($scope.char,choice.classname).subclass=choice.name;
 			$scope.currentStep.action($scope.char,$scope.derived,choice,$scope);
 			nextStep();
 		} else {
@@ -274,6 +272,7 @@ $scope.selectChoice=function(choice){
 					name:$scope.chosenClassName,
 					level:1,
 					subclass:null,
+					spellcasting:[$scope.chosenClassName],
 					spells:[]
 				});
 			} else {
@@ -313,6 +312,9 @@ function nextStep(){
 			return;
 		} else {
 			//start leveling up their subclass
+			if ($scope.chosenLevel===0){
+				$scope.chosenLevel=1;
+			}
 			$scope.inSubclass=true;
 			let sc=getCharacterClass($scope.char,$scope.chosenClassName).subclass;
 			if (sc){

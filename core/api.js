@@ -205,7 +205,11 @@ function listUnknownLanguages(char){
 function addSubclass(char,classname,subclass){
 	for (var clas of char.classes){
 		if (clas.name===classname){
-			clas.subclass=subclass;
+			if (subclass.name){
+				clas.subclass=subclass.name;
+			} else {
+				clas.subclass=subclass;
+			}
 			return;
 		}
 	}
@@ -407,32 +411,43 @@ function highestSpellLevel(char){
  * Based on which class the user picked ($scope.chosenClassName),
  * list all the spells they can currently learn from that class.
  */
-function listLearnableSpellsForClass(char,$scope){
-	var result=[];
-	let classname=$scope.chosenClassName;
-	//find the right class
+function listLearnableSpells(char,$scope){
+	let result=[];
+	let spellcasting=[];
 	let clas={};
 	for (var c of char.classes){
-		if (c.name===classname){
+		if (c.name===$scope.chosenClassName){
 			clas=c;
+			spellcasting=c.spellcasting;
 			break;
 		}
 	}
 	//find the highest level they can cast on this class
 	let highest=highestSpellLevel(char);
 	
+	nextSpell:
 	for (var spell of window.spells){
 		//check if they can learn a spell of this level (and exclude cantrips)
 		if (spell.level>highest || spell.level===0){
-			continue;
+			continue nextSpell;
 		}
 		//check that the spell belongs to this class
-		if (spell.classes.indexOf(classname)==-1){
-			continue;
+		let found=false;
+		for (let spellclass of spell.classes){
+			if (spellcasting.includes(spellclass)){
+				found=true;
+				break;
+			}
 		}
-		if (!hasSpell(char,spell.name)){
-			result.push(spell);
+		if (!found){
+			continue nextSpell;
 		}
+		for (let s of clas.spells){
+			if (s.name===spell.name){
+				continue nextSpell;
+			}
+		}
+		result.push(spell);
 	}
 	return result;
 }
