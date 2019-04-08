@@ -322,15 +322,6 @@ window.passives.append([
 		name:"Reckless Attack",
 		description:"You can throw aside all concern for defense to attack with fierce desperation. When you make your first attack on your turn, you can decide to attack recklessly. Doing so gives you advantage on melee weapon attack rolls using Strength during this turn, but attack rolls against you have advantage until your next turn."
 	},{
-		name:"Extra Attacks x1",
-		description:"You can attack twice when you take the attack action on your turn."
-	},{
-		name:"Extra Attacks x2",
-		description:"You can attack three times when you take the attack action on your turn."
-	},{
-		name:"Extra Attacks x3",
-		description:"You can attack four times when you take the attack action on your turn."
-	},{
 		name:"Fast Movement",
 		description:"Your speed increases by 10 feet while you aren't wearing heavy armor."
 	},{

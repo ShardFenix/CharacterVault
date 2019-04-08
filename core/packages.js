@@ -1,4 +1,28 @@
 var helper={
+	chooseFightingStyle:{
+						choicePrompt:"Choose a Fighting Style",
+						choices:[function(char){
+							let result=[];
+							let fsNames=["Archery","Defense","Dueling","Great Weapon Fighting","Protection","Two-Weapon Fighting"];
+							for (let name of fsNames){
+								let found=false;
+								for (let abil of char.passives){
+									if (abil.name===name){
+										found=true;
+										break;
+									}
+								}
+								if (!found){
+									result.push(findPassive(name));
+								}
+							}
+							return result;
+						}],
+						action:function(char,derived,choice){
+							let f = angular.copy(findPassive(choice));
+							char.passives.push(f);
+						}
+					},
 	attributeOrFeat:{
 						"choicePrompt":"Choose one:",
 						"choices":["+2 to Ability Scores","Take a Feat"],

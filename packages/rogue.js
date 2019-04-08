@@ -337,52 +337,12 @@ window.subclasses.push(
 );
 
 window.subclasses.push(
-	{
-		classname:"Monk",
-		name:"Way of Enlightenment",
-		subclass:"Way of Enlightenment",
-		description:"Monks on the Path of Enlightenment seek to become one with the world around them. Through intense study and meditation, enlightened monks are able to feel their surroundings, not only in place but in time. This path rewards monks who manage their Ki points well.",
-		levels:[{},{},{},
-			{//3
-				updates:[
-					{
-						choices:[],
-						action:function(char,derived,choice,$scope){
-							addPassive(char,"Supernatural Awareness");
-							addPassive(char,"Bonus Reaction");
-						}
-					}
-				]
-			},{},{},{ //6
-				updates:[
-					{
-						choices:[],
-						action:function(char){
-							addPassive(char,"See the Code");
-						}
-					}
-				]
-			},{},{},{},{},
-			{//11
-				updates:[
-					{
-						choices:[],
-						action:function(char,derived,choice){
-							addPassive(char,"Zen Meditation");
-						}
-					}
-				]
-			},{},{},{},{},{},
-			{//17
-				updates:[
-					{
-						choices:[],
-						action:function(char){
-							addPassive(char,"Enlightened Strike");
-						}
-					}
-				]
-			},{},{},{}
-		]
-	}
+	
 );
+
+window.passives.append([
+	{
+		name:"Sneak Attack",
+		description:"You know how to strike subtly and exploit a foe's distraction. Once per turn, you can deal an extra <i>${Math.floor((1+classLevel($scope.char,'Rogue'))/2)}d6</i> damage to one creature you hit with an attack if you have advantage on the attack roll. The attack must use a finesse or a ranged weapon.\n\nYou don't need advantage on the attack roll if another enemy of the target is within 5 feet of it, that enemy isn't incapacitated, and you don't have disadvantage on the attack roll."
+	}
+]);

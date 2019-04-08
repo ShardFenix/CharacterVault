@@ -100,7 +100,6 @@ $scope.loadSpells=function(){
 	}
 }
 
-//load all spell slot abilities onto new characters
 addAbility($scope.char,"Lv 1 Spell");
 addAbility($scope.char,"Lv 2 Spell");
 addAbility($scope.char,"Lv 3 Spell");
@@ -111,7 +110,6 @@ addAbility($scope.char,"Lv 7 Spell");
 addAbility($scope.char,"Lv 8 Spell");
 addAbility($scope.char,"Lv 9 Spell");
 
-//debug: give this character every skill
 for (var i=0;i<window.skills.length;i++){
 	var found=false;
 	for (var j=0;j<$scope.char.skills.length;j++){
@@ -343,6 +341,70 @@ function nextStep(){
 }
 
 $scope.newChar=function(){
+	
+	$scope.char={
+		maxHp:0,
+		hp:0,
+		level:0, //total level
+		money:0,
+		classes:[],
+		//multipliers for save proficiencies
+		saves:{
+			str:0,dex:0,con:0,wis:0,int:0,cha:0
+		},
+		attributes:{
+			str:10,dex:10,con:10,wis:10,int:10,cha:10
+		},
+		skills:[],
+		passives:[],
+		abilities:[],
+		proficiencies:[],
+		inventory:[]
+	};
+
+	$scope.derived={
+		modifiers:{
+			str:0,dex:0,con:0,int:0,wis:0,cha:0
+		},
+		saves:{
+			str:0,dex:0,con:0,int:0,wis:0,cha:0
+		},
+		maxHp:0,//con modifier and some feats/passives may increase this
+		skills:[],
+		initiative:0,
+		moveSpeed:30,
+		ac:10,
+		proficiency:2
+	}
+	
+	addAbility($scope.char,"Lv 1 Spell");
+	addAbility($scope.char,"Lv 2 Spell");
+	addAbility($scope.char,"Lv 3 Spell");
+	addAbility($scope.char,"Lv 4 Spell");
+	addAbility($scope.char,"Lv 5 Spell");
+	addAbility($scope.char,"Lv 6 Spell");
+	addAbility($scope.char,"Lv 7 Spell");
+	addAbility($scope.char,"Lv 8 Spell");
+	addAbility($scope.char,"Lv 9 Spell");
+
+	for (var i=0;i<window.skills.length;i++){
+		var found=false;
+		for (var j=0;j<$scope.char.skills.length;j++){
+			if ($scope.char.skills[j].name===window.skills[i].name){
+				found=true;
+				break;
+			}
+		}
+		if (!found){
+			$scope.char.skills.push({
+				name:window.skills[i].name,
+				mult:0,
+				attribute:window.skills[i].attribute
+			});
+		found=false;
+		}
+	}
+	
 	$scope.showSaveMenu=false;
 	let choices=[];
 	for (let race of window.races){

@@ -135,7 +135,7 @@ window.classes.push(
 										findAbility('Distant Spell'),
 										findAbility('Empowered Spell'),
 										findAbility('Extended Spell'),
-										findAbility('Hightened Spell'),
+										findAbility('Heightened Spell'),
 										findAbility('Quickened Spell'),
 										findAbility('Subtle Spell'),
 										findAbility('Twinned Spell')];
@@ -147,6 +147,7 @@ window.classes.push(
 									}
 								}
 							}
+							return result;
 						}],
 						action:function(char,derived,choice){
 							addAbility(char,choice);
@@ -158,7 +159,7 @@ window.classes.push(
 										findAbility('Distant Spell'),
 										findAbility('Empowered Spell'),
 										findAbility('Extended Spell'),
-										findAbility('Hightened Spell'),
+										findAbility('Heightened Spell'),
 										findAbility('Quickened Spell'),
 										findAbility('Subtle Spell'),
 										findAbility('Twinned Spell')];
@@ -170,6 +171,7 @@ window.classes.push(
 									}
 								}
 							}
+							return result;
 						}],
 						action:function(char,derived,choice){
 							addAbility(char,choice);
@@ -302,7 +304,7 @@ window.classes.push(
 										findAbility('Distant Spell'),
 										findAbility('Empowered Spell'),
 										findAbility('Extended Spell'),
-										findAbility('Hightened Spell'),
+										findAbility('Heightened Spell'),
 										findAbility('Quickened Spell'),
 										findAbility('Subtle Spell'),
 										findAbility('Twinned Spell')];
@@ -314,6 +316,7 @@ window.classes.push(
 									}
 								}
 							}
+							return result;
 						}],
 						action:function(char,derived,choice){
 							addAbility(char,choice);
@@ -410,7 +413,7 @@ window.classes.push(
 										findAbility('Distant Spell'),
 										findAbility('Empowered Spell'),
 										findAbility('Extended Spell'),
-										findAbility('Hightened Spell'),
+										findAbility('Heightened Spell'),
 										findAbility('Quickened Spell'),
 										findAbility('Subtle Spell'),
 										findAbility('Twinned Spell')];
@@ -422,6 +425,7 @@ window.classes.push(
 									}
 								}
 							}
+							return result;
 						}],
 						action:function(char,derived,choice){
 							addAbility(char,choice);
