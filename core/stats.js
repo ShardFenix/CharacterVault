@@ -480,6 +480,27 @@ $scope.deleteInit=function(item,event){
 	$scope.initiativeOrder.splice(index,1);
 }
 
+$scope.checkItems=function(){
+	if ($scope.item.name && $scope.item.name.length>2){
+		for (let i of window.items){
+			if (i.name===$scope.item.name){
+				$scope.item=i;
+				return;
+			}
+		}
+	}
+}
+
+$scope.toggleSkillProf=function(skillName){
+	for (let skill of $scope.char.skills){
+		if (skill.name===skillName){
+			skill.mult=(skill.mult+1)%3;
+			$scope.calculate()
+			return;
+		}
+	}
+}
+
 $scope.spellLevelAvailable=function(level){
 	//each index here corresponds to that spell level
 	var available=[true,false,false,false,false,false,false,false,false,false];

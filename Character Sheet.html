@@ -129,9 +129,9 @@
 <br>
 <div class='label' style='text-align:left;'>Skills</div>
 <div ng-repeat="skill in derived.skills">
-	<span ng-show="skill.mult===0" class='redx' ng-click="skill.mult=1;calculate();">&#x2716;</span>
-	<span ng-show="skill.mult===1" class='greenx' ng-click="skill.mult=2;calculate();">&#x2714;</span>
-	<span ng-show="skill.mult===2" class='greenx' ng-click="skill.mult=0;calculate();">&#x271A;</span>
+	<span ng-show="skill.mult===0" class='redx' ng-click="toggleSkillProf(skill.name);">&#x2716;</span>
+	<span ng-show="skill.mult===1" class='greenx' ng-click="toggleSkillProf(skill.name);">&#x2714;</span>
+	<span ng-show="skill.mult===2" class='greenx' ng-click="toggleSkillProf(skill.name);">&#x271A;</span>
 	<span style="font-weight:bold;font-size:1.3em;"> {{skill.bonus}}</span> {{skill.name}}
 </div>
 </td>
@@ -294,27 +294,24 @@
 <div ng-show="tab=='equipment'">
 <table style="width:100%;">
 <thead class="header"><tr>
-<th>Equipped</th>
-<th>Inventory</th>
 <th></th>
-<th>Proficiencies and Languages</th>
+<th></th>
+<th></th>
 </tr>
 
 <tbody><tr>
-<td width="20%" style="vertical-align:top;">
+
+<td width="30%" style="vertical-align:top;">
 	<div class="leftmenu">
+		<div class="label">Equipped Items</div>
 		<div class="yellowback item" ng-repeat="item in char.inventory | orderBy:'name' track by $index" ng-click="unequip(item)" ng-if="item.equipped"
 		ng-mouseenter="setTip(item)" ng-mouseleave="clearTip()">
 			<span style="font-weight:bold;">{{item.name}}</span>
 			<span>({{item.count}})</span>
 			<span class="deletebutton" ng-click="delete(item,char.equipment,$event)">&times;</span>
 		</div>
-	</div>
-</td>
-
-
-<td width="20%" style="vertical-align:top;">
-	<div class="leftmenu">
+		<br>
+		<div class="label">Inventory</div>
 		<div class="yellowback item" ng-repeat="item in char.inventory | orderBy:'name' track by $index" ng-click="item.equipped=true" ng-if="!(item.equipped)"
 		ng-mouseenter="setTip(item)" ng-mouseleave="clearTip()">
 			<span style="font-weight:bold;">{{item.name}}</span>
@@ -324,20 +321,20 @@
 	</div>
 </td>
 
-
-<td width="20%" style="vertical-align:top;text-align:center;">
-	<input type="text" ng-model="item.name" placeholder="Item name..."/>
+<td width="50%" style="vertical-align:top;text-align:center;">
+	<input type="text" ng-model="item.name" placeholder="Item name..." ng-change="checkItems()"/>
 	<br>
 	<input type="text" ng-model="item.count" placeholder="Quantity..."/>
 	<br>
 	<span class="button" ng-click="add(item,char.inventory)">&laquo; Inventory</span>
 	<span class="button" ng-click="char.proficiencies.upush(item.name)">Proficiencies &raquo;</span>
 	<br>
-	<button style="display:none"></button>
+	<textarea ng-model='item.description' style="min-width:90%;max-width:90%;min-height:400px;font-size:1.3em"></textarea>
 </td>
 
 <td width="20%" style="vertical-align:top;text-align:center;">
-	<input ng-model='profSearch' placeholder="Search..."
+	<div class="label">Proficiencies and Languages</div>
+	<input type="text" ng-model='profSearch' placeholder="Search..." />
 	<div class="leftmenu">
 		<div class="greenback item" ng-repeat="item in char.proficiencies | filter:profSearch ">
 			<span style="font-weight:bold;">{{item}}</span>
@@ -619,7 +616,6 @@
 			<br>
 			<span class="footnote">Spell Save DC: {{tip.saveDc}}.</span>
 		</div>
-		{{choiceQueue}}
 	</div>
 </div>
 

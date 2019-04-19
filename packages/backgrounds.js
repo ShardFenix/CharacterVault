@@ -174,5 +174,121 @@ window.backgrounds=[
 			scope.choiceQueue.push(helper.learnLanguage);
 			char.money+=2500;
 		}
+	},{
+		name:"Outlander",
+		description:"",
+		featureName:"Wanderer",
+		featureDescription:"You have an excellent memory for maps and geography, and you can always recall the general layout of terrain, settlements, and other features around you. In addition, you can find food and fresh water for yourself and up to five other people each day, provided that the land offers berries, small game, water, and so forth.",
+		onPickup:function(char,scope){
+			addProficiency(char,'Athletics');
+			addProficiency(char,'Survival');
+			addToInventory(char,findItem('Staff'));
+			addToInventory(char,findItem("Hunting Trap"));
+			addToInventory(char,findItem("Traveler's Clothes"));
+			addToInventory(char,findItem('Belt Pouch'));
+			addToInventory(char,findItem('Animal Trophy'));
+			addPassive(char,{name:this.featureName,description:this.featureDescription});
+			scope.choiceQueue.push(helper.learnInstrument);
+			scope.choiceQueue.push(helper.learnLanguage);
+			char.money+=1000;
+		}
+	},{
+		name:"Sage",
+		description:"",
+		featureName:"Researcher",
+		featureDescription:"When you attempt to learn or recall a piece of lore, if you do not know that information, you often know where and from whom you can obtain it. Usually, this information comes from a library, scriptorium, university, or a sage or other learned person or creature, Your DM might rule that the knowledge you seek is secreted away in an almost inaccessible place, or that it simply cannot be found. Unearthing the deepest secrets of the multiverse can require an adventure or even a whole campaign.",
+		onPickup:function(char,scope){
+			addProficiency(char,'Arcana');
+			addProficiency(char,'History');
+			addToInventory(char,findItem('Bottle of Ink'));
+			addToInventory(char,findItem("Quill"));
+			addToInventory(char,findItem("Small Knife"));
+			addToInventory(char,findItem('Belt Pouch'));
+			addToInventory(char,findItem('Common Clothes'));
+			addToInventory(char,{name:"Letter from Colleague",description:"This letter was written to you by a late colleague. It contains a question you have not yet been able to answer."});
+			addPassive(char,{name:this.featureName,description:this.featureDescription});
+			scope.choiceQueue.push(helper.learnLanguage);
+			scope.choiceQueue.push(helper.learnLanguage);
+			char.money+=1000;
+		}
+	},{
+		name:"Sailor",
+		description:"",
+		featureName:"Ship's Passage",
+		featureDescription:"When you need to, you can secure free passage on a sailing ship for yourself and your adventuring companions. You might sail on the ship you served on, or another ship you have good relations with (perhaps one captained by a former crewmate). Because you're calling in a favor, you can't be certain of a schedule or route that will meet your every need. Your Dungeon Master will determine how long it takes to get where you need to go. In return for your free passage, you and your companions are expected to assist the crew during the voyage.",
+		onPickup:function(char,scope){
+			addProficiency(char,'Athletics');
+			addProficiency(char,'Perception');
+			addToInventory(char,findItem('Club'));
+			addToInventory(char,findItem("50' Silk Rope"));
+			addToInventory(char,findItem("Lucky Charm"));
+			addToInventory(char,findItem('Belt Pouch'));
+			addToInventory(char,findItem('Common Clothes'));
+			addPassive(char,{name:this.featureName,description:this.featureDescription});
+			char.proficiencies.upush("Navigator's Tools");
+			char.proficiencies.upush("Water Vehicles");
+			char.money+=1000;
+		}
+	},{
+		name:"Sailor (Pirate)",
+		description:"",
+		featureName:"Bad Reputation",
+		featureDescription:"No matter where you go, people are afraid of you due to your reputation. When you are in a civilized settlement, you can get away with minor criminal offenses, such as refusing to pay for food at a tavern or breaking down doors at a local shop, since most people will not report your activity to the authorities.",
+		onPickup:function(char,scope){
+			addProficiency(char,'Athletics');
+			addProficiency(char,'Perception');
+			addToInventory(char,findItem('Club'));
+			addToInventory(char,findItem("50' Silk Rope"));
+			addToInventory(char,findItem("Lucky Charm"));
+			addToInventory(char,findItem('Belt Pouch'));
+			addToInventory(char,findItem('Common Clothes'));
+			addPassive(char,{name:this.featureName,description:this.featureDescription});
+			char.proficiencies.upush("Navigator's Tools");
+			char.proficiencies.upush("Water Vehicles");
+			char.money+=1000;
+		}
+	},{
+		name:"Soldier",
+		description:"",
+		featureName:"Military Rank",
+		featureDescription:"You have a military rank from your career as a soldier. Soldiers loyal to your former military organization still recognize your authority and influence, and they defer to you if they are of a lower rank. You can invoke your rank to exert influence over other soldiers and requisition simple equipment or horses for temporary use. You can also usually gain access to friendly military encampments and fortresses where your rank is recognized.",
+		onPickup:function(char,scope){
+			addProficiency(char,'Athletics');
+			addProficiency(char,'Intimidation');
+			addToInventory(char,findItem('Rank Insignia'));
+			addToInventory(char,findItem("Trophy from a Foe"));
+			addToInventory(char,findItem('Belt Pouch'));
+			addToInventory(char,findItem('Common Clothes'));
+			addPassive(char,{name:this.featureName,description:this.featureDescription});
+			char.proficiencies.upush("Land Vehicles");
+			scope.choiceQueue.push({
+				choicePrompt:"Choose a pastime",
+				chocies:["Playing Cards","Dice Set"],
+				action:function(char,derived,choice){
+					char.proficiencies.upush(choice);
+					addToInventory(char,findItem(choice));
+				}
+			});
+			char.money+=1000;
+		}
+	},{
+		name:"Urchin",
+		description:"Skill Proficiencies: Sleight of Hand, Stealth\nTool Proficiencies: Disguise kit, Thieves' tools\nEquipment: A small knife, a map of the city you grew up in, a pet mouse, a token to remember your parents by, a set of common clothes, and a belt pouch containing 10 gp",
+		featureName:"City Secrets",
+		featureDescription:"You know the secret patterns and flow to cities and can find passages through the urban sprawl that others would miss. When you are not in combat, you (and companions you lead) can travel between any two locations in the city twice as fast as your speed would normally allow.",
+		onPickup:function(char,scope){
+			addProficiency(char,'Sleight of Hand');
+			addProficiency(char,'Stealth');
+			addToInventory(char,findItem('Small Knife'));
+			addToInventory(char,findItem("Map of Hometown"));
+			addToInventory(char,findItem('Belt Pouch'));
+			addToInventory(char,findItem('Pet Mouse'));
+			addToInventory(char,findItem('Memento of Parents'));
+			addToInventory(char,findItem('Common Clothes'));
+			addPassive(char,{name:this.featureName,description:this.featureDescription});
+			char.proficiencies.upush("Disguise Kit");
+			char.proficiencies.upush("Thieves' Tools");
+			char.money+=1000;
+		}
 	}
 ]
