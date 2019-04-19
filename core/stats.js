@@ -418,14 +418,30 @@ $scope.newChar=function(){
 				if (race.name===choice){
 					if (race.onPickup){
 						race.onPickup(char,scope);
+						return;
 					}
-					checkChoiceQueue();
-					return;
 				}
 			}
 		}
 	};
 	$scope.currentChoices=choices;
+	
+	let bchoices=[];
+	for (let bg of window.backgrounds){
+		bchoices.push(bg);
+	}
+	
+	$scope.choiceQueue.push({
+		choicePrompt:"Choose a background",
+		choices:bchoices,
+		action:function(char,derived,choice){
+			for (let bg of window.backgrounds){
+				if (bg.name===choice){
+					bg.onPickup(char,$scope);
+				}
+			}
+		}
+	});
 }
 /**********************************
 Done with package handler
@@ -924,70 +940,126 @@ $scope.save=function(){
 				delete spell.description;
 			}
 		}
-		localStorage.setItem("dnd"+$scope.saveId,JSON.stringify($scope.char));
+		if (serverVaultEnabled) {
+			$http.get('http://localhost:8080/vault.json').then(function(response){
+				if (response.data.length<=$scope.saveId){
+					response.data.push({});
+				}
+				response.data[$scope.saveId]={name:$scope.char.name,saveId:$scope.saveId,char:$scope.char};
+				$http.put('http://localhost:8080/vault.json',JSON.stringify(response.data))
+					.then(function(response){},function(error){});
+			},function(error){
+				console.error(error);
+			});
+		} else {
+			localStorage.setItem("dnd"+$scope.saveId,JSON.stringify($scope.char));
+		}
 		$scope.loadList();
 	}
 }
 
+let serverVaultEnabled=false;
+
+//check to see if a webserver is running
+$http.get('http://localhost:8080/').then(function(resp){
+	serverVaultEnabled=true;
+	//create a vault file if one doesnt exist
+	$http.get('http://localhost:8080/vault.json').then(function(response){
+		//do nothing if it exists
+	},function(error){
+		$http.put('http://localhost:8080/vault.json','[]').then(function(response){},function(error){});
+	});
+	$scope.loadList();
+},function(error){
+	serverVaultEnabled=false;
+	$scope.loadList();
+});
+
 $scope.loadList=function(){
 	$scope.saveList=[];
-	if (typeof(Storage) !== "undefined") {
-		for (var i=0;i<10;i++){
-			var jsonString = localStorage.getItem("dnd"+i);
-			if (jsonString){
-				var lists = JSON.parse(jsonString);
-				$scope.saveList.push({name:lists.name,saveId:i});
+	if (serverVaultEnabled){
+		$http.get('http://localhost:8080/vault.json').then(function(response){
+			for (let cmeta of response.data){
+				$scope.saveList.push({name:cmeta.name,saveId:cmeta.saveId});
+			}
+		},function(error){
+			console.error("Error trying to load character vault.");
+			console.error(error);
+		});
+	} else {
+		if (typeof(Storage) !== "undefined") {
+			for (var i=0;i<90;i++){
+				var jsonString = localStorage.getItem("dnd"+i);
+				if (jsonString){
+					var lists = JSON.parse(jsonString);
+					$scope.saveList.push({name:lists.name,saveId:i});
+				}
 			}
 		}
 	}
 }
 
 $scope.load=function(num){
-	if (typeof(Storage) !== "undefined" && (num || num==0)) {
-		$scope.char = JSON.parse(localStorage.getItem("dnd"+num));
-		$scope.saveId=num;
-		//hook up passive and ability functions, since those can't be serialized
-		for (let passive of $scope.char.passives){
-			let found=false;
-			let p = findPassive(passive.name);
-			if (p){
+	if (serverVaultEnabled){
+		$http.get('http://localhost:8080/vault.json').then(function(response){
+			$scope.char=response.data[num].char;
+			$scope.saveId=num;
+			initLoadedCharacter();
+		},function(error){
+			console.error("Error trying to load character "+num+" from vault.");
+			console.error(error);
+		});
+	} else {
+		if (typeof(Storage) !== "undefined" && (num || num==0)) {
+			$scope.char = JSON.parse(localStorage.getItem("dnd"+num));
+			$scope.saveId=num;
+			initLoadedCharacter();
+		}
+	}
+}
+
+function initLoadedCharacter(){
+	//hook up passive and ability functions, since those can't be serialized
+	for (let passive of $scope.char.passives){
+		let found=false;
+		let p = findPassive(passive.name);
+		if (p){
+			passive.onShortRest=p.onShortRest;
+			passive.onLongRest=p.onLongRest;
+			passive.apply=p.apply;
+			continue;
+		}
+		for (let p of packages.feats){
+			if (p.name===passive.name){
 				passive.onShortRest=p.onShortRest;
 				passive.onLongRest=p.onLongRest;
 				passive.apply=p.apply;
-				continue;
-			}
-			for (let p of packages.feats){
-				if (p.name===passive.name){
-					passive.onShortRest=p.onShortRest;
-					passive.onLongRest=p.onLongRest;
-					passive.apply=p.apply;
-					break;
-				}
+				break;
 			}
 		}
-		for (let ability of $scope.char.abilities){
-			let a = findAbility(ability.name);
-			if (a){
-				ability.onShortRest=a.onShortRest;
-				ability.onLongRest=a.onLongRest;
-				ability.apply=a.apply;
-				ability.maxChargesFunction=a.maxChargesFunction;
-			}
-		}
-		for (let clas of $scope.char.classes){
-			for (let spell of clas.spells){
-				let pSpell = findSpell(spell.name);
-				if (pSpell){
-					spell.description=pSpell.description;
-				}
-			}
-		}
-		$scope.showSaveMenu=false;
-		//calculate breaks HP on loaded creatures
-		let hp=$scope.char.hp;
-		$scope.calculate();
-		$scope.char.hp=hp;
 	}
+	for (let ability of $scope.char.abilities){
+		let a = findAbility(ability.name);
+		if (a){
+			ability.onShortRest=a.onShortRest;
+			ability.onLongRest=a.onLongRest;
+			ability.apply=a.apply;
+			ability.maxChargesFunction=a.maxChargesFunction;
+		}
+	}
+	for (let clas of $scope.char.classes){
+		for (let spell of clas.spells){
+			let pSpell = findSpell(spell.name);
+			if (pSpell){
+				spell.description=pSpell.description;
+			}
+		}
+	}
+	$scope.showSaveMenu=false;
+	//calculate breaks HP on loaded creatures
+	let hp=$scope.char.hp;
+	$scope.calculate();
+	$scope.char.hp=hp;
 }
 
 $scope.loadList();

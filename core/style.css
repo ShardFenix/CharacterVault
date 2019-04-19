@@ -141,6 +141,11 @@ input[type="text"].small{
 	text-align:center;
 }
 
+input[type="text"].med{
+	font-size:1em;
+	width:130px;
+}
+
 input[type="text"].small.round{
 	border-radius:10px;
 	border:1px solid black;
@@ -172,6 +177,7 @@ input[type="text"].medium{
 	font-weight:bold;
 	font-size:34px;
 	margin-top:-8px;
+	cursor:pointer;
 }
 
 .tab{
@@ -197,6 +203,7 @@ input[type="text"].medium{
 
 .tab.activetab{
 	background-color:#d60000;
+	color:white;
 }
 
 .label{
@@ -223,6 +230,7 @@ background-color:white;
 input[type="text"].hidden{
 	border:none;
 	width:50px;
+	background:#00000000;
 }
 
 .top{
@@ -298,21 +306,79 @@ span.money{
 	z-index:1;
 }
 
-#refDescription{
-	width:98%;
+table.borders{
+	border-collapse:collapse;
+}
+table.borders th{
+	border:1px solid #aaa;
+	text-align:center;
+	background-color:#b2d8ff;
+}
+table.borders td{
+	border:1px solid #aaa;
+	text-align:center;
+}
+table.borders tr:nth-child(even){
+	background-color: #eee;
 }
 
-#refDescription table {
-    border-collapse: collapse;
+.creatureCard .label.subheader{
+	background: linear-gradient(90deg, #00000000, #fffad6 20%,#fffad6 80%, #00000000);
 }
 
-#refDescription td {
-    border: 1px solid black;
-    padding: 4px;
+@media screen and (min-width: 1773px){
+	.creatureCard{
+		min-width: 500px;
+		max-width: calc(50% - 30px);
+		margin-bottom: 20px;
+		margin-right: 20px;
+		background:url('../images/parchment2.jpg');
+	}
+}
+@media screen and (max-width: 1773px){
+	.creatureCard{
+		width:100%;
+		margin-bottom: 20px;
+		background:url('../images/parchment2.jpg');
+	}
 }
 
-#refDescription br{
-	line-height:2em;
+.creatureCard thead tr{
+	background: linear-gradient(90deg, rgba(255, 94, 0, 0.5), rgba(255,255,255,0));
+    text-align: left;
+}
+.creatureCard thead th{
+	border-bottom: 1px solid #000;
+    padding: 4px 0px 4px 4px;
+}
+.monsterHeader{
+	background: linear-gradient(90deg, #000000, #00000000);
+    color: #000;
+    padding: 5px 8px;
+    border-radius: 3px;
+    transition: 0.3s ease all;
+    z-index: 5;
+    position: relative;
+}
+
+.monsterHeader .headerBg{
+    width: 0%;
+    transition: 0.3s ease all;
+    background: linear-gradient(90deg, #c70000 30%, #00000000);
+    height: 38px;
+    position: absolute;
+    margin-top: -5px;
+    margin-left: -8px;
+    z-index: -10;
+}
+
+span.white{
+	color:white;
+}
+
+.monsterHeader.selected .headerBg,
+.creatureCard:hover .headerBg{
+	width:100%;
 }
 
 .leftcol{
@@ -480,4 +546,48 @@ i{
 	cursor:pointer;
 	padding: 9px 4px;
     margin-top: -6px;
+}
+
+.rulesHeader{
+	background:black;
+	color:white;
+	font-family: 'Cinzel Decorative';
+	font-size:18px;
+	padding:4px;
+	text-align:center;
+}
+
+.box{
+	box-shadow: 0 0 1px 1px black;
+	border-radius: 3px 3px 0px 0px;
+}
+.boxContent{
+	padding:8px;
+}
+.subheader{
+	font-size: 16px;
+    font-weight: bold;
+    border-bottom: 1px solid black;
+    display: block;
+    margin-top: 10px;
+}
+.has-tip:{
+	position:relative;
+}
+
+.tooltip{
+	visibility: hidden;
+    position: absolute;
+    font-size: 16px;
+    min-width: 160px;
+    max-width: 200px;
+    background: #000;
+    color: white;
+    padding: 6px;
+    border-radius: 3px;
+    top: 0px;
+    margin-left: 30px;
+}
+.has-tip:hover .tooltip{
+	visibility:visible;
 }

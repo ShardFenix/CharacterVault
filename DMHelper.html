@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html>
+<head>
+<link rel="stylesheet" href="./core/style.css">
+<link href="https://fonts.googleapis.com/css?family=Cinzel+Decorative:700" rel="stylesheet">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular-animate.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular-sanitize.js"></script>
+</head>
+<body style="background-color:#ffffff;width:100vw;overflow-x:hidden;">
+<div ng-app="myApp">
+<div ng-controller="MyController" ng-cloak>
+
+<div style="margin-top:-8px;">
+<span class="tab" ng-click="tab='general'" ng-class="{'activetab':tab=='general'}">General</span>
+<span class="tab" ng-click="tab='notes'" ng-class="{'activetab':tab=='notes'}">Notes</span>
+<span class="tab" ng-click="tab='combat'" ng-class="{'activetab':tab=='combat'}">Combat</span>
+<span class="tab" ng-click="tab='spells'" ng-class="{'activetab':tab=='spells'}">Spell Reference</span>
+</div>
+
+<div ng-show="tab=='general'">
+	<table style="width:99%"><tr>
+		<td width="40%">
+			<div class="box">
+				<div class="rulesHeader">Conditions</div>
+				<div class="boxContent" style="display:flex;">
+					<div style="width:50%;padding:0px 4px;">
+						<span class="subheader">Blinded</span>
+						&bull; Automatically fail any ability check that requires sight.
+						<br>&bull; Attack rolls against the creature have advantage.
+						<br>&bull; The creature has disadvantage on attack rolls.
+						<span class="subheader">Charmed</span>
+						&bull; Charmed creatures can't attack the charmer.
+						<br>&bull; The charmer has advantage on ability checks that interact socially with the creature.
+						<span class="subheader">Deafened</span>
+						&bull; Automatically fail any ability check that requires hearing.
+						<span class="subheader">Frightened</span>
+						&bull; Creature has disadvantage on ability checks and attack rolls while the source of its fear is within line of sight.
+						<br>&bull; Can't willingly move closer to the source of its fear.
+						<span class="subheader">Grappled</span>
+						&bull; A grappled creature has 0 move speed.
+						<br>&bull; The condition ends if the grappler is incapacitated, or if some effect removed the grappled creature from reach of the grappler.
+						<span class="subheader">Incapacitated</span>
+						&bull; Can't take actions or reactions.
+						<span class="subheader">Invisible</span>
+						&bull; Impossible to see without the aid of magic or a special sense (heavily obscured).
+						<br>&bull; The creature CAN be detected by any noise that it makes or any tracks it leaves.
+						<br>&bull; Attack rolls against the creature have disadvantage, and attack rolls made by the creature have advantage.
+						<span class="subheader">Paralyzed</span>
+						&bull; A paralyzed creature is incapacitated and can't move or speak.
+						<br>&bull; The creature automatically fails Str and Dex saves.
+						<br>&bull; Attack rolls against the creature have advantage.
+						<br>&bull; Any attack made on the creature from up to 5 feet away is a critical hit.
+						
+					</div>
+					<div style="width:50%;padding:0px 4px;">
+						<span class="subheader">Petrified</span>
+						&bull; A petrified creature is transformed, along with nonmagical objects it's wearing or carrying, into a solid inanimate substance.
+						<br>&bull; The creature is incapacitated, can't move or speak, and is unaware of its surroundings.
+						<br>&bull; Attack rolls against the creature have advantage.
+						<br>&bull; Automatically fails Str and Dex saves.
+						<br>&bull; Resistance to all damage.
+						<br>&bull; Immune to poison and disease, though poison and disease already in its system are only suspended.
+						<br>&bull; Weight of the creature increases by 10 times, and it doesn't age.
+						<span class="subheader">Poisoned</span>
+						&bull; Disadvantage on attack rolls and ability checks.
+						<span class="subheader">Prone</span>
+						&bull; Can crawl at half speed, or can stand by spending half its speed.
+						<br>&bull; Disadvantage on attack rolls.
+						<br>&bull; Attack rolls on the creature made from within 5 feet have advantage. Otherwise, attacks on the creature have disadvantage.
+						<span class="subheader">Restrained</span>
+						&bull; Speed becomes 0.
+						<br>&bull; Disadvantage on Dex saves.
+						<br>&bull; Attack rolls on the creature have advantage, and attack rolls made by the creature have disadvantage.
+						<span class="subheader">Stunned</span>
+						&bull; A stunned creature is incapacitated, can't move, and can only speak falteringly.
+						<br>&bull; Automatically fail Str and Dex saves.
+						<br>&bull; Attack rolls against the creature have advantage.
+						<span class="subheader">Unconscious</span>
+						&bull; The creature is incapacitated, can't move or speak, and is unaware of its surroundings.
+						<br>&bull; The creature drops whatever it's holding and falls prone.
+						<br>&bull; Automaticallly fails Str and Dex saves.
+						<br>&bull; Attack rolls against the creature have advantage.
+						<br>&bull; Any attack made within 5 feet of the creature that hits is a critical hit.						
+					</div>
+				</div>
+			</div>
+		</td>
+		<td width="20%">
+			<div class="box">
+				<div class="rulesHeader">Cover</div>
+				<div class="boxContent">
+					<table style="width:100%" class="borders">
+						<thead><tr><th>Cover</th><th>Effect</th></tr></thead>
+						<tbody>
+							<tr>
+								<td>1/2 Cover</td>
+								<td>+2 Bonus to AC and Dex saving throws.</td>
+							</tr>
+							<tr>
+								<td>3/4 Cover</td>
+								<td>+5 Bonus to AC and Dex daving throws.</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+
+		</td>
+		<td width="20%">
+		</td>
+		<td width="20%">
+			<div class="box">
+				<div class="rulesHeader">Common Expenditures</div>
+				<div class="boxContent">
+					<table style="width:100%" class="borders">
+						<thead><tr><th>Item</th><th>Cost</th></tr></thead>
+						<tbody><tr></tr>
+							<tr>
+								<td style="text-align:left;">Ale</td>
+								<td></td>
+							</tr>
+							<tr>
+								<td>Mug<br>Gallon</td>
+								<td>4 cp<br>2 sp</td>
+							</tr>
+							<tr>
+								<td style="text-align:left;">Inn Stay (per day)</td>
+								<td></td>
+							</tr>
+							<tr>
+								<td>Squalid<br>Poor<br>Modest<br>Comfortable<br>Wealthy<br>Aristocratic</td>
+								<td>7 cp<br>1 sp<br>5 sp<br>8 sp<br>2 gp<br>4 gp</td>
+							</tr>
+							<tr>
+								<td style="text-align:left;">Meals (per day)</td>
+								<td></td>
+							</tr>
+							<tr>
+								<td>Squalid<br>Poor<br>Modest<br>Comfortable<br>Wealthy<br>Aristocratic</td>
+								<td>3 cp<br>6 cp<br>3 sp<br>6 sp<br>8 sp<br>2 gp</td>
+							</tr>
+							<tr>
+								<td style="text-align:left;">Wine</td>
+								<td></td>
+							</tr>
+							<tr>
+								<td>Common pitcher<br>Fine bottle</td>
+								<td>2 sp<br>10 gp</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+
+		</td>
+	</table>
+
+</div>
+
+
+<div ng-show="tab=='combat'">
+
+<table style="width:100%"><tbody><tr>
+	<td style="width:400px;vertical-align: top;">
+		<input type="text" ng-model="creatureFilter" placeholder="Filter..."/>
+		<div style="overflow-y:scroll;max-height:calc(100vh - 100px)">
+			<table class="borders">
+				<thead><tr>
+					<th>Name</th>
+					<th>CR</th>
+					<th>Type</th>
+					<th></th>
+				</tr></thead>
+				<tbody>
+					<tr ng-repeat="creature in creatures | filter:creatureFilter" >
+						<td style="width:30%">{{creature.name}}</td>
+						<td style="width:10%">{{creature.cr}}</td>
+						<td style="width:20%">{{creature.type}}</td>
+						<td style="width:10%"><span class="button" ng-click="addToEncounter(creature)">&raquo;</span></td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</td>
+	<td style="width:320px;vertical-align: top;">
+		<div style="margin-top:80px;">
+			<form ng-submit="addInitiative()">
+				<input type='text' placeholder="Enter Name" ng-model="newInitiative"/>
+			</form>
+			<div ng-repeat="item in initiativeOrder track by $index" ng-click="initUp(item)"
+				 class="yellowback item"
+				 ng-mouseenter="chooseMonster(item)"
+				 ng-mouseleave="chooseMonster()">
+				{{item.name || item}}
+				<span class="deletebutton" ng-click="deleteInit(item,$event)">&times;</span>
+			</div>
+			<button class="redback item" ng-click="initiativeOrder=[]">Clear Initiative</button>
+		</div>
+	</td>
+	<td style="vertical-align: top;display: flex;flex-wrap: wrap;">
+		<div ng-repeat="creature in initiativeOrder track by $index"
+			 class="creatureCard box" ng-if="creature.name">
+			<div class="monsterHeader" ng-class="{'selected':creature===chosenMonster}">
+				<div class="headerBg"></div>
+				<span class="white label">{{creature.name}}</span><span class="white"> (CR {{creature.cr}})</span>
+				<span class="deletebutton has-tip" ng-click="deleteInit(creature,$event)">&times;
+					<span class="tooltip">Remove from combat.</span>
+				</span>
+			</div>
+			<div style="position:relative;">
+				<span>&emsp;HP: </span>
+				<input type="text" class="hidden right" ng-model="creature.hp"/>
+				<span ng-click="rerollHp(creature)"> / {{creature.hpMax}}</span>
+				<form ng-submit="damage(this)" style="display:initial;">
+					<input type="text" number ng-model="damageAmount" 
+							placeholder="Deal damage" class="med"/>
+				</form>
+				<div style="position:absolute;right:4px;top:8px;font-weight:bold;">{{creature.type}}</div>
+			</div>
+			<div style="display:block;">
+				<span class="label subheader">Resistances and Vulnerabilities</span>
+				<div ng-if="creature.immunities" style="margin-bottom:6px;">
+					<span style="font-weight:bold;">Immune to &horbar; </span>{{creature.immunities.join(', ')}}
+				</div>
+				<div ng-if="creature.conditionImmunities" style="margin-bottom:6px;">
+					<span style="font-weight:bold;">Immune to &horbar; </span>{{creature.conditionImmunities.join(', ')}}
+				</div>
+				<div ng-if="creature.resistances" style="margin-bottom:6px;">
+					<span style="font-weight:bold;">Resistant to &horbar; </span>{{creature.resistances.join(', ')}}
+				</div>
+				<div ng-if="creature.vulnerabilities" style="margin-bottom:6px;">
+					<span style="font-weight:bold;">Vulnerable to &horbar; </span>{{creature.vulnerabilities.join(', ')}}
+				</div>
+			</div>
+			<div ng-if="creature.passives">
+				<span class="label subheader">Passives</span>
+				<table ng-repeat="p in creature.passives">
+					<thead><tr><th>{{p.name}}</th></tr></thead>
+					<tbody><tr><td style="white-space: pre-wrap;">{{p.description}}</td></tr></tbody>
+				</table>
+			</div>
+			<div ng-if="creature.actions">
+				<span class="label subheader">Actions</span>
+				<table ng-repeat="a in creature.actions">
+					<thead><tr><th>{{a.name}}</th></tr></thead>
+					<tbody><tr><td style="white-space: pre-wrap;">{{a.description}}</td></tr></tbody>
+				</table>
+			</div>
+		</div>
+	</td>
+</table>
+</div>
+<!-- End Combat -->
+
+<div ng-show="tab=='notes'">
+	<textarea ng-model='dm.notes' style="margin-left: -4px;margin-top: 10px;width: 100%;height: 800px;"></textarea>
+</div>
+
+<div ng-show="tab=='spells'">
+	<table style="width:100%;"><thead class='label'><tr>
+		<th>Spells</th>
+		<th>Filters</th>
+		<th>&nbsp;</th>
+	</tr></thead><tbody><tr>
+	<td style="width:340px;max-width:340px;display:inherit;vertical-align:top;">
+		<div style="overflow-y:scroll;height: calc(100vh - 150px);">
+			<input style="width:340px;" type="text" ng-model="spellSearch" placeholder="Filter..."/>
+			<div class="item greenback" ng-repeat="spell in filteredSpellList | filter:spellSearch"
+					ng-mouseenter="setTip(spell,spell.level)" ng-mouseleave="clearTip()">{{spell.name}} ({{spell.level}})</div>
+		</div>
+	</td>
+	<td style="width:25%;vertical-align:top;">
+	<br>
+		<span class="item" ng-repeat="i in [0,1,2,3,4,5,6,7,8,9]" style="padding:8px 10px;"
+				ng-class="{'greenback':spellFilters.levels[i]}"
+				ng-click="spellFilters.levels[i]=!spellFilters.levels[i];updateSpellFilter()">{{i}}</span>
+<br><br><table><tr>
+		<td><div class="item" style="display:inherit;" ng-class="{'redback':spellFilters.excludeClass[0]}" ng-click="classFilterExclude(0)">Bard</div></td>
+		<td><div class="item" style="display:inherit;" ng-class="{'greenback':spellFilters.includeClass[0]}" ng-click="classFilterInclude(0)">Bard</div></td></tr><tr>
+		<td><div class="item" style="display:inherit;" ng-class="{'redback':spellFilters.excludeClass[1]}" ng-click="classFilterExclude(1)">Cleric</div></td>
+		<td><div class="item" style="display:inherit;" ng-class="{'greenback':spellFilters.includeClass[1]}" ng-click="classFilterInclude(1)">Cleric</div></td></tr><tr>
+		<td><div class="item" style="display:inherit;" ng-class="{'redback':spellFilters.excludeClass[2]}" ng-click="classFilterExclude(2)">Druid</div></td>
+		<td><div class="item" style="display:inherit;" ng-class="{'greenback':spellFilters.includeClass[2]}" ng-click="classFilterInclude(2)">Druid</div></td></tr><tr>
+		<td><div class="item" style="display:inherit;" ng-class="{'redback':spellFilters.excludeClass[3]}" ng-click="classFilterExclude(3)">Paladin</div></td>
+		<td><div class="item" style="display:inherit;" ng-class="{'greenback':spellFilters.includeClass[3]}" ng-click="classFilterInclude(3)">Paladin</div></td></tr><tr>
+		<td><div class="item" style="display:inherit;" ng-class="{'redback':spellFilters.excludeClass[4]}" ng-click="classFilterExclude(4)">Ranger</div></td>
+		<td><div class="item" style="display:inherit;" ng-class="{'greenback':spellFilters.includeClass[4]}" ng-click="classFilterInclude(4)">Ranger</div></td></tr><tr>
+		<td><div class="item" style="display:inherit;" ng-class="{'redback':spellFilters.excludeClass[5]}" ng-click="classFilterExclude(5)">Sorcerer</div></td>
+		<td><div class="item" style="display:inherit;" ng-class="{'greenback':spellFilters.includeClass[5]}" ng-click="classFilterInclude(5)">Sorcerer</div></td></tr><tr>
+		<td><div class="item" style="display:inherit;" ng-class="{'redback':spellFilters.excludeClass[6]}" ng-click="classFilterExclude(6)">Warlock</div></td>
+		<td><div class="item" style="display:inherit;" ng-class="{'greenback':spellFilters.includeClass[6]}" ng-click="classFilterInclude(6)">Warlock</div></td></tr><tr>
+		<td><div class="item" style="display:inherit;" ng-class="{'redback':spellFilters.excludeClass[7]}" ng-click="classFilterExclude(7)">Wizard</div></td>
+		<td><div class="item" style="display:inherit;" ng-class="{'greenback':spellFilters.includeClass[7]}" ng-click="classFilterInclude(7)">Wizard</div></td></tr>
+	</table>
+
+	</td>
+	<td style="width: 50%;vertical-align: top;font-size: 1.3em;"></td>
+	</tr></tbody></table>
+</div>
+<!-- End Reference -->
+
+<!-- Tooltip Modal-->
+<div class="rightModal" ng-class="{'show':currentChoices || tip}" ng-mouseenter="renewTip()" ng-mouseleave="clearTip()">
+	<div>
+		<div class="label">{{tip.name || tip}}</div>
+		<hr>
+		<!-- Spell metadata -->
+		<div ng-show="tip.level>=0" style="text-align:left">
+			<div>
+				Cast Time: {{tip.castTime}}
+				<span style="float:right" ng-show="tip.components.verbal">Verbal</span>
+			</div>
+			<div>
+				Duration: {{tip.duration}}
+				<span style="float:right" ng-show="tip.components.somatic">Somatic</span>
+			</div>
+			<div>
+				Range: {{tip.range}}
+				<span style="float:right" ng-show="tip.ritual">Ritual</span>
+			</div>
+			<div ng-show="tip.components.material">
+				Material component: {{tip.components.material}}
+			</div>
+			<br>
+		</div>
+		<!-- Item metadata -->
+		<div ng-show="tip.value" style="text-align:left;">
+			<div style="display:flex;">
+				<div style="width:49%;text-align:left;">
+					<div ng-show="tip.damage1">
+						1H Damage: {{tip.damage1}} {{tip.damageType}}
+					</div>
+					<div ng-show="tip.damage2">
+						2H Damage: {{tip.damage2}} {{tip.damageType}}
+					</div>
+					<div ng-show="tip.attackRange">
+						Range: {{tip.attackRange[0]}}ft / {{tip.attackRange[1]}}ft
+					</div>
+					<div ng-show="tip.ac">
+						AC: {{tip.ac}}
+					</div>
+				</div>
+				<div style="width:49%;text-align:right;">
+					<div ng-show="tip.finesse">Finesse</div>
+					<div ng-show="tip.heavy">Heavy</div>
+					<div ng-show="tip.reach">Reach</div>
+					<div ng-show="tip.throwRange">Thrown</div>
+				</div>
+			</div>
+			<br>
+			<span class="footnote" ng-show="isWeapon(tip)">Your attack bonus with this item is +{{attackBonus(tip)}}</span>
+		</div>
+		<div ng-bind-html='evalTooltip(tip)' class="tipDescription"></div>
+		<br>
+		<div ng-show="tip.saveDc" style="text-align:left;">
+			<span ng-show="tip.casterClass" class="footnote label">Casting Class: {{tip.casterClass}}</span>
+			<br>
+			<span class="footnote">Spell Attack Bonus: +{{tip.attackBonus}}.</span>
+			<br>
+			<span class="footnote">Spell Save DC: {{tip.saveDc}}.</span>
+		</div>
+	</div>
+</div>
+
+
+</div>
+</div>
+<script src="./core/spells.js"></script>
+<script src="./core/monsters.js"></script>
+<script src="./core/api.js"></script>
+<script src="./core/packages.js"></script>
+
+<script src="./packages/feats.js"></script>
+<script src="./packages/items.js"></script>
+<script src="./packages/races.js"></script>
+<script src="./packages/abilities.js"></script>
+
+<script src="./packages/barbarian.js"></script>
+<script src="./packages/bard.js"></script>
+<script src="./packages/cleric.js"></script>
+<script src="./packages/druid.js"></script>
+<script src="./packages/fighter.js"></script>
+<script src="./packages/monk.js"></script>
+<script src="./packages/paladin.js"></script>
+<script src="./packages/ranger.js"></script>
+<script src="./packages/rogue.js"></script>
+<script src="./packages/sorcerer.js"></script>
+<script src="./packages/warlock.js"></script>
+<script src="./packages/wizard.js"></script>
+
+<script src="./core/dm.js"></script>
+
+</body>
+</html>

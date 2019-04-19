@@ -208,6 +208,17 @@ function listMartialWeapons(){
 	return result;
 }
 
+function listInstruments(){
+	var result=[];
+	for (var i=0;i<window.items.length;i++){
+		let item=window.items[i];
+		if (item.categories.indexOf('Instrument')!=-1){
+			result.push(item);
+		}
+	}
+	return result;
+}
+
 function listUnknownLanguages(char){
 	var result=[];
 	for (var i=0;i<window.languages.length;i++){

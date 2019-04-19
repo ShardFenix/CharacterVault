@@ -90,7 +90,7 @@
 					<input type='text' class='statbox' ng-model='char.level' number />
 				</label>
 			</div>
-			<span class="button" ng-click="levelUpStart()">Level Up</span>
+			<span class="button" ng-hide="char.level>=20" ng-click="levelUpStart()">Level Up</span>
 		</td>
 		<td style="width:100px;text-align:center;">
 			<div class="acbox">
@@ -202,7 +202,7 @@
 <td class="top" style="padding-left:30px;width:250px;">
 <br>
 	<div class="label center">Abilities</div>
-	<div class="item greenback" ng-repeat="item in char.passives"
+	<div class="item greenback" ng-repeat="item in char.passives track by $index"
 			ng-mouseenter="setTip(item)" ng-mouseleave="clearTip()">{{item.name}}</div>
 </td>
 
@@ -619,6 +619,7 @@
 			<br>
 			<span class="footnote">Spell Save DC: {{tip.saveDc}}.</span>
 		</div>
+		{{choiceQueue}}
 	</div>
 </div>
 
@@ -647,6 +648,7 @@
 <script src="./packages/items.js"></script>
 <script src="./packages/races.js"></script>
 <script src="./packages/abilities.js"></script>
+<script src="./packages/backgrounds.js"></script>
 
 <script src="./packages/barbarian.js"></script>
 <script src="./packages/bard.js"></script>
