@@ -1,4 +1,11 @@
 var helper={
+	chooseManeuver:{
+						choicePrompt:"Choose a Maneuver",
+						choices:[],
+						action:function(char,derived,choice){
+							
+						}
+					},
 	chooseFightingStyle:{
 						choicePrompt:"Choose a Fighting Style",
 						choices:[function(char){
@@ -35,6 +42,13 @@ var helper={
 	learnInstrument:{
 						"choicePrompt":"Choose an instrument proficiency.",
 						"choices":[listNonProficientInstruments],
+						"action":function(char,derived,choice){
+							char.proficiencies.upush(choice);
+						}
+					},
+	learnTool:{
+						"choicePrompt":"Choose a tool proficiency.",
+						"choices":[listNonProficientTools],
 						"action":function(char,derived,choice){
 							char.proficiencies.upush(choice);
 						}

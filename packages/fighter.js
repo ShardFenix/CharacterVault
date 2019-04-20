@@ -257,10 +257,10 @@ window.classes.push(
 
 window.subclasses.push(
 	{
-		classname:"Barbarian",
-		name:"Whirlwind",
-		subclass:"Whirlwind",
-		description:"You achieve glory in combat the only way you know how - by spinning. Barbarians who follow the Path of the Whirlwind throw caution to the... wind, and swing their oversized weapons in every possible direction, as well as some impossible directions, creating a twister of carnage. Manly yells are mandatory while spinning.",
+		classname:"Fighter",
+		name:"Champion",
+		subclass:"Champion",
+		description:"",
 		levels:[{},{},{},
 			{//3
 				updates:[

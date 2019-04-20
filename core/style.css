@@ -435,7 +435,7 @@ div.leftModal.show{
 
 div.rightModal {
     position: absolute;
-    background-color: white;
+    background: url('../images/parchment2.jpg');
     box-shadow: 0 0 2px 1px black;
     width: 35%;
     padding: 3%;

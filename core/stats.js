@@ -188,14 +188,15 @@ function checkChoiceQueue(){
 			}
 		}
 		$scope.currentStep=$scope.choiceQueue[0];
+		$scope.prompt=$scope.currentStep.choicePrompt;
 		$scope.choiceQueue.splice(0,1);
+		//if no choices are available, skip this step
+		if ($scope.currentChoices.length===0){
+			return checkChoiceQueue();
+		}
 		return true;
 	}
 	return false;
-	if (tipPromise){
-		$timeout.cancel(tipPromise);
-	}
-	$scope.tip=null;
 }
 
 function finishLevelUp(){
@@ -240,7 +241,7 @@ var setupForCurrentStep=function(){
 			}
 		}
 		//if, after all of this, there are no choices to make, send in something bogus
-		if ($scope.currentChoices.length==0){
+		if ($scope.currentChoices.length===0){
 			$scope.selectChoice('');
 		} else {
 			$scope.prompt=$scope.currentStep.choicePrompt;
@@ -860,6 +861,9 @@ $scope.combatRelevant=function(item){
 	if ($scope.isWeapon(item)) {
 		return true;
 	}
+	if (item.categories && item.categories.includes("Ammunition")){
+		return true;
+	}
 	return false;
 }
 
@@ -887,6 +891,9 @@ $scope.attackBonus=function(item){
 	}
 	if (item.categories.includes("Ranged")){
 		canUseDex=true;
+		if (hasPassive($scope.char,"Archery")){
+			total+=2;
+		}
 	}
 	if (item.finesse){
 		canUseDex=true;
@@ -909,6 +916,9 @@ $scope.attackBonus=function(item){
 		} else {
 			total+=$scope.derived.modifiers.str;
 		}
+	}
+	if (item.enhancement){
+		total+=item.enhancement;
 	}
 	return total;
 }

@@ -560,7 +560,7 @@
 <div class="rightModal" ng-class="{'show':currentChoices || tip}" ng-mouseenter="renewTip()" ng-mouseleave="clearTip()">
 	<div>
 		<div class="label">{{tip.name || tip}}</div>
-		<hr>
+		<hr style="border-color:black;">
 		<!-- Spell metadata -->
 		<div ng-show="tip.level>=0" style="text-align:left">
 			<div>
@@ -609,6 +609,11 @@
 		</div>
 		<div ng-bind-html='evalTooltip(tip)' class="tipDescription"></div>
 		<br>
+		<!-- Background metadata -->
+		<div ng-show="tip.featureName">
+			<div class="label subheader">{{tip.featureName}}</div>
+			<div class="tipDescription">{{tip.featureDescription}}</div>
+		</div>
 		<div ng-show="tip.saveDc" style="text-align:left;">
 			<span ng-show="tip.casterClass" class="footnote label">Casting Class: {{tip.casterClass}}</span>
 			<br>

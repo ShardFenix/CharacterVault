@@ -87,7 +87,7 @@ window.backgrounds=[
 						addToInventory(char,findItem(choice));
 					}
 				}
-			)
+			);
 			char.money+=1500;
 		}
 	},{
@@ -113,7 +113,7 @@ window.backgrounds=[
 						addToInventory(char,findItem(choice));
 					}
 				}
-			)
+			);
 			char.money+=1000;
 		}
 	},{
@@ -263,7 +263,7 @@ window.backgrounds=[
 			char.proficiencies.upush("Land Vehicles");
 			scope.choiceQueue.push({
 				choicePrompt:"Choose a pastime",
-				chocies:["Playing Cards","Dice Set"],
+				choices:["Playing Cards","Dice Set"],
 				action:function(char,derived,choice){
 					char.proficiencies.upush(choice);
 					addToInventory(char,findItem(choice));

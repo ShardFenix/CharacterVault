@@ -137,6 +137,18 @@ function listNonProficientInstruments(char){
 	return result;
 }
 
+function listNonProficientTools(char){
+	var result=[];
+	for (var i=0;i<window.items.length;i++){
+		if (window.items[i].categories.indexOf('Artisan Tool')!=-1){
+			if (!hasProficiency(char,window.items[i].proficiencies[0])){
+				result.push(window.items[i].name);
+			}
+		}
+	}
+	return result;
+}
+
 function listNonProficientWeapons(char){
 	var result=[];
 	for (let item of window.items){
@@ -633,6 +645,18 @@ function nextLevel(char,className){
 		return 0;
 	}
 	return 1;
+}
+
+function hasPassive(char,passive){
+	if (typeof passive === 'object'){
+		passive=passive.name;
+	}
+	for (let p of char.passives){
+		if (p.name===passive){
+			return true;
+		}
+	}
+	return false;
 }
 
 function addPassive(char,p){
