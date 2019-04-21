@@ -1,9 +1,9 @@
 var helper={
 	chooseManeuver:{
 						choicePrompt:"Choose a Maneuver",
-						choices:[],
+						choices:[listManeuvers],
 						action:function(char,derived,choice){
-							
+							addPassive(char,findPassive(choice));
 						}
 					},
 	chooseFightingStyle:{

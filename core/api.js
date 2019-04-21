@@ -123,7 +123,17 @@ function listSkills(){
 		result.push(window.skills[i].name);
 	}
 	return result;
-};
+}
+
+function listManeuvers(char){
+	let result=[];
+	for (let passive of window.passives){
+		if (passive.name.startsWith("Maneuver:") && !hasPassive(char,passive.name)){
+			result.push(passive);
+		}
+	}
+	return result;
+}
 
 function listNonProficientInstruments(char){
 	var result=[];

@@ -89,8 +89,11 @@ $scope.loadSpells=function(){
 				case "Paladin":
 					s.attackBonus = $scope.derived.proficiency + $scope.derived.modifiers.cha;
 					break;
+				case "Barbarian":
 				case "Druid":
 				case "Cleric":
+				case "Ranger":
+				case "Monk":
 					s.attackBonus = $scope.derived.proficiency + $scope.derived.modifiers.wis;
 					break;
 			}
@@ -612,7 +615,7 @@ $scope.getSilver=function(){
 	return Math.floor(($scope.char.money%100)/10);
 }
 $scope.getGold=function(){
-	return Math.floor(($scope.char.money%1000)/100);
+	return Math.floor($scope.char.money/100);
 }
 $scope.getPlatinum=function(){
 	return Math.floor($scope.char.money/1000);

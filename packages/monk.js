@@ -477,7 +477,7 @@ window.passives.append([
 		description:"Attacks of Opportunity against you have disadvantage. Whenever an enemy makes an attack against you and misses, or casts a spell on you that you resist, you may spend your reaction to regain 1 Ki point."
 	},{
 		name:"Zen Meditation",
-		description:"When you end your turn, if you took no movement or actions, you enter a zen-like state. This meditation requires concentration. When your next turn begins, if your concentration has not been broken, you regain 3 Ki points."
+		description:"When you end your turn, if you took no movement or actions, you enter a zen-like state. This meditation requires concentration. When your next turn begins, if your concentration has not been broken, you regain 3 Ki points. This can only be used in combat."
 	},{
 		name:"Enlightened Strikes",
 		description:"Whenever you hit with a melee attack, you deal bonus radiant damage equal to half your current Ki points."

@@ -191,18 +191,21 @@
 	<span class='subtract noselect' ng-click="decrGold()">-</span>
 	<span class='money' >{{getGold()}}</span>
 	<span class='add noselect' ng-click="incrGold()">&#x271A;</span></td></tr>
-<tr><td>Platinum:</td><td>
+<tr><!--<td>Platinum:</td><td>
 	<span class='subtract noselect' ng-click="char.platinum=char.platinum-1">-</span>
 	<span class='money' >{{getPlatinum()}}</span>
-	<span class='add noselect' ng-click="char.platinum=char.platinum+1">&#x271A;</span></td></tr>
+	<span class='add noselect' ng-click="char.platinum=char.platinum+1">&#x271A;</span></td>
+	-->
+</tr>
 </table>
 
 
 </td>
 <td class="top" style="padding-left:30px;width:250px;">
 <br>
-	<div class="label center">Abilities</div>
-	<div class="item greenback" ng-repeat="item in char.passives track by $index"
+	<div class="label center">Passives</div>
+	<input type="text" ng-model='passiveFilter' placeholder="Search..."/>
+	<div class="item greenback" ng-repeat="item in char.passives |filter:passiveFilter track by $index"
 			ng-mouseenter="setTip(item)" ng-mouseleave="clearTip()">{{item.name}}</div>
 </td>
 
@@ -626,16 +629,16 @@
 
 <div class="modal" style="display:flex;" ng-class="{'show':showSaveMenu}">
 	<div class="half center">
-		<div class="label">Create New Character</div>
-		<span class="button" ng-click="newChar()">Create</span>
+		<div class="label">Save</div>
+		<hr>
+		<input type='text' ng-model='char.name' placeholder='Character Name'/>
+		<span class="button large" ng-click="save()">Save</span>
 	</div>
 	<div class="half center">
-		<div class="label">Save/Load</div>
-		<input type='text' ng-model='char.name' placeholder='Character Name'/>
-		<br>
-		<span class="button large" ng-click="save()">Save</span>
-		<br><br><br><br>
-		<span class="button large" ng-repeat='item in saveList track by $index' ng-click="load($index)">{{item.name}}</span>
+		<div class="label">Load</div>
+		<hr>
+		<span class="button" style="font-family:'Cinzel Decorative'" ng-click="newChar()">Create New Character</span>
+		<div class="button large" ng-repeat='item in saveList track by $index' ng-click="load($index)">{{item.name}}</div>
 	</div>
 </div>
 

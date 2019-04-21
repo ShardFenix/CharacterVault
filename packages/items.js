@@ -346,7 +346,7 @@ window.items=[
 		description:'',
 		categories:['Martial','Melee','Weapon'],
 		count:1,
-		damage2:'1d8',
+		damage2:'1d10',
 		damageType:"Slashing",
 		value:2500,
 		proficiencies:['Martial Weapons','Katanas']
