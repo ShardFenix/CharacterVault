@@ -1,3 +1,53 @@
+window.abilities.append([
+	{
+		name:"Second Wind",
+		description:"You have a limited well of stamina that you can draw on to protect yourself from harm. On your turn, you can use a bonus action to regain hit points equal to 1d10 + your fighter level.\n\nOnce you use this feature, you must finish a short or long rest before you can use it again.",
+		charges:1,
+		maxCharges:1,
+		onShortRest:function(){
+			this.charges=this.maxCharges;
+		}
+	},{
+		name:"Action Surge",
+		description:"You can push yourself beyond your normal limits for a moment. On your turn, you can take one additional action on top of your regular action and a possible bonus action.\n\nOnce you use this feature, you must finish a short or long rest before you can use it again. Starting at 17th level, you can use it twice before a rest, but only once on the same turn.",
+		charges:1,
+		maxCharges:1,
+		maxChargesFunction:function(char){
+			return ladder(classLevel(char,"Fighter"),1,1,17,2);
+		},
+		onShortRest:function(){
+			this.charges=this.maxCharges;
+		}
+	},{
+		name:"Indomitable",
+		description:"You can reroll a saving throw that you fail. If you do so, you must use the new roll, and you can't use this feature again until you finish a long rest.",
+		charges:1,
+		maxCharges:1,
+		maxChargesFunction:function(char){
+			return ladder(classLevel(char,"Fighter"),9,1,13,2,17,3);
+		},
+		onLongRest:function(){
+			this.charges=this.maxCharges;
+		}
+	}
+]);
+
+window.passives.append([
+	{
+		name:"Improved Critical",
+		description:"Your weapon attacks score a critical hit on a roll of 19 or 20."
+	},{
+		name:"Superior Critical",
+		description:"Your weapon attacks score a critical hit on a roll of 18-20."
+	},{
+		name:"Remarkable Athlete",
+		description:"You can add half your proficiency bonus (round up) to any Strength, Dexterity, or Constitution check you make that doesn't already use your proficiency bonus.\n\nIn addition, when you make a running long jump, the distance you can cover increases by a number of feet equal to your Strength modifier."
+	},{
+		name:"Survivor",
+		description:"You attain the pinnacle of resilience in battle. At the start of each of your turns, you regain hit points equal to 5 + your Constitution modifier if you have no more than half of your hit points left. You don't gain this benefit if you have 0 hit points."
+	}
+]);
+
 window.classes.push(
 	{
 		classname:"Fighter",
@@ -260,89 +310,54 @@ window.subclasses.push(
 		classname:"Fighter",
 		name:"Champion",
 		subclass:"Champion",
-		description:"",
+		description:"The archetypal Champion focuses on the development of raw physical power honed to deadly perfection. Those who model themselves on this archetype combine rigorous training with physical excellence to deal devastating blows.",
 		levels:[{},{},{},
 			{//3
 				updates:[
 					{
-						choices:[],
+						choicePrompt:"You gain the following:",
+						choices:[findPassive("Improved Critical")],
 						action:function(char,derived,choice,$scope){
-							addAbility(char,"Whirlwind");
-						}
-					}
-				]
-			},{},{},{ //6
-				updates:[
-					{
-						choices:[],
-						action:function(char){
-							addPassive(char,"Slice and Dice");
+							addPassive(char,"Improved Critical");
 						}
 					}
 				]
 			},{},{},{},
+			{ //7
+				updates:[
+					{
+						choicePrompt:"You gain the following:",
+						choices:[findPassive("Remarkable Athlete")],
+						action:function(char){
+							addPassive(char,"Remarkable Athlete");
+						}
+					}
+				]
+			},{},{},
 			{//10
 				updates:[
 					{
-						choices:[],
+						choicePrompt:"You gain the following:",
+						choices:[findPassive("Superior Critical")],
 						action:function(char,derived,choice){
-							addPassive(char,"Storm of Steel");
+							removePassive(char,"Improved Critical");
+							addPassive(char,"Superior Critical");
 						}
 					}
 				]
-			},{},{},{},
-			{//14
+			},{},{},{},{},{},{},{},
+			{//18
 				updates:[
 					{
-						choices:[],
+						choicePrompt:"You gain the following:",
+						choices:[findPassive("Survivor")],
 						action:function(char){
-							addPassive(char,"Spin to Win");
+							addPassive(char,"Survivor");
 						}
 					}
 				]
 
-			},{},{},{},{},{},{}
+			},{},{}
 		]
 	}
 );
-
-window.abilities.append([
-	{
-		name:"Second Wind",
-		description:"You have a limited well of stamina that you can draw on to protect yourself from harm. On your turn, you can use a bonus action to regain hit points equal to 1d10 + your fighter level.\n\nOnce you use this feature, you must finish a short or long rest before you can use it again.",
-		charges:1,
-		maxCharges:1,
-		onShortRest:function(){
-			this.charges=this.maxCharges;
-		}
-	},{
-		name:"Action Surge",
-		description:"You can push yourself beyond your normal limits for a moment. On your turn, you can take one additional action on top of your regular action and a possible bonus action.\n\nOnce you use this feature, you must finish a short or long rest before you can use it again. Starting at 17th level, you can use it twice before a rest, but only once on the same turn.",
-		charges:1,
-		maxCharges:1,
-		maxChargesFunction:function(char){
-			return ladder(classLevel(char,"Fighter"),1,1,17,2);
-		},
-		onShortRest:function(){
-			this.charges=this.maxCharges;
-		}
-	},{
-		name:"Indomitable",
-		description:"You can reroll a saving throw that you fail. If you do so, you must use the new roll, and you can't use this feature again until you finish a long rest.",
-		charges:1,
-		maxCharges:1,
-		maxChargesFunction:function(char){
-			return ladder(classLevel(char,"Fighter"),9,1,13,2,17,3);
-		},
-		onLongRest:function(){
-			this.charges=this.maxCharges;
-		}
-	}
-]);
-
-window.passives.append([
-	{
-		name:"",
-		description:""
-	}
-]);
