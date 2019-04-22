@@ -191,11 +191,12 @@
 	<span class='subtract noselect' ng-click="decrGold()">-</span>
 	<span class='money' >{{getGold()}}</span>
 	<span class='add noselect' ng-click="incrGold()">&#x271A;</span></td></tr>
-<tr><!--<td>Platinum:</td><td>
-	<span class='subtract noselect' ng-click="char.platinum=char.platinum-1">-</span>
-	<span class='money' >{{getPlatinum()}}</span>
-	<span class='add noselect' ng-click="char.platinum=char.platinum+1">&#x271A;</span></td>
-	-->
+<tr>
+<td colspan=2 style="text-align:right;">
+	<form ng-submit="spendGold()">
+		<input type="text" style="width:75%" ng-model="spendGoldInput" placeholder="Spend Gold..." />
+	</form>
+</td>
 </tr>
 </table>
 
@@ -205,8 +206,10 @@
 <br>
 	<div class="label center">Passives</div>
 	<input type="text" ng-model='passiveFilter' placeholder="Search..."/>
-	<div class="item greenback" ng-repeat="item in char.passives |filter:passiveFilter track by $index"
-			ng-mouseenter="setTip(item)" ng-mouseleave="clearTip()">{{item.name}}</div>
+	<div class="item greenback" ng-mouseenter="setTip(item)" ng-mouseleave="clearTip()"
+			ng-repeat="item in char.passives | filter:passiveFilter | orderBy:'name' track by $index">
+			{{item.name}}
+	</div>
 </td>
 
 </tr>
@@ -247,7 +250,7 @@
 <tbody><tr>
 <td width="20%" style="vertical-align:top;">
 	<div class="leftmenu">
-		<div class="greenback item" ng-repeat="item in char.abilities | orderBy:'name' track by item.name "
+		<div class="greenback item" ng-repeat="item in char.abilities | orderBy:'name' track by $index"
 				ng-click="decrementCharges(item)"
 				ng-if="item.charges>0"
 				ng-mouseenter="setTip(item)" ng-mouseleave="clearTip()">
@@ -259,7 +262,7 @@
 
 <td width="20%" style="vertical-align:top;">
 	<div class="leftmenu">
-		<div class="redback item" ng-repeat="item in char.abilities | orderBy:'name' track by item.name"
+		<div class="redback item" ng-repeat="item in char.abilities | orderBy:'name' track by $index"
 				ng-click="addCharge(item)" 
 				ng-if="item.maxCharges-item.charges>0"
 				ng-mouseenter="setTip(item)" ng-mouseleave="clearTip()">
@@ -305,7 +308,7 @@
 <tbody><tr>
 
 <td width="30%" style="vertical-align:top;">
-	<div class="leftmenu">
+	<div class="leftmenu scrollable">
 		<div class="label">Equipped Items</div>
 		<div class="yellowback item" ng-repeat="item in char.inventory | orderBy:'name' track by $index" ng-click="unequip(item)" ng-if="item.equipped"
 		ng-mouseenter="setTip(item)" ng-mouseleave="clearTip()">
@@ -338,8 +341,8 @@
 <td width="20%" style="vertical-align:top;text-align:center;">
 	<div class="label">Proficiencies and Languages</div>
 	<input type="text" ng-model='profSearch' placeholder="Search..." />
-	<div class="leftmenu">
-		<div class="greenback item" ng-repeat="item in char.proficiencies | filter:profSearch ">
+	<div class="leftmenu scrollable">
+		<div class="greenback item" ng-repeat="item in char.proficiencies | filter:profSearch | orderBy:'name'">
 			<span style="font-weight:bold;">{{item}}</span>
 			<span class="deletebutton" ng-click="delete(item,char.proficiencies,$event)">&times;</span>
 		</div>
@@ -353,19 +356,16 @@
 
 <div ng-show="tab=='spells'">
 <table style="width:100%;">
-<thead class="header"><tr>
-<th>Known Spells</th>
-<th></th>
-<th>Add New Spell</th></tr>
 <tbody><tr>
 <td width="30%" style="vertical-align:top;">
-	<div class="leftmenu" style="overflow-y:auto;height:calc(100vh - 150px);">
+	<div class="leftmenu scrollable">
+		<div class="label">Known Spells</div>
 		<input type="text" ng-model="combatSpellFilter" placeholder="Filter spells..."/>
-	<br><br>
-			<span class="item" ng-repeat="i in [0,1,2,3,4,5,6,7,8,9]" style="padding:8px 10px;"
+		<br><br>
+		<span class="item" ng-repeat="i in [0,1,2,3,4,5,6,7,8,9]" style="padding:8px 10px;"
 				ng-class="{'greenback':knownSpellLevelFilter[i]}"
 				ng-click="knownSpellLevelFilter[i]=!knownSpellLevelFilter[i]">{{i}}</span>
-				<br><br>
+		<br><br>
 		<div class="label">Cantrips</div>
 		<div class="greenback prepared item" ng-repeat="spell in knownSpells | filter:combatSpellFilter | orderBy:'name' track by $index"
 				ng-click="selectSpell(spell)" ng-class="{'selected':chosenSpell==spell}" ng-if="spell.level==0"
@@ -508,13 +508,13 @@
 		<th>&nbsp;</th>
 	</tr></thead><tbody><tr>
 	<td style="width:340px;max-width:340px;display:inherit;vertical-align:top;">
-		<div style="overflow-y:scroll;height: calc(100vh - 150px);">
+		<div class="scrollable" style="max-height:calc(100vh - 90px)">
 			<input style="width:340px;" type="text" ng-model="spellSearch" placeholder="Filter..."/>
 			<div class="item greenback" ng-repeat="spell in filteredSpellList | filter:spellSearch"
 					ng-mouseenter="setTip(spell,spell.level)" ng-mouseleave="clearTip()">{{spell.name}} ({{spell.level}})</div>
 		</div>
 	</td>
-	<td style="width:25%;vertical-align:top;">
+	<td style="width:25%;vertical-align:top;margin-left:10px">
 	<br>
 		<span class="item" ng-repeat="i in [0,1,2,3,4,5,6,7,8,9]" style="padding:8px 10px;"
 				ng-class="{'greenback':spellFilters.levels[i]}"

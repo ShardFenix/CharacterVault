@@ -183,8 +183,9 @@ input[type="text"].medium{
 .tab{
 	font-size:20px;
 	font-weight:bold;
-	border: 2px solid black;
-	background-color:#ffffff;
+	border: 2px solid #4c4c4c;
+	background-color:#000;
+	color:white;
 	padding:6px 0px;
 	margin-left:-8px;
 	width:14%;
@@ -202,8 +203,7 @@ input[type="text"].medium{
 }
 
 .tab.activetab{
-	background-color:#d60000;
-	color:white;
+	background-color:#bb0000;
 }
 
 .label{
@@ -604,4 +604,8 @@ i{
 }
 .has-tip:hover .tooltip{
 	visibility:visible;
+}
+.scrollable{
+	overflow-y: auto;
+    height: calc(100vh - 70px);
 }

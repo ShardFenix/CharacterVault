@@ -620,7 +620,12 @@ $scope.getGold=function(){
 $scope.getPlatinum=function(){
 	return Math.floor($scope.char.money/1000);
 }
-
+$scope.spendGold=function(){
+	if ($scope.char.money > $scope.spendGoldInput*100){
+		$scope.char.money -= $scope.spendGoldInput*100;
+		$scope.spendGoldInput=null;
+	}
+}
 $scope.unequip=function(item){
 	delete item.equipped;
 }
