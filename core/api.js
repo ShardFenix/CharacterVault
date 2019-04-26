@@ -743,37 +743,43 @@ function countCasterLevels(char){
 
 function spellSlots1(char){
 	let casterLevel=countCasterLevels(char);
-	return Math.min(casterLevel+1,4);
+	let warlockSlots=ladder(classLevel(char,"Warlock"),0,0,1,1,2,2,3,0);
+	if (casterLevel===0)return warlockSlots;
+	return Math.min(casterLevel+1,4) + warlockSlots;
 }
 
 function spellSlots2(char){
 	let casterLevel=countCasterLevels(char);
-	if (casterLevel<3)return 0;
-	if (casterLevel===3)return 2;
-	return 4;
+	let warlockSlots=ladder(classLevel(char,"Warlock"),0,0,3,2,5,0);
+	if (casterLevel<3)return warlockSlots;
+	if (casterLevel===3)return 2 + warlockSlots;
+	return 4 + warlockSlots;
 }
 
 function spellSlots3(char){
 	let casterLevel=countCasterLevels(char);
-	if (casterLevel<5)return 0;
-	if (casterLevel===5)return 2;
-	return 3;
+	let warlockSlots=ladder(classLevel(char,"Warlock"),0,0,5,2,7,0);
+	if (casterLevel<5)return warlockSlots;
+	if (casterLevel===5)return 2+warlockSlots;
+	return 3+warlockSlots;
 }
 
 function spellSlots4(char){
 	let casterLevel=countCasterLevels(char);
-	if (casterLevel<7)return 0;
-	if (casterLevel===7)return 1;
-	if (casterLevel===8)return 2;
-	return 3;
+	let warlockSlots=ladder(classLevel(char,"Warlock"),0,0,7,2,9,0);
+	if (casterLevel<7)return warlockSlots;
+	if (casterLevel===7)return 1+warlockSlots;
+	if (casterLevel===8)return 2+warlockSlots;
+	return 3+warlockSlots;
 }
 
 function spellSlots5(char){
 	let casterLevel=countCasterLevels(char);
-	if (casterLevel<9)return 0;
-	if (casterLevel===9)return 1;
-	if (casterLevel<18)return 2;
-	return 3;
+	let warlockSlots=ladder(classLevel(char,"Warlock"),0,0,9,2,11,3,17,4);
+	if (casterLevel<9)return warlockSlots;
+	if (casterLevel===9)return 1+warlockSlots;
+	if (casterLevel<18)return 2+warlockSlots;
+	return 3+warlockSlots;
 }
 
 function spellSlots6(char){
