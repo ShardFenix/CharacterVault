@@ -695,6 +695,11 @@ $scope.longRest=function(){
 		}
 		if (typeof abil.onLongRest === 'function'){
 			abil.onLongRest($scope.char,$scope);
+		} else {
+			//by default, all abilities get full charges on long rest.
+			if (abil.maxCharges){
+				abil.charges=abil.maxCharges;
+			}
 		}
 	}
 	$scope.calculateSharedResources();
@@ -963,12 +968,12 @@ $scope.save=function(){
 		//passives, spells, and abilities can be compressed by removing everything but their name and description.
 		//We can restore them on load.
 		for (let passive of $scope.char.passives){
-			delete	passive.onShortRest;
+			delete passive.onShortRest;
 			delete passive.onLongRest;
 			delete passive.apply;
 		}
 		for (let ability of $scope.char.abilities){
-			delete	ability.onShortRest;
+			delete ability.onShortRest;
 			delete ability.onLongRest;
 			delete ability.apply;
 			delete ability.maxChargesFunction;

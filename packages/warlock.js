@@ -1,7 +1,7 @@
 function listAvailableInvocations(char){
 	let result=[];
 	for (let i of window.passives){
-		if (i.tags.contains("Eldritch Invocation")){
+		if (i.tags && i.tags.includes("Eldritch Invocation")){
 			if (i.requirement && !i.requirement(char)){
 				continue;
 			}
@@ -14,6 +14,54 @@ function listAvailableInvocations(char){
 	return result;
 }
 
+function listArcanums(char){
+	let result=[];
+	let spellLevel=ladder(classLevel(char,"Warlock"),0,0,11,6,13,7,15,8,17,9);
+	for (let spell of window.spells){
+		if (spell.level === spellLevel && spell.classes.includes("Warlock")){
+			result.push(spell);
+		}
+	}
+	return result;
+}
+
+helper.chooseArcanum={
+						choicePrompt:"Choose a Mystic Arcanum",
+						choices:[listArcanums],
+						action:function(char,derived,choice){
+							let spell = angular.copy(findSpell(choice));
+							spell.maxCharges=1;
+							spell.charges=1;
+							spell.name="Arcanum: "+spell.name;
+							spell.description="You can cast "+spell.name+" once without spending a spell slot.\n\n"+ spell.description;
+							addAbility(char,spell);
+						}
+					};
+
+helper.chooseInvocation={
+						"choicePrompt":"Choose an Eldritch Invocation",
+						"choices":[listAvailableInvocations],
+						"action":function(char,derived,choice){
+							addPassive(char,choice);
+						}
+					};
+
+helper.unlearnInvocation={
+						"choicePrompt":"Choose an Invocation to unlearn",
+						"choices":[function(char){
+							let result=[];
+							for (let p of char.passives){
+								if (p.tags && p.tags.contains("Eldritch Invocation")){
+									result.push(p);
+								}
+							}
+							return result;
+						}],
+						"action":function(char,derived,choice,scope){
+							removePassive(choice);
+						}
+					};
+					
 window.abilities.append([
 	
 ]);
@@ -125,7 +173,7 @@ window.passives.append([
 		description:"When you cast Eldritch Blast, its range is 300 feet.",
 		requirement:function(char){
 			return hasSpell(char,"Eldritch Blast");
-		}
+		},
 		onPickup:function(char){
 			for (let clas of char.classes){
 				for (let spell of clas.spells){
@@ -231,7 +279,7 @@ window.passives.append([
 	},{
 		name:"Mire the Mind",
 		tags:['Eldritch Invocation'],
-		description:"You can cast slow once using a warlock spell slot. You can't do so again until you finish a long rest."
+		description:"You can cast slow once using a warlock spell slot. You can't do so again until you finish a long rest.",
 		requirement:function(char){
 			return char.level>=5;
 		}
@@ -364,70 +412,124 @@ window.classes.push(
 							char.maxHp=8;
 							char.proficiencies.push("Light Armor");
 							char.proficiencies.push("Simple Weapons");
-							char.proficiencies.push("Rapiers");
-							char.proficiencies.push("Longswords");
-							char.proficiencies.push("Shortswords");
-							char.proficiencies.push("Hand Crossbows");
-							char.saves.dex=1;
+							char.saves.wis=1;
 							char.saves.cha=1;
-							addAbility(char,"Bardic Inspiration (d6)");
 							addToInventory(char,findItem("Leather Armor"));
-							addToInventory(char,findItem("Dagger"));
+							addToInventory(char,findItem("Dagger",2));
 						}
-					},
-					helper.learnInstrument,
-					helper.learnInstrument,
-					helper.learnInstrument,
-					helper.learnSkillProficiency,
-					helper.learnSkillProficiency,
-					helper.learnSkillProficiency,
-					{
+					},{
 						"choicePrompt":"Choose a weapon to start with",
-						"choices":[listSimpleWeapons,findItem("Longsword"),findItem("Rapier")],
+						"choices":[listSimpleWeapons],
 						"action":function(char,derived,choice){
+							if (choice==="Light Crossbow"){
+								addToInventory(char,findItem("Bolt",20));
+							}
+							addToInventory(char,findItem(choice));
+						}
+					},{
+						"choicePrompt":"Choose another weapon to start with",
+						"choices":[listSimpleWeapons],
+						"action":function(char,derived,choice){
+							if (choice==="Light Crossbow"){
+								addToInventory(char,findItem("Bolt",20));
+							}
 							addToInventory(char,findItem(choice));
 						}
 					},{
 						"choicePrompt":"Choose a pack",
-						"choices":[findItem("Diplomat's Pack"),findItem("Entertainer's Pack")],
+						"choices":[findItem("Dungeoneer's Pack"),findItem("Scholar's Pack")],
 						"action":function(char,derived,choice){
 							openPack(char,choice);
 						}
+					},{
+						"choicePrompt":"Choose two skill proficiencies:",
+						"choices":[function(char){
+							let result=[];
+							for (let skill of char.skills){
+								if (skill.mult===0){
+									if (["Arcana","Deception","History","Intimidation","Nature","Religion"].indexOf(skill.name)!=-1){
+										result.push(skill.name);
+									}
+								}
+							}
+							return result;
+						}],
+						"action":function(char,derived,choice){
+							addProficiency(char,choice);
+						}
+					},{
+						"choicePrompt":"Choose two skill proficiencies:",
+						"choices":[function(char){
+							let result=[];
+							for (let skill of char.skills){
+								if (skill.mult===0){
+									if (["Arcana","Deception","History","Intimidation","Nature","Religion"].indexOf(skill.name)!=-1){
+										result.push(skill.name);
+									}
+								}
+							}
+							return result;
+						}],
+						"action":function(char,derived,choice){
+							addProficiency(char,choice);
+						}
+					},{
+						"choicePrompt":"Choose one",
+						"choices":["Arcane Focus","Component Pouch"],
+						"action":function(char,derived,choice){
+							addToInventory(char,findItem(choice));
+						}
 					},
-					helper.chooseBardCantrip,
-					helper.chooseBardCantrip,
+					helper.chooseWarlockCantrip,
+					helper.chooseWarlockCantrip,
 					helper.chooseSpell,
 					helper.chooseSpell,
-					helper.chooseSpell,
-					helper.chooseSpell
+					{
+						"choicePrompt":"Choose a Patron",
+						"choices":[listSpecializations],
+						"action":function(char,derived,choice){
+							addSubclass(char,"Warlock",choice);
+						}
+					}
 				]
 			},	{ // 1
 				"updates":[
 					helper.hitDice8,
-					helper.chooseBardCantrip,
-					helper.chooseBardCantrip,
+					helper.chooseWarlockCantrip,
+					helper.chooseWarlockCantrip,
 					helper.chooseSpell,
 					helper.chooseSpell,
-					helper.chooseSpell,
-					helper.chooseSpell
+					{
+						"choicePrompt":"Choose a Patron",
+						"choices":[listSpecializations],
+						"action":function(char,derived,choice){
+							addSubclass(char,"Warlock",choice);
+						}
+					}
 				]
 			}, { // 2
 				"updates":[
 					helper.hitDice8,
+					helper.chooseInvocation,
+					helper.chooseInvocation,
 					{
-						"choices":[],
-						"action":function(char,derived,choice){
-							addPassive(char,"Jack of All Trades");
-							addPassive(char,"Song of Rest");
-						}
-					},
-					helper.chooseSpell,
-					{
-						"choicePrompt":"Do you want to replace one of your known Bard spells?",
+						"choicePrompt":"Do you want to replace one of your invocations?",
 						"choices":["Yes","No"],
 						"action":function(char,derived,choice,scope){
 							if (choice==="No"){
-								scope.updateStep+=2;//exit this level up
+								scope.updateStep+=2;
+							}
+						}
+					},
+					helper.unlearnInvocation,
+					helper.chooseInvocation,
+					helper.chooseSpell,
+					{
+						"choicePrompt":"Do you want to replace one of your known Warlock spells?",
+						"choices":["Yes","No"],
+						"action":function(char,derived,choice,scope){
+							if (choice==="No"){
+								scope.updateStep+=2;
 							}
 						}
 					},
@@ -438,19 +540,19 @@ window.classes.push(
 				"updates":[
 					helper.hitDice8,
 					{
-						"choicePrompt":"Choose a Bard College:",
-						"choices":[listSpecializations],
-						"action":function(char,derived,choice){
-							addSubclass(char,"Bard",choice);
+						choicePrompt:"Choose a Pact Boon",
+						choices:[findPassive("Pact of the Blade"),findPassive("Pact of the Chain"),findPassive("Pact of the Tome")],
+						action:function(char,derived,choice){
+							addPassive(char,choice);
 						}
 					},
 					helper.chooseSpell,
 					{
-						"choicePrompt":"Do you want to replace one of your known Bard spells?",
+						"choicePrompt":"Do you want to replace one of your known Warlock spells?",
 						"choices":["Yes","No"],
 						"action":function(char,derived,choice,scope){
 							if (choice==="No"){
-								scope.updateStep+=2;//exit this level up
+								scope.updateStep+=2;
 							}
 						}
 					},
@@ -460,42 +562,47 @@ window.classes.push(
 			}, { // 4
 				"updates":[
 					helper.hitDice8,
+					helper.chooseWarlockCantrip,
 					helper.attributeOrFeat,
 					helper.chooseFeat,
 					helper.increaseAttribute,
 					helper.increaseAttribute,
-					helper.chooseBardCantrip,
 					helper.chooseSpell,
 					{
-						"choicePrompt":"Do you want to replace one of your known Bard spells?",
+						"choicePrompt":"Do you want to replace one of your known Warlock spells?",
 						"choices":["Yes","No"],
 						"action":function(char,derived,choice,scope){
 							if (choice==="No"){
-								scope.updateStep+=2;//exit this level up
+								scope.updateStep+=2;
 							}
 						}
 					},
 					helper.unlearnSpell,
 					helper.chooseSpell
+					
 				]
 			},{//5
 				"updates":[
 					helper.hitDice8,
+					helper.chooseInvocation,
 					{
-						"choices":[],
-						"action":function(char,derived){
-							//upgrade bardic inspiration to recharge on short rest
-							removeAbility(char,"Bardic Inspiration (d6)");
-							addAbility(char,"Bardic Inspiration (d8)");
-						}
-					},
-					helper.chooseSpell,
-					{
-						"choicePrompt":"Do you want to replace one of your known Bard spells?",
+						"choicePrompt":"Do you want to replace one of your invocations?",
 						"choices":["Yes","No"],
 						"action":function(char,derived,choice,scope){
 							if (choice==="No"){
-								scope.updateStep+=2;//exit this level up
+								scope.updateStep+=2;
+							}
+						}
+					},
+					helper.unlearnInvocation,
+					helper.chooseInvocation,
+					helper.chooseSpell,
+					{
+						"choicePrompt":"Do you want to replace one of your known Warlock spells?",
+						"choices":["Yes","No"],
+						"action":function(char,derived,choice,scope){
+							if (choice==="No"){
+								scope.updateStep+=2;
 							}
 						}
 					},
@@ -505,19 +612,13 @@ window.classes.push(
 			},{//6
 				"updates":[
 					helper.hitDice8,
-					{
-						"choices":[],
-						"action":function(char,derived){
-							addPassive(char,"Countercharm");
-						}
-					},
 					helper.chooseSpell,
 					{
-						"choicePrompt":"Do you want to replace one of your known Bard spells?",
+						"choicePrompt":"Do you want to replace one of your known Warlock spells?",
 						"choices":["Yes","No"],
 						"action":function(char,derived,choice,scope){
 							if (choice==="No"){
-								scope.updateStep+=2;//exit this level up
+								scope.updateStep+=2;
 							}
 						}
 					},
@@ -527,13 +628,25 @@ window.classes.push(
 			},{//7
 				"updates":[
 					helper.hitDice8,
-					helper.chooseSpell,
+					helper.chooseInvocation,
 					{
-						"choicePrompt":"Do you want to replace one of your known Bard spells?",
+						"choicePrompt":"Do you want to replace one of your invocations?",
 						"choices":["Yes","No"],
 						"action":function(char,derived,choice,scope){
 							if (choice==="No"){
-								scope.updateStep+=2;//exit this level up
+								scope.updateStep+=2;
+							}
+						}
+					},
+					helper.unlearnInvocation,
+					helper.chooseInvocation,
+					helper.chooseSpell,
+					{
+						"choicePrompt":"Do you want to replace one of your known Warlock spells?",
+						"choices":["Yes","No"],
+						"action":function(char,derived,choice,scope){
+							if (choice==="No"){
+								scope.updateStep+=2;
 							}
 						}
 					},
@@ -549,11 +662,11 @@ window.classes.push(
 					helper.increaseAttribute,
 					helper.chooseSpell,
 					{
-						"choicePrompt":"Do you want to replace one of your known Bard spells?",
+						"choicePrompt":"Do you want to replace one of your known Warlock spells?",
 						"choices":["Yes","No"],
 						"action":function(char,derived,choice,scope){
 							if (choice==="No"){
-								scope.updateStep+=2;//exit this level up
+								scope.updateStep+=2;
 							}
 						}
 					},
@@ -563,13 +676,25 @@ window.classes.push(
 			},{//9
 				"updates":[
 					helper.hitDice8,
-					helper.chooseSpell,
+					helper.chooseInvocation,
 					{
-						"choicePrompt":"Do you want to replace one of your known Bard spells?",
+						"choicePrompt":"Do you want to replace one of your invocations?",
 						"choices":["Yes","No"],
 						"action":function(char,derived,choice,scope){
 							if (choice==="No"){
-								scope.updateStep+=2;//exit this level up
+								scope.updateStep+=2;
+							}
+						}
+					},
+					helper.unlearnInvocation,
+					helper.chooseInvocation,
+					helper.chooseSpell,
+					{
+						"choicePrompt":"Do you want to replace one of your known Warlock spells?",
+						"choices":["Yes","No"],
+						"action":function(char,derived,choice,scope){
+							if (choice==="No"){
+								scope.updateStep+=2;
 							}
 						}
 					},
@@ -579,57 +704,24 @@ window.classes.push(
 			},{//10
 				"updates":[
 					helper.hitDice8,
-					{
-						"choices":[],
-						"action":function(char){
-							removeAbility(char,"Bardic Inspiration (d8)");
-							addAbility(char,"Bardic Inspiration (d10)");
-						}
-					},
-					helper.chooseExpertise,
-					helper.chooseExpertise,
-					{
-						choicePrompt:"Learn a spell from any class:",
-						choices:[listAllUnknownSpells],
-						action:function(char,derived,choice){
-							addSpell(char,choice,'Bard');
-						}
-					},{
-						choicePrompt:"Learn a spell from any class:",
-						choices:[listAllUnknownSpells],
-						action:function(char,derived,choice){
-							addSpell(char,choice,'Bard');
-						}
-					},
-					helper.chooseBardCantrip,
-					helper.chooseSpell,
-					{
-						"choicePrompt":"Do you want to replace one of your known Bard spells?",
-						"choices":["Yes","No"],
-						"action":function(char,derived,choice,scope){
-							if (choice==="No"){
-								scope.updateStep+=2;//exit this level up
-							}
-						}
-					},
-					helper.unlearnSpell,
-					helper.chooseSpell
+					helper.chooseWarlockCantrip,
 				]
 			},{//11
 				"updates":[
 					helper.hitDice8,
 					helper.chooseSpell,
 					{
-						"choicePrompt":"Do you want to replace one of your known Bard spells?",
+						"choicePrompt":"Do you want to replace one of your known Warlock spells?",
 						"choices":["Yes","No"],
 						"action":function(char,derived,choice,scope){
 							if (choice==="No"){
-								scope.updateStep+=2;//exit this level up
+								scope.updateStep+=2;
 							}
 						}
 					},
 					helper.unlearnSpell,
-					helper.chooseSpell
+					helper.chooseSpell,
+					helper.chooseArcanum
 				]
 			},{//12
 				"updates":[
@@ -638,73 +730,68 @@ window.classes.push(
 					helper.chooseFeat,
 					helper.increaseAttribute,
 					helper.increaseAttribute,
-					helper.chooseSpell,
+					helper.chooseInvocation,
 					{
-						"choicePrompt":"Do you want to replace one of your known Bard spells?",
+						"choicePrompt":"Do you want to replace one of your invocations?",
 						"choices":["Yes","No"],
 						"action":function(char,derived,choice,scope){
 							if (choice==="No"){
-								scope.updateStep+=2;//exit this level up
+								scope.updateStep+=2;
 							}
 						}
 					},
-					helper.unlearnSpell,
-					helper.chooseSpell
+					helper.unlearnInvocation,
+					helper.chooseInvocation
 				]
 			},{//13
 				"updates":[
 					helper.hitDice8,
 					helper.chooseSpell,
 					{
-						"choicePrompt":"Do you want to replace one of your known Bard spells?",
+						"choicePrompt":"Do you want to replace one of your known Warlock spells?",
 						"choices":["Yes","No"],
 						"action":function(char,derived,choice,scope){
 							if (choice==="No"){
-								scope.updateStep+=2;//exit this level up
+								scope.updateStep+=2;
 							}
 						}
 					},
 					helper.unlearnSpell,
-					helper.chooseSpell
+					helper.chooseSpell,
+					helper.chooseArcanum
 				]
 			},{//14
 				"updates":[
-					helper.hitDice8,
-					helper.chooseSpell,
-					{
-						"choicePrompt":"Do you want to replace one of your known Bard spells?",
-						"choices":["Yes","No"],
-						"action":function(char,derived,choice,scope){
-							if (choice==="No"){
-								scope.updateStep+=2;//exit this level up
-							}
-						}
-					},
-					helper.unlearnSpell,
-					helper.chooseSpell
+					helper.hitDice8
 				]
 			},{//15
 				"updates":[
 					helper.hitDice8,
+					helper.chooseInvocation,
 					{
-						"choices":[],
-						"action":function(char){
-							removeAbility(char,"Bardic Inspiration (d10)");
-							addAbility(char,"Bardic Inspiration(d12)");
-						}
-					},
-					helper.chooseSpell,
-					{
-						"choicePrompt":"Do you want to replace one of your known Bard spells?",
+						"choicePrompt":"Do you want to replace one of your invocations?",
 						"choices":["Yes","No"],
 						"action":function(char,derived,choice,scope){
 							if (choice==="No"){
-								scope.updateStep+=2;//exit this level up
+								scope.updateStep+=2;
+							}
+						}
+					},
+					helper.unlearnInvocation,
+					helper.chooseInvocation,
+					helper.chooseSpell,
+					{
+						"choicePrompt":"Do you want to replace one of your known Warlock spells?",
+						"choices":["Yes","No"],
+						"action":function(char,derived,choice,scope){
+							if (choice==="No"){
+								scope.updateStep+=2;
 							}
 						}
 					},
 					helper.unlearnSpell,
-					helper.chooseSpell
+					helper.chooseSpell,
+					helper.chooseArcanum
 				]
 			},{//16
 				"updates":[
@@ -712,64 +799,40 @@ window.classes.push(
 					helper.attributeOrFeat,
 					helper.chooseFeat,
 					helper.increaseAttribute,
-					helper.increaseAttribute,
-					helper.chooseSpell,
-					{
-						"choicePrompt":"Do you want to replace one of your known Bard spells?",
-						"choices":["Yes","No"],
-						"action":function(char,derived,choice,scope){
-							if (choice==="No"){
-								scope.updateStep+=2;//exit this level up
-							}
-						}
-					},
-					helper.unlearnSpell,
-					helper.chooseSpell
+					helper.increaseAttribute
 				]
 			},{//17
 				"updates":[
 					helper.hitDice8,
 					helper.chooseSpell,
 					{
-						"choicePrompt":"Do you want to replace one of your known Bard spells?",
+						"choicePrompt":"Do you want to replace one of your known Warlock spells?",
 						"choices":["Yes","No"],
 						"action":function(char,derived,choice,scope){
 							if (choice==="No"){
-								scope.updateStep+=2;//exit this level up
+								scope.updateStep+=2;
 							}
 						}
 					},
 					helper.unlearnSpell,
-					helper.chooseSpell
+					helper.chooseSpell,
+					helper.chooseArcanum
 				]
 			},{//18
 				"updates":[
 					helper.hitDice8,
+					helper.chooseInvocation,
 					{
-						choicePrompt:"Learn a spell from any class:",
-						choices:[listAllUnknownSpells],
-						action:function(char,derived,choice){
-							addSpell(char,choice,'Bard');
-						}
-					},{
-						choicePrompt:"Learn a spell from any class:",
-						choices:[listAllUnknownSpells],
-						action:function(char,derived,choice){
-							addSpell(char,choice,'Bard');
-						}
-					},
-					helper.chooseSpell,
-					{
-						"choicePrompt":"Do you want to replace one of your known Bard spells?",
+						"choicePrompt":"Do you want to replace one of your invocations?",
 						"choices":["Yes","No"],
 						"action":function(char,derived,choice,scope){
 							if (choice==="No"){
-								scope.updateStep+=2;//exit this level up
+								scope.updateStep+=2;
 							}
 						}
 					},
-					helper.unlearnSpell,
-					helper.chooseSpell
+					helper.unlearnInvocation,
+					helper.chooseInvocation
 				]
 			},{//19
 				"updates":[
@@ -780,11 +843,11 @@ window.classes.push(
 					helper.increaseAttribute,
 					helper.chooseSpell,
 					{
-						"choicePrompt":"Do you want to replace one of your known Bard spells?",
+						"choicePrompt":"Do you want to replace one of your known Warlock spells?",
 						"choices":["Yes","No"],
 						"action":function(char,derived,choice,scope){
 							if (choice==="No"){
-								scope.updateStep+=2;//exit this level up
+								scope.updateStep+=2;
 							}
 						}
 					},
@@ -795,23 +858,12 @@ window.classes.push(
 				"updates":[
 					helper.hitDice8,
 					{
-						choices:[],
+						choicePrompt:"You gain the following",
+						choices:[findAbility("Eldritch Master")],
 						action:function(char){
-							addPassive(char,"Superior Inspiration");
+							addAbility(char,"Eldritch Master");
 						}
-					},
-					helper.chooseSpell,
-					{
-						"choicePrompt":"Do you want to replace one of your known Bard spells?",
-						"choices":["Yes","No"],
-						"action":function(char,derived,choice,scope){
-							if (choice==="No"){
-								scope.updateStep+=2;//exit this level up
-							}
-						}
-					},
-					helper.unlearnSpell,
-					helper.chooseSpell
+					}
 				]
 			}
 		]
@@ -820,10 +872,10 @@ window.classes.push(
 
 window.subclasses.push(
 	{
-		classname:"Bard",
-		name:"College of Lore",
-		subclass:"College of Lore",
-		description:"Bards of the College of Lore know something about most things, collecting bits of knowledge from sources as diverse as scholarly tomes and peasant tales. Whether singing folk ballads in taverns or elaborate compositions in royal courts, these bards use their gifts to hold audiences spellbound. When the applause dies down, the audience members might find themselves questioning everything they held to be true, from their faith in the priesthood of the local temple to their loyalty to the king.\nThe loyalty of these bards lies in the pursuit of beauty and truth, not in fealty to a monarch or following the tenets of a deity. A noble who keeps such a bard as a herald or advisor knows that the bard would rather be honest than politic.\nThe college's members gather in libraries and sometimes in actual colleges, complete with classrooms and dormitories, to share their lore with one another. They also meet at festivals or affairs of state, where they can expose corruption, unravel lies, and poke fun at self-important figures of authority.",
+		classname:"Warlock",
+		name:"Fiend",
+		subclass:"Fiend",
+		description:"You learn fire and evil shit.",
 		levels:[
 			{},{},{},
 			{ // 3
@@ -915,76 +967,3 @@ window.subclasses.push(
 		]
 	}
 );
-
-window.abilities.append([
-	{
-		name:"Bardic Inspiration (d6)",
-		description:"As a bonus action, choose one creature other than yourself within 60 feet of you who can hear you. That creature gains one Bardic Inspiration die, a d6.\nOnce within the next 10 minutes, the creature can roll the die and add the number rolled to one ability check, attack roll, or saving throw it makes. The creature can wait until after it rolls the d20 before deciding to use the Bardic Inspiration die, but must decide before the DM says whether the roll succeeds or fails. Once the Bardic Inspiration die is rolled, it is lost. A creature can have only one Bardic Inspiration die at a time.",
-		maxChargesFunction:function(char,scope){
-			return Math.max(1,scope.derived.modifiers.cha);
-		},
-		onLongRest:function(char,scope){
-			this.charges=this.maxCharges;
-		}
-	},{
-		name:"Bardic Inspiration (d8)",
-		description:"As a bonus action, choose one creature other than yourself within 60 feet of you who can hear you. That creature gains one Bardic Inspiration die, a d8.\nOnce within the next 10 minutes, the creature can roll the die and add the number rolled to one ability check, attack roll, or saving throw it makes. The creature can wait until after it rolls the d20 before deciding to use the Bardic Inspiration die, but must decide before the DM says whether the roll succeeds or fails. Once the Bardic Inspiration die is rolled, it is lost. A creature can have only one Bardic Inspiration die at a time.",
-		maxChargesFunction:function(char,scope){
-			return Math.max(1,scope.derived.modifiers.cha);
-		},
-		onShortRest:function(char,scope){
-			this.charges=this.maxCharges;
-		}
-	},{
-		name:"Bardic Inspiration (d10)",
-		description:"As a bonus action, choose one creature other than yourself within 60 feet of you who can hear you. That creature gains one Bardic Inspiration die, a d10.\nOnce within the next 10 minutes, the creature can roll the die and add the number rolled to one ability check, attack roll, or saving throw it makes. The creature can wait until after it rolls the d20 before deciding to use the Bardic Inspiration die, but must decide before the DM says whether the roll succeeds or fails. Once the Bardic Inspiration die is rolled, it is lost. A creature can have only one Bardic Inspiration die at a time.",
-		maxChargesFunction:function(char,scope){
-			return Math.max(1,scope.derived.modifiers.cha);
-		},
-		onShortRest:function(char,scope){
-			this.charges=this.maxCharges;
-		}
-	},{
-		name:"Bardic Inspiration (d12)",
-		description:"As a bonus action, choose one creature other than yourself within 60 feet of you who can hear you. That creature gains one Bardic Inspiration die, a d12.\nOnce within the next 10 minutes, the creature can roll the die and add the number rolled to one ability check, attack roll, or saving throw it makes. The creature can wait until after it rolls the d20 before deciding to use the Bardic Inspiration die, but must decide before the DM says whether the roll succeeds or fails. Once the Bardic Inspiration die is rolled, it is lost. A creature can have only one Bardic Inspiration die at a time.",
-		maxChargesFunction:function(char,scope){
-			return Math.max(1,scope.derived.modifiers.cha);
-		},
-		onShortRest:function(char,scope){
-			this.charges=this.maxCharges;
-		}
-	},{
-		name:"Cutting Words",
-		description:"You learn how to use your wit to distract, confuse, and otherwise sap the confidence and competence of others. When a creature that you can see within 60 feet of you makes an attack roll, an ability check, or a damage roll, you can use your reaction to expend one of your uses of Bardic Inspiration, rolling a Bardic Inspiration die and subtracting the number rolled from the creature's roll. You can choose to use this feature after the creature makes its roll, but before the DM determines whether the attack roll or ability check succeeds or fails, or before the creature deals its damage. The creature is immune if it can't hear you or if it's immune to being charmed.",
-		resourceName:"Bardic Inspiration (d6)",
-		resourceCost:1
-	}
-]);
-
-window.passives.append([
-	{
-		name:"Jack of All Trades",
-		description:"You can add half your proficiency bonus, rounded down, to any ability check you make that doesn't already include your proficiency bonus.",
-		apply:function(char,scope){
-			let bonus=Math.floor(scope.derived.proficiency/2);
-			for (var skill of scope.derived.skills){
-				if (skill.mult==0){
-					skill.bonus += bonus;
-				}
-			}
-			scope.derived.initiative+=bonus;
-		}
-	},{
-		name:"Song of Rest",
-		description:"You can use soothing music or oration to help revitalize your wounded allies during a short rest. If you or any friendly creatures who can hear your performance regain hit points by spending Hit Dice at the end of the short rest, each of those creatures regains an extra 1d${ladder(getClassLevel($scope.char,'Bard'),0,6,9,8,13,19,17,12)} hit points."
-	},{
-		name:"Countercharm",
-		description:"You use musical notes or words of power to disrupt mind-influencing effects. As an action, you can start a performance that lasts until the end of your next turn. During that time, you and any friendly creatures within 30 feet of you have advantage on saving throws against being frightened or charmed. A creature must be able to hear you to gain this benefit. The performance ends early if you are incapacitated or silenced or if you voluntarily end it (no action required)."
-	},{
-		name:"Peerless Skill",
-		description:"When you make an ability check, you can expend one use of Bardic Inspiration. Roll a Bardic Inspiration die and add the number rolled to your ability check. You can choose to do so after you roll the die for the ability check, but before the DM tells you whether you succeed or fail."
-	},{
-		name:"Superior Inspiration",
-		description:"When you roll initiative and have no uses of Bardic Inspiration left, you regain one use."
-	}
-]);

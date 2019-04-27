@@ -219,6 +219,36 @@
 				</form>
 				<div style="position:absolute;right:4px;top:8px;font-weight:bold;">{{creature.type}}</div>
 			</div>
+			<div>
+				<table><thead><tr>
+					<th>AC</th>
+					<th>STR</th>
+					<th>DEX</th>
+					<th>CON</th>
+					<th>INT</th>
+					<th>WIS</th>
+					<th>CHA</th>
+				</tr></thead>
+				<tr>
+					<td>{{creature.ac}}</td>
+					<td>{{creature.str}}</td>
+					<td>{{creature.dex}}</td>
+					<td>{{creature.con}}</td>
+					<td>{{creature.int}}</td>
+					<td>{{creature.wis}}</td>
+					<td>{{creature.cha}}</td>
+				</tr>
+				<tr>
+					<td>Saves:</td>
+					<td>{{creature.str}}</td>
+					<td>{{creature.dex}}</td>
+					<td>{{creature.con}}</td>
+					<td>{{creature.int}}</td>
+					<td>{{creature.wis}}</td>
+					<td>{{creature.cha}}</td>
+				</tr>
+				</table>
+			</div>
 			<div style="display:block;">
 				<span class="label subheader">Resistances and Vulnerabilities</span>
 				<div ng-if="creature.immunities" style="margin-bottom:6px;">

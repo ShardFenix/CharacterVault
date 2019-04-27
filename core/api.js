@@ -443,6 +443,12 @@ function highestSpellLevel(char){
 					highest=value;
 				}
 				break;
+			case "Warlock":
+				value=ladder(clas.level,0,0,1,1,3,2,5,3,7,4,9,5);
+				if (value > highest){
+					highest=value;
+				}
+				break;
 		}
 	}
 	return highest;
@@ -456,16 +462,17 @@ function listLearnableSpells(char,$scope){
 	let result=[];
 	let spellcasting=[];
 	let clas={};
+	let extraSpells=[];
 	for (var c of char.classes){
 		if (c.name===$scope.chosenClassName){
 			clas=c;
 			spellcasting=c.spellcasting;
+			extraSpells=c.extraSpells; //to support stupid warlocks
 			break;
 		}
 	}
 	//find the highest level they can cast on this class
 	let highest=highestSpellLevel(char);
-	
 	nextSpell:
 	for (var spell of window.spells){
 		//check if they can learn a spell of this level (and exclude cantrips)
@@ -676,6 +683,9 @@ function addPassive(char,p){
 	}
 	if (passive){
 		char.passives.push(passive);
+		if (typeof passive.onPickup === 'function'){
+			passive.onPickup(char);
+		}
 	} else {
 		console.error("Passive not found: "+p);
 	}
