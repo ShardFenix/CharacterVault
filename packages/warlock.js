@@ -68,6 +68,9 @@ window.abilities.append([
 
 window.passives.append([
 	{
+		name:"Dark One's Blessing",
+		description:"When you reduce a hostile creature to 0 hit points, you gain temporary hit points equal to your Charisma modifier + your warlock level (minimum of 1)."
+	},{
 		name:"Agonizing Blast",
 		tags:['Eldritch Invocation'],
 		description:"When you cast eldritch blast, add your Charisma modifier to the damage it deals on a hit.",
@@ -447,7 +450,7 @@ window.classes.push(
 							let result=[];
 							for (let skill of char.skills){
 								if (skill.mult===0){
-									if (["Arcana","Deception","History","Intimidation","Nature","Religion"].indexOf(skill.name)!=-1){
+									if (["Arcana","Deception","History","Intimidation","Investigation","Nature","Religion"].indexOf(skill.name)!=-1){
 										result.push(skill.name);
 									}
 								}
@@ -463,7 +466,7 @@ window.classes.push(
 							let result=[];
 							for (let skill of char.skills){
 								if (skill.mult===0){
-									if (["Arcana","Deception","History","Intimidation","Nature","Religion"].indexOf(skill.name)!=-1){
+									if (["Arcana","Deception","History","Intimidation","Investigation","Nature","Religion"].indexOf(skill.name)!=-1){
 										result.push(skill.name);
 									}
 								}
@@ -877,7 +880,18 @@ window.subclasses.push(
 		subclass:"Fiend",
 		description:"You learn fire and evil shit.",
 		levels:[
-			{},{},{},
+			{},{//1
+				updates:[
+					{
+						choicePrompt:"You gain the following",
+						choices:[findPassive("Dark One's Blessing")],
+						action:function(char){
+							addPassive(char,"Dark One's Blessing");
+							getCharacterClass(char,"Warlock").extraSpells=["Burning Hands","Command","Blindness/Deafness","Scorching Ray","Fireball","Stinking Cloud","Fire Shield","Wall of Fire","Flame Strike","Hallow"];
+						}
+					}
+				]
+			},{},
 			{ // 3
 				"updates":[
 					helper.learnSkillProficiency,

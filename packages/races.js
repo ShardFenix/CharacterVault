@@ -29,6 +29,34 @@ window.races=[
 			);
 		}
 	},{
+		name:"Dwarf (Mountain)",
+		description:"",
+		onPickup:function(char,scope){
+			char.proficiencies.push("Language: Common");
+			char.proficiencies.push("Language: Dwarvish");
+			char.proficiencies.push("Light Armor");
+			char.proficiencies.push("Medium Armor");
+			char.proficiencies.push("Battleaxes");
+			char.proficiencies.push("Handaxes");
+			char.proficiencies.push("Light Hammers");
+			char.proficiencies.push("Warhammers");
+			char.speed=25;
+			char.attributes.str+=2;
+			char.attributes.con+=2;
+			addPassive(char,"Darkvision");
+			addPassive(char,"Dwarven Resilience");
+			addPassive(char,"Stonecunning");
+			scope.choiceQueue.push(
+				{
+					choicePrompt:"Choose a tool proficiency",
+					choices:["Brewer's Supplies","Smith's Tools","Mason's Tools"],
+					action:function(char,derived,choice){
+						char.proficiencies.upush(choice);
+					}
+				}
+			);
+		}
+	},{
 		name:"Tiefling",
 		description:"",
 		onPickup:function(char,scope){

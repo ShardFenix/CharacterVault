@@ -3,10 +3,17 @@
 <head>
 <link rel="stylesheet" href="./core/style.css">
 <link href="https://fonts.googleapis.com/css?family=Cinzel+Decorative:700" rel="stylesheet">
+<!--
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular-animate.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular-sanitize.js"></script>
+-->
+<script src="libs/jquery.min.js"></script>
+<script src="libs/angular.min.js"></script>
+<script src="libs/angular-animate.js"></script>
+<script src="libs/angular-sanitize.js"></script>
+
 </head>
 <body style="background-color:#ffffff;width:100vw;overflow-x:hidden;">
 <div ng-app="myApp">
@@ -15,6 +22,7 @@
 <div style="margin-top:-8px;">
 <span class="tab" ng-click="tab='general'" ng-class="{'activetab':tab=='general'}">General</span>
 <span class="tab" ng-click="tab='notes'" ng-class="{'activetab':tab=='notes'}">Notes</span>
+<span class="tab" ng-click="tab='players'" ng-class="{'activetab':tab=='players'}">Players</span>
 <span class="tab" ng-click="tab='combat'" ng-class="{'activetab':tab=='combat'}">Combat</span>
 <span class="tab" ng-click="tab='spells'" ng-class="{'activetab':tab=='spells'}">Spell Reference</span>
 </div>
@@ -106,7 +114,6 @@
 					</table>
 				</div>
 			</div>
-
 		</td>
 		<td width="20%">
 		</td>
@@ -155,8 +162,8 @@
 			</div>
 
 		</td>
+	</tr>
 	</table>
-
 </div>
 
 
@@ -205,9 +212,7 @@
 			<div class="monsterHeader" ng-class="{'selected':creature===chosenMonster}">
 				<div class="headerBg"></div>
 				<span class="white label">{{creature.name}}</span><span class="white"> (CR {{creature.cr}})</span>
-				<span class="deletebutton has-tip" ng-click="deleteInit(creature,$event)">&times;
-					<span class="tooltip">Remove from combat.</span>
-				</span>
+				<span class="deletebutton" ng-click="deleteInit(creature,$event)">&times;</span>
 			</div>
 			<div style="position:relative;">
 				<span>&emsp;HP: </span>
@@ -220,8 +225,8 @@
 				<div style="position:absolute;right:4px;top:8px;font-weight:bold;">{{creature.type}}</div>
 			</div>
 			<div>
-				<table><thead><tr>
-					<th>AC</th>
+				<table class="borders full"><thead><tr>
+					<th></th>
 					<th>STR</th>
 					<th>DEX</th>
 					<th>CON</th>
@@ -230,26 +235,29 @@
 					<th>CHA</th>
 				</tr></thead>
 				<tr>
-					<td>{{creature.ac}}</td>
-					<td>{{creature.str}}</td>
-					<td>{{creature.dex}}</td>
-					<td>{{creature.con}}</td>
-					<td>{{creature.int}}</td>
-					<td>{{creature.wis}}</td>
-					<td>{{creature.cha}}</td>
+					<td>AC {{creature.ac}}</td>
+					<td>{{att(creature,'str')}}</td>
+					<td>{{att(creature,'dex')}}</td>
+					<td>{{att(creature,'con')}}</td>
+					<td>{{att(creature,'int')}}</td>
+					<td>{{att(creature,'wis')}}</td>
+					<td>{{att(creature,'cha')}}</td>
 				</tr>
 				<tr>
 					<td>Saves:</td>
-					<td>{{creature.str}}</td>
-					<td>{{creature.dex}}</td>
-					<td>{{creature.con}}</td>
-					<td>{{creature.int}}</td>
-					<td>{{creature.wis}}</td>
-					<td>{{creature.cha}}</td>
+					<td>{{saveBonus(creature,'str')}}</td>
+					<td>{{saveBonus(creature,'dex')}}</td>
+					<td>{{saveBonus(creature,'con')}}</td>
+					<td>{{saveBonus(creature,'int')}}</td>
+					<td>{{saveBonus(creature,'wis')}}</td>
+					<td>{{saveBonus(creature,'cha')}}</td>
 				</tr>
 				</table>
 			</div>
-			<div style="display:block;">
+			<div ng-if="creature.immunities.length>0
+			|| creature.conditionImmunities.length>0
+			|| creature.resistances.length>0
+			|| creature.vulnerabilities.length>0">
 				<span class="label subheader">Resistances and Vulnerabilities</span>
 				<div ng-if="creature.immunities" style="margin-bottom:6px;">
 					<span style="font-weight:bold;">Immune to &horbar; </span>{{creature.immunities.join(', ')}}
@@ -264,25 +272,103 @@
 					<span style="font-weight:bold;">Vulnerable to &horbar; </span>{{creature.vulnerabilities.join(', ')}}
 				</div>
 			</div>
-			<div ng-if="creature.passives">
+			<div ng-if="creature.passives.length>0">
 				<span class="label subheader">Passives</span>
-				<table ng-repeat="p in creature.passives">
+				<table class="full" ng-repeat="p in creature.passives">
 					<thead><tr><th>{{p.name}}</th></tr></thead>
 					<tbody><tr><td style="white-space: pre-wrap;">{{p.description}}</td></tr></tbody>
 				</table>
 			</div>
 			<div ng-if="creature.actions">
 				<span class="label subheader">Actions</span>
-				<table ng-repeat="a in creature.actions">
+				<table class="full" ng-repeat="a in creature.actions">
 					<thead><tr><th>{{a.name}}</th></tr></thead>
 					<tbody><tr><td style="white-space: pre-wrap;">{{a.description}}</td></tr></tbody>
 				</table>
 			</div>
+			<div ng-if="creature.spellcasting">
+				<span class="label subheader">Spellcasting</span>
+				<div>{{creature.spellcasting.description}}</div>
+				<div ng-if="creature.spellcasting.will">
+					<span>At will: {{creature.spellcasting.will.join(', ')}}</span>
+				</div>
+				<div ng-if="creature.spellcasting.individual">
+					<span>Individual uses: </span>
+					<span ng-repeat="spell in creature.spellcasting.individual" class="spellButton"
+							ng-click="spell.charges=spell.charges-1" ng-if="spell.charges">{{spell.name}} ({{spell.charges}})</span>
+				</div>
+				<div ng-if="creature.spellcasting.spells"> 
+					<div ng-repeat="level in creature.spellcasting.spells"
+						 ng-if="level.slots" ng-click="level.slots=level.slots-1">
+						<span style="font-weight:bold;"">Level {{$index}} ({{level.slots}}): </span>
+						<span ng-repeat="spell in level.spells" class="spellButton">{{spell}}</span>
+					</div>
+				</div>
+				
+			<!--	{{creature.spellcasting}} <!-- -->
+				
+			</div>
 		</div>
 	</td>
+	</tr></tbody>
 </table>
 </div>
 <!-- End Combat -->
+
+<div ng-show="tab=='players'">
+	<div style="display:flex;">
+		<div ng-repeat="creature in players" class="playerCard box">
+			<div class="playerHeader" ng-class="{'selected':creature===chosenMonster}">
+				<div class="headerBg"></div>
+				<input type="text" class="white label" ng-model="creature.name"/>
+				<span class="deletebutton" ng-click="removePlayer(creature)">&times;</span>
+			</div>
+			<div style="position:relative;">
+				<span>&emsp;HP: </span>
+				<input type="text" class="hidden right" ng-model="creature.hp"/> / 
+				<input type="text" class="hidden right" ng-model="creature.hpMax"/>
+				<form ng-submit="damage(this)" style="display:initial;">
+					<input type="text" number ng-model="damageAmount" 
+							placeholder="Deal damage" class="med"/>
+				</form>
+				<div style="position:absolute;right:4px;top:8px;font-weight:bold;">{{creature.type}}</div>
+			</div>
+			<div>
+				<table class="borders full"><thead><tr>
+					<th>AC</th>
+					<th>STR</th>
+					<th>DEX</th>
+					<th>CON</th>
+					<th>INT</th>
+					<th>WIS</th>
+					<th>CHA</th>
+				</tr></thead>
+				<tr>
+					<td><input class="tiny" ng-model="player.ac" number/></td>
+					<td><input class="tiny" ng-model="player.attributes.str" number/></td>
+					<td><input class="tiny" ng-model="player.attributes.dex" number/></td>
+					<td><input class="tiny" ng-model="player.attributes.con" number/></td>
+					<td><input class="tiny" ng-model="player.attributes.int" number/></td>
+					<td><input class="tiny" ng-model="player.attributes.wis" number/></td>
+					<td><input class="tiny" ng-model="player.attributes.cha" number/></td>
+				</tr>
+				<tr>
+					<td>Saves:</td>
+					<td><input class="tiny" ng-model="player.saves.str" number/></td>
+					<td><input class="tiny" ng-model="player.saves.dex" number/></td>
+					<td><input class="tiny" ng-model="player.saves.con" number/></td>
+					<td><input class="tiny" ng-model="player.saves.int" number/></td>
+					<td><input class="tiny" ng-model="player.saves.wis" number/></td>
+					<td><input class="tiny" ng-model="player.saves.cha" number/></td>
+				</tr>
+				</table>
+			</div>
+		</div>
+	</div>
+	<div>
+		<span class="button" ng-click="addPlayer()">Add</span>
+	</div>
+</div>
 
 <div ng-show="tab=='notes'">
 	<textarea ng-model='dm.notes' style="margin-left: -4px;margin-top: 10px;width: 100%;height: 800px;"></textarea>

@@ -91,6 +91,25 @@ window.backgrounds=[
 			char.money+=1500;
 		}
 	},{
+		name:"Ex-Scholar",
+		description:"Skill Proficiencies: Sleight of Hand, Stealth\nTool Proficiencies: Disguise kit, Thieves' tools\nEquipment: A small knife, a map of the city you grew up in, a pet mouse, a token to remember your parents by, a set of common clothes, and a belt pouch containing 10 gp",
+		featureName:"Researcher",
+		featureDescription:"When you attempt to learn or recall a piece of lore, if you do not know that information, you often know where and from whom you can obtain it. Usually, this information comes from a library, scriptorium, university, or a sage or other learned person or creature, Your DM might rule that the knowledge you seek is secreted away in an almost inaccessible place, or that it simply cannot be found. Unearthing the deepest secrets of the multiverse can require an adventure or even a whole campaign.",
+		onPickup:function(char,scope){
+			addProficiency(char,'Sleight of Hand');
+			addProficiency(char,'Stealth');
+			addToInventory(char,findItem('Bottle of Ink'));
+			addToInventory(char,findItem("Quill"));
+			addToInventory(char,findItem("Small Knife"));
+			addToInventory(char,findItem('Belt Pouch'));
+			addToInventory(char,findItem('Common Clothes'));
+			addToInventory(char,{name:"Letter from Colleague",description:"This letter was written to you by a late colleague. It contains a question you have not yet been able to answer."});
+			addPassive(char,{name:this.featureName,description:this.featureDescription});
+			char.proficiencies.upush("Disguise Kit");
+			char.proficiencies.upush("Thieves' Tools");
+			char.money+=1000;
+		}
+	},{
 		name:"Folk Hero",
 		description:"Skill Proficiencies: Animal Handling, Survival\nTool Proficiencies: One type of artisan's tools, Land Vehicles\nEquipment: A set of artisan's tools (one of your choice), a shovel, an iron pot, a set of common clothes, and a belt pouch containing 10 gp",
 		featureName:"Rustic Hospitality",

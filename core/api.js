@@ -467,7 +467,9 @@ function listLearnableSpells(char,$scope){
 		if (c.name===$scope.chosenClassName){
 			clas=c;
 			spellcasting=c.spellcasting;
-			extraSpells=c.extraSpells; //to support stupid warlocks
+			if (c.extraSpells){
+				extraSpells=c.extraSpells; //to support stupid warlocks
+			}
 			break;
 		}
 	}
@@ -488,7 +490,9 @@ function listLearnableSpells(char,$scope){
 			}
 		}
 		if (!found){
-			continue nextSpell;
+			if (!extraSpells.includes(spell.name)){
+				continue nextSpell;
+			}
 		}
 		for (let s of clas.spells){
 			if (s.name===spell.name){

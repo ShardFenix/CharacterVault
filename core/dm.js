@@ -27,6 +27,43 @@ $scope.spellFilters={
 	includeClass:[true,true,true,true,true,true,true,true],
 	excludeClass:[false,false,false,false,false,false,false,false]
 }
+$scope.players=[];
+
+$scope.addPlayer=function(){
+	let p = {
+		name:"",
+		attributes:{
+			str:10,
+			dex:10,
+			con:10,
+			int:10,
+			wis:10,
+			cha:10
+		},
+		ac:12,
+		saves:{
+			str:0,
+			dex:0,
+			con:0,
+			int:0,
+			wis:0,
+			cha:0
+		},
+		hp:9,
+		hpMax:9,
+		effects:[]
+		};
+	$scope.players.push(p);
+}
+
+$scope.removePlayer=function(p){
+	for (let i=0;i<$scope.players.length;i++){
+		if ($scope.players[i]===p){
+			$scope.players.splice(i,1);
+			return;
+		}
+	}
+}
 
 $scope.dm={};
 
@@ -41,7 +78,7 @@ $scope.addToEncounter=function(monster){
 }
 
 $scope.rerollHp=function(monster){
-	let params=monster.hpGen.match(/(\d+)d(\d+) ?\+? ?(\d*)/);
+	let params=monster.hpgen.match(/(\d+)d(\d+) ?\+? ?(\d*)/);
 	let diceNum=parseInt(params[1]);
 	let diceType=parseInt(params[2]);
 	let bonus=parseInt(params[3]);
@@ -54,6 +91,23 @@ $scope.rerollHp=function(monster){
 	}
 	monster.hpMax=sum;
 	monster.hp=sum;
+}
+
+$scope.att=function(creature,attribute){
+	let total = Math.floor((creature.attributes[attribute]+20)/2)-15;
+	if (total>=0){total="+"+total;}
+	return creature.attributes[attribute]+" ("+total+")";
+}
+
+$scope.saveBonus=function(creature,attribute){
+	let total = Math.floor((creature.attributes[attribute]+20)/2)-15;
+	if (creature.saves && creature.saves[attribute]){
+		total=creature.saves[attribute];
+	}
+	if (total>0){
+		return "+"+total;
+	}
+	return total;
 }
 
 $scope.damage=function(scope){

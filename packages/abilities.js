@@ -109,6 +109,18 @@ window.abilities=[
 
 window.passives=[
 	{
+		name:"Stonecunning",
+		description:"Whenever you make an Intelligence (History) check related to the origin of stonework, you are considered proficient in the History skill and add double your proficiency bonus to the check, instead of your normal proficiency bonus."
+	},{
+		name:"Dwarven Resilience",
+		description:"You have advantage on saving throws against poison, and you have resistance against poison damage."
+	},{
+		name:"Resistant to Fire",
+		description:"You take half damage from fire."
+	},{
+		name:"Darkvision",
+		description:"You have superior vision in dark and dim conditions. You can see in dim light within 60 feet of you as if it were bright light, and in darkness as if it were dim light. You can't discern color in darkness, only shades of gray."
+	},{
 		name:"Evasion",
 		description:"Your instinctive agility lets you dodge out of the way of certain area effects. When you are subjected to an effect that allows you to make a Dexterity saving throw to take only half damage, you instead take no damage if you succeed on the saving throw, and only half damage if you fail."
 	},{

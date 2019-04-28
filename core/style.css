@@ -321,9 +321,27 @@ table.borders td{
 table.borders tr:nth-child(even){
 	background-color: #eee;
 }
-
-.creatureCard .label.subheader{
+table.full{
+	width:100%;
+}
+.creatureCard table.borders th,
+.playerCard table.borders th{
+	background-color:#b2d8ff;
+}
+.creatureCard .label.subheader,
+.playerCard .label.subheader{
 	background: linear-gradient(90deg, #00000000, #fffad6 20%,#fffad6 80%, #00000000);
+}
+
+.playerCard{
+	width:400px;
+	margin:10px 15px;
+	background:url('../images/parchment2.jpg');
+}
+
+input.tiny{
+	width:40px;
+	font-size:14px;
 }
 
 @media screen and (min-width: 1773px){
@@ -608,4 +626,14 @@ i{
 .scrollable{
 	overflow-y: auto;
     height: calc(100vh - 70px);
+}
+.spellButton{
+	background-color: #004e8e;
+    border: 1px solid #aaa;
+    border-radius: 5px;
+    margin: 0px 2px;
+    padding: 4px;
+    color: white;
+    text-transform: capitalize;
+    display: inline-block;
 }

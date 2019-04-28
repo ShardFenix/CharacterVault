@@ -10,14 +10,14 @@ window.classes.push(
 						"choices":[],
 						"action":function(char,derived,choice,$scope){
 							char.maxHp=12;
-							char.proficiencies.push("Light Armor");
-							char.proficiencies.push("Medium Armor");
-							char.proficiencies.push("Shields");
-							char.proficiencies.push("Simple Weapons");
-							char.proficiencies.push("Martial Weapons");
+							char.proficiencies.upush("Light Armor");
+							char.proficiencies.upush("Medium Armor");
+							char.proficiencies.upush("Shields");
+							char.proficiencies.upush("Simple Weapons");
+							char.proficiencies.upush("Martial Weapons");
 							char.saves.str=1;
 							char.saves.con=1;
-							addToInventory(findItem("Javelin",4));
+							addToInventory(char,findItem("Javelin",4));
 							addAbility(char,"Rage");
 							addPassive(char,"Unarmored Defense");
 							openPack(char,"Explorer's Pack");
