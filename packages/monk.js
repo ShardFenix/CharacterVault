@@ -28,7 +28,7 @@ window.classes.push(
 						choicePrompt:"Choose a pack:",
 						choices:[findItem("Dungeoneer's Pack"),findItem("Explorer's Pack")],
 						action:function(char,derived,choice){
-							addToInventory(char,findItem(choice));
+							openPack(choice);
 						}
 					},{
 						"choicePrompt":"Choose two skill proficiencies:",

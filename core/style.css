@@ -637,3 +637,10 @@ i{
     text-transform: capitalize;
     display: inline-block;
 }
+.summary{
+	text-align:left;
+	font-size:1.15em;
+}
+.bold{
+	font-weight:bold;
+}

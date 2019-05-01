@@ -7,6 +7,7 @@ var helper={
 						}
 					},
 	chooseFightingStyle:{
+						summary:{name:"Fighting Style",description:"Choose a fighting style from one of the following:\n\u2022 Archery: "+findPassive("Archery").description+"\n\u2022 Defense: "+findPassive("Defense").description+"\n\u2022 Dueling: "+findPassive("Dueling").description+"\n\u2022 Great Weapon Fighting: "+findPassive("Great Weapon Fighting").description+"\n\u2022 Protection: "+findPassive("Protection").description+"\n\u2022 Two-Weapon Fighting: "+findPassive("Two-Weapon Fighting").description},
 						choicePrompt:"Choose a Fighting Style",
 						choices:[function(char){
 							let result=[];
@@ -31,6 +32,7 @@ var helper={
 						}
 					},
 	attributeOrFeat:{
+						summary:{name:"Attribute Score Increase",description:"Add +2 to one attribute, or +1 to two attributes, or take a Feat."},
 						"choicePrompt":"Choose one:",
 						"choices":["+2 to Ability Scores","Take a Feat"],
 						"action":function(char,derived,choice,scope){

@@ -63,13 +63,41 @@ helper.unlearnInvocation={
 					};
 					
 window.abilities.append([
-	
+	{
+		name:"Dark One's Own Luck",
+		description:"You can call on your patron to alter fate in your favor. When you make an ability check or a saving throw, you can use this feature to add a d10 to your roll. You can do so after seeing the initial roll but before any of the roll's effects occur.\n\nOnce you use this feature, you can't use it again until you finish a short or long rest.",
+		maxCharges:1,
+		charges:1,
+		onShortRest:function(char){
+			this.charges=this.maxCharges;
+		}
+	},{
+		name:"Hurl Through Hell",
+		description:"When you hit a creature with an attack, you can use this feature to instantly transport the target through the lower planes. The creature disappears and hurtles through a nightmare landscape.\n\nAt the end of your next turn, the target returns to the space it previously occupied, or the nearest unoccupied space. If the target is not a fiend, it takes 10d10 psychic damage as it reels from its horrific experience.\n\nOnce you use this feature, you can't use it again until you finish a long rest.",
+		maxCharges:1,
+		charges:1,
+		onLongRest:function(){
+			this.charges=this.maxCharges;
+		}
+	}
 ]);
 
 window.passives.append([
 	{
+		name:"Pact of the Chain",
+		description:"You learn the find familiar spell and can cast it as a ritual. The spell doesn't count against your number of spells known.\n\nWhen you cast the spell, you can choose one of the normal forms for your familiar or one of the following special forms: imp, pseudodragon, quasit, or sprite.\n\nAdditionally, when you take the Attack action, you can forgo one of your own attacks to allow your familiar to use its reaction to make one attack of its own."
+	},{
+		name:"Pact of the Blade",
+		description:"You can use your action to create a pact weapon in your empty hand. You can choose the form that this melee weapon takes each time you create it (see chapter 5 for weapon options). You are proficient with it while you wield it. This weapon counts as magical for the purpose of overcoming resistance and immunity to nonmagical attacks and damage.\n\nYour pact weapon disappears if it is more than 5 feet away from you for 1 minute or more. It also disappears if you use this feature again, if you dismiss the weapon (no action required), or if you die.\n\nYou can transform one magic weapon into your pact weapon by performing a special ritual while you hold the weapon. You perform the ritual over the course of 1 hour, which can be done during a short rest. You can then dismiss the weapon, shunting it into an extradimensional space, and it appears whenever you create your pact weapon thereafter. You can't affect an artifact or a sentient weapon in this way. The weapon ceases being your pact weapon if you die, if you perform the 1-hour ritual on a different weapon, or if you use a 1-hour ritual to break your bond to it. The weapon appears at your feet if it is in the extradimensional space when the bond breaks."
+	},{
+		name:"Pact of the Tome",
+		description:"Your patron gives you a grimoire called a Book of Shadows. When you gain this feature, choose three cantrips from any class's spell list. The cantrips do not need to be from the same spell list. While the book is on your person, you can cast those cantrips at will. They don't count against your number of cantrips known. Any cantrip you cast with this feature is considered a warlock cantrip for you. If you lose your Book of Shadows, you can perform a 1-hour ceremony to receive a replacement from your patron. This ceremony can be performed during a short or long rest, and it destroys the previous book. The book turns to ash when you die."
+	},{
 		name:"Dark One's Blessing",
 		description:"When you reduce a hostile creature to 0 hit points, you gain temporary hit points equal to your Charisma modifier + your warlock level (minimum of 1)."
+	},{
+		name:"Fiendish Resilience",
+		description:"You can choose one damage type when you finish a short or long rest. You gain resistance to that damage type until you choose a different one with this feature. Damage from magical weapons or silver weapons ignores this resistance."
 	},{
 		name:"Agonizing Blast",
 		tags:['Eldritch Invocation'],
@@ -410,6 +438,7 @@ window.classes.push(
 			{ //1, first player level
 				updates:[
 					{
+						summary:{name:"Hit Dice",description:"d8"},
 						"choices":[],
 						"action":function(char,derived,choice){
 							char.maxHp=8;
@@ -421,6 +450,7 @@ window.classes.push(
 							addToInventory(char,findItem("Dagger",2));
 						}
 					},{
+						summary:{name:"Proficiencies",description:"Light Armor, Simple Weapons, Wisdom saves, Charisma saves"},
 						"choicePrompt":"Choose a weapon to start with",
 						"choices":[listSimpleWeapons],
 						"action":function(char,derived,choice){
@@ -430,6 +460,7 @@ window.classes.push(
 							addToInventory(char,findItem(choice));
 						}
 					},{
+						summary:{name:"Starting Equipment",description:"Leather Armor, 2 Daggers, Two Simple Weapons of your choice"},
 						"choicePrompt":"Choose another weapon to start with",
 						"choices":[listSimpleWeapons],
 						"action":function(char,derived,choice){
@@ -445,6 +476,7 @@ window.classes.push(
 							openPack(char,choice);
 						}
 					},{
+						summary:{name:"Two proficiencies from:",description:"Arcana, Deception, History, Intimidation, Investigation, Nature, Religion"},
 						"choicePrompt":"Choose two skill proficiencies:",
 						"choices":[function(char){
 							let result=[];
@@ -503,11 +535,16 @@ window.classes.push(
 					helper.chooseSpell,
 					helper.chooseSpell,
 					{
+						summary:{name:"Warlock Patron",description:"Choose a warlock patron"},
 						"choicePrompt":"Choose a Patron",
 						"choices":[listSpecializations],
 						"action":function(char,derived,choice){
 							addSubclass(char,"Warlock",choice);
 						}
+					},{
+						summary:{name:"Spellcasting",description:"Learn two Warlock cantrips"}
+					},{
+						summary:{name:"Spellcasting",description:"Learn two Warlock spells"}
 					}
 				]
 			}, { // 2
@@ -545,8 +582,15 @@ window.classes.push(
 					{
 						choicePrompt:"Choose a Pact Boon",
 						choices:[findPassive("Pact of the Blade"),findPassive("Pact of the Chain"),findPassive("Pact of the Tome")],
-						action:function(char,derived,choice){
+						action:function(char,derived,choice,scope){
 							addPassive(char,choice);
+							if (choice==="Pact of the Chain"){
+								addSpell(char,"Find Familiar","Warlock");
+							} else if (choice==="Pact of the Tome"){
+								scope.choiceQueue.push(helper.chooseAnyCantrip);
+								scope.choiceQueue.push(helper.chooseAnyCantrip);
+								scope.choiceQueue.push(helper.chooseAnyCantrip);
+							}
 						}
 					},
 					helper.chooseSpell,
@@ -878,11 +922,12 @@ window.subclasses.push(
 		classname:"Warlock",
 		name:"Fiend",
 		subclass:"Fiend",
-		description:"You learn fire and evil shit.",
+		description:"You have made a pact with a fiend from the lower planes of existence, a being whose aims are evil, even if you strive against those aims. Such beings desire the corruption or destruction of all things, ultimately including you. Fiends powerful enough to forge a pact include demon lords such as Demogorgon, Orcus, Fraz'Urb-luu, and Baphomet; archdevils such as Asmodeus, Dispater, Mephistopheles, and Belial; pit fiends and balors that are especially mighty; and ultroloths and other lords of the yugoloths.",
 		levels:[
 			{},{//1
 				updates:[
 					{
+						summary:findPassive("Dark One's Blessing"),
 						choicePrompt:"You gain the following",
 						choices:[findPassive("Dark One's Blessing")],
 						action:function(char){
@@ -891,50 +936,15 @@ window.subclasses.push(
 						}
 					}
 				]
-			},{},
-			{ // 3
+			},{},{},{},{},
+			{ // 6
 				"updates":[
-					helper.learnSkillProficiency,
-					helper.learnSkillProficiency,
-					helper.learnSkillProficiency,
-					helper.chooseExpertise,
-					helper.chooseExpertise,
 					{
-						"choices":[],
-						"action":function(char){
-							addAbility(char,"Cutting Words");
-						}
-					}
-				]
-			},{},
-			{//5
-				updates:[
-					{
-						"choices":[],
-						"action":function(char){
-							for (let abil of char.abilities){
-								if (abil.name==='Cutting Words'){
-									abil.resourceName="Bardic Inspiration (d8)";
-									return;
-								}
-							}
-						}
-					}
-				]
-			},
-			{//6
-				updates:[
-					{
-						choicePrompt:"Learn a spell from any class:",
-						choices:[listAllUnknownSpells],
-						action:function(char,derived,choice){
-							addSpell(char,choice,'Bard');
-						}
-					},{
-						choicePrompt:"Learn a spell from any class:",
-						choices:[listAllUnknownSpells],
-						action:function(char,derived,choice){
-							addSpell(char,choice,'Bard');
+						summary:findAbility("Dark One's Own Luck"),
+						choicePrompt:"You gain the following",
+						choices:[findPassive("Dark One's Own Luck")],
+						action:function(char){
+							addAbility(char,"Dark One's Own Luck");
 						}
 					}
 				]
@@ -942,14 +952,11 @@ window.subclasses.push(
 			{//10
 				updates:[
 					{
-						"choices":[],
-						"action":function(char){
-							for (let abil of char.abilities){
-								if (abil.name==='Cutting Words'){
-									abil.resourceName="Bardic Inspiration (d10)";
-									return;
-								}
-							}
+						summary:findPassive("Fiendish Resilience"),
+						choicePrompt:"You gain the following",
+						choices:[findPassive("Fiendish Resilience")],
+						action:function(char){
+							addPassice(char,"Fiendish Resilience");
 						}
 					}
 				]
@@ -957,27 +964,15 @@ window.subclasses.push(
 			{//14
 				updates:[
 					{
-						choices:[],
+						summary:findAbility("Hurl Through Hell"),
+						choicePrompt:"You gain the following",
+						choices:[findAbility("Hurl Through Hell")],
 						action:function(char){
-							addPassive("Peerless Skill");
+							addAbility(char,"Hurl Through Hell")
 						}
 					}
 				]
-			},{//15
-				updates:[
-					{
-						choices:[],
-						action:function(char){
-							for (let abil of char.abilities){
-								if (abil.name==='Cutting Words'){
-									abil.resourceName="Bardic Inspiration (d12)";
-									return;
-								}
-							}
-						}
-					}
-				]
-			},{},{},{},{},{}
+			},{},{},{},{},{},{}
 		]
 	}
 );

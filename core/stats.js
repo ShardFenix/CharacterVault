@@ -131,6 +131,8 @@ for (var i=0;i<window.skills.length;i++){
 	}
 }
 
+$scope.getCharacterClass=getCharacterClass;
+
 /**********************************
 Package handler
 **********************************/

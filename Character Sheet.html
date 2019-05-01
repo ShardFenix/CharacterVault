@@ -631,6 +631,16 @@
 			<br>
 			<span class="footnote">Spell Save DC: {{tip.saveDc}}.</span>
 		</div>
+		<!-- Package metadata -->
+		<div ng-show="tip.levels">
+			<div ng-repeat="l in tip.levels track by $index"
+				 ng-if="l.updates.length>0 && ($index>1 || ($index===0 && char.level===1) || ($index===1 && char.level>1)) && (getCharacterClass(char,tip.name)===null || getCharacterClass(char,tip.name).level<$index)">
+				<div class="label subheader">Level {{$index===0?1:$index}}</div>
+				<div ng-repeat="update in l.updates track by $index" ng-if="update.summary" class="summary">
+					<span class="bold">{{update.summary.name}}</span> &mdash; <span style="white-space:pre-wrap;">{{update.summary.description}}</span>
+				</div>
+			</div>
+		</div>
 	</div>
 </div>
 
@@ -653,12 +663,12 @@
 </div>
 <script src="./core/spells.js"></script>
 <script src="./core/api.js"></script>
+<script src="./packages/abilities.js"></script>
 <script src="./core/packages.js"></script>
 
 <script src="./packages/feats.js"></script>
 <script src="./packages/items.js"></script>
 <script src="./packages/races.js"></script>
-<script src="./packages/abilities.js"></script>
 <script src="./packages/backgrounds.js"></script>
 
 <script src="./packages/barbarian.js"></script>
