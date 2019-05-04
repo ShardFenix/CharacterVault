@@ -637,7 +637,7 @@
 				 ng-if="l.updates.length>0 && ($index>1 || ($index===0 && char.level===1) || ($index===1 && char.level>1)) && (getCharacterClass(char,tip.name)===null || getCharacterClass(char,tip.name).level<$index)">
 				<div class="label subheader">Level {{$index===0?1:$index}}</div>
 				<div ng-repeat="update in l.updates track by $index" ng-if="update.summary" class="summary">
-					<span class="bold">{{update.summary.name}}</span> &mdash; <span style="white-space:pre-wrap;">{{update.summary.description}}</span>
+					<span class="bold">{{update.summary.name}}</span> &mdash; <span style="white-space:pre-wrap;">{{evalTooltip(update.summary)}}</span>
 				</div>
 			</div>
 		</div>

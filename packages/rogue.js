@@ -1,3 +1,50 @@
+window.abilities.append([
+	{
+		name:"Stroke of Luck",
+		description:"If your attack misses a target within range, you can turn the miss into a hit. Alternatively, if you fail an ability check, you can treat the d20 roll as a 20.\n\nOnce you use this feature, you can't use it again until you finish a short or long rest.",
+		maxCharges:1,
+		charges:1,
+		onShortRest:function(){this.charges=1;}
+	}
+]);
+
+window.passives.append([
+	{
+		name:"Sneak Attack",
+		description:"You know how to strike subtly and exploit a foe's distraction. Once per turn, you can deal an extra <i>${Math.floor((1+classLevel($scope.char,'Rogue'))/2)}d6</i> damage to one creature you hit with an attack if you have advantage on the attack roll. The attack must use a finesse or a ranged weapon.\n\nYou don't need advantage on the attack roll if another enemy of the target is within 5 feet of it, that enemy isn't incapacitated, and you don't have disadvantage on the attack roll."
+	},{
+		name:"Uncanny Dodge",
+		description:"When an attacker that you can see hits you with an attack, you can use your reaction to halve the attack's damage against you."
+	},{
+		name:"Evasion",
+		description:"When you are subjected to an effect that allows you to make a Dexterity saving throw to take only half damage, you instead take no damage if you succeed on the saving throw, and only half damage if you fail."
+	},{
+		name:"Cunning Action",
+		description:"You can take a bonus action on each of your turns in combat. This action can be used only to take the Dash, Disengage, or Hide action."
+	},{
+		name:"Reliable Talent",
+		description:"Whenever you make an ability check that lets you add your proficiency bonus, you can treat a d20 roll of 9 or lower as a 10."
+	},{
+		name:"Blindsense",
+		description:"If you are able to hear, you are aware of the location of any hidden or invisible creature within 10 feet of you."
+	},{
+		name:"Elusive",
+		description:"You are so evasive that attackers rarely gain the upper hand against you. No attack roll has advantage against you while you aren't incapacitated."
+	},{
+		name:"Assassinate",
+		description:"You are at your deadliest when you get the drop on your enemies. You have advantage on attack rolls against any creature that hasn't taken a turn in the combat yet. In addition, any hit you score against a creature that is surprised is a critical hit."
+	},{
+		name:"Infiltration Expertise",
+		description:"You can unfailingly create false identities for yourself. You must spend seven days and 25 gp to establish the history, profession, and affiliations for an identity. You can't establish an identity that belongs to someone else. For example, you might acquire appropriate clothing, letters of introduction, and official-looking certification to establish yourself as a member of a trading house from a remote city so you can insinuate yourself into the company of other wealthy merchants.\n\nThereafter, if you adopt the new identity as a disguise, other creatures believe you to be that person until given an obvious reason not to."
+	},{
+		name:"Impostor",
+		description:"You gain the ability to unerringly mimic another person's speech, writing, and behavior. You must spend at least three hours studying these three components of the person's behavior, listening to speech, examining handwriting, and observing mannerism.\n\nYour ruse is indiscernible to the casual observer. If a wary creature suspects something is amiss, you have advantage on any Charisma (Deception) check you make to avoid detection."
+	},{
+		name:"Death Strike",
+		description:"When you attack and hit a creature that is surprised, it must make a Constitution saving throw (DC 8 + your Dexterity modifier + your proficiency bonus). On a failed save, double the damage of your attack against the creature."
+	}
+]);
+
 window.classes.push(
 	{
 		classname:"Rogue",
@@ -7,6 +54,7 @@ window.classes.push(
 			{ //1, first player level
 				"updates":[
 					{
+						summary:{name:"Proficiencies",description:"Light Armor, Simple Weapons, Hand Crossbows, Longswords, Rapiers, Shortswords, Thieves' Tools, Thieves' Cant"},
 						"choices":[],
 						"action":function(char,derived,choice,$scope){
 							char.maxHp=8;
@@ -26,6 +74,7 @@ window.classes.push(
 							addPassive(char,"Sneak Attack");
 						}
 					},{
+						summary:{name:"Starting Equipment",description:"2 Daggers, Thieves' Tools, Leather Armor, Shortsword or Rapier, Shortbow or Shortsword"},
 						choicePrompt:"Choose a starting weapon:",
 						choices:[findItem("Shortsword"),findItem("Rapier")],
 						action:function(char,derived,choice){
@@ -47,6 +96,7 @@ window.classes.push(
 							openPack(char,choice);
 						}
 					},{
+						summary:{name:"Skill Proficiencies",description:"Four from Acrobatics, Athletics, Deception, Insight, Intimidation, Investigation, Perception, Performance, Persuasion, Sleight of Hand, Stealth"},
 						"choicePrompt":"Choose four skill proficiencies:",
 						"choices":[function(char){
 							let result=[];
@@ -63,6 +113,7 @@ window.classes.push(
 							addProficiency(char,choice);
 						}
 					},{
+						summary:{name:"Expertise",description:"Your proficiency bonus is doubled for two skills of your choice."},
 						"choicePrompt":"Choose four skill proficiencies:",
 						"choices":[function(char){
 							let result=[];
@@ -79,6 +130,7 @@ window.classes.push(
 							addProficiency(char,choice);
 						}
 					},{
+						summary:findPassive("Sneak Attack"),
 						"choicePrompt":"Choose four skill proficiencies:",
 						"choices":[function(char){
 							let result=[];
@@ -118,10 +170,16 @@ window.classes.push(
 				"updates":[
 					helper.hitDice8,
 					{
-						"choices":[],
+						summary:findPassive("Sneak Attack"),
+						choicePrompt:"You gain the following",
+						"choices":[findPassive("Sneak Attack")],
 						"action":function(char,derived,choice){
 							addPassive(char,"Sneak Attack");
 						}
+					},{
+						summary:{name:"Expertise",description:"Double the proficiency bonus of two skills of your choice."},
+						choices:[],
+						action:function(){}
 					},
 					helper.chooseExpertise,
 					helper.chooseExpertise
@@ -130,7 +188,9 @@ window.classes.push(
 				"updates":[
 					helper.hitDice8,
 					{
-						"choices":[],
+						summary:findPassive("Cunning Action"),
+						choicePrompt:"You gain the following",
+						"choices":[findPassive("Cunning Action")],
 						"action":function(char,derived,choice){
 							addPassive(char,"Cunning Action");
 						}
@@ -140,6 +200,7 @@ window.classes.push(
 				"updates":[
 					helper.hitDice8,
 					{
+						summary:{name:"Roguish Archetype",description:"You choose your Rogue subclass"},
 						choicePrompt:"Choose a Roguish Archetype",
 						choices:[listSpecializations],
 						action:function(char,derived,choice){
@@ -159,7 +220,9 @@ window.classes.push(
 				"updates":[
 					helper.hitDice8,
 					{
-						"choices":[],
+						summary:findPassive("Uncanny Dodge"),
+						choicePrompt:"You gain the following",
+						"choices":[findPassive("Uncanny Dodge")],
 						"action":function(char,derived){
 							addPassive(char,"Uncanny Dodge");
 						}
@@ -169,13 +232,16 @@ window.classes.push(
 				"updates":[
 					helper.hitDice8,
 					helper.chooseExpertise,
-					helper.chooseExpertise
+					helper.chooseExpertise,
+					{summary:{name:"Expertise",description:"Double the proficiency bonus for two skills of your choice."}}
 				]
 			},{//7
 				"updates":[
 					helper.hitDice8,
 					{
-						"choices":[],
+						summary:findPassive("Evasion"),
+						choicePrompt:"You gain the following",
+						"choices":[findPassive("Evasion")],
 						"action":function(char,derived){
 							addPassive(char,"Evasion");
 						}
@@ -201,7 +267,9 @@ window.classes.push(
 				"updates":[
 					helper.hitDice8,
 					{
-						choices:[],
+						summary:findPassive("Reliable Talent"),
+						choicePrompt:"You gain the following",
+						choices:[findPassive("Reliable Talent")],
 						action:function(char){
 							addPassive(char,"Reliable Talent");
 						}
@@ -223,7 +291,9 @@ window.classes.push(
 				"updates":[
 					helper.hitDice8,
 					{
-						"choices":[],
+						summary:findPassive("Blindsense"),
+						choicePrompt:"You gain the following",
+						"choices":[findPassive("Blindsense")],
 						"action":function(char){
 							addPassive(char,"Blindsense");
 						}
@@ -233,7 +303,9 @@ window.classes.push(
 				"updates":[
 					helper.hitDice8,
 					{
-						"choices":[],
+						summary:{name:"Slippery Mind",description:"You gain proficiency in Wisdom saving throws."},
+						choicePrompt:"You gain the following",
+						"choices":[{name:"Slippery Mind",description:"You gain proficiency in Wisdom saving throws."}],
 						"action":function(char){
 							char.saves.wis=1;
 						}
@@ -255,7 +327,9 @@ window.classes.push(
 				"updates":[
 					helper.hitDice8,
 					{
-						"choices":[],
+						summary:findPassive("Elusive"),
+						choicePrompt:"You gain the following",
+						"choices":[findPassive("Elusive")],
 						"action":function(char){
 							addPassive(char,"Elusive");
 						}
@@ -273,6 +347,8 @@ window.classes.push(
 				"updates":[
 					helper.hitDice8,
 					{
+						summary:findAbility("Stroke of Luck"),
+						choicePrompt:"You gain the following",
 						"choices":[],
 						"action":function(char){
 							addAbility(char,"Stroke of Luck");
@@ -294,7 +370,9 @@ window.subclasses.push(
 			{//3
 				updates:[
 					{
-						choices:[],
+						summary:findPassive("Assassinate"),
+						choicePrompt:"You gain the following",
+						choices:[findPassive("Assassinate")],
 						action:function(char,derived,choice,$scope){
 							addPassive(char,"Assassinate");
 							char.proficiencies.upush("Disguise Kit");
@@ -305,7 +383,9 @@ window.subclasses.push(
 			},{},{},{},{},{},{ //9
 				updates:[
 					{
-						choices:[],
+						summary:findPassive("Infiltration Expertise"),
+						choicePrompt:"You gain the following",
+						choices:[findPassive("Infiltration Expertise")],
 						action:function(char){
 							addPassive(char,"Infiltration Expertise");
 						}
@@ -315,7 +395,9 @@ window.subclasses.push(
 			{//13
 				updates:[
 					{
-						choices:[],
+						summary:findPassive("Impostor"),
+						choicePrompt:"You gain the following",
+						choices:[findPassive("Impostor")],
 						action:function(char,derived,choice){
 							addPassive(char,"Impostor");
 						}
@@ -325,7 +407,9 @@ window.subclasses.push(
 			{//17
 				updates:[
 					{
-						choices:[],
+						summary:findPassive("Death Strike"),
+						choicePrompt:"You gain the following",
+						choices:[findPassive("Death Strike")],
 						action:function(char){
 							addPassive(char,"Death Strike");
 						}
@@ -339,10 +423,3 @@ window.subclasses.push(
 window.subclasses.push(
 	
 );
-
-window.passives.append([
-	{
-		name:"Sneak Attack",
-		description:"You know how to strike subtly and exploit a foe's distraction. Once per turn, you can deal an extra <i>${Math.floor((1+classLevel($scope.char,'Rogue'))/2)}d6</i> damage to one creature you hit with an attack if you have advantage on the attack roll. The attack must use a finesse or a ranged weapon.\n\nYou don't need advantage on the attack roll if another enemy of the target is within 5 feet of it, that enemy isn't incapacitated, and you don't have disadvantage on the attack roll."
-	}
-]);
