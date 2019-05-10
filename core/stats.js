@@ -1006,20 +1006,22 @@ $scope.save=function(){
 
 let serverVaultEnabled=false;
 
-//check to see if a webserver is running
-$http.get('http://localhost:8080/').then(function(resp){
-	serverVaultEnabled=true;
-	//create a vault file if one doesnt exist
-	$http.get('http://localhost:8080/vault.json').then(function(response){
-		//do nothing if it exists
+function checkServerVault(){
+	//check to see if a webserver is running
+	$http.get('http://localhost:8080/').then(function(resp){
+		serverVaultEnabled=true;
+		//create a vault file if one doesnt exist
+		$http.get('http://localhost:8080/vault.json').then(function(response){
+			//do nothing if it exists
+		},function(error){
+			$http.put('http://localhost:8080/vault.json','[]').then(function(response){},function(error){});
+		});
+		$scope.loadList();
 	},function(error){
-		$http.put('http://localhost:8080/vault.json','[]').then(function(response){},function(error){});
+		serverVaultEnabled=false;
+		$scope.loadList();
 	});
-	$scope.loadList();
-},function(error){
-	serverVaultEnabled=false;
-	$scope.loadList();
-});
+}
 
 $scope.loadList=function(){
 	$scope.saveList=[];
