@@ -5,6 +5,13 @@ window.abilities=[
 		description:"",
 		onLongRest:function(char,scope){
 			this.charges=this.maxCharges;
+		},
+		onShortRest:function(char,scope){
+			let warlockLevel=classLevel($scope.char,"Warlock");
+			switch (warlockLevel){
+				case 1: this.charges=Math.min(this.maxCharges,this.charges+1);break;
+				case 2: this.charges=Math.min(this.maxCharges,this.charges+2);break;
+			}
 		}
 	},{
 		name:"Lv 2 Spell",
@@ -12,6 +19,13 @@ window.abilities=[
 		description:"",
 		onLongRest:function(char,scope){
 			this.charges=this.maxCharges;
+		},
+		onShortRest:function(char,scope){
+			let warlockLevel=classLevel($scope.char,"Warlock");
+			switch (warlockLevel){
+				case 3: 
+				case 4: this.charges=Math.min(this.maxCharges,this.charges+2);break;
+			}
 		}
 	},{
 		name:"Lv 3 Spell",
@@ -19,6 +33,13 @@ window.abilities=[
 		description:"",
 		onLongRest:function(char,scope){
 			this.charges=this.maxCharges;
+		},
+		onShortRest:function(char,scope){
+			let warlockLevel=classLevel($scope.char,"Warlock");
+			switch (warlockLevel){
+				case 5: 
+				case 6: this.charges=Math.min(this.maxCharges,this.charges+2);break;
+			}
 		}
 	},{
 		name:"Lv 4 Spell",
@@ -26,6 +47,13 @@ window.abilities=[
 		description:"",
 		onLongRest:function(char,scope){
 			this.charges=this.maxCharges;
+		},
+		onShortRest:function(char,scope){
+			let warlockLevel=classLevel($scope.char,"Warlock");
+			switch (warlockLevel){
+				case 7: 
+				case 8: this.charges=Math.min(this.maxCharges,this.charges+2);break;
+			}
 		}
 	},{
 		name:"Lv 5 Spell",
@@ -33,6 +61,23 @@ window.abilities=[
 		description:"",
 		onLongRest:function(char,scope){
 			this.charges=this.maxCharges;
+		},
+		onShortRest:function(char,scope){
+			let warlockLevel=classLevel($scope.char,"Warlock");
+			switch (warlockLevel){
+				case 9: 
+				case 10: this.charges=Math.min(this.maxCharges,this.charges+2);break;
+				case 11:
+				case 12:
+				case 13:
+				case 14:
+				case 15:
+				case 16: this.charges=Math.min(this.maxCharges,this.charges+3);break;
+				case 17:
+				case 18:
+				case 19:
+				case 20: this.charges=Math.min(this.maxCharges,this.charges+4);break;
+			}
 		}
 	},{
 		name:"Lv 6 Spell",

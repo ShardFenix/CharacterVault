@@ -80,12 +80,17 @@ window.classes.push(
 		description:"Divine magic, as the name suggests, is the power of the gods, flowing from them into the world. Clerics are conduits for that power, manifesting it as miraculous effects. The gods don't grant this power to everyone who seeks it, but only to those chosen to fulfill a high calling.\nHarnessing divine magic doesn't rely on study or training. A cleric might learn formulaic prayers and ancient rites, but the ability to cast cleric spells relies on devotion and an intuitive sense of a deity's wishes.\nClerics combine the helpful magic of healing and inspiring their allies with spells that harm and hinder foes. They can provoke awe and dread, lay curses of plague or poison, and even call down flames from heaven to consume their enemies. For those evildoers who will benefit most from a mace to the head, clerics depend on their combat training to let them wade into melee with the power of the gods on their side.",
 		levels:[
 			{ //1, first player level
+				summary:[
+					{name:"Proficiencies",description:"Light Armor, Simple Weapons, Medium Armor, Shields, Wisdom saves, Charisma saves"},
+					{name:"Starting Equipment",description:"Mace or Warhammer, A simple weapon, Scale Mail or Leather Armor or Chain Mail"},
+					{name:"Skill Proficiencies",description:"Two from History, Religion, Insight, Medicine, Persuasion"},
+					{name:"Divine Domain",description:"You choose your divine domain"}
+				],
 				"updates":[
 					{
 						choicePrompt:"You gain the following proficiencies",
-						summary:{name:"Proficiencies",description:"Light Armor, Simple Weapons, Medium Armor, Shields, Wisdom saves, Charisma saves"},
-						"choices":["Light Armor","Medium Armor","Shields","Simple Weapons"],
-						"action":function(char,derived,choice,$scope){
+						choices:["Light Armor","Medium Armor","Shields","Simple Weapons"],
+						action:function(char,derived,choice,$scope){
 							char.maxHp=8;
 							char.proficiencies.push("Light Armor");
 							char.proficiencies.push("Simple Weapons");
@@ -98,7 +103,6 @@ window.classes.push(
 							learnAllClassSpells(char,$scope);
 						}
 					},{
-						summary:{name:"Starting Equipment",description:"Mace or Warhammer, A simple weapon, Scale Mail or Leather Armor or Chain Mail"},
 						choicePrompt:"Choose a starting weapon:",
 						choices:[findItem("Mace"),findItem("Warhammer")],
 						action:function(char,derived,choice){
@@ -128,7 +132,6 @@ window.classes.push(
 							addToInventory(char,findItem(choice));
 						}
 					},{
-						summary:{name:"Skill Proficiencies",description:"Two from History, Religion, Insight, Medicine, Persuasion"},
 						choicePrompt:"Choose two skill proficiencies:",
 						choices:[function(char){
 							let result=[];
@@ -141,12 +144,12 @@ window.classes.push(
 							}
 							return result;
 						}],
-						"action":function(char,derived,choice){
+						action:function(char,derived,choice){
 							addProficiency(char,choice);
 						}
 					},{
-						"choicePrompt":"Choose two skill proficiencies:",
-						"choices":[function(char){
+						choicePrompt:"Choose two skill proficiencies:",
+						choices:[function(char){
 							let result=[];
 							for (let skill of char.skills){
 								if (skill.mult===0){
@@ -157,7 +160,7 @@ window.classes.push(
 							}
 							return result;
 						}],
-						"action":function(char,derived,choice){
+						action:function(char,derived,choice){
 							addProficiency(char,choice);
 						}
 					},
@@ -165,10 +168,9 @@ window.classes.push(
 					helper.chooseClericCantrip,
 					helper.chooseClericCantrip,
 					{
-						summary:{name:"Divine Domain",description:"You choose your divine domain"},
-						"choicePrompt":"Choose a Divine Domain:",
-						"choices":[listSpecializations],
-						"action":function(char,derived,choice){
+						choicePrompt:"Choose a Divine Domain:",
+						choices:[listSpecializations],
+						action:function(char,derived,choice){
 							addSubclass(char,"Cleric",choice);
 						}
 					}
@@ -178,29 +180,28 @@ window.classes.push(
 					helper.hitDice8,
 					{
 						summary:{name:"Divine Domain",description:"You choose your divine domain"},
-						"choicePrompt":"Choose a Divine Domain:",
-						"choices":[listSpecializations],
-						"action":function(char,derived,choice,$scope){
+						choicePrompt:"Choose a Divine Domain:",
+						choices:[listSpecializations],
+						action:function(char,derived,choice,$scope){
 							learnAllClassSpells(char,$scope);
 							addSubclass(char,"Cleric",choice);
 						}
 					}
 				]
 			}, { // 2
+				summary:[
+					findAbility("Channel Divinity"),
+					findAbility("Turn Undead")
+				],
 				"updates":[
 					helper.hitDice8,
 					{
-						summary:findAbility("Channel Divinity"),
 						choicePrompt:"You gain the following",
 						choices:[findAbility("Channel Divinity"),findAbility("Turn Undead")],
 						action:function(char,derived,choice){
 							addAbility(char,"Channel Divinity");
 							addAbility(char,"Turn Undead");
 						}
-					},{
-						summary:findAbility("Turn Undead"),
-						choices:[],
-						action:function(){}
 					}
 				]
 			}, { // 3
@@ -221,8 +222,8 @@ window.classes.push(
 					{
 						summary:findPassive("Destroy Undead (CR 1/2)"),
 						choicePrompt:"You gain the following",
-						"choices":[findPassive("Destroy Undead (CR 1/2)")],
-						"action":function(char,derived){
+						choices:[findPassive("Destroy Undead (CR 1/2)")],
+						action:function(char,derived){
 							addPassive(char,"Destroy Undead (CR 1/2)");
 						}
 					}
@@ -263,7 +264,7 @@ window.classes.push(
 						summary:findAbility("Divine Intervention"),
 						choicePrompt:"You gain the following",
 						choices:[findAbility("Divine Intervention")],
-						"action":function(char){
+						action:function(char){
 							addAbility(char,"Divine Intervention");
 						}
 					}
@@ -300,7 +301,7 @@ window.classes.push(
 						summary:findPassive("Destroy Undead (CR 3)"),
 						choicePrompt:"You gain the following",
 						choices:[findPassive("Destroy Undead (CR 3)")],
-						"action":function(char){
+						action:function(char){
 							removePassive(char,"Destroy Undead (CR 2)");
 							addPassive(char,"Destroy Undead (CR 3)");
 						}
@@ -325,7 +326,7 @@ window.classes.push(
 						summary:findPassive("Destroy Undead (CR 4)"),
 						choicePrompt:"You gain the following",
 						choices:[findPassive("Destroy Undead (CR 4)")],
-						"action":function(char){
+						action:function(char){
 							removePassive(char,"Destroy Undead (CR 3)");
 							addPassive(char,"Destroy Undead (CR 4)");
 						}
@@ -350,7 +351,7 @@ window.classes.push(
 						summary:findAbility("Improved Divine Intervention"),
 						choicePrompt:"You gain the following",
 						choices:[findAbility("Improved Divine Intervention")],
-						"action":function(char){
+						action:function(char){
 							removeAbility(char,"Divine Intervention");
 							addAbility(char,"Improved Divine Intervention");
 						}

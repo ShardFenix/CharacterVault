@@ -628,6 +628,10 @@ $scope.spendGold=function(){
 		$scope.spendGoldInput=null;
 	}
 }
+$scope.takeDamage=function(){
+	$scope.char.hp-=$scope.takeDamageInput;
+	$scope.takeDamageInput=null;
+}
 $scope.unequip=function(item){
 	delete item.equipped;
 }
@@ -996,7 +1000,9 @@ $scope.save=function(){
 		//spell descriptions take up a lot of space.
 		for (let clas of $scope.char.classes){
 			for (let spell of clas.spells){
-				delete spell.description;
+				if (!spell.edited){
+					delete spell.description;
+				}
 			}
 		}
 		if (serverVaultEnabled) {

@@ -146,19 +146,17 @@
 
 <td style="padding-left:20px;" class="top">
 <br><br>
-<div>
-	<table style="border:1px solid black;width:180px;"><tr>
-		<td>
-			<span class="bordertitle label">Hit Points</span>
-			<div class="label" style="padding:8px 10px">
-				<input type='text' class='hidden right' ng-model='char.hp' number/>
-				<span>&nbsp;/&nbsp;</span>
-				<input type='text' class='hidden left' disabled ng-model='derived.maxHp' number/>
-				</div>
-		</td>
-	</tr></table>
+<div style="border:1px solid black;width:180px;">
+	<span class="bordertitle label">Hit Points</span>
+	<div class="label" style="padding:8px 10px">
+		<input type='text' class='hidden right' ng-model='char.hp' number/>
+		<span>&nbsp;/&nbsp;</span>
+		<input type='text' class='hidden left' disabled ng-model='derived.maxHp'/>
+	</div>
 </div>
-<br>
+<form ng-submit="takeDamage()">
+	<input type="text" style="width:170px" ng-model="takeDamageInput" placeholder="Deal damage..." number />
+</form>
 <br>
 
 <div class='label' style='text-align:left;'>Saving Throws</div>

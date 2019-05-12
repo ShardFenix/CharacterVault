@@ -26,6 +26,7 @@ function listArcanums(char){
 }
 
 helper.chooseArcanum={
+						summary:{name:"Mystic Arcanum",description:"Choose a Mystic Arcanum"},
 						choicePrompt:"Choose a Mystic Arcanum",
 						choices:[listArcanums],
 						action:function(char,derived,choice){
@@ -39,16 +40,16 @@ helper.chooseArcanum={
 					};
 
 helper.chooseInvocation={
-						"choicePrompt":"Choose an Eldritch Invocation",
-						"choices":[listAvailableInvocations],
-						"action":function(char,derived,choice){
+						choicePrompt:"Choose an Eldritch Invocation",
+						choices:[listAvailableInvocations],
+						action:function(char,derived,choice){
 							addPassive(char,choice);
 						}
 					};
 
 helper.unlearnInvocation={
-						"choicePrompt":"Choose an Invocation to unlearn",
-						"choices":[function(char){
+						choicePrompt:"Choose an Invocation to unlearn",
+						choices:[function(char){
 							let result=[];
 							for (let p of char.passives){
 								if (p.tags && p.tags.contains("Eldritch Invocation")){
@@ -57,7 +58,7 @@ helper.unlearnInvocation={
 							}
 							return result;
 						}],
-						"action":function(char,derived,choice,scope){
+						action:function(char,derived,choice,scope){
 							removePassive(choice);
 						}
 					};
@@ -74,6 +75,14 @@ window.abilities.append([
 	},{
 		name:"Hurl Through Hell",
 		description:"When you hit a creature with an attack, you can use this feature to instantly transport the target through the lower planes. The creature disappears and hurtles through a nightmare landscape.\n\nAt the end of your next turn, the target returns to the space it previously occupied, or the nearest unoccupied space. If the target is not a fiend, it takes 10d10 psychic damage as it reels from its horrific experience.\n\nOnce you use this feature, you can't use it again until you finish a long rest.",
+		maxCharges:1,
+		charges:1,
+		onLongRest:function(){
+			this.charges=this.maxCharges;
+		}
+	},{
+		name:"Eldritch Master",
+		description:"You can spend 1 minute entreating your patron for aid to regain all your expended spell slots from your Pact Magic feature. Once you regain spell slots with this feature, you must finish a long rest before you can do so again.",
 		maxCharges:1,
 		charges:1,
 		onLongRest:function(){
@@ -110,6 +119,7 @@ window.passives.append([
 				for (let spell of clas.spells){
 					if (spell.name==='Eldritch Blast'){
 						spell.description=spell.description.replace("takes 1d10 force damage","takes force damage equal to 1d10 plus your Charisma modifier");
+						spell.edited=true;
 						return;
 					}
 				}
@@ -210,6 +220,7 @@ window.passives.append([
 				for (let spell of clas.spells){
 					if (spell.name==='Eldritch Blast'){
 						spell.range='300 feet';
+						spell.edited=true;
 						return;
 					}
 				}
@@ -444,8 +455,8 @@ window.classes.push(
 				],
 				updates:[
 					{
-						"choices":[],
-						"action":function(char,derived,choice){
+						choices:[],
+						action:function(char,derived,choice){
 							char.maxHp=8;
 							char.proficiencies.push("Light Armor");
 							char.proficiencies.push("Simple Weapons");
@@ -455,32 +466,32 @@ window.classes.push(
 							addToInventory(char,findItem("Dagger",2));
 						}
 					},{
-						"choicePrompt":"Choose a weapon to start with",
-						"choices":[listSimpleWeapons],
-						"action":function(char,derived,choice){
+						choicePrompt:"Choose a weapon to start with",
+						choices:[listSimpleWeapons],
+						action:function(char,derived,choice){
 							if (choice==="Light Crossbow"){
 								addToInventory(char,findItem("Bolt",20));
 							}
 							addToInventory(char,findItem(choice));
 						}
 					},{
-						"choicePrompt":"Choose another weapon to start with",
-						"choices":[listSimpleWeapons],
-						"action":function(char,derived,choice){
+						choicePrompt:"Choose another weapon to start with",
+						choices:[listSimpleWeapons],
+						action:function(char,derived,choice){
 							if (choice==="Light Crossbow"){
 								addToInventory(char,findItem("Bolt",20));
 							}
 							addToInventory(char,findItem(choice));
 						}
 					},{
-						"choicePrompt":"Choose a pack",
-						"choices":[findItem("Dungeoneer's Pack"),findItem("Scholar's Pack")],
-						"action":function(char,derived,choice){
+						choicePrompt:"Choose a pack",
+						choices:[findItem("Dungeoneer's Pack"),findItem("Scholar's Pack")],
+						action:function(char,derived,choice){
 							openPack(char,choice);
 						}
 					},{
-						"choicePrompt":"Choose two skill proficiencies:",
-						"choices":[function(char){
+						choicePrompt:"Choose two skill proficiencies:",
+						choices:[function(char){
 							let result=[];
 							for (let skill of char.skills){
 								if (skill.mult===0){
@@ -491,12 +502,12 @@ window.classes.push(
 							}
 							return result;
 						}],
-						"action":function(char,derived,choice){
+						action:function(char,derived,choice){
 							addProficiency(char,choice);
 						}
 					},{
-						"choicePrompt":"Choose two skill proficiencies:",
-						"choices":[function(char){
+						choicePrompt:"Choose two skill proficiencies:",
+						choices:[function(char){
 							let result=[];
 							for (let skill of char.skills){
 								if (skill.mult===0){
@@ -507,13 +518,13 @@ window.classes.push(
 							}
 							return result;
 						}],
-						"action":function(char,derived,choice){
+						action:function(char,derived,choice){
 							addProficiency(char,choice);
 						}
 					},{
-						"choicePrompt":"Choose one",
-						"choices":["Arcane Focus","Component Pouch"],
-						"action":function(char,derived,choice){
+						choicePrompt:"Choose one",
+						choices:["Arcane Focus","Component Pouch"],
+						action:function(char,derived,choice){
 							addToInventory(char,findItem(choice));
 						}
 					},
@@ -522,9 +533,9 @@ window.classes.push(
 					helper.chooseSpell,
 					helper.chooseSpell,
 					{
-						"choicePrompt":"Choose a Patron",
-						"choices":[listSpecializations],
-						"action":function(char,derived,choice){
+						choicePrompt:"Choose a Patron",
+						choices:[listSpecializations],
+						action:function(char,derived,choice){
 							addSubclass(char,"Warlock",choice);
 						}
 					}
@@ -540,22 +551,25 @@ window.classes.push(
 					helper.chooseSpell,
 					helper.chooseSpell,
 					{
-						"choicePrompt":"Choose a Patron",
-						"choices":[listSpecializations],
-						"action":function(char,derived,choice){
+						choicePrompt:"Choose a Patron",
+						choices:[listSpecializations],
+						action:function(char,derived,choice){
 							addSubclass(char,"Warlock",choice);
 						}
 					}
 				]
 			}, { // 2
+				summary:[
+					{name:"Eldritch Invocations",description:"Learn two Eldritch Invocations"}
+				],
 				"updates":[
 					helper.hitDice8,
 					helper.chooseInvocation,
 					helper.chooseInvocation,
 					{
-						"choicePrompt":"Do you want to replace one of your invocations?",
-						"choices":["Yes","No"],
-						"action":function(char,derived,choice,scope){
+						choicePrompt:"Do you want to replace one of your invocations?",
+						choices:["Yes","No"],
+						action:function(char,derived,choice,scope){
 							if (choice==="No"){
 								scope.updateStep+=2;
 							}
@@ -565,9 +579,9 @@ window.classes.push(
 					helper.chooseInvocation,
 					helper.chooseSpell,
 					{
-						"choicePrompt":"Do you want to replace one of your known Warlock spells?",
-						"choices":["Yes","No"],
-						"action":function(char,derived,choice,scope){
+						choicePrompt:"Do you want to replace one of your known Warlock spells?",
+						choices:["Yes","No"],
+						action:function(char,derived,choice,scope){
 							if (choice==="No"){
 								scope.updateStep+=2;
 							}
@@ -580,6 +594,7 @@ window.classes.push(
 				"updates":[
 					helper.hitDice8,
 					{
+						summary:{name:"Pact Boon",description:"Choose a Pact Boon."},
 						choicePrompt:"Choose a Pact Boon",
 						choices:[findPassive("Pact of the Blade"),findPassive("Pact of the Chain"),findPassive("Pact of the Tome")],
 						action:function(char,derived,choice,scope){
@@ -595,9 +610,9 @@ window.classes.push(
 					},
 					helper.chooseSpell,
 					{
-						"choicePrompt":"Do you want to replace one of your known Warlock spells?",
-						"choices":["Yes","No"],
-						"action":function(char,derived,choice,scope){
+						choicePrompt:"Do you want to replace one of your known Warlock spells?",
+						choices:["Yes","No"],
+						action:function(char,derived,choice,scope){
 							if (choice==="No"){
 								scope.updateStep+=2;
 							}
@@ -616,9 +631,9 @@ window.classes.push(
 					helper.increaseAttribute,
 					helper.chooseSpell,
 					{
-						"choicePrompt":"Do you want to replace one of your known Warlock spells?",
-						"choices":["Yes","No"],
-						"action":function(char,derived,choice,scope){
+						choicePrompt:"Do you want to replace one of your known Warlock spells?",
+						choices:["Yes","No"],
+						action:function(char,derived,choice,scope){
 							if (choice==="No"){
 								scope.updateStep+=2;
 							}
@@ -629,13 +644,16 @@ window.classes.push(
 					
 				]
 			},{//5
+				summary:[
+					{name:"Eldritch Invocation",description:"Learn another Eldritch Invocation."}
+				],
 				"updates":[
 					helper.hitDice8,
 					helper.chooseInvocation,
 					{
-						"choicePrompt":"Do you want to replace one of your invocations?",
-						"choices":["Yes","No"],
-						"action":function(char,derived,choice,scope){
+						choicePrompt:"Do you want to replace one of your invocations?",
+						choices:["Yes","No"],
+						action:function(char,derived,choice,scope){
 							if (choice==="No"){
 								scope.updateStep+=2;
 							}
@@ -645,9 +663,9 @@ window.classes.push(
 					helper.chooseInvocation,
 					helper.chooseSpell,
 					{
-						"choicePrompt":"Do you want to replace one of your known Warlock spells?",
-						"choices":["Yes","No"],
-						"action":function(char,derived,choice,scope){
+						choicePrompt:"Do you want to replace one of your known Warlock spells?",
+						choices:["Yes","No"],
+						action:function(char,derived,choice,scope){
 							if (choice==="No"){
 								scope.updateStep+=2;
 							}
@@ -661,9 +679,9 @@ window.classes.push(
 					helper.hitDice8,
 					helper.chooseSpell,
 					{
-						"choicePrompt":"Do you want to replace one of your known Warlock spells?",
-						"choices":["Yes","No"],
-						"action":function(char,derived,choice,scope){
+						choicePrompt:"Do you want to replace one of your known Warlock spells?",
+						choices:["Yes","No"],
+						action:function(char,derived,choice,scope){
 							if (choice==="No"){
 								scope.updateStep+=2;
 							}
@@ -673,13 +691,16 @@ window.classes.push(
 					helper.chooseSpell
 				]
 			},{//7
+				summary:[
+					{name:"Eldritch Invocation",description:"Learn another Eldritch Invocation."}
+				],
 				"updates":[
 					helper.hitDice8,
 					helper.chooseInvocation,
 					{
-						"choicePrompt":"Do you want to replace one of your invocations?",
-						"choices":["Yes","No"],
-						"action":function(char,derived,choice,scope){
+						choicePrompt:"Do you want to replace one of your invocations?",
+						choices:["Yes","No"],
+						action:function(char,derived,choice,scope){
 							if (choice==="No"){
 								scope.updateStep+=2;
 							}
@@ -689,9 +710,9 @@ window.classes.push(
 					helper.chooseInvocation,
 					helper.chooseSpell,
 					{
-						"choicePrompt":"Do you want to replace one of your known Warlock spells?",
-						"choices":["Yes","No"],
-						"action":function(char,derived,choice,scope){
+						choicePrompt:"Do you want to replace one of your known Warlock spells?",
+						choices:["Yes","No"],
+						action:function(char,derived,choice,scope){
 							if (choice==="No"){
 								scope.updateStep+=2;
 							}
@@ -709,9 +730,9 @@ window.classes.push(
 					helper.increaseAttribute,
 					helper.chooseSpell,
 					{
-						"choicePrompt":"Do you want to replace one of your known Warlock spells?",
-						"choices":["Yes","No"],
-						"action":function(char,derived,choice,scope){
+						choicePrompt:"Do you want to replace one of your known Warlock spells?",
+						choices:["Yes","No"],
+						action:function(char,derived,choice,scope){
 							if (choice==="No"){
 								scope.updateStep+=2;
 							}
@@ -721,13 +742,16 @@ window.classes.push(
 					helper.chooseSpell
 				]
 			},{//9
+				summary:[
+					{name:"Eldritch Invocation",description:"Learn another Eldritch Invocation."}
+				],
 				"updates":[
 					helper.hitDice8,
 					helper.chooseInvocation,
 					{
-						"choicePrompt":"Do you want to replace one of your invocations?",
-						"choices":["Yes","No"],
-						"action":function(char,derived,choice,scope){
+						choicePrompt:"Do you want to replace one of your invocations?",
+						choices:["Yes","No"],
+						action:function(char,derived,choice,scope){
 							if (choice==="No"){
 								scope.updateStep+=2;
 							}
@@ -737,9 +761,9 @@ window.classes.push(
 					helper.chooseInvocation,
 					helper.chooseSpell,
 					{
-						"choicePrompt":"Do you want to replace one of your known Warlock spells?",
-						"choices":["Yes","No"],
-						"action":function(char,derived,choice,scope){
+						choicePrompt:"Do you want to replace one of your known Warlock spells?",
+						choices:["Yes","No"],
+						action:function(char,derived,choice,scope){
 							if (choice==="No"){
 								scope.updateStep+=2;
 							}
@@ -758,9 +782,9 @@ window.classes.push(
 					helper.hitDice8,
 					helper.chooseSpell,
 					{
-						"choicePrompt":"Do you want to replace one of your known Warlock spells?",
-						"choices":["Yes","No"],
-						"action":function(char,derived,choice,scope){
+						choicePrompt:"Do you want to replace one of your known Warlock spells?",
+						choices:["Yes","No"],
+						action:function(char,derived,choice,scope){
 							if (choice==="No"){
 								scope.updateStep+=2;
 							}
@@ -771,6 +795,9 @@ window.classes.push(
 					helper.chooseArcanum
 				]
 			},{//12
+				summary:[
+					{name:"Eldritch Invocation",description:"Learn another Eldritch Invocation."}
+				],
 				"updates":[
 					helper.hitDice8,
 					helper.attributeOrFeat,
@@ -779,9 +806,9 @@ window.classes.push(
 					helper.increaseAttribute,
 					helper.chooseInvocation,
 					{
-						"choicePrompt":"Do you want to replace one of your invocations?",
-						"choices":["Yes","No"],
-						"action":function(char,derived,choice,scope){
+						choicePrompt:"Do you want to replace one of your invocations?",
+						choices:["Yes","No"],
+						action:function(char,derived,choice,scope){
 							if (choice==="No"){
 								scope.updateStep+=2;
 							}
@@ -795,9 +822,9 @@ window.classes.push(
 					helper.hitDice8,
 					helper.chooseSpell,
 					{
-						"choicePrompt":"Do you want to replace one of your known Warlock spells?",
-						"choices":["Yes","No"],
-						"action":function(char,derived,choice,scope){
+						choicePrompt:"Do you want to replace one of your known Warlock spells?",
+						choices:["Yes","No"],
+						action:function(char,derived,choice,scope){
 							if (choice==="No"){
 								scope.updateStep+=2;
 							}
@@ -816,9 +843,9 @@ window.classes.push(
 					helper.hitDice8,
 					helper.chooseInvocation,
 					{
-						"choicePrompt":"Do you want to replace one of your invocations?",
-						"choices":["Yes","No"],
-						"action":function(char,derived,choice,scope){
+						choicePrompt:"Do you want to replace one of your invocations?",
+						choices:["Yes","No"],
+						action:function(char,derived,choice,scope){
 							if (choice==="No"){
 								scope.updateStep+=2;
 							}
@@ -828,9 +855,9 @@ window.classes.push(
 					helper.chooseInvocation,
 					helper.chooseSpell,
 					{
-						"choicePrompt":"Do you want to replace one of your known Warlock spells?",
-						"choices":["Yes","No"],
-						"action":function(char,derived,choice,scope){
+						choicePrompt:"Do you want to replace one of your known Warlock spells?",
+						choices:["Yes","No"],
+						action:function(char,derived,choice,scope){
 							if (choice==="No"){
 								scope.updateStep+=2;
 							}
@@ -853,9 +880,9 @@ window.classes.push(
 					helper.hitDice8,
 					helper.chooseSpell,
 					{
-						"choicePrompt":"Do you want to replace one of your known Warlock spells?",
-						"choices":["Yes","No"],
-						"action":function(char,derived,choice,scope){
+						choicePrompt:"Do you want to replace one of your known Warlock spells?",
+						choices:["Yes","No"],
+						action:function(char,derived,choice,scope){
 							if (choice==="No"){
 								scope.updateStep+=2;
 							}
@@ -866,13 +893,16 @@ window.classes.push(
 					helper.chooseArcanum
 				]
 			},{//18
+				summary:[
+					{name:"Eldritch Invocation",description:"Learn another Eldritch Invocation"}
+				],
 				"updates":[
 					helper.hitDice8,
 					helper.chooseInvocation,
 					{
-						"choicePrompt":"Do you want to replace one of your invocations?",
-						"choices":["Yes","No"],
-						"action":function(char,derived,choice,scope){
+						choicePrompt:"Do you want to replace one of your invocations?",
+						choices:["Yes","No"],
+						action:function(char,derived,choice,scope){
 							if (choice==="No"){
 								scope.updateStep+=2;
 							}
@@ -890,9 +920,9 @@ window.classes.push(
 					helper.increaseAttribute,
 					helper.chooseSpell,
 					{
-						"choicePrompt":"Do you want to replace one of your known Warlock spells?",
-						"choices":["Yes","No"],
-						"action":function(char,derived,choice,scope){
+						choicePrompt:"Do you want to replace one of your known Warlock spells?",
+						choices:["Yes","No"],
+						action:function(char,derived,choice,scope){
 							if (choice==="No"){
 								scope.updateStep+=2;
 							}
@@ -905,6 +935,7 @@ window.classes.push(
 				"updates":[
 					helper.hitDice8,
 					{
+						summary:findAbility('Eldritch Master'),
 						choicePrompt:"You gain the following",
 						choices:[findAbility("Eldritch Master")],
 						action:function(char){
