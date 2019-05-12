@@ -2,6 +2,7 @@
 <html>
 <head>
 <link rel="stylesheet" href="./core/style.css">
+<link rel="stylesheet" href="./core/tablet.css">
 <link href="https://fonts.googleapis.com/css?family=Cinzel+Decorative:700" rel="stylesheet">
 <!--
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
@@ -17,7 +18,7 @@
 </head>
 <body style="background-color:#ffffff;width:100vw;overflow-x:hidden;">
 <div ng-app="myApp">
-<div ng-controller="MyController" ng-cloak>
+<div ng-controller="MyController" ng-cloak id='tabletPooperDooper'>
 
 <div style="margin-top:-8px;">
 <span class="tab" ng-click="tab='stats'" ng-class="{'activetab':tab=='stats'}">Stats</span>
@@ -88,7 +89,7 @@
 </td>
 
 <td style="width:700px;vertical-align:top;">
-<table style="width:100%">
+<table style="width:100%" class="desktop">
 	<tr>
 		<td style="width:150px;text-align:center;">
 			<div>
@@ -129,9 +130,9 @@
 		</td>
 	</tr>
 </table>
+
 <table>
-<tr>
-	
+<tr>	
 <td colspan=2 class="top" style="min-width:160px;">
 <br>
 <div class='label' style='text-align:left;'>Skills</div>
@@ -205,8 +206,12 @@
 	</form>
 </td>
 </tr>
+<tr>
+<td colspan=2>
+	<span class="button" ng-click="showSaveMenu=true;">Save/Load</span>
+</td>
+</tr>
 </table>
-
 
 </td>
 <td class="top" style="padding-left:30px;width:250px;">
@@ -224,21 +229,63 @@
 </td>
 
 <td style="vertical-align:top;">
-<span class="button" ng-click="showSaveMenu=true;">Save/Load</span>
-<br><br><br>
 <br><br>
-<div style="padding:10px;border:1px solid black;">
-	<span class="label bordertitle" style="margin-top:-24px;">Add Passive Ability</span>
-	<label>Name
-		<input type="text" ng-model="newpassive.name" ng-change="checkForPassives(newpassive.name)"/>
-	</label>
-	<br>
-	<label>Description
-	<textarea class="descriptionbox" ng-model="newpassive.description" style="width:100%;min-height:400px;max-height:400px;"></textarea>
-	</label>
-	<button ng-click="addPassive(newpassive)">Add to Passives</button>
-	<br>
-	<button style="display:none"></button>
+	<div style="padding:10px;border:1px solid black;" class="desktop">
+		<span class="label bordertitle" style="margin-top:-24px;">Add Passive Ability</span>
+		<label>Name
+			<input type="text" ng-model="newpassive.name" ng-change="checkForPassives(newpassive.name)"/>
+		</label>
+		<br>
+		<label>Description
+		<textarea class="descriptionbox" ng-model="newpassive.description" style="width:100%;min-height:400px;max-height:400px;"></textarea>
+		</label>
+		<button ng-click="addPassive(newpassive)">Add to Passives</button>
+		<br>
+		<button style="display:none"></button>
+	</div>
+	<div class="tablet">
+		<table style="width:100%" class="tablet">
+			<tr>
+				<td style="width:150px;text-align:center;">
+					<div>
+						<label>
+							<span class='label'>Level</span><br>
+							<input type='text' class='statbox' ng-model='char.level' number />
+						</label>
+					</div>
+					<span class="button" ng-hide="char.level>=20" ng-click="levelUpStart()">Level Up</span>
+				</td></tr><tr>
+				<td style="width:100px;text-align:center;">
+					<div class="acbox">
+						<label>
+							<br>
+							<span class='label'>AC</span>
+							<br>
+							<input type='text' style="font-size:2.2em;background-color:rgba(0,0,0,0)" class='statmod' ng-model='char.ac'/>
+						</label>
+					</div>
+				</td></tr><tr>
+				<td style="width:150px;text-align:center;">
+					<label>
+						<span class='label'>Proficiency<br>Bonus</span><br>
+						<input type='text' class='statbox' disabled ng-model='derived.proficiency'/>
+					</label>
+				</td></tr><tr>
+				<td style="width:150px;text-align:center;">
+					<label>
+						<span class='label'>Initiative<br>Bonus</span><br>
+						<input type='text' class='statbox' ng-model='derived.initiative'/>
+					</label>
+				</td></tr><tr>
+				<td style="width:150px;text-align:center;">
+					<label>
+						<span class='label'>Move<br>Speed</span><br>
+						<input type='text' class='statbox' ng-model='char.speed'/>
+					</label>
+				</td>
+			</tr>
+		</table>
+
 	</div>
 </td>
 
@@ -515,7 +562,7 @@
 		<th>&nbsp;</th>
 	</tr></thead><tbody><tr>
 	<td style="width:340px;max-width:340px;display:inherit;vertical-align:top;">
-		<div class="scrollable" style="max-height:calc(100vh - 90px)">
+		<div class="scrollable">
 			<input style="width:340px;" type="text" ng-model="spellSearch" placeholder="Filter..."/>
 			<div class="item greenback" ng-repeat="spell in filteredSpellList | filter:spellSearch"
 					ng-mouseenter="setTip(spell,spell.level)" ng-mouseleave="clearTip()">{{spell.name}} ({{spell.level}})</div>
@@ -636,6 +683,9 @@
 			<div ng-repeat="l in tip.levels track by $index"
 				 ng-if="l.updates.length>0 && ($index>1 || ($index===0 && char.level===1) || ($index===1 && char.level>1)) && (getCharacterClass(char,tip.name)===null || getCharacterClass(char,tip.name).level<$index)">
 				<div class="label subheader">Level {{$index===0?1:$index}}</div>
+				<div ng-repeat="summary in l.summary track by $index" class="summary">
+					<span class="bold">{{summary.name}}</span> &mdash; <span style="white-space:pre-wrap;">{{evalTooltip(summary)}}</span>
+				</div>
 				<div ng-repeat="update in l.updates track by $index" ng-if="update.summary" class="summary">
 					<span class="bold">{{update.summary.name}}</span> &mdash; <span style="white-space:pre-wrap;">{{evalTooltip(update.summary)}}</span>
 				</div>
@@ -655,7 +705,7 @@
 		<div class="label">Load</div>
 		<hr>
 		<span class="button" style="font-family:'Cinzel Decorative'" ng-click="newChar()">Create New Character</span>
-		<div class="button large" ng-repeat='item in saveList track by $index' ng-click="load($index)">{{item.name}}</div>
+		<div class="button large" ng-repeat='item in saveList track by $index' ng-click="load(item.saveId)">{{item.name}}</div>
 	</div>
 </div>
 

@@ -962,6 +962,19 @@ $scope.setTip=function(choice,spellLevel){
 	}
 }
 
+$scope.saveToVault=function(){
+	let name=$scope.char.name;
+	console.log("Saving character to vault "+name);
+	$http.post('http://localhost:8080/characters/' + name,
+				JSON.stringify($scope.char))
+	.then(function(response){
+			console.log("Saved character "+name);
+		},function(error){
+			console.error(error);
+		}
+	);
+}
+
 $scope.save=function(){
 	if (typeof(Storage) !== "undefined") {
 		if ($scope.saveId==-1){
@@ -987,51 +1000,76 @@ $scope.save=function(){
 			}
 		}
 		if (serverVaultEnabled) {
-			$http.get('http://localhost:8080/vault.json').then(function(response){
-				if (response.data.length<=$scope.saveId){
-					response.data.push({});
-				}
-				response.data[$scope.saveId]={name:$scope.char.name,saveId:$scope.saveId,char:$scope.char};
-				$http.put('http://localhost:8080/vault.json',JSON.stringify(response.data))
-					.then(function(response){},function(error){});
-			},function(error){
-				console.error(error);
-			});
+			$scope.saveToVault();
 		} else {
 			localStorage.setItem("dnd"+$scope.saveId,JSON.stringify($scope.char));
 		}
-		$scope.loadList();
+		loadList();
 	}
 }
 
 let serverVaultEnabled=false;
 
+function convertLocalStorage(){
+	console.log("Converting local storage");
+	if (typeof(Storage) !== "undefined") {
+		for (var i=0;i<99;i++){
+			var jsonString = localStorage.getItem("dnd"+i);
+			if (jsonString){
+				console.log("Converting local slot "+i);
+				var c = JSON.parse(jsonString);
+				$scope.char=c;
+				console.log(c);
+				$scope.saveToVault();
+			}
+		}
+	}
+
+	$scope.char={
+		maxHp:0,
+		hp:0,
+		level:0, //total level
+		money:0,
+		classes:[],
+		//multipliers for save proficiencies
+		saves:{
+			str:0,dex:0,con:0,wis:0,int:0,cha:0
+		},
+		attributes:{
+			str:10,dex:10,con:10,wis:10,int:10,cha:10
+		},
+		skills:[],
+		passives:[],
+		abilities:[],
+		proficiencies:[],
+		inventory:[]
+	};
+}
+
 function checkServerVault(){
 	//check to see if a webserver is running
 	$http.get('http://localhost:8080/').then(function(resp){
 		serverVaultEnabled=true;
-		//create a vault file if one doesnt exist
-		$http.get('http://localhost:8080/vault.json').then(function(response){
-			//do nothing if it exists
-		},function(error){
-			$http.put('http://localhost:8080/vault.json','[]').then(function(response){},function(error){});
-		});
-		$scope.loadList();
+		convertLocalStorage();
+		loadList();
 	},function(error){
 		serverVaultEnabled=false;
-		$scope.loadList();
+		loadList();
 	});
 }
 
-$scope.loadList=function(){
+checkServerVault();
+
+function loadList(){
 	$scope.saveList=[];
 	if (serverVaultEnabled){
-		$http.get('http://localhost:8080/vault.json').then(function(response){
-			for (let cmeta of response.data){
-				$scope.saveList.push({name:cmeta.name,saveId:cmeta.saveId});
+		$http.get('http://localhost:8080/characters').then(function(response){
+			for (let filename of response.data){
+				console.log("  Adding "+filename+" to character list");
+				$scope.saveList.push({name:filename,saveId:filename});
 			}
 		},function(error){
-			console.error("Error trying to load character vault.");
+			console.error("Error loading character vault.");
 			console.error(error);
 		});
 	} else {
@@ -1048,13 +1086,13 @@ $scope.loadList=function(){
 }
 
 $scope.load=function(num){
+	console.log("Loading "+num);
 	if (serverVaultEnabled){
-		$http.get('http://localhost:8080/vault.json').then(function(response){
-			$scope.char=response.data[num].char;
-			$scope.saveId=num;
+		$http.get('http://localhost:8080/characters/'+num).then(function(response){
+			$scope.char=response.data;
 			initLoadedCharacter();
 		},function(error){
-			console.error("Error trying to load character "+num+" from vault.");
+			console.error("Error loading character "+num+" from vault.");
 			console.error(error);
 		});
 	} else {
@@ -1110,7 +1148,7 @@ function initLoadedCharacter(){
 	$scope.char.hp=hp;
 }
 
-$scope.loadList();
+loadList();
 
 $scope.spellList=window.spells;
 

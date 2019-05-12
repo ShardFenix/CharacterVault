@@ -436,7 +436,7 @@ div.modal {
     height: auto;
     padding: 3%;
     left: 10%;
-    top: -70%;
+    top: -90%;
     transition: 0.5s ease all;
     text-align: center;
     min-height: 50%;
@@ -468,6 +468,7 @@ div.leftModal.show{
 div.rightModal {
     position: absolute;
     background: url('../images/parchment2.jpg');
+	background-attachment:local;
     box-shadow: 0 0 2px 1px black;
     width: 35%;
     padding: 3%;
@@ -524,6 +525,7 @@ div.acbox{
     background-size: cover;
     width: 100px;
     height: 115px;
+	margin-left: calc(50% - 50px);
 }
 
 input.statbox {
@@ -625,7 +627,7 @@ i{
 }
 .scrollable{
 	overflow-y: auto;
-    height: calc(100vh - 70px);
+    height: calc(100vh - 90px);
 }
 .spellButton{
 	background-color: #004e8e;
@@ -644,3 +646,4 @@ i{
 .bold{
 	font-weight:bold;
 }
+@media 

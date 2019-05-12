@@ -436,9 +436,14 @@ window.classes.push(
 		description:"",
 		levels:[
 			{ //1, first player level
+				summary:[
+					{name:"Proficiencies",description:"Light Armor, Simple Weapons, Wisdom saves, Charisma saves"},
+					{name:"Starting Equipment",description:"Leather Armor, 2 Daggers, Two Simple Weapons of your choice"},
+					{name:"Two proficiencies from:",description:"Arcana, Deception, History, Intimidation, Investigation, Nature, Religion"},
+					{name:"Patron",description:"Choose your patron"}
+				],
 				updates:[
 					{
-						summary:{name:"Hit Dice",description:"d8"},
 						"choices":[],
 						"action":function(char,derived,choice){
 							char.maxHp=8;
@@ -450,7 +455,6 @@ window.classes.push(
 							addToInventory(char,findItem("Dagger",2));
 						}
 					},{
-						summary:{name:"Proficiencies",description:"Light Armor, Simple Weapons, Wisdom saves, Charisma saves"},
 						"choicePrompt":"Choose a weapon to start with",
 						"choices":[listSimpleWeapons],
 						"action":function(char,derived,choice){
@@ -460,7 +464,6 @@ window.classes.push(
 							addToInventory(char,findItem(choice));
 						}
 					},{
-						summary:{name:"Starting Equipment",description:"Leather Armor, 2 Daggers, Two Simple Weapons of your choice"},
 						"choicePrompt":"Choose another weapon to start with",
 						"choices":[listSimpleWeapons],
 						"action":function(char,derived,choice){
@@ -476,7 +479,6 @@ window.classes.push(
 							openPack(char,choice);
 						}
 					},{
-						summary:{name:"Two proficiencies from:",description:"Arcana, Deception, History, Intimidation, Investigation, Nature, Religion"},
 						"choicePrompt":"Choose two skill proficiencies:",
 						"choices":[function(char){
 							let result=[];
@@ -528,6 +530,9 @@ window.classes.push(
 					}
 				]
 			},	{ // 1
+				summary:[
+					{name:"Patron",description:"Choose your patron"}
+				],
 				"updates":[
 					helper.hitDice8,
 					helper.chooseWarlockCantrip,
@@ -535,16 +540,11 @@ window.classes.push(
 					helper.chooseSpell,
 					helper.chooseSpell,
 					{
-						summary:{name:"Warlock Patron",description:"Choose a warlock patron"},
 						"choicePrompt":"Choose a Patron",
 						"choices":[listSpecializations],
 						"action":function(char,derived,choice){
 							addSubclass(char,"Warlock",choice);
 						}
-					},{
-						summary:{name:"Spellcasting",description:"Learn two Warlock cantrips"}
-					},{
-						summary:{name:"Spellcasting",description:"Learn two Warlock spells"}
 					}
 				]
 			}, { // 2
