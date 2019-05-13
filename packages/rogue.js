@@ -52,9 +52,15 @@ window.classes.push(
 		description:"",
 		levels:[
 			{ //1, first player level
+				summary:[
+					{name:"Proficiencies",description:"Light Armor, Simple Weapons, Hand Crossbows, Longswords, Rapiers, Shortswords, Thieves' Tools, Thieves' Cant"},
+					{name:"Starting Equipment",description:"2 Daggers, Thieves' Tools, Leather Armor, Shortsword or Rapier, Shortbow or Shortsword"},
+					{name:"Skill Proficiencies",description:"Four from Acrobatics, Athletics, Deception, Insight, Intimidation, Investigation, Perception, Performance, Persuasion, Sleight of Hand, Stealth"},
+					{name:"Expertise",description:"Your proficiency bonus is doubled for two skills of your choice."},
+					findPassive("Sneak Attack"),
+				],
 				"updates":[
 					{
-						summary:{name:"Proficiencies",description:"Light Armor, Simple Weapons, Hand Crossbows, Longswords, Rapiers, Shortswords, Thieves' Tools, Thieves' Cant"},
 						"choices":[],
 						"action":function(char,derived,choice,$scope){
 							char.maxHp=8;
@@ -74,7 +80,6 @@ window.classes.push(
 							addPassive(char,"Sneak Attack");
 						}
 					},{
-						summary:{name:"Starting Equipment",description:"2 Daggers, Thieves' Tools, Leather Armor, Shortsword or Rapier, Shortbow or Shortsword"},
 						choicePrompt:"Choose a starting weapon:",
 						choices:[findItem("Shortsword"),findItem("Rapier")],
 						action:function(char,derived,choice){
@@ -96,7 +101,6 @@ window.classes.push(
 							openPack(char,choice);
 						}
 					},{
-						summary:{name:"Skill Proficiencies",description:"Four from Acrobatics, Athletics, Deception, Insight, Intimidation, Investigation, Perception, Performance, Persuasion, Sleight of Hand, Stealth"},
 						"choicePrompt":"Choose four skill proficiencies:",
 						"choices":[function(char){
 							let result=[];
@@ -113,7 +117,6 @@ window.classes.push(
 							addProficiency(char,choice);
 						}
 					},{
-						summary:{name:"Expertise",description:"Your proficiency bonus is doubled for two skills of your choice."},
 						"choicePrompt":"Choose four skill proficiencies:",
 						"choices":[function(char){
 							let result=[];
@@ -130,7 +133,6 @@ window.classes.push(
 							addProficiency(char,choice);
 						}
 					},{
-						summary:findPassive("Sneak Attack"),
 						"choicePrompt":"Choose four skill proficiencies:",
 						"choices":[function(char){
 							let result=[];
@@ -167,19 +169,18 @@ window.classes.push(
 					helper.chooseExpertise
 				]
 			},	{ // 1
+				summary:[
+					findPassive("Sneak Attack"),
+					{name:"Expertise",description:"Double the proficiency bonus of two skills of your choice."}
+				],
 				"updates":[
 					helper.hitDice8,
 					{
-						summary:findPassive("Sneak Attack"),
 						choicePrompt:"You gain the following",
 						"choices":[findPassive("Sneak Attack")],
 						"action":function(char,derived,choice){
 							addPassive(char,"Sneak Attack");
 						}
-					},{
-						summary:{name:"Expertise",description:"Double the proficiency bonus of two skills of your choice."},
-						choices:[],
-						action:function(){}
 					},
 					helper.chooseExpertise,
 					helper.chooseExpertise
@@ -229,11 +230,13 @@ window.classes.push(
 					}
 				]
 			},{//6
+				summary:[
+					{name:"Expertise",description:"Double the proficiency bonus for two skills of your choice."}
+				],
 				"updates":[
 					helper.hitDice8,
 					helper.chooseExpertise,
 					helper.chooseExpertise,
-					{summary:{name:"Expertise",description:"Double the proficiency bonus for two skills of your choice."}}
 				]
 			},{//7
 				"updates":[
@@ -305,8 +308,8 @@ window.classes.push(
 					{
 						summary:{name:"Slippery Mind",description:"You gain proficiency in Wisdom saving throws."},
 						choicePrompt:"You gain the following",
-						"choices":[{name:"Slippery Mind",description:"You gain proficiency in Wisdom saving throws."}],
-						"action":function(char){
+						choices:[{name:"Slippery Mind",description:"You gain proficiency in Wisdom saving throws."}],
+						action:function(char){
 							char.saves.wis=1;
 						}
 					}
