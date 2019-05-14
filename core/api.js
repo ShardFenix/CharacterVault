@@ -1,3 +1,14 @@
+Array.prototype.has=function(string){
+	for (let element of this){
+		if (typeof let === 'string' && let===string){
+			return true;
+		} else if (typeof let === 'Object' && let.name===string) {
+			return true;
+		}
+	}
+	return false;
+};
+
 Array.prototype.upush=function(element){
 	if (element && element.name) {
 		for (var i=0;i<this.length;i++){

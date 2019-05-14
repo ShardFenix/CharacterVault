@@ -243,6 +243,55 @@ $scope.load=function(){
 $scope.spellList=window.spells;
 $scope.creatures=window.creatures;
 
+//load player info into the creatures array if server is available
+$http.get('http://localhost:8080/').then(function(resp){
+	loadPlayerList();
+},function(error){
+	console.warn("Couldn't load player info from character vault. Start the server and refresh the page.");
+});
+
+function loadPlayerList(){
+	$http.get('http://localhost:8080/characters').then(function(response){
+		for (let filename of response.data){
+			$http.get('http://localhost:8080/characters/'+filename).then(function(response){
+				let char=response.data;
+				prepCharacter(char);
+				$scope.creatures.push(char);
+			},function(error){
+				console.error(error);
+			});
+		}
+	},function(error){
+		console.error("Error loading character vault.");
+		console.error(error);
+	});
+}
+
+function prepCharacter(char){
+	let strBonus = Math.floor((char.attributes.str+20)/2)-15;
+	let dexBonus = Math.floor((char.attributes.dex+20)/2)-15;
+	let conBonus = Math.floor((char.attributes.con+20)/2)-15;
+	let intBonus = Math.floor((char.attributes.int+20)/2)-15;
+	let wisBonus = Math.floor((char.attributes.wis+20)/2)-15;
+	let chaBonus = Math.floor((char.attributes.cha+20)/2)-15;
+	
+	let p=proficiency(char.level);
+	
+	char.saves.str = strBonus + p*char.saves.str;
+	char.saves.dex = dexBonus + p*char.saves.dex;
+	char.saves.con = conBonus + p*char.saves.con;
+	char.saves.int = intBonus + p*char.saves.int;
+	char.saves.wis = wisBonus + p*char.saves.wis;
+	char.saves.cha = chaBonus + p*char.saves.cha;
+	delete char.passives;
+	delete char.abilities;
+	delete char.proficiencies;
+}
+
+function proficiency(level){
+	return Math.ceil(level/4)+1;
+}
+
 $scope.classFilterInclude=function(num){
 	var f = $scope.spellFilters;
 	f.includeClass[num]=!f.includeClass[num];
