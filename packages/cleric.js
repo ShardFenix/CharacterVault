@@ -44,6 +44,15 @@ window.abilities.append([
 		description:"Using your Channel Divinity action, you present your holy symbol and speak a prayer censuring the undead. Each undead that can see or hear you within 30 feet of you must make a Wisdom saving throw. If the creature fails its saving throw, it is turned for 1 minute or until it takes any damage.\nA turned creature must spend its turns trying to move as far away from you as it can, and it can't willingly move to a space within 30 feet of you. It also can't take reactions. For its action, it can use only the Dash action or try to escape from an effect that prevents it from moving. If there's nowhere to move, the creature can use the Dodge action.",
 		resourceName:"Channel Divinity",
 		resourceCost:1
+	},{
+		name:"Wrath of the Storm",
+		description:"You can thunderously rebuke attackers. When a creature within 5 feet of you that you can see hits you with an attack, you can use your reaction to cause the creature to make a Dexterity saving throw. The creature takes 2d8 lightning or thunder damage (your choice) on a failed saving throw, and half as much damage on a successful one.\n\nYou can use this feature a number of times equal to your Wisdom modifier (a minimum of once). You regain all expended uses when you finish a long rest.",
+		onLongRest:function(char,scope){
+			this.charges=this.maxCharges;
+		},
+		maxChargesFunction:function(char,scope){
+			return scope.derived.modifiers.wis;
+		}
 	}
 ]);
 
@@ -502,13 +511,15 @@ window.subclasses.push(
 			{//1
 				updates:[
 					{
-						summary:findPassive("Wrath of the Storm"),
+						summary:findAbility("Wrath of the Storm"),
 						choicePrompt:"You gain the following",
-						choices:[findPassive("Wrath of the Storm")],
+						choices:[findAbility("Wrath of the Storm")],
 						action:function(char,derived,choice,$scope){
 							char.proficiencies.upush("Heavy Armor");
 							char.proficiencies.upush("Martial Weapons");
 							addAbility(char,"Wrath of the Storm");
+							addSpell(char,"Fog Cloud","Cleric");
+							addSpell(char,"Thunderwave","Cleric");
 							getPlayerSpell(char,"Fog Cloud","Cleric").alwaysPrepared=true;
 							getPlayerSpell(char,"Thunderwave","Cleric").alwaysPrepared=true;
 						}
@@ -530,6 +541,8 @@ window.subclasses.push(
 					{
 						choices:[],
 						action:function(char){
+							addSpell(char,"Gust of Wind","Cleric");
+							addSpell(char,"Shatter","Cleric");
 							getPlayerSpell(char,"Gust of Wind","Cleric").alwaysPrepared=true;
 							getPlayerSpell(char,"Shatter","Cleric").alwaysPrepared=true;
 						}
@@ -540,6 +553,8 @@ window.subclasses.push(
 					{
 						choices:[],
 						action:function(char){
+							addSpell(char,"Call Lightning","Cleric");
+							addSpell(char,"Sleet Storm","Cleric");
 							getPlayerSpell(char,"Call Lightning","Cleric").alwaysPrepared=true;
 							getPlayerSpell(char,"Sleet Storm","Cleric").alwaysPrepared=true;
 						}
@@ -561,6 +576,8 @@ window.subclasses.push(
 					{
 						choices:[],
 						action:function(char){
+							addSpell(char,"Control Weather","Cleric");
+							addSpell(char,"Ice Storm","Cleric");
 							getPlayerSpell(char,"Control Weather","Cleric").alwaysPrepared=true;
 							getPlayerSpell(char,"Ice Storm","Cleric").alwaysPrepared=true;
 						}
@@ -583,6 +600,7 @@ window.subclasses.push(
 					{
 						choices:[],
 						action:function(char){
+							addSpell(char,"Destructive Wave","Cleric");
 							getPlayerSpell(char,"Destructive Wave","Cleric").alwaysPrepared=true;
 							getPlayerSpell(char,"Insect Plague","Cleric").alwaysPrepared=true;
 						}

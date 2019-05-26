@@ -7,7 +7,7 @@ window.abilities=[
 			this.charges=this.maxCharges;
 		},
 		onShortRest:function(char,scope){
-			let warlockLevel=classLevel($scope.char,"Warlock");
+			let warlockLevel=classLevel(scope.char,"Warlock");
 			switch (warlockLevel){
 				case 1: this.charges=Math.min(this.maxCharges,this.charges+1);break;
 				case 2: this.charges=Math.min(this.maxCharges,this.charges+2);break;
@@ -21,7 +21,7 @@ window.abilities=[
 			this.charges=this.maxCharges;
 		},
 		onShortRest:function(char,scope){
-			let warlockLevel=classLevel($scope.char,"Warlock");
+			let warlockLevel=classLevel(scope.char,"Warlock");
 			switch (warlockLevel){
 				case 3: 
 				case 4: this.charges=Math.min(this.maxCharges,this.charges+2);break;
@@ -35,7 +35,7 @@ window.abilities=[
 			this.charges=this.maxCharges;
 		},
 		onShortRest:function(char,scope){
-			let warlockLevel=classLevel($scope.char,"Warlock");
+			let warlockLevel=classLevel(scope.char,"Warlock");
 			switch (warlockLevel){
 				case 5: 
 				case 6: this.charges=Math.min(this.maxCharges,this.charges+2);break;
@@ -49,7 +49,7 @@ window.abilities=[
 			this.charges=this.maxCharges;
 		},
 		onShortRest:function(char,scope){
-			let warlockLevel=classLevel($scope.char,"Warlock");
+			let warlockLevel=classLevel(scope.char,"Warlock");
 			switch (warlockLevel){
 				case 7: 
 				case 8: this.charges=Math.min(this.maxCharges,this.charges+2);break;
@@ -63,7 +63,7 @@ window.abilities=[
 			this.charges=this.maxCharges;
 		},
 		onShortRest:function(char,scope){
-			let warlockLevel=classLevel($scope.char,"Warlock");
+			let warlockLevel=classLevel(scope.char,"Warlock");
 			switch (warlockLevel){
 				case 9: 
 				case 10: this.charges=Math.min(this.maxCharges,this.charges+2);break;

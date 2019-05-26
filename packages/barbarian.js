@@ -393,7 +393,7 @@ window.subclasses.push(
 				updates:[
 					{
 						choicePrompt:"You gain the following",
-						summary:findPassive("Spin to Win")
+						summary:findPassive("Spin to Win"),
 						choices:[findPassive("Spin to Win")],
 						action:function(char){
 							addPassive(char,"Spin to Win");

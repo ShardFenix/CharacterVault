@@ -99,6 +99,7 @@ function handleGet(request, response){
 function handlePost(request, response){
 	// The requested URL, like http://localhost:8000/file.html => /file.html
     var uri = url.parse(request.url).pathname;
+    uri=decodeURI(uri);
     // get the /file.html from above and then find it from the current folder
     var filename = path.join(root, uri);
     // Check if the requested file exists
