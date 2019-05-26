@@ -93,6 +93,20 @@ function findSpell(name){
 	}
 }
 
+function getPlayerSpell(char, spellName, className){
+	for (let clas of char.classes){
+		if (className && clas.name!==className){
+			continue;
+		}
+		for (let spell of clas.spells){
+			if (spell.name===spellName){
+				return spell;
+			}
+		}
+	}
+	return null;
+}
+
 function addProficiency(char,skillname){
 	for (var i=0;i<char.skills.length;i++){
 		if (char.skills[i].name===skillname){

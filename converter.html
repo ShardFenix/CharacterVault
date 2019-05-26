@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular-animate.js"></script>
+<script src="audiometadata.js"></script>
+</head>
+<body style="background-color:#ffffff;">
+
+
+<script type="text/javascript">
+
+function collapseDescription(entries){
+	var result='';
+	for (var i=0;i<entries.length;i++){
+		if (typeof entries[i]==='string'){
+			result+=entries[i]+"<br>";
+		} else if (Array.isArray(entries[i])) {
+			result=collapseDescription(entries[i]);
+		} else {
+			if (entries[i].type=='entries'){
+				result+="&bull;<b>"+entries[i].name+":</b> ";
+				result+=collapseDescription(entries[i].entries);
+			} else if (entries[i].type=='table'){
+				result+="<table><thead><tr>";
+				for (var j=0;j<entries[i].colLabels.length;j++){
+					result+='<th>'+entries[i].colLabels[j]+'</th>';
+				}
+				result+="</tr></thead><tbody>";
+				for (var j=0;j<entries[i].rows.length;j++){
+					result+="<tr>";
+					for (var row=0;row<entries[i].rows[j].length;row++){
+						if (typeof entries[i].rows[j][row] === 'string'){
+							result+="<td>"+entries[i].rows[j][row]+"</td>";
+						} else if (entries[i].rows[j][row].type == 'cell'){
+							if (entries[i].rows[j][row].roll.exact){
+								result+="<td class='leftcol'>"+entries[i].rows[j][row].roll.exact+"</td>";
+							} else {
+								result+="<td class='leftcol'>"+entries[i].rows[j][row].roll.min+"-";
+								result+=entries[i].rows[j][row].roll.max+"</td>";
+							}
+						}
+					}
+					result+="</tr>";
+				}
+				result+="</tbody></table>";
+			} else if (entries[i].type=='list'){
+				result+="<ul>";
+				for (var j=0;j<entries[i].items.length;j++){
+					result+="<li>"+entries[i].items[j]+"</li>";
+				}
+				result+="</ul>";
+			}
+		}
+	}
+	return result;
+}
+
+function getSchool(s){
+	switch (s){
+		case "I":return "Illusion";
+		case "A":return "Abjuration";
+		case "V":return "Evocation";
+		case "D":return "Divination";
+		case "N":return "Necromancy";
+		case "T":return "Transmutation";
+		case "C":return "Conjuration";
+		case "E":return "Enchantment";
+	}
+	return "Unknown school: "+s;
+}
+
+
+function convertSpells(){
+$.get('http://localhost:8080/5espells.json',function(response){
+	var spells=[];
+	var print=true;
+	for (var i=0;i<response.spell.length;i++){
+	try{
+		var s=response.spell[i];
+		var spell={name:s.name};
+		spell.level=s.level;
+		spell.castTime=s.time[0].number+" "+s.time[0].unit;
+		if (s.time[0].number!=1){
+			spell.castTime+='s';
+		}
+		if (s.range.type=='point'){
+			if (s.range.distance.type=='touch'){
+				spell.range="Touch";
+			} else if (s.range.distance.type=='self') {
+				spell.range="Self";
+			} else {
+				spell.range=s.range.distance.amount+" "+s.range.distance.type;
+			}
+		} else {
+			spell.range=s.range.type.substring(0,1).toUpperCase()+s.range.type.substring(1);
+		}
+		if (s.meta && s.meta.ritual){
+			spell.ritual=true;
+		}
+		spell.components={verbal:false,somatic:false,material:false};
+		//components
+		if (s.components){
+			if (s.components.v){
+				spell.components.verbal=s.components.v;
+			}
+			if (s.components.s){
+				spell.components.somatic=s.components.s;
+			}
+			if (s.components.m){
+				if (s.components.m.text){
+					spell.components.material=s.components.m.text;
+				} else {
+					spell.components.material=s.components.m;
+				}
+			}
+		}
+		spell.classes=[];
+		for (var j=0;j<s.classes.fromClassList.length;j++){
+			spell.classes.push(s.classes.fromClassList[j].name);
+		}
+		spell.school=getSchool(s.school);
+		if (s.duration[0].type=='timed') {
+			spell.duration=s.duration[0].duration.amount+" "+s.duration[0].duration.type;
+			if (s.duration[0].duration.amount!=1){
+				spell.duration+='s';
+			}
+			if (s.duration[0].concentration){
+				spell.duration="Concentration up to "+spell.duration;
+			}
+		} else if (s.duration[0].type=='instant') {
+			spell.duration="Instant";
+		} else if (s.duration[0].type=='special') {
+			spell.duration="Special";
+		} else if (s.duration[0].type=='permanent') {
+			spell.duration="permanent";
+		} else {
+			console.log(s.name+" DURATION="+s.duration[0].type);
+			print=false;
+		}
+		spell.description=collapseDescription(s.entries);
+		if (s.entriesHigherLevel){
+			spell.description=spell.description+collapseDescription(s.entriesHigherLevel);
+		}
+		spell.description=spell.description.replace(/\{@filter ([^|]+)[^}]+\}/gm,'$1');
+		spell.description=spell.description.replace(/\{@[A-Za-z0-9-_() |]+\|([^}]+)\}/gm,'$1');
+		spell.description=spell.description.replace(/\{@\w+ ([^}]+)\}/gm,'$1');
+		spells.push(spell);
+	}catch(error){
+		console.error("Error with "+response.spell[i].name);
+		console.error(error);
+		print=false;
+	}
+	}
+	if (print){
+	console.log(JSON.stringify(spells));
+	document.getElementsByTagName('body')[0].innerHTML=JSON.stringify(spells);
+	}
+});
+}
+
+
+function convertCreatures(){
+$.get('http://localhost:8080/5espells.json',function(response){
+	var creatures=[];
+	var print=true;
+	for (var i=0;i<response.length;i++){
+	try{
+		var s=response.creature[i];
+		if (s.name=='Identify'){
+			var test=123;
+		}
+		var spell={name:s.name};
+		spell.level=s.level;
+		spell.castTime=s.time[0].number+" "+s.time[0].unit;
+		if (s.time[0].number!=1){
+			spell.castTime+='s';
+		}
+		if (s.range.type=='point'){
+			if (s.range.distance.type=='touch'){
+				spell.range="Touch";
+			} else {
+				spell.range=s.range.distance.amount+" "+s.range.distance.type;
+			}
+		} else {
+			spell.range=s.range.type;
+		}
+		spell.classes=[];
+		for (var j=0;j<s.classes.fromClassList.length;j++){
+			spell.classes.push(s.classes.fromClassList[j].name);
+		}
+		spell.school=getSchool(s.school);
+		if (s.duration[0].type=='timed') {
+			spell.duration=s.duration[0].duration.amount+" "+s.duration[0].duration.type;
+			if (s.duration[0].duration.amount!=1){
+				spell.duration+='s';
+			}
+		} else if (s.duration[0].type=='instant') {
+			spell.duration="Instant";
+		} else if (s.duration[0].type=='special') {
+			spell.duration="Special";
+		} else if (s.duration[0].type=='permanent') {
+			spell.duration="permanent";
+		} else {
+			console.log(s.name+" DURATION="+s.duration[0].type);
+			print=false;
+		}
+		spell.description=collapseDescription(s.entries);
+		spell.description=spell.description.replace(/\{@filter ([^|]+)[^}]+\}/gm,'$1');
+		spell.description=spell.description.replace(/\{@[A-Za-z0-9-_() |]+\|([^}]+)\}/gm,'$1');
+		spell.description=spell.description.replace(/\{@\w+ ([^}]+)\}/gm,'$1');
+		spells.push(spell);
+	}catch(error){
+		console.error("Error with "+response.spell[i].name);
+		console.error(error);
+		print=false;
+	}
+	}
+	if (print){
+	console.log(JSON.stringify(spells));
+	document.getElementsByTagName('body')[0].innerHTML=JSON.stringify(spells);
+	}
+});
+}
+
+convertSpells();
+//convertCreatures();
+
+
+</script>
+
+
+</body>
+</html>

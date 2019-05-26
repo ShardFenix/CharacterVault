@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular-animate.js"></script>
+</head>
+<body style="background-color:#ffffff;">
+<script type="text/javascript">
+
+
+function convertSpells(){
+$.get('http://localhost:8080/5emm.json',function(response){
+	var monsters=[];
+	var print=true;
+	for (let mm of response.monster){
+		try{
+			let monster={name:mm.name,source:mm.source};
+			if (typeof mm.cr === 'string'){
+				monster.cr=mm.cr;
+			} else {
+				monster.cr=mm.cr.cr;
+			}
+			monster.ac=getAc(mm.ac);
+			monster.size=getSize(mm.size);
+			monster.hp=mm.hp.average;
+			monster.hpgen=mm.hp.formula;
+			monster.speed=getSpeed(mm.speed);
+			monster.attributes={str:mm.str,
+								dex:mm.dex,
+								con:mm.con,
+								int:mm.int,
+								wis:mm.wis,
+								cha:mm.cha}
+			monster.saves=getSaves(mm);
+			monster.skills=mm.skill;
+			monster.languages=getLanguages(mm);
+			monster.passives=getPassives(mm.trait);
+			monster.actions=getActions(mm.action);
+			populateResistances(monster,mm);
+			populateSpellcasting(mm,monster);
+			if (typeof mm.type === 'string'){
+				monster.type=mm.type;
+			} else {
+				monster.type=mm.type.type;
+			}
+			monsters.push(monster);
+		}catch(error){
+			console.error("Error with "+mm.name);
+			console.error(error);
+			print=false;
+		}
+	}
+	if (print){
+		console.log(JSON.stringify(monsters));
+		document.getElementsByTagName('body')[0].innerHTML=JSON.stringify(monsters);
+	}
+});
+}
+
+function populateResistances(monster,mm){
+	if (mm.resist){
+		monster.resistances=[];
+		for (let r of mm.resist){
+			if (typeof r === 'string'){
+				monster.resistances.push(r);
+			} else {
+				if (r.note==="(from stoneskin)")continue;
+				if (r.special){
+					monster.resistances.push(r.special);
+				} else {
+					monster.resistances.push(r.preNote?r.preNote:''+r.resist.join(', ')+" "+r.note?r.note.replace('from ',''):'');
+				}
+			}
+		}
+	}
+	if (mm.immune){
+		monster.immunities=[];
+		for (let r of mm.immune){
+			if (typeof r === 'string'){
+				monster.immunities.push(r);
+			} else {
+				if (r.note==="(from stoneskin)")continue;
+				if (r.special){
+					monster.immunities.push(r.special);
+				} else {
+					monster.immunities.push(r.preNote?r.preNote:''+r.immune.join(', ')+" "+r.note?r.note.replace('from ',''):'');
+				}
+			}
+		}
+	}
+	if (mm.vulnerable){
+		monster.vulnerabilities=[];
+		for (let r of mm.vulnerable){
+			if (typeof r === 'string'){
+				monster.vulnerabilities.push(r);
+			} else {
+				if (r.special){
+					monster.vulnerabilities.push(r.special);
+				} else {
+					monster.vulnerabilities.push(r.preNote?r.preNote:''+r.vulnerable.join(', ')+" "+r.note?r.note.replace('from ',''):'');
+				}
+			}
+		}
+	}
+	if (mm.conditionImmune){
+		monster.conditionImmunities=mm.conditionImmune;
+	}
+}
+
+function populateSpellcasting(mm,creature){
+	if (mm.spellcasting){
+		creature.spellcasting={name:mm.spellcasting[0].name};
+		creature.spellcasting.description=mm.spellcasting[0].headerEntries.join('\n');
+		creature.spellcasting.description=creature.spellcasting.description.replace(/\{@hit (\d+)\}/,"+$1");
+		if (mm.spellcasting[0].will){
+			creature.spellcasting.will=[];
+			for (let spell of mm.spellcasting[0].will){
+				creature.spellcasting.will.push(
+					spell.replace(/\{@spell (.*)\}/,'$1')
+				);
+			}
+		}
+		if (mm.spellcasting[0].daily){
+			creature.spellcasting.individual=[];
+			if (mm.spellcasting[0].daily['1e']){
+				for (let spell of mm.spellcasting[0].daily['1e']){
+					creature.spellcasting.individual.push({
+						name:spell.replace(/\{@spell (.*)\}/,'$1'),
+						charges:1}
+					);
+				}
+			}
+			if (mm.spellcasting[0].daily['1']){
+				for (let spell of mm.spellcasting[0].daily['1']){
+					creature.spellcasting.individual.push({
+						name:spell.replace(/\{@spell (.*)\}/,'$1'),
+						charges:1}
+					);
+				}
+			}
+			if (mm.spellcasting[0].daily['2e']){
+				for (let spell of mm.spellcasting[0].daily['2e']){
+					creature.spellcasting.individual.push({
+						name:spell.replace(/\{@spell (.*)\}/,'$1'),
+						charges:2}
+					);
+				}
+			}
+			if (mm.spellcasting[0].daily['2']){
+				for (let spell of mm.spellcasting[0].daily['2']){
+					creature.spellcasting.individual.push({
+						name:spell.replace(/\{@spell (.*)\}/,'$1'),
+						charges:2}
+					);
+				}
+			}
+			if (mm.spellcasting[0].daily['3e']){
+				for (let spell of mm.spellcasting[0].daily['3e']){
+					creature.spellcasting.individual.push({
+						name:spell.replace(/\{@spell (.*)\}/,'$1'),
+						charges:3}
+					);
+				}
+			}
+			if (mm.spellcasting[0].daily['3']){
+				for (let spell of mm.spellcasting[0].daily['3']){
+					creature.spellcasting.individual.push({
+						name:spell.replace(/\{@spell (.*)\}/,'$1'),
+						charges:3}
+					);
+				}
+			}
+		}
+		if (mm.spellcasting[0].spells){
+			creature.spellcasting.spells=[];
+			for (let level of Object.keys(mm.spellcasting[0].spells)){
+				let lv = parseInt(level);
+				if (!creature.spellcasting.spells[lv]){
+					creature.spellcasting.spells[lv]=
+						{
+							slots:parseInt(mm.spellcasting[0].spells[level].slots),
+							spells:[]
+						}
+				}
+				for (let spell of mm.spellcasting[0].spells[level].spells){
+					creature.spellcasting.spells[lv].spells.push(
+						spell.replace(/\{@spell (.*)\}/,'$1')
+					);
+				}
+			}
+		}
+	}
+}
+
+function getLanguages(mm){
+	if (typeof mm === 'string'){
+		return mm.languages.split(', ');
+	}else{
+		return [];
+	}
+}
+function getPassives(traits){
+	let result=[];
+	if (!traits || traits.length===0){
+		return result;
+	}
+	for (let passive of traits){
+		let temp={name:passive.name};
+		temp.description=removeTags(passive.entries[0]);
+		result.push(temp);
+	}
+	return result;
+}
+
+function getActions(actions){
+	let result=[];
+	if (!actions || actions.length===0){
+		return result;
+	}
+	for (let action of actions){
+		let temp={name:action.name};
+		temp.name=temp.name.replace('{@recharge}','(recharge 6)');
+		temp.name=temp.name.replace('{@recharge 5}','(recharge 5-6)');
+		temp.name=temp.name.replace('{@recharge 4}','(recharge 4-6)');
+		temp.description=removeTags(collapseEntries(action.entries));
+		result.push(temp);
+	}
+	return result;
+}
+
+function collapseEntries(entries){
+	let result="";
+	for (let obj of entries){
+		if (typeof obj === 'string'){
+			result+=obj+"\n";
+		} else if (typeof obj === 'object'){
+			if (obj.type==='list'){
+				for (let item of obj.items){
+					if (item.type==='item'){
+						result+="\u2022 "+item.entry+"\n";
+					} else {
+						console.log("Unknown entry type: "+item.type);
+					}
+				}
+			}
+		}
+	}
+	return result;
+}
+
+function removeTags(string){
+	string=string.replace('{@atk mw}','Melee Weapon Attack');
+	string=string.replace('{@atk rw}','Ranged Weapon Attack');
+	string=string.replace('{@atk rs}','Ranged Special');
+	string=string.replace('{@h}','');
+	string=string.replace('{@atk mw,rw}','Ranged or Melee Weapon Attack');
+	string=string.replace(/\{@hit (\d+)\}/g,'+$1');
+	return string.replace(/\{@[^ ]+ ([^}]+)\}/g,'$1');
+}
+
+function getSaves(monster){
+	let save={};
+	if (monster.save){
+		if (monster.save.str){
+			save.str=parseInt(monster.save.str.substring(1));
+		} else {
+			save.str=attBonus(monster.str);
+		}
+		if (monster.save.dex){
+			save.dex=parseInt(monster.save.dex.substring(1));
+		} else {
+			save.dex=attBonus(monster.dex);
+		}
+		if (monster.save.con){
+			save.con=parseInt(monster.save.con.substring(1));
+		} else {
+			save.con=attBonus(monster.con);
+		}
+		if (monster.save.int){
+			save.int=parseInt(monster.save.int.substring(1));
+		} else {
+			save.int=attBonus(monster.int);
+		}
+		if (monster.save.wis){
+			save.wis=parseInt(monster.save.wis.substring(1));
+		} else {
+			save.wis=attBonus(monster.wis);
+		}
+		if (monster.save.cha){
+			save.cha=parseInt(monster.save.cha.substring(1));
+		} else {
+			save.cha=attBonus(monster.cha);
+		}
+	}
+	return save;
+}
+
+function attBonus(number){
+	return Math.floor((number+20)/2)-15;
+}
+
+function getSpeed(speed){
+	let result={};
+	if (speed.walk){
+		if (speed.walk.number){
+			result.walk=speed.walk.number;
+		} else {
+			result.walk=speed.walk;
+		}
+	}
+	if (speed.fly){
+		if (speed.fly.number){
+			result.fly=speed.fly.number;
+		} else {
+			result.fly=speed.fly;
+		}
+	}
+	if (speed.climb){
+		if (speed.climb.number){
+			result.climb=speed.climb.number;
+		} else {
+			result.climb=speed.climb;
+		}
+	}
+	if (speed.swim){
+		if (speed.swim.number){
+			result.swim=speed.swim.number;
+		} else {
+			result.swim=speed.swim;
+		}
+	}
+	if (speed.burrow){
+		if (speed.burrow.number){
+			result.burrow=speed.burrow.number;
+		} else {
+			result.burrow=speed.burrow;
+		}
+	}
+	return result;
+}
+
+function getSize(size){
+	switch (size){
+		case "T":return "Tiny";
+		case "S":return "Small";
+		case "M":return "Medium";
+		case "L":return "Large";
+		case "H":return "Huge";
+		case "G":return "Giant";
+	}
+	return size;
+}
+
+function getAc(ac){
+	let result='';
+	let first=true;
+	for (let entry of ac){
+		if (!first){result+=', ';}
+		if (typeof entry === 'number'){
+			result+=entry;
+		} else if (typeof entry === 'object'){
+			if (entry.condition){
+				result+=entry.ac+' '+ac.condition;
+			} else {
+				result+=entry.ac;
+			}
+		}
+		first=false;
+	}
+	return result;
+}
+
+
+function convertCreatures(){
+$.get('http://localhost:8080/5espells.json',function(response){
+	var creatures=[];
+	var print=true;
+	for (var i=0;i<response.length;i++){
+	try{
+		var s=response.creature[i];
+		if (s.name=='Identify'){
+			var test=123;
+		}
+		var spell={name:s.name};
+		spell.level=s.level;
+		spell.castTime=s.time[0].number+" "+s.time[0].unit;
+		if (s.time[0].number!=1){
+			spell.castTime+='s';
+		}
+		if (s.range.type=='point'){
+			if (s.range.distance.type=='touch'){
+				spell.range="Touch";
+			} else {
+				spell.range=s.range.distance.amount+" "+s.range.distance.type;
+			}
+		} else {
+			spell.range=s.range.type;
+		}
+		spell.classes=[];
+		for (var j=0;j<s.classes.fromClassList.length;j++){
+			spell.classes.push(s.classes.fromClassList[j].name);
+		}
+		spell.school=getSchool(s.school);
+		if (s.duration[0].type=='timed') {
+			spell.duration=s.duration[0].duration.amount+" "+s.duration[0].duration.type;
+			if (s.duration[0].duration.amount!=1){
+				spell.duration+='s';
+			}
+		} else if (s.duration[0].type=='instant') {
+			spell.duration="Instant";
+		} else if (s.duration[0].type=='special') {
+			spell.duration="Special";
+		} else if (s.duration[0].type=='permanent') {
+			spell.duration="permanent";
+		} else {
+			console.log(s.name+" DURATION="+s.duration[0].type);
+			print=false;
+		}
+		spell.description=collapseDescription(s.entries);
+		spell.description=spell.description.replace(/\{@filter ([^|]+)[^}]+\}/gm,'$1');
+		spell.description=spell.description.replace(/\{@[A-Za-z0-9-_() |]+\|([^}]+)\}/gm,'$1');
+		spell.description=spell.description.replace(/\{@\w+ ([^}]+)\}/gm,'$1');
+		spells.push(spell);
+	}catch(error){
+		console.error("Error with "+response.spell[i].name);
+		console.error(error);
+		print=false;
+	}
+	}
+	if (print){
+	console.log(JSON.stringify(spells));
+	document.getElementsByTagName('body')[0].innerHTML=JSON.stringify(spells);
+	}
+});
+}
+
+convertSpells();
+//convertCreatures();
+
+
+</script>
+
+
+</body>
+</html>

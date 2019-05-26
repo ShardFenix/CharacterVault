@@ -35,6 +35,11 @@ window.abilities.append([
 		resourceName:"Channel Divinity",
 		resourceCost:1
 	},{
+		name:"Destructive Wrath",
+		description:"You can use your Channel Divinity to wield the power of the storm with unchecked ferocity. When you roll lightning or thunder damage, you can use your Channel Divinity to deal maximum damage, instead of rolling.",
+		resourceName:"Channel Divinity",
+		resourceCost:1
+	},{
 		name:"Turn Undead",
 		description:"Using your Channel Divinity action, you present your holy symbol and speak a prayer censuring the undead. Each undead that can see or hear you within 30 feet of you must make a Wisdom saving throw. If the creature fails its saving throw, it is turned for 1 minute or until it takes any damage.\nA turned creature must spend its turns trying to move as far away from you as it can, and it can't willingly move to a space within 30 feet of you. It also can't take reactions. For its action, it can use only the Dash action or try to escape from an effect that prevents it from moving. If there's nowhere to move, the creature can use the Dodge action.",
 		resourceName:"Channel Divinity",
@@ -70,6 +75,18 @@ window.passives.append([
 	},{
 		name:"Supreme Healing",
 		description:"When you would normally roll one or more dice to restore hit points with a spell, you instead use the highest number possible for each die."
+	},{
+		name:"Thunderbolt Strike",
+		description:"When you deal lightning damage to a Large or smaller creature, you can also push it up to 10 feet away from you."
+	},{
+		name:"Divine Strike (1d8)",
+		description:"You gain the ability to infuse your weapon strikes with divine energy. Once on each of your turns when you hit a creature with a weapon attack, you can cause the attack to deal an extra 1d8 thunder damage to the target. When you reach 14th level, the extra damage increases to 2d8."
+	},{
+		name:"Divine Strike (2d8)",
+		description:"You gain the ability to infuse your weapon strikes with divine energy. Once on each of your turns when you hit a creature with a weapon attack, you can cause the attack to deal an extra 2d8 thunder damage to the target."
+	},{
+		name:"Stormborn",
+		description:"You have a flying speed equal to your current walking speed whenever you are not underground or indoors."
 	}
 ]);
 
@@ -378,6 +395,8 @@ window.subclasses.push(
 						action:function(char,derived,choice,$scope){
 							char.proficiencies.upush("Heavy Armor");
 							addPassive(char,"Disciple of Life");
+							getPlayerSpell(char,"Cure Wounds","Cleric").alwaysPrepared=true;
+							getPlayerSpell(char,"Bless","Cleric").alwaysPrepared=true;
 						}
 					}
 				]
@@ -392,7 +411,27 @@ window.subclasses.push(
 						}
 					}
 				]
-			},{},{},{},
+			},{ //3
+				updates:[
+					{
+						choices:[],
+						action:function(char){
+							getPlayerSpell(char,"Spiritual Weapon","Cleric").alwaysPrepared=true;
+							getPlayerSpell(char,"Lesser Restoration","Cleric").alwaysPrepared=true;
+						}
+					}
+				]
+			},{},{ //5
+				updates:[
+					{
+						choices:[],
+						action:function(char){
+							getPlayerSpell(char,"Beacon of Hope","Cleric").alwaysPrepared=true;
+							getPlayerSpell(char,"Revivify","Cleric").alwaysPrepared=true;
+						}
+					}
+				]
+			},
 			{//6
 				updates:[
 					{
@@ -403,7 +442,17 @@ window.subclasses.push(
 							addPassive(char,"Blessed Healer");
 						}
 					}				]
-			},{},
+			},{ //7
+				updates:[
+					{
+						choices:[],
+						action:function(char){
+							getPlayerSpell(char,"Death Ward","Cleric").alwaysPrepared=true;
+							getPlayerSpell(char,"Guardian of Faith","Cleric").alwaysPrepared=true;
+						}
+					}
+				]
+			},
 			{//8
 				updates:[
 					{
@@ -415,15 +464,149 @@ window.subclasses.push(
 						}
 					}
 				]
-			},{},{},{},{},{},{},{},{},
-			{//18
+			},{ //9
+				updates:[
+					{
+						choices:[],
+						action:function(char){
+							getPlayerSpell(char,"Mass Cure Wounds","Cleric").alwaysPrepared=true;
+							getPlayerSpell(char,"Raise Dead","Cleric").alwaysPrepared=true;
+						}
+					}
+				]
+			},{},{},{},{},{},{},{},
+			{//17
 				updates:[
 					{
 						summary:findPassive("Supreme Healing"),
 						choicePrompt:"You gain the following",
 						choices:[findPassive("Supreme Healing")],
 						action:function(char){
-							addPassive("Supreme Healing");
+							addPassive(char,"Supreme Healing");
+						}
+					}
+				]
+			}
+		]
+	}
+);
+
+
+window.subclasses.push(
+	{
+		classname:"Cleric",
+		name:"Tempest Domain",
+		subclass:"Tempest Domain",
+		description:"Gods whose portfolios include the Tempest domain—including Talos, Umberlee, Kord, Zeboim, the Devourer, Zeus, and Thor—govern storms, sea, and sky. They include gods of lightning and thunder, gods of earthquakes, some fire gods, and certain gods of violence, physical strength, and courage. In some pantheons, a god of this domain rules over other deities and is known for swift justice delivered by thunderbolts. In the pantheons of seafaring people, gods of this domain are ocean deities and the patrons of sailors. Tempest gods send their clerics to inspire fear in the common folk, either to keep those folk on the path of righteousness or to encourage them to offer sacrifices of propitiation to ward off divine wrath.",
+		levels:[{},
+			{//1
+				updates:[
+					{
+						summary:findPassive("Wrath of the Storm"),
+						choicePrompt:"You gain the following",
+						choices:[findPassive("Wrath of the Storm")],
+						action:function(char,derived,choice,$scope){
+							char.proficiencies.upush("Heavy Armor");
+							char.proficiencies.upush("Martial Weapons");
+							addAbility(char,"Wrath of the Storm");
+							getPlayerSpell(char,"Fog Cloud","Cleric").alwaysPrepared=true;
+							getPlayerSpell(char,"Thunderwave","Cleric").alwaysPrepared=true;
+						}
+					}
+				]
+			},{ //2
+				updates:[
+					{
+						summary:findAbility("Destructive Wrath"),
+						choicePrompt:"You gain the following",
+						choices:[findAbility("Destructive Wrath")],
+						action:function(char){
+							addAbility(char,"Destructive Wrath");
+						}
+					}
+				]
+			},{ //3
+				updates:[
+					{
+						choices:[],
+						action:function(char){
+							getPlayerSpell(char,"Gust of Wind","Cleric").alwaysPrepared=true;
+							getPlayerSpell(char,"Shatter","Cleric").alwaysPrepared=true;
+						}
+					}
+				]
+			},{},{ //5
+				updates:[
+					{
+						choices:[],
+						action:function(char){
+							getPlayerSpell(char,"Call Lightning","Cleric").alwaysPrepared=true;
+							getPlayerSpell(char,"Sleet Storm","Cleric").alwaysPrepared=true;
+						}
+					}
+				]
+			},
+			{//6
+				updates:[
+					{
+						summary:findPassive("Thunderbolt Strike"),
+						choicePrompt:"You gain the following",
+						choices:[findPassive("Thunderbolt Strike")],
+						action:function(char,derived,choice){
+							addPassive(char,"Thunderbolt Strike");
+						}
+					}				]
+			},{ //7
+				updates:[
+					{
+						choices:[],
+						action:function(char){
+							getPlayerSpell(char,"Control Weather","Cleric").alwaysPrepared=true;
+							getPlayerSpell(char,"Ice Storm","Cleric").alwaysPrepared=true;
+						}
+					}
+				]
+			},
+			{//8
+				updates:[
+					{
+						summary:findPassive("Divine Strike"),
+						choicePrompt:"You gain the following",
+						choices:[findPassive("Divine Strike")],
+						action:function(char){
+							addPassive(char,"Divine Strike");
+						}
+					}
+				]
+			},{ //9
+				updates:[
+					{
+						choices:[],
+						action:function(char){
+							getPlayerSpell(char,"Destructive Wave","Cleric").alwaysPrepared=true;
+							getPlayerSpell(char,"Insect Plague","Cleric").alwaysPrepared=true;
+						}
+					}
+				]
+			},{},{},{},{},{ //14
+				updates:[
+					{
+						choices:[],
+						action:function(char){
+							removePassive(char,"Divine Strike (1d8)");
+							addPassive(char,"Divine Strike (2d8)");
+						}
+					}
+				]
+			},{},{},
+			{//17
+				updates:[
+					{
+						summary:findPassive("Stormborn"),
+						choicePrompt:"You gain the following",
+						choices:[findPassive("Stormborn")],
+						action:function(char){
+							addPassive(char,"Stormborn");
 						}
 					}
 				]

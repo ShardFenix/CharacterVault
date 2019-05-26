@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+
+.leftitem{
+	text-align: center;
+    background-color: #ffdb77;
+    border: 1px groove black;
+    margin: 2px;
+    padding: 4px 0px 4px 0px;
+    font-size: 20px;
+}
+
+.slidecontainer {
+    width: 100%;
+}
+
+.slider {
+    -webkit-appearance: none;
+    width: 100%;
+    height: 15px;
+    border-radius: 5px;
+    background: #d3d3d3;
+    outline: none;
+    opacity: 0.7;
+    -webkit-transition: .2s;
+    transition: opacity .2s;
+}
+
+.slider:hover {
+    opacity: 1;
+}
+
+.slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    background: #4CAF50;
+    cursor: pointer;
+}
+
+.slider::-moz-range-thumb {
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    background: #4CAF50;
+    cursor: pointer;
+}
+</style>
+<!--
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular-animate.js"></script>
+-->
+<script src="libs/jquery.min.js"></script>
+<script src="libs/angular.min.js"></script>
+<script src="libs/angular-animate.js"></script>
+
+<script src="libs/audiometadata.js"></script>
+</head>
+<body style="background-color:#707070;">
+<div ng-app="myApp">
+<div ng-controller="MyController">
+
+<table style="width:100%;"><tr>
+<td width="25%" style="vertical-align:top;">
+	<div class="leftmenu">
+		<div class="leftitem" ng-repeat="folder in mainFolders" ng-click="openSecondaryFolder(folder)">
+			{{folder}}
+		</div>
+	</div>
+</td>
+<td width="25%" style="vertical-align:top;">
+	<div class="secondmenu">
+		<div class="leftitem" ng-repeat="file in files" ng-click="load(primaryFolder+file)">
+			{{file}}
+		</div>
+	</div>
+</td>
+<td width="25%" style="vertical-align:top;">
+	<div class="secondmenu">
+		<div class="leftitem" ng-repeat="file in stingers" ng-click="loadStinger(primaryFolder+file)">
+			{{file}}
+		</div>
+	</div>
+	
+</td>
+<td width="25%">
+	 <input type="range" min="0" max="100" value="50" class="slider" ng-model="volume">
+	 <br>
+	 <div class="leftitem" ng-click="fade=1">Stop</div>
+</td>
+
+</tr></table>
+</div>
+</div>
+
+<script type="text/javascript">
+var app=angular.module('myApp',[]);
+app.controller('MyController',['$scope','$timeout','$http','$interval',function($scope,$timeout,$http,$interval){
+
+$scope.mainFolders=[];
+
+$scope.files=[];
+$scope.stingers=[];
+
+let root="resources/";
+
+$scope.getFolders=function(rootPath, arrayStore){
+	$http.get('http://localhost:8080/'+root+rootPath).then(function(response){
+		for (let filename of response.data){
+			if (filename.endsWith('/')){
+				arrayStore.push(filename);
+			}
+		}
+	});
+}
+
+$scope.getFiles=function(rootPath, arrayStore, stingers){
+	$http.get('http://localhost:8080/'+root+rootPath).then(function(response){
+		for (let filename of response.data){
+			if (filename.endsWith('.ogg')){
+				arrayStore.push(filename.substring(0,filename.indexOf('.ogg')));
+			}
+		}
+	});
+}
+//init the folders
+$scope.getFolders('',$scope.mainFolders);
+
+$scope.openSecondaryFolder=function(rootPath){
+	$scope.files=[];
+	$scope.stingers=[];
+	$scope.primaryFolder=rootPath;
+	$scope.getFiles(rootPath,$scope.files,$scope.stingers);
+}
+
+$scope.audio1=null;
+$scope.audio2=null;
+$scope.onAudio1=false;
+
+$scope.load=function(filename) {
+	$scope.fade=0;
+	if ($scope.audio1){
+		$scope.audio1.pause();
+	}
+	if ($scope.audio2){
+		$scope.audio2.pause();
+	}
+	var req = new XMLHttpRequest();
+	req.open('GET', 'http://localhost:8080/'+root+filename+'.ogg', true);
+	req.responseType = 'arraybuffer';
+
+	req.onload = function() {
+		var metadata = AudioMetadata.ogg(req.response);
+		var loopStart=metadata.loopstart;
+		var bufferPart = req.response.slice(40, 48);
+		var bufferView = new Uint32Array(bufferPart);
+		var samplerate = bufferView[0];
+		var loopStartNum=parseFloat(loopStart)/samplerate;
+		if (!loopStartNum){loopStartNum=0;}
+		
+		$scope.audio2 = new Audio(root+filename+'.ogg');
+		$scope.audio2.volume=($scope.volume/100.0);
+		$scope.audio2.addEventListener('timeupdate', function() {
+			if ($scope.fade>0){
+				$scope.fade++;
+			}
+			this.volume=Math.max(0,(($scope.volume-$scope.fade*5)/100.0));
+			if (this.currentTime>this.duration-0.1){
+				this.pause();
+				this.currentTime=loopStartNum;
+				$scope.audio1.play();
+			}
+		}, false);
+		
+		$scope.audio1 = new Audio(root+filename+'.ogg');
+		$scope.audio1.volume=($scope.volume/100.0);
+		$scope.audio1.addEventListener('timeupdate', function() {
+			if ($scope.fade>0){
+				$scope.fade++;
+			}
+			this.volume=Math.max(0,(($scope.volume-$scope.fade*5)/100.0));
+			if (this.currentTime>4 && this.currentTime<5){
+				//need this to set the initial time of audio2
+				$scope.audio2.currentTime=loopStartNum;
+			}
+			if (this.currentTime>this.duration-0.1){
+				this.pause();
+				this.currentTime=loopStartNum;
+				$scope.audio2.play();
+			}
+		}, false);
+		$scope.audio1.play();
+	};
+	req.send(null);
+}
+
+
+$scope.loadStinger=function(filename) {
+	if ($scope.audio){
+		$scope.audio.pause();
+	}	if ($scope.audio1){
+		$scope.audio1.pause();
+	}	if ($scope.audio2){
+		$scope.audio2.pause();
+	}
+	var req = new XMLHttpRequest();
+	req.open('GET', 'http://localhost:8080/'+root+filename+'.ogg', true);
+	req.responseType = 'arraybuffer';
+
+	req.onload = function() {
+		$scope.audio = new Audio(root+filename+'.ogg');
+		$scope.audio.volume=($scope.volume/100.0);
+		$scope.audio.play();
+	};
+	req.send(null);
+}
+	
+
+}]);
+
+</script>
+
+
+</body>
+</html>

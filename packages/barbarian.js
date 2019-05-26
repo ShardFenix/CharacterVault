@@ -1,296 +1,3 @@
-window.classes.push(
-	{
-		classname:"Barbarian",
-		name:"Barbarian",
-		description:"People of towns and cities take pride in how their civilized ways set them apart from animals, as if denying one's own nature was a mark of superiority. To a barbarian, though, civilization is no virtue, but a sign of weakness. The strong embrace their animal nature—keen instincts, primal physicality, and ferocious rage. Barbarians are uncomfortable when hedged in by walls and crowds. They thrive in the wilds of their homelands: the tundra, jungle, or grasslands where their tribes live and hunt.\nBarbarians come alive in the chaos of combat. They can enter a berserk state where rage takes over, giving them superhuman strength and resilience. A barbarian can draw on this reservoir of fury only a few times without resting, but those few rages are usually sufficient to defeat whatever threats arise.",
-		levels:[
-			{ //1, first player level
-				"updates":[
-					{
-						"choices":[],
-						"action":function(char,derived,choice,$scope){
-							char.maxHp=12;
-							char.proficiencies.upush("Light Armor");
-							char.proficiencies.upush("Medium Armor");
-							char.proficiencies.upush("Shields");
-							char.proficiencies.upush("Simple Weapons");
-							char.proficiencies.upush("Martial Weapons");
-							char.saves.str=1;
-							char.saves.con=1;
-							addToInventory(char,findItem("Javelin",4));
-							addAbility(char,"Rage");
-							addPassive(char,"Unarmored Defense");
-							openPack(char,"Explorer's Pack");
-						}
-					},{
-						choicePrompt:"Choose a starting weapon:",
-						choices:[listMartialWeapons],
-						action:function(char,derived,choice){
-							addToInventory(char,findItem(choice));
-						}
-					},{
-						choicePrompt:"Choose a starting weapon:",
-						choices:[listSimpleWeapons],
-						action:function(char,derived,choice){
-							addToInventory(char,findItem(choice));
-						}
-					},{
-						"choicePrompt":"Choose two skill proficiencies:",
-						"choices":[function(char){
-							let result=[];
-							for (let skill of char.skills){
-								if (skill.mult===0){
-									if (["Animal Handling","Athletics","Intimidation","Nature","Perception","Survival"].indexOf(skill.name)!=-1){
-										result.push(skill.name);
-									}
-								}
-							}
-							return result;
-						}],
-						"action":function(char,derived,choice){
-							addProficiency(char,choice);
-						}
-					},{
-						"choicePrompt":"Choose two skill proficiencies:",
-						"choices":[function(char){
-							let result=[];
-							for (let skill of char.skills){
-								if (skill.mult===0){
-									if (["Animal Handling","Athletics","Intimidation","Nature","Perception","Survival"].indexOf(skill.name)!=-1){
-										result.push(skill.name);
-									}
-								}
-							}
-							return result;
-						}],
-						"action":function(char,derived,choice){
-							addProficiency(char,choice);
-						}
-					}
-				]
-			},	{ // 1
-				"updates":[
-					helper.hitDice12,
-					{
-						"choices":[],
-						"action":function(char,derived,choice){
-							addAbility(char,"Rage");
-							addPassive(char,"Unarmored Defense");
-						}
-					}
-				]
-			}, { // 2
-				"updates":[
-					helper.hitDice12,
-					{
-						"choices":[],
-						"action":function(char,derived,choice){
-							addPassive(char,"Danger Sense");
-							addPassive(char,"Reckless Attack");
-						}
-					}
-				]
-			}, { // 3
-				"updates":[
-					helper.hitDice12,
-					{
-						choicePrompt:"Choose a Primal Path",
-						choices:[listSpecializations],
-						action:function(char,derived,choice){
-							addSubclass(char,"Barbarian",choice);
-						}
-					}
-				]
-			}, { // 4
-				"updates":[
-					helper.hitDice12,
-					helper.attributeOrFeat,
-					helper.chooseFeat,
-					helper.increaseAttribute,
-					helper.increaseAttribute
-				]
-			},{//5
-				"updates":[
-					helper.hitDice12,
-					{
-						"choices":[],
-						"action":function(char,derived){
-							addPassive(char,"Extra Attacks (x1)");
-							addPassive(char,"Fast Movement");
-						}
-					}
-				]
-			},{//6
-				"updates":[
-					helper.hitDice12
-					
-				]
-			},{//7
-				"updates":[
-					helper.hitDice12,
-					{
-						"choices":[],
-						"action":function(char,derived){
-							addPassive(char,"Feral Instinct");
-						}
-					}
-				]
-			},{//8
-				"updates":[
-					helper.hitDice12,
-					helper.attributeOrFeat,
-					helper.chooseFeat,
-					helper.increaseAttribute,
-					helper.increaseAttribute
-				]
-			},{//9
-				"updates":[
-					helper.hitDice12,
-					{
-						"choices":[],
-						"action":function(char,derived){
-							addPassive(char,"Brutal Critical");
-						}
-					}
-				]
-			},{//10
-				"updates":[
-					helper.hitDice12
-				]
-			},{//11
-				"updates":[
-					helper.hitDice12,
-					{
-						choices:[],
-						action:function(char,derived){
-							addPassive(char,"Relentless Rage");
-						}
-					}
-				]
-			},{//12
-				"updates":[
-					helper.hitDice12,
-					helper.attributeOrFeat,
-					helper.chooseFeat,
-					helper.increaseAttribute,
-					helper.increaseAttribute
-				]
-			},{//13
-				"updates":[
-					helper.hitDice12
-				]
-			},{//14
-				"updates":[
-					helper.hitDice12
-				]
-			},{//15
-				"updates":[
-					helper.hitDice12,
-					{
-						"choices":[],
-						"action":function(char){
-							addPassive(char,"Persistent Rage");
-						}
-					}
-				]
-			},{//16
-				"updates":[
-					helper.hitDice12,
-					helper.attributeOrFeat,
-					helper.chooseFeat,
-					helper.increaseAttribute,
-					helper.increaseAttribute
-				]
-			},{//17
-				"updates":[
-					helper.hitDice12
-				]
-			},{//18
-				"updates":[
-					helper.hitDice12,
-					{
-						"choices":[],
-						"action":function(char){
-							addPassive(char,"Indomitable Might");
-						}
-					}
-				]
-			},{//19
-				"updates":[
-					helper.hitDice12,
-					helper.attributeOrFeat,
-					helper.chooseFeat,
-					helper.increaseAttribute,
-					helper.increaseAttribute
-				]
-			},{//20
-				"updates":[
-					helper.hitDice12,
-					{
-						"choices":[],
-						"action":function(char){
-							addPassive(char,"Primal Champion");
-							char.attributes.str=Math.min(char.attributes.str+4,24);
-							char.attributes.con=Math.min(char.attributes.con+4,24);
-						}
-					}
-				]
-			}
-		]
-	}
-);
-
-window.subclasses.push(
-	{
-		classname:"Barbarian",
-		name:"Whirlwind",
-		subclass:"Whirlwind",
-		description:"You achieve glory in combat the only way you know how - by spinning. Barbarians who follow the Path of the Whirlwind throw caution to the... wind, and swing their oversized weapons in every possible direction, as well as some impossible directions, creating a twister of carnage. Manly yells are mandatory while spinning.",
-		levels:[{},{},{},
-			{//3
-				updates:[
-					{
-						choices:[],
-						action:function(char,derived,choice,$scope){
-							addAbility(char,"Whirlwind");
-						}
-					}
-				]
-			},{},{},{ //6
-				updates:[
-					{
-						choices:[],
-						action:function(char){
-							addPassive(char,"Slice and Dice");
-						}
-					}
-				]
-			},{},{},{},
-			{//10
-				updates:[
-					{
-						choices:[],
-						action:function(char,derived,choice){
-							addPassive(char,"Storm of Steel");
-						}
-					}
-				]
-			},{},{},{},
-			{//14
-				updates:[
-					{
-						choices:[],
-						action:function(char){
-							addPassive(char,"Spin to Win");
-						}
-					}
-				]
-
-			},{},{},{},{},{},{}
-		]
-	}
-);
-
 window.abilities.append([
 	{
 		name:"Rage",
@@ -359,3 +66,343 @@ window.passives.append([
 		description:"Whenever you bring a creature to 0 hit points during your turn, you can move up to 30 additional feet this turn."
 	}
 ]);
+
+window.classes.push(
+	{
+		classname:"Barbarian",
+		name:"Barbarian",
+		description:"People of towns and cities take pride in how their civilized ways set them apart from animals, as if denying one's own nature was a mark of superiority. To a barbarian, though, civilization is no virtue, but a sign of weakness. The strong embrace their animal nature—keen instincts, primal physicality, and ferocious rage. Barbarians are uncomfortable when hedged in by walls and crowds. They thrive in the wilds of their homelands: the tundra, jungle, or grasslands where their tribes live and hunt.\nBarbarians come alive in the chaos of combat. They can enter a berserk state where rage takes over, giving them superhuman strength and resilience. A barbarian can draw on this reservoir of fury only a few times without resting, but those few rages are usually sufficient to defeat whatever threats arise.",
+		levels:[
+			{ //1, first player level
+				summary:[
+					{name:"Proficiencies",description:"Light Armor, Medium Armor, Simple Weapons, Martial Weapons, Shields, STR saves, CON saves"},
+					{name:"Starting Equipment",description:"Any Martial Melee weapon, Two handaxes or any simple weapon, four javelins"},
+					{name:"Skill Proficiencies",description:"Choose two from Animal Handling, Athletics, Intimidation, Nature, Perception, and Survival"},
+					findPassive("Unarmored Defense"),
+					findAbility("Rage")
+				],
+				"updates":[
+					{
+						choicePrompt:"You gain the following proficiencies",
+						choices:["Light Armor","Medium Armor","Simple Weapons","Martial Weapons","Shields","STR saves","CON saves"],
+						action:function(char,derived,choice,$scope){
+							char.maxHp=12;
+							char.proficiencies.upush("Light Armor");
+							char.proficiencies.upush("Medium Armor");
+							char.proficiencies.upush("Shields");
+							char.proficiencies.upush("Simple Weapons");
+							char.proficiencies.upush("Martial Weapons");
+							char.saves.str=1;
+							char.saves.con=1;
+							addToInventory(char,findItem("Javelin",4));
+							addAbility(char,"Rage");
+							addPassive(char,"Unarmored Defense");
+							openPack(char,"Explorer's Pack");
+						}
+					},{
+						choicePrompt:"Choose a starting weapon:",
+						choices:[listMartialWeapons],
+						action:function(char,derived,choice){
+							addToInventory(char,findItem(choice));
+						}
+					},{
+						choicePrompt:"Choose a starting weapon:",
+						choices:[listSimpleWeapons],
+						action:function(char,derived,choice){
+							addToInventory(char,findItem(choice));
+						}
+					},{
+						choicePrompt:"Choose two skill proficiencies:",
+						choices:[function(char){
+							let result=[];
+							for (let skill of char.skills){
+								if (skill.mult===0){
+									if (["Animal Handling","Athletics","Intimidation","Nature","Perception","Survival"].indexOf(skill.name)!=-1){
+										result.push(skill.name);
+									}
+								}
+							}
+							return result;
+						}],
+						"action":function(char,derived,choice){
+							addProficiency(char,choice);
+						}
+					},{
+						"choicePrompt":"Choose two skill proficiencies:",
+						"choices":[function(char){
+							let result=[];
+							for (let skill of char.skills){
+								if (skill.mult===0){
+									if (["Animal Handling","Athletics","Intimidation","Nature","Perception","Survival"].indexOf(skill.name)!=-1){
+										result.push(skill.name);
+									}
+								}
+							}
+							return result;
+						}],
+						"action":function(char,derived,choice){
+							addProficiency(char,choice);
+						}
+					}
+				]
+			},	{ // 1
+				summary:[
+					findPassive("Unarmored Defense"),
+					findAbility("Rage")
+				],
+				"updates":[
+					helper.hitDice12,
+					{
+						"choices":[],
+						"action":function(char,derived,choice){
+							addAbility(char,"Rage");
+							addPassive(char,"Unarmored Defense");
+						}
+					}
+				]
+			}, { // 2
+				summary:[
+					findPassive("Danger Sense"),
+					findPassive("Reckless Attack")
+				],
+				"updates":[
+					helper.hitDice12,
+					{
+						"choices":[],
+						"action":function(char,derived,choice){
+							addPassive(char,"Danger Sense");
+							addPassive(char,"Reckless Attack");
+						}
+					}
+				]
+			}, { // 3
+				"updates":[
+					helper.hitDice12,
+					{
+						summary:{name:"Primal Path",description:"Choose your Primal Path"},
+						choicePrompt:"Choose a Primal Path",
+						choices:[listSpecializations],
+						action:function(char,derived,choice){
+							addSubclass(char,"Barbarian",choice);
+						}
+					}
+				]
+			}, { // 4
+				"updates":[
+					helper.hitDice12,
+					helper.attributeOrFeat,
+					helper.chooseFeat,
+					helper.increaseAttribute,
+					helper.increaseAttribute
+				]
+			},{//5
+				summary:[
+					findPassive("Extra Attacks (x1)"),
+					findPassive("Fast Movement")
+				],
+				"updates":[
+					helper.hitDice12,
+					{
+						"choices":[],
+						"action":function(char,derived){
+							addPassive(char,"Extra Attacks (x1)");
+							addPassive(char,"Fast Movement");
+						}
+					}
+				]
+			},{//6
+				"updates":[
+					helper.hitDice12
+				]
+			},{//7
+				summary:[
+					findPassive("Feral Instinct")
+				],
+				"updates":[
+					helper.hitDice12,
+					{
+						"choices":[],
+						"action":function(char,derived){
+							addPassive(char,"Feral Instinct");
+						}
+					}
+				]
+			},{//8
+				"updates":[
+					helper.hitDice12,
+					helper.attributeOrFeat,
+					helper.chooseFeat,
+					helper.increaseAttribute,
+					helper.increaseAttribute
+				]
+			},{//9
+				summary:[
+					findPassive("Brutal Critical")
+				],
+				"updates":[
+					helper.hitDice12,
+					{
+						"choices":[],
+						"action":function(char,derived){
+							addPassive(char,"Brutal Critical");
+						}
+					}
+				]
+			},{//10
+				"updates":[
+					helper.hitDice12
+				]
+			},{//11
+				summary:[
+					findPassive("Relentless Rage")
+				],
+				"updates":[
+					helper.hitDice12,
+					{
+						choices:[],
+						action:function(char,derived){
+							addPassive(char,"Relentless Rage");
+						}
+					}
+				]
+			},{//12
+				"updates":[
+					helper.hitDice12,
+					helper.attributeOrFeat,
+					helper.chooseFeat,
+					helper.increaseAttribute,
+					helper.increaseAttribute
+				]
+			},{//13
+				"updates":[
+					helper.hitDice12
+				]
+			},{//14
+				"updates":[
+					helper.hitDice12
+				]
+			},{//15
+				summary:[
+					findPassive("Persistent Rage")
+				],
+				"updates":[
+					helper.hitDice12,
+					{
+						"choices":[],
+						"action":function(char){
+							addPassive(char,"Persistent Rage");
+						}
+					}
+				]
+			},{//16
+				"updates":[
+					helper.hitDice12,
+					helper.attributeOrFeat,
+					helper.chooseFeat,
+					helper.increaseAttribute,
+					helper.increaseAttribute
+				]
+			},{//17
+				"updates":[
+					helper.hitDice12
+				]
+			},{//18
+				summary:[
+					findPassive("Indomitable Might")
+				],
+				"updates":[
+					helper.hitDice12,
+					{
+						"choices":[],
+						"action":function(char){
+							addPassive(char,"Indomitable Might");
+						}
+					}
+				]
+			},{//19
+				"updates":[
+					helper.hitDice12,
+					helper.attributeOrFeat,
+					helper.chooseFeat,
+					helper.increaseAttribute,
+					helper.increaseAttribute
+				]
+			},{//20
+				summary:[
+					findPassive("Primal Champion")
+				],
+				"updates":[
+					helper.hitDice12,
+					{
+						"choices":[],
+						"action":function(char){
+							addPassive(char,"Primal Champion");
+							char.attributes.str=Math.min(char.attributes.str+4,24);
+							char.attributes.con=Math.min(char.attributes.con+4,24);
+						}
+					}
+				]
+			}
+		]
+	}
+);
+
+window.subclasses.push(
+	{
+		classname:"Barbarian",
+		name:"Whirlwind",
+		subclass:"Whirlwind",
+		description:"You achieve glory in combat the only way you know how - by spinning. Barbarians who follow the Path of the Whirlwind throw caution to the wind, and swing their oversized weapons in physically impossible ways in every possible direction, as well as some impossible directions, creating a blurry metal twister of carnage. Manly yells are mandatory while spinning.",
+		levels:[{},{},{},
+			{//3
+				updates:[
+					{
+						summary:findAbility("Whirlwind"),
+						choicePrompt:"You gain the following",
+						choices:[findAbility("Whirlwind")],
+						action:function(char,derived,choice,$scope){
+							addAbility(char,"Whirlwind");
+						}
+					}
+				]
+			},{},{},{ //6
+				updates:[
+					{
+						summary:findPassive("Slice and Dice"),
+						choicePrompt:"You gain the following",
+						choices:[findPassive("Slice and Dice")],
+						action:function(char){
+							addPassive(char,"Slice and Dice");
+						}
+					}
+				]
+			},{},{},{},
+			{//10
+				updates:[
+					{
+						choicePrompt:"You gain the following",
+						summary:findPassive("Storm of Steel"),
+						choices:[findPassive("Storm of Steel")],
+						action:function(char,derived,choice){
+							addPassive(char,"Storm of Steel");
+						}
+					}
+				]
+			},{},{},{},
+			{//14
+				updates:[
+					{
+						choicePrompt:"You gain the following",
+						summary:findPassive("Spin to Win")
+						choices:[findPassive("Spin to Win")],
+						action:function(char){
+							addPassive(char,"Spin to Win");
+						}
+					}
+				]
+
+			},{},{},{},{},{},{}
+		]
+	}
+);
+

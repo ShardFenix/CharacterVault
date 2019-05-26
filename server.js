@@ -25,6 +25,7 @@ for (let i=2;i<process.argv.length;i++){
 function handleGet(request, response){
 	// The requested URL, like http://localhost:8000/file.html => /file.html
     var uri = url.parse(request.url).pathname;
+	uri=decodeURI(uri);
     // get the /file.html from above and then find it from the current folder
     var filename = path.join(root, uri);
 	
@@ -45,14 +46,17 @@ function handleGet(request, response){
             console.log(RED + 'FAIL: ' + WHT + filename);
             // Redirect the browser to the 404 page
             filename = path.join(process.cwd(), '/404.html');
-        // If the requested URL is a folder, like http://localhost:8000/catpics
         } else if (fs.statSync(filename).isDirectory()) {
             // Output a green line to the console explaining what folder was requested
             console.log(GRN + 'FLDR: ' + WHT + filename);
             // return a list of filenames/foldernames in this folder
 			let files=[];
-			fs.readdirSync(filename).forEach(file => {
-				files.push(file);
+			fs.readdirSync(filename, {withFileTypes:true}).forEach(file => {
+				if (file.isDirectory()){
+					files.push(decodeURI(file.name)+"/");
+				} else {
+					files.push(decodeURI(file.name));
+				}
 			});
             var headers = {'Access-Control-Allow-Origin':'*'};
 			headers['Content-Type']='application/json';
