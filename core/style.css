@@ -355,7 +355,7 @@ input.tiny{
 }
 @media screen and (max-width: 1773px){
 	.creatureCard{
-		width:100%;
+		width:calc(100% - 30px);
 		margin-bottom: 20px;
 		background:url('../images/parchment2.jpg');
 	}
@@ -646,4 +646,3 @@ i{
 .bold{
 	font-weight:bold;
 }
-@media 

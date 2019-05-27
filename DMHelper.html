@@ -275,15 +275,15 @@
 			<div ng-if="creature.passives.length>0">
 				<span class="label subheader">Passives</span>
 				<table class="full" ng-repeat="p in creature.passives">
-					<thead><tr><th>{{p.name}}</th></tr></thead>
-					<tbody><tr><td style="white-space: pre-wrap;">{{p.description}}</td></tr></tbody>
+					<thead><tr><th ng-click="p.hidden=!p.hidden">{{p.name}}</th></tr></thead>
+					<tbody ng-hide="p.hidden"><tr><td style="white-space: pre-wrap;">{{p.description}}</td></tr></tbody>
 				</table>
 			</div>
 			<div ng-if="creature.actions">
 				<span class="label subheader">Actions</span>
 				<table class="full" ng-repeat="a in creature.actions">
-					<thead><tr><th>{{a.name}}</th></tr></thead>
-					<tbody><tr><td style="white-space: pre-wrap;">{{a.description}}</td></tr></tbody>
+					<thead><tr><th ng-click="a.hidden=!a.hidden">{{a.name}}</th></tr></thead>
+					<tbody ng-hide="a.hidden"><tr><td style="white-space: pre-wrap;">{{a.description}}</td></tr></tbody>
 				</table>
 			</div>
 			<div ng-if="creature.spellcasting">
@@ -299,8 +299,8 @@
 				</div>
 				<div ng-if="creature.spellcasting.spells"> 
 					<div ng-repeat="level in creature.spellcasting.spells"
-						 ng-if="level.slots" ng-click="level.slots=level.slots-1">
-						<span style="font-weight:bold;"">Level {{$index}} ({{level.slots}}): </span>
+						 ng-click="level.slots=level.slots-1">
+						<span style="font-weight:bold;"> Level {{$index}} ({{level.slots}}): </span>
 						<span ng-repeat="spell in level.spells" class="spellButton">{{spell}}</span>
 					</div>
 				</div>

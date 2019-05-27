@@ -283,7 +283,43 @@ function prepCharacter(char){
 	char.saves.int = intBonus + p*char.saves.int;
 	char.saves.wis = wisBonus + p*char.saves.wis;
 	char.saves.cha = chaBonus + p*char.saves.cha;
-	delete char.passives;
+	
+	//delete char.passives;
+	char.actions=char.abilities;
+	for (let i=char.actions.length-1;i>=0;i--){
+		if (/(Lv|Level) \d Spell/.test(char.actions[i].name)){
+			char.actions.splice(i,1);
+		}
+	}
+	//setup spells
+	char.spellcasting={spells:[{spells:[]}]};
+	let slots = spellSlots1(char);
+	if (slots){char.spellcasting.spells.push({slots:slots,spells:[]});}
+	slots = spellSlots2(char);
+	if (slots){char.spellcasting.spells.push({slots:slots,spells:[]});}
+	slots = spellSlots3(char);
+	if (slots){char.spellcasting.spells.push({slots:slots,spells:[]});}
+	slots = spellSlots4(char);
+	if (slots){char.spellcasting.spells.push({slots:slots,spells:[]});}
+	slots = spellSlots5(char);
+	if (slots){char.spellcasting.spells.push({slots:slots,spells:[]});}
+	slots = spellSlots6(char);
+	if (slots){char.spellcasting.spells.push({slots:slots,spells:[]});}
+	slots = spellSlots7(char);
+	if (slots){char.spellcasting.spells.push({slots:slots,spells:[]});}
+	slots = spellSlots8(char);
+	if (slots){char.spellcasting.spells.push({slots:slots,spells:[]});}
+	slots = spellSlots9(char);
+	if (slots){char.spellcasting.spells.push({slots:slots,spells:[]});}
+
+	
+	for (let clas of char.classes){
+		for (let spell of clas.spells){
+			if (char.spellcasting.spells[spell.level]){
+				char.spellcasting.spells[spell.level].spells.push(spell.name);
+			}
+		}
+	}
 	delete char.abilities;
 	delete char.proficiencies;
 }
