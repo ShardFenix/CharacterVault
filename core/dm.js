@@ -29,30 +29,38 @@ $scope.spellFilters={
 }
 $scope.players=[];
 
-$scope.addPlayer=function(){
-	let p = {
-		name:"",
-		attributes:{
-			str:10,
-			dex:10,
-			con:10,
-			int:10,
-			wis:10,
-			cha:10
-		},
-		ac:12,
-		saves:{
-			str:0,
-			dex:0,
-			con:0,
-			int:0,
-			wis:0,
-			cha:0
-		},
-		hp:9,
-		hpMax:9,
-		effects:[]
+$scope.loot=[];
+
+$scope.addPlayer=function(player){
+	if (player){
+		$scope.players.push(angular.copy(player));
+		
+		return;
+	} else {
+		let p = {
+			name:"",
+			attributes:{
+				str:10,
+				dex:10,
+				con:10,
+				int:10,
+				wis:10,
+				cha:10
+			},
+			ac:12,
+			saves:{
+				str:0,
+				dex:0,
+				con:0,
+				int:0,
+				wis:0,
+				cha:0
+			},
+			hp:9,
+			hpMax:9,
+			effects:[]
 		};
+	}
 	$scope.players.push(p);
 }
 
@@ -228,18 +236,6 @@ $scope.setTip=function(choice,spellLevel){
 	}
 }
 
-$scope.save=function(){
-	if (typeof Storage !== "undefined") {
-		localStorage.setItem("dmtool",JSON.stringify($scope.dm));
-	}
-}
-
-$scope.load=function(){
-	if (typeof Storage !== "undefined") {
-		$scope.dm = JSON.parse(localStorage.getItem("dmtool"));
-	}
-}
-
 $scope.spellList=window.spells;
 $scope.creatures=window.creatures;
 
@@ -320,6 +316,7 @@ function prepCharacter(char){
 			}
 		}
 	}
+	char.isPlayer=true;
 	delete char.abilities;
 	delete char.proficiencies;
 }
@@ -378,5 +375,21 @@ $scope.updateSpellFilter=function(){
 }
 $scope.updateSpellFilter();
 
+function listWeapons(){
+	let result=[];
+	for (item of window.items){
+		if (item.categories && item.categories.includes("Weapon") && !item.categories.includes("Wondrous")){
+			result.push(item);
+		}
+	}
+	return result;
+}
+
+function randomWeapon(){
+	let weapons=listWeapons();
+	return weapons[Math.rand(0,weapons.length)];
+}
+
+console.log(randomWeapon());
 
 }]);

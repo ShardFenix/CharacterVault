@@ -564,7 +564,7 @@ window.items=[
 	},{
 		name:"Amulet of Nine Lives",
 		description:"This ornate amulet is set with nine rubies that glow with a dim crimson light. Ezch time you would die while wearing the amulet, one of the rubies stops glowing, and something miraculous happens to prevent your death. Once all nine rubies have been expended, this becomes a nonmagical amulet worth 10g.",
-		categories:['Wondrous'],
+		categories:['Wondrous','Jewelry'],
 		count:9,
 		value:1000,
 		proficiencies:[]
@@ -578,14 +578,14 @@ window.items=[
 	},{
 		name:"Gauntlet of Challenge",
 		description:"This unassuming gauntlet appears mundane, but when thrown in front of a creature with whom you have asked a one-on-one challenge of some sort, the creature must accept. This effect can't be used until the next dawn.",
-		categories:["Wondrous"],
+		categories:["Wondrous",'Clothing'],
 		count:1,
 		value:500,
 		proficiencies:[]
 	},{
 		name:"Helm of Command",
 		description:"Once per combat on your turn, you may forfeit all your actions for that turn. You designate a creature you can see within 60 feet that can see or hear you. That creature gains a second action on their next turn.",
-		categories:['Helmet','Medium Armor'],
+		categories:['Wondrous','Helmet','Clothing'],
 		count:1,
 		value:3000,
 		proficiencies:['Medium Armor']

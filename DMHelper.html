@@ -24,7 +24,8 @@
 <span class="tab" ng-click="tab='notes'" ng-class="{'activetab':tab=='notes'}">Notes</span>
 <span class="tab" ng-click="tab='players'" ng-class="{'activetab':tab=='players'}">Players</span>
 <span class="tab" ng-click="tab='combat'" ng-class="{'activetab':tab=='combat'}">Combat</span>
-<span class="tab" ng-click="tab='spells'" ng-class="{'activetab':tab=='spells'}">Spell Reference</span>
+<span class="tab" ng-click="tab='spells'" ng-class="{'activetab':tab=='spells'}">Spells</span>
+<span class="tab" ng-click="tab='loot'" ng-class="{'activetab':tab=='loot'}">LOOt</span>
 </div>
 
 <div ng-show="tab=='general'">
@@ -114,6 +115,74 @@
 					</table>
 				</div>
 			</div>
+			<div class="box">
+				<div class="rulesHeader">Exhaustion</div>
+				<div class="boxContent">
+					<table style="width:100%" class="borders">
+						<thead><tr><th>Level</th><th>Effect</th></tr></thead>
+						<tbody>
+							<tr>
+								<td>1</td>
+								<td>Disadvantage on ability checks</td>
+							</tr>
+							<tr>
+								<td>2</td>
+								<td>Half speed</td>
+							</tr>
+							<tr>
+								<td>3</td>
+								<td>Disadvantage on attack rolls and saving throws</td>
+							</tr>
+							<tr>
+								<td>4</td>
+								<td>Max HP halved</td>
+							</tr>
+							<tr>
+								<td>5</td>
+								<td>0 Speed</td>
+							</tr>
+							<tr>
+								<td>6</td>
+								<td>Death</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+			<div class="box">
+				<div class="rulesHeader">Improvised Damage</div>
+				<div class="boxContent">
+					<table style="width:100%" class="borders">
+						<thead><tr><th>CR</th><th>Minor</th><th>Dangerous</th><th>Deadly</th></tr></thead>
+						<tbody>
+							<tr>
+								<td>1-4</td>
+								<td>1d10</td>
+								<td>2d10</td>
+								<td>4d10</td>
+							</tr>
+							<tr>
+								<td>5-10</td>
+								<td>2d10</td>
+								<td>4d10</td>
+								<td>8d10</td>
+							</tr>
+							<tr>
+								<td>11-16</td>
+								<td>4d10</td>
+								<td>10d10</td>
+								<td>18d10</td>
+							</tr>
+							<tr>
+								<td>17-20</td>
+								<td>10d10</td>
+								<td>18d10</td>
+								<td>40d10</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
 		</td>
 		<td width="20%">
 		</td>
@@ -171,8 +240,22 @@
 
 <table style="width:100%"><tbody><tr>
 	<td style="width:400px;vertical-align: top;">
+		<div>
+			<form ng-submit="addInitiative()">
+				<input type='text' placeholder="Enter Name" ng-model="newInitiative"/>
+			</form>
+			<div ng-repeat="item in initiativeOrder track by $index" ng-click="initUp(item)"
+				 class="yellowback item"
+				 ng-mouseenter="chooseMonster(item)"
+				 ng-mouseleave="chooseMonster()">
+				{{item.name || item}}
+				<span class="deletebutton" ng-click="deleteInit(item,$event)">&times;</span>
+			</div>
+			<button class="redback item" ng-click="initiativeOrder=[]">Clear Initiative</button>
+		</div>
+		<hr>
 		<input type="text" ng-model="creatureFilter" placeholder="Filter..."/>
-		<div style="overflow-y:scroll;max-height:calc(100vh - 100px)">
+		<div style="overflow-y:scroll;max-height:calc(100vh - 450px)">
 			<table class="borders">
 				<thead><tr>
 					<th>Name</th>
@@ -185,25 +268,10 @@
 						<td style="width:30%">{{creature.name}}</td>
 						<td style="width:10%">{{creature.cr}}</td>
 						<td style="width:20%">{{creature.type}}</td>
-						<td style="width:10%"><span class="button" ng-click="addToEncounter(creature)">&raquo;</span></td>
+						<td style="width:10%"><span class="button" ng-click="addToEncounter(creature)">^</span></td>
 					</tr>
 				</tbody>
 			</table>
-		</div>
-	</td>
-	<td style="width:320px;vertical-align: top;">
-		<div style="margin-top:80px;">
-			<form ng-submit="addInitiative()">
-				<input type='text' placeholder="Enter Name" ng-model="newInitiative"/>
-			</form>
-			<div ng-repeat="item in initiativeOrder track by $index" ng-click="initUp(item)"
-				 class="yellowback item"
-				 ng-mouseenter="chooseMonster(item)"
-				 ng-mouseleave="chooseMonster()">
-				{{item.name || item}}
-				<span class="deletebutton" ng-click="deleteInit(item,$event)">&times;</span>
-			</div>
-			<button class="redback item" ng-click="initiativeOrder=[]">Clear Initiative</button>
 		</div>
 	</td>
 	<td style="vertical-align: top;display: flex;flex-wrap: wrap;">
@@ -316,22 +384,22 @@
 <!-- End Combat -->
 
 <div ng-show="tab=='players'">
-	<div style="display:flex;">
-		<div ng-repeat="creature in players" class="playerCard box">
-			<div class="playerHeader" ng-class="{'selected':creature===chosenMonster}">
+	<div style="display:flex;flex-wrap:wrap;">
+		<div ng-repeat="player in players" class="playerCard box">
+			<div class="playerHeader" ng-class="{'selected':player===chosenMonster}">
 				<div class="headerBg"></div>
-				<input type="text" class="white label" ng-model="creature.name"/>
-				<span class="deletebutton" ng-click="removePlayer(creature)">&times;</span>
+				<input type="text" class="white label" ng-model="player.name"/>
+				<span class="deletebutton" ng-click="removePlayer(player)">&times;</span>
 			</div>
 			<div style="position:relative;">
 				<span>&emsp;HP: </span>
-				<input type="text" class="hidden right" ng-model="creature.hp"/> / 
-				<input type="text" class="hidden right" ng-model="creature.hpMax"/>
+				<input type="text" class="hidden right" ng-model="player.hp"/> / 
+				<input type="text" class="hidden right" ng-model="player.hpMax"/>
 				<form ng-submit="damage(this)" style="display:initial;">
 					<input type="text" number ng-model="damageAmount" 
 							placeholder="Deal damage" class="med"/>
 				</form>
-				<div style="position:absolute;right:4px;top:8px;font-weight:bold;">{{creature.type}}</div>
+				<div style="position:absolute;right:4px;top:8px;font-weight:bold;">{{player.type}}</div>
 			</div>
 			<div>
 				<table class="borders full"><thead><tr>
@@ -365,8 +433,29 @@
 			</div>
 		</div>
 	</div>
+	
+	<input type="text" ng-model="playerFilter" placeholder="Filter..."/>
+	<div style="overflow-y:scroll;max-height:calc(100vh - 450px)">
+		<table class="borders">
+			<thead><tr>
+				<th>Name</th>
+				<th>CR</th>
+				<th>Type</th>
+				<th></th>
+			</tr></thead>
+			<tbody>
+				<tr ng-repeat="creature in creatures | filter:playerFilter" ng-if="creature.isPlayer">
+					<td style="width:30%">{{creature.name}}</td>
+					<td style="width:10%">{{creature.cr}}</td>
+					<td style="width:20%">{{creature.type}}</td>
+					<td style="width:10%"><span class="button" ng-click="addPlayer(creature)">^</span></td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+
 	<div>
-		<span class="button" ng-click="addPlayer()">Add</span>
+		<span class="button" ng-click="addPlayer()">Add New</span>
 	</div>
 </div>
 
@@ -480,6 +569,22 @@
 	</div>
 </div>
 
+<div ng-show="tab=='loot'">
+	<table><tr>
+		<td>
+			<input type="text" ng-model="lootlevel" placeholder="CR/Level" number />
+			<div class="" ng-repeat="item in loot">
+				{{item.name}}
+				
+			</div>
+			<button class="button" ng-click="loot=[]">Clear</button>
+		</td>
+		<td>
+		
+		</td>
+	</tr></table>
+</div>
+
 
 </div>
 </div>
@@ -490,6 +595,7 @@
 
 <script src="./core/monsters.js"></script>
 <script src="./packages/items.js"></script>
+<script src="./packages/itemModifiers.js"></script>
 
 <script src="./core/dm.js"></script>
 

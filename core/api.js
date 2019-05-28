@@ -1,13 +1,26 @@
+Math.rand=function(min,max){
+	return min + Math.floor(Math.random()*(max-min));
+}
+
 Array.prototype.has=function(string){
 	for (let element of this){
-		if (typeof let === 'string' && let===string){
+		if (typeof element === 'string' && element===string){
 			return true;
-		} else if (typeof let === 'Object' && let.name===string) {
+		} else if (typeof element === 'Object' && element.name===string) {
 			return true;
 		}
 	}
 	return false;
 };
+
+Array.prorotype.hasAny=function(...list){
+	for (let item of list){
+		if (this.has(item)){
+			return true;
+		}
+	}
+	return false;
+}
 
 Array.prototype.upush=function(element){
 	if (element && element.name) {
