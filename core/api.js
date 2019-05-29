@@ -13,13 +13,22 @@ Array.prototype.has=function(string){
 	return false;
 };
 
-Array.prorotype.hasAny=function(...list){
+Array.prototype.hasAny=function(...list){
 	for (let item of list){
 		if (this.has(item)){
 			return true;
 		}
 	}
 	return false;
+}
+
+Array.prototype.hasAll=function(...list){
+	for (let item of list){
+		if (!this.has(item)){
+			return false;
+		}
+	}
+	return true;
 }
 
 Array.prototype.upush=function(element){

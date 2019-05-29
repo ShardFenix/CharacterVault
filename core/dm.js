@@ -375,21 +375,4 @@ $scope.updateSpellFilter=function(){
 }
 $scope.updateSpellFilter();
 
-function listWeapons(){
-	let result=[];
-	for (item of window.items){
-		if (item.categories && item.categories.includes("Weapon") && !item.categories.includes("Wondrous")){
-			result.push(item);
-		}
-	}
-	return result;
-}
-
-function randomWeapon(){
-	let weapons=listWeapons();
-	return weapons[Math.rand(0,weapons.length)];
-}
-
-console.log(randomWeapon());
-
 }]);

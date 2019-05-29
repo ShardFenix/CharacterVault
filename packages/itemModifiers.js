@@ -29,6 +29,57 @@ console.log("Magic: "+test[1]);
 console.log("Rare: "+test[2]);
 console.log("Wondrous: "+test[3]);
 
+var baseItems=[];
+for (item of window.items){
+	if (!item.categories.includes("Wondrous")){
+		let rarity=item.rarity?item.rarity:1;
+		for (let i=0;i<rarity;i++){
+			baseItems.push(item);
+		}
+	}
+}
+	
+function randomItem(){
+	return angular.copy(baseItems[Math.rand(0,baseItems.length)]);
+}
+
+function generateLoot(luck){
+	let tier = genTier(luck);
+	if (tier===0){
+		return randomItem();
+	}
+	let baseItem = randomItem();
+	let availableMods=[];
+	for (let mod of itemMods){
+		if (mod.tier===tier && mod.appliesTo(baseItem)){
+			for (let i=0;i<mod.rarity;i++){
+				availableMods.push(mod);
+			}
+		}
+	}
+	let rand = Math.rand(0,availableMods.length);
+	let mod = availableMods[rand];
+	if (typeof mod === 'undefined'){
+		return baseItem;
+	}
+	if (baseItem.description){
+		baseItem.description = baseItem.description+'\n\n'+mod.description;
+	} else {
+		baseItem.description = mod.description;
+	}
+	if (mod.suffix){
+		baseItem.name = baseItem.name + mod.suffix;
+	}
+	if (mod.prefix){
+		baseItem.name = mod.prefix + baseItem.name;
+	}
+	if (mod.attunement){
+		baseItem.description="(Requires Attunement)\n\n" + baseItem.description;
+	}
+	console.log(baseItem);
+	return baseItem;
+}
+
 window.itemMods=[
 	{
 		name:"+1",
@@ -36,45 +87,35 @@ window.itemMods=[
 		tier:1,
 		rarity:10,
 		suffix:" +1",
-		suffixOrder:9,
 		appliesTo:function(item){return item.categories.hasAny("Weapon");}
-		order:2
 	},{
 		name:"+2",
 		description:"This item has a +2 bonus to attack and damage rolls.",
 		tier:2,
 		rarity:10,
 		suffix:" +2",
-		suffixOrder:9,
 		appliesTo:function(item){return item.categories.hasAny("Weapon");}
-		order:2
 	},{
 		name:"+3",
 		description:"This item has a +3 bonus to attack and damage rolls.",
 		tier:3,
 		rarity:10,
 		suffix:" +3",
-		suffixOrder:9,
 		appliesTo:function(item){return item.categories.hasAny("Weapon");}
-		order:2
 	},{
 		name:"+1",
 		description:"This item grants you a +1 bonus to AC while you wear it.",
 		tier:1,
 		rarity:10,
 		suffix:" +1",
-		suffixOrder:9,
 		appliesTo:function(item){return item.categories.hasAny("Armor");}
-		order:2
 	},{
 		name:"+2",
 		description:"This item grants you a +2 bonus to AC while you wear it.",
 		tier:2,
 		rarity:10,
 		suffix:" +1",
-		suffixOrder:9,
 		appliesTo:function(item){return item.categories.hasAny("Armor");}
-		order:2
 	},{
 		name:"+3",
 		description:"This item grants you a +3 bonus to AC while you wear it.",
@@ -82,7 +123,6 @@ window.itemMods=[
 		rarity:10,
 		suffix:" +1",
 		appliesTo:function(item){return item.categories.hasAny("Armor");}
-		order:2
 	},{
 		name:"Vorpal",
 		description:"Whenever you score a critical hit on a creature that has heads, you decapitate one of its heads.",
@@ -212,7 +252,7 @@ window.itemMods=[
 		prefix: "Dancing ",
 		appliesTo:function(item){
 			return ["Greatsword","Longsword","Rapier","Scimitar","Shortsword"].includes(item.name);
-		}
+		},
 		attunement:true
 	},{
 		name:"Defender",
@@ -222,7 +262,7 @@ window.itemMods=[
 		prefix: "Defender ",
 		appliesTo:function(item){
 			return ["Greatsword","Longsword","Rapier","Scimitar","Shortsword"].includes(item.name);
-		}
+		},
 		attunement:true
 	},{
 		name:"Flame Tongue",
@@ -232,7 +272,7 @@ window.itemMods=[
 		prefix: "Flame Tongue ",
 		appliesTo:function(item){
 			return ["Greatsword","Longsword","Rapier","Scimitar","Shortsword"].includes(item.name);
-		}
+		},
 		attunement:true
 	},{
 		name:"Frost Brand",
@@ -242,7 +282,7 @@ window.itemMods=[
 		prefix: "Frost Brand ",
 		appliesTo:function(item){
 			return ["Greatsword","Longsword","Rapier","Scimitar","Shortsword"].includes(item.name);
-		}
+		},
 		attunement:true
 	},{
 		name:"Glamoured Armor",
@@ -419,5 +459,49 @@ window.itemMods=[
 		appliesTo:function(item){
 			return item.name==='Shield';
 		}
+	},{
+		name:"Life Stealing",
+		description:"When you attack a creature with this magic weapon and roll a 20 on the attack roll, that target takes an extra 3d6 necrotic damage if it isn't a construct or an undead. You gain temporary hit points equal to the necrotic damage dealt.",
+		tier:1,
+		rarity:1,
+		prefix: "Vampyric ",
+		attunement:true,
+		appliesTo:function(item){
+			return item.categories.includes('Weapon');
+		}
+	},{
+		name:"Warning",
+		description:"This magic weapon warns you of danger. While the weapon is on your person, you have advantage on initiative rolls. In addition, you and any of your companions within 30 feet of you can't be surprised, except when incapacitated by something other than nonmagical sleep. The weapon magically awakens you and your companions within range if any of you are sleeping naturally when combat begins.",
+		tier:1,
+		rarity:1,
+		suffix: " of Warning",
+		attunement:true,
+		appliesTo:function(item){
+			return item.categories.includes('Weapon');
+		}
+	},{
+		name:"Weapon of Vengeance",
+		description:"You gain a +1 bonus to attack and damage rolls made with this magic weapon.\n\nCurse. This weapon is cursed and possessed by a vengeful spirit. Becoming attuned to it extends the curse to you. As long as you remain cursed, you are unwilling to part with the weapon, keeping it on your person at all times. While attuned to this weapon, you have disadvantage on attack rolls made with weapons other than this one\n\nIn addition, while the weapon is on your person, you must succeed on a DC 15 Wisdom saving throw whenever you take damage in combat. On a failed save you must attack the creature that damaged you until you drop to 0 hit points or it does, or until you can't reach the creature to make a melee attack against it.\n\nYou can break the curse in the usual ways. Alternatively, casting banishment on the weapon forces the vengeful spirit to leave it. The weapon then becomes a +1 weapon with no other properties.",
+		tier:1,
+		rarity:1,
+		suffix: " of Vengeance",
+		attunement:true,
+		appliesTo:function(item){
+			return item.categories.hasAll('Weapon','Melee');
+		}
+	},{
+		name:"Vicious Weapon",
+		description:"When you land a critical hit with this weapon, the target takes an additional 2d6 damage of the weapon's type. These dice are not doubled by the crit.",
+		tier:1,
+		rarity:1,
+		prefix: "Vicious ",
+		attunement:true,
+		appliesTo:function(item){
+			return item.categories.hasAll('Weapon','Melee');
+		}
 	}
 ];
+
+for (let i=0;i<1000;i++){
+	generateLoot(50);
+}
