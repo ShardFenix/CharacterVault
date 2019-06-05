@@ -19,19 +19,9 @@ function genTier(luck){
 	return tier;
 }
 
-let test=[0,0,0,0];
-for (let i=0;i<1000;i++){
-	let tier = genTier(100);
-	test[tier]++;
-}
-console.log("Normal: "+test[0]);
-console.log("Magic: "+test[1]);
-console.log("Rare: "+test[2]);
-console.log("Wondrous: "+test[3]);
-
 var baseItems=[];
 for (item of window.items){
-	if (!item.categories.includes("Wondrous")){
+	if (!item.categories.includes("Wondrous") && !item.categories.includes("Instrument")){
 		let rarity=item.rarity?item.rarity:1;
 		for (let i=0;i<rarity;i++){
 			baseItems.push(item);
@@ -76,7 +66,6 @@ function generateLoot(luck){
 	if (mod.attunement){
 		baseItem.description="(Requires Attunement)\n\n" + baseItem.description;
 	}
-	console.log(baseItem);
 	return baseItem;
 }
 

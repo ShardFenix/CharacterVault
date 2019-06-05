@@ -646,3 +646,14 @@ i{
 .bold{
 	font-weight:bold;
 }
+
+.itembox {
+    width: calc(25% - 34px);
+    min-width: calc(25% - 34px);
+    max-width: calc(25% - 34px);
+    padding: 0px 10px 10px 10px;
+    border: 2px groove black;
+    border-radius: 10px;
+    margin: 0px 5px 10px 0px;
+    background: url('../images/parchment2.jpg');
+}

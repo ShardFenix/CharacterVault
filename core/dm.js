@@ -343,6 +343,10 @@ $scope.classFilterExclude=function(num){
 	$scope.updateSpellFilter();
 }
 
+$scope.generateLoot=function(){
+	$scope.loot.push(generateLoot($scope.lootLevel));
+}
+
 $scope.updateSpellFilter=function(){
 	//validate some of the filters
 	$scope.filteredSpellList=[];

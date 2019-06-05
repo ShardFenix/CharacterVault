@@ -21,11 +21,11 @@
 
 <div style="margin-top:-8px;">
 <span class="tab" ng-click="tab='general'" ng-class="{'activetab':tab=='general'}">General</span>
-<span class="tab" ng-click="tab='notes'" ng-class="{'activetab':tab=='notes'}">Notes</span>
 <span class="tab" ng-click="tab='players'" ng-class="{'activetab':tab=='players'}">Players</span>
 <span class="tab" ng-click="tab='combat'" ng-class="{'activetab':tab=='combat'}">Combat</span>
 <span class="tab" ng-click="tab='spells'" ng-class="{'activetab':tab=='spells'}">Spells</span>
 <span class="tab" ng-click="tab='loot'" ng-class="{'activetab':tab=='loot'}">LOOt</span>
+<span class="tab" ng-click="tab='notes'" ng-class="{'activetab':tab=='notes'}">Notes</span>
 </div>
 
 <div ng-show="tab=='general'">
@@ -571,16 +571,20 @@
 
 <div ng-show="tab=='loot'">
 	<table><tr>
-		<td>
-			<input type="text" ng-model="lootlevel" placeholder="CR/Level" number />
-			<div class="" ng-repeat="item in loot">
-				{{item.name}}
-				
-			</div>
+		<td style="vertical-align:top;width:200px;">
+			<input type="text" ng-model="lootLevel" placeholder="CR/Level" number />
 			<button class="button" ng-click="loot=[]">Clear</button>
+			<button class="button" ng-click="generateLoot()">Generate</button>
 		</td>
-		<td>
-		
+		<td style="display: flex;flex-wrap: wrap;">
+			<div class="itembox" ng-repeat="item in loot |orderBy:'description.length'">
+				<div class="label subheader">
+					{{item.name}}
+				</div>
+				<div style="white-space:pre-line">
+					{{item.description}}
+				</div>
+			</div>
 		</td>
 	</tr></table>
 </div>
