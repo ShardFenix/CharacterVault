@@ -577,7 +577,7 @@
 			<button class="button" ng-click="generateLoot()">Generate</button>
 		</td>
 		<td style="display: flex;flex-wrap: wrap;">
-			<div class="itembox" ng-repeat="item in loot |orderBy:'description.length'">
+			<div class="itembox" ng-repeat="item in loot |orderBy:'description.length' track by $index">
 				<div class="label subheader">
 					{{item.name}}
 				</div>
