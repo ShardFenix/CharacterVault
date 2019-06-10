@@ -575,9 +575,14 @@
 			<input type="text" ng-model="lootLevel" placeholder="CR/Level" number />
 			<button class="button" ng-click="loot=[]">Clear</button>
 			<button class="button" ng-click="generateLoot()">Generate</button>
+			<br><br>
+			<div class="label">Merchants</label>
+			<button ng-repeat="merch in merchants" ng-click="generateMerchant(merch)">{{merch.name}}</button>
 		</td>
 		<td style="display: flex;flex-wrap: wrap;">
-			<div class="itembox" ng-repeat="item in loot |orderBy:'description.length' track by $index">
+			<input type="text" placeholder="Filter..." ng-model="lootFilter"
+				style="width: 300px;margin-left: calc(50% - 150px);margin-right: calc(50% - 150px);"/>
+			<div class="itembox" ng-repeat="item in loot |filter:lootFilter |orderBy:'description.length' track by $index">
 				<div class="label subheader">
 					{{item.name}}
 				</div>
@@ -600,7 +605,8 @@
 <script src="./core/monsters.js"></script>
 <script src="./packages/items.js"></script>
 <script src="./packages/itemModifiers.js"></script>
-
+<script src="./packages/merchants.js"></script>
+<script src="./packages/5eitems.js"></script>
 <script src="./core/dm.js"></script>
 
 </body>

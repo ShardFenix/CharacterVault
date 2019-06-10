@@ -347,6 +347,12 @@ $scope.generateLoot=function(){
 	$scope.loot.push(generateLoot($scope.lootLevel));
 }
 
+$scope.merchants=window.merchants;
+
+$scope.generateMerchant=function(merch){
+	$scope.loot=generateMerchant(merch);
+}
+
 $scope.updateSpellFilter=function(){
 	//validate some of the filters
 	$scope.filteredSpellList=[];
