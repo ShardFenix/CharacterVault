@@ -868,3 +868,13 @@ function spellSlots9(char){
 	if (casterLevel<17)return 0;
 	return 1;
 }
+
+function randomSpell(level){
+	let candidates=[];
+	for (let spell of window.spells){
+		if (spell.level===level){
+			candidates.push(spell.name);
+		}
+	}
+	return candidates[Math.rand(0,candidates.length)];
+}

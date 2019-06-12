@@ -360,6 +360,7 @@ window.items=[
 		ac:'14 + Dex (max +2)',
 		categories:['Armor'],
 		count:1,
+		rarity:2,
 		value:40000,
 		proficiencies:['Medium Armor']
 	},{
@@ -368,6 +369,7 @@ window.items=[
 		ac:'16',
 		categories:['Armor'],
 		count:1,
+		rarity:2,
 		value:7500,
 		proficiencies:['Heavy Armor']
 	},{
@@ -376,6 +378,7 @@ window.items=[
 		ac:'13 + Dex (max +2)',
 		categories:['Armor'],
 		count:1,
+		rarity:2,
 		value:5000,
 		proficiencies:['Medium Armor']
 	},{
@@ -384,6 +387,7 @@ window.items=[
 		ac:'15 + Dex (max +2)',
 		categories:['Armor'],
 		count:1,
+		rarity:2,
 		value:75000,
 		proficiencies:['Medium Armor']
 	},{
@@ -392,6 +396,7 @@ window.items=[
 		ac:'12 + Dex (max +2)',
 		categories:['Armor'],
 		count:1,
+		rarity:3,
 		value:1000,
 		proficiencies:['Medium Armor']
 	},{
@@ -400,6 +405,7 @@ window.items=[
 		ac:'11 + Dex',
 		categories:['Armor'],
 		count:1,
+		rarity:3,
 		value:1000,
 		proficiencies:['Light Armor']
 	},{
@@ -408,6 +414,7 @@ window.items=[
 		ac:'11 + Dex',
 		categories:['Armor'],
 		count:1,
+		rarity:3,
 		value:500,
 		proficiencies:['Light Armor']
 	},{
@@ -416,6 +423,7 @@ window.items=[
 		ac:'18',
 		categories:['Armor'],
 		count:1,
+		rarity:2,
 		value:150000,
 		proficiencies:['Heavy Armor']
 	},{
@@ -424,6 +432,7 @@ window.items=[
 		ac:'14',
 		categories:['Armor'],
 		count:1,
+		rarity:3,
 		value:3000,
 		proficiencies:['Heavy Armor']
 	},{
@@ -432,6 +441,7 @@ window.items=[
 		ac:'14 + Dex (max +2)',
 		categories:['Armor'],
 		count:1,
+		rarity:2,
 		value:5000,
 		proficiencies:['Medium Armor']
 	},{
@@ -440,6 +450,7 @@ window.items=[
 		ac:'17',
 		categories:['Armor'],
 		count:1,
+		rarity:2,
 		value:20000,
 		proficiencies:['Heavy Armor']
 	},{
@@ -448,6 +459,7 @@ window.items=[
 		ac:'12 + Dex',
 		categories:['Armor'],
 		count:1,
+		rarity:3,
 		value:4500,
 		proficiencies:['Light Armor']
 	},
@@ -1367,11 +1379,49 @@ window.items=[
 		value:10000,
 		tier:1,
 		categories:['Wondrous','Potion']
+	},{
+		name:"Scroll",
+		description:"If the spell written on this scroll is on your class's spell list, you can read the scroll and cast it without having to provide any of the spell's components. Once the spell is cast, the scroll is destroyed. If the casting is interrupted, the scroll is not lost.\n\nIf the spell is on your class's spell list but of a higher level than you can normally cast, you must make a DC 18 ability check using your spellcasting ability. On a failed check, the scroll is destroyed.\n\nA spell cast from this scroll has a save DC of 18 and an attack bonus of +10.",
+		count:1,
+		value:0,
+		tier:2,
+		categories:['Scroll'],
+		onGenerate:function(luck){
+			let tierBreakpoints=[
+				{min:20,max:50},
+				{min:30,max:60},
+				{min:30,max:80},
+				{min:30,max:100},
+				{min:20,max:150},
+				{min:20,max:200},
+				{min:20,max:300},
+				{min:20,max:450}
+			];
+			let level=0;
+			for (level=0;level<9;){
+				let rand = Math.rand(0,tierBreakpoints[level].max + luck);
+				if (rand < luck + tierBreakpoints[level].min){
+					level++;
+				} else {
+					break;
+				}
+			}
+			level++;
+			let spell = randomSpell(level);
+			this.name=this.name+" of "+spell;
+			switch(level){
+				case 1: this.value=500;break;
+				case 2: this.value=1500;break;
+				case 3: this.value=5000;break;
+				case 4: this.value=15000;break;
+				case 5: this.value=45000;break;
+				case 6: this.value=70000;break;
+				case 7: this.value=100000;break;
+				case 8: this.value=250000;break;
+				case 9: this.value=500000;break;
+			}
+		}
 	}
-	
-	
-	
-	
 ];
 
 

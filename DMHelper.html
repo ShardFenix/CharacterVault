@@ -586,8 +586,12 @@
 				<div class="label subheader">
 					{{item.name}}
 				</div>
-				<div style="white-space:pre-line">
+				<div style="white-space:pre-line;margin-top:-10px;" ng-show="item.description.length">
 					{{item.description}}
+				</div>
+				<div class="itemfooter">
+					<span class="left">Count: {{item.count}}</span>
+					<span style="float:right">{{getCost(item.value)}}</span>
 				</div>
 			</div>
 		</td>

@@ -44,7 +44,11 @@ function randomItem(){
 function generateLoot(luck){
 	let tier = genTier(luck);
 	if (tier===0){
-		return randomItem();
+		let item = randomItem();
+		if (typeof item.onGenerate === 'function'){
+			item.onGenerate(luck);
+		}
+		return item;
 	}
 	let rand = Math.rand(0,wondrousChance.maxRoll + luck);
 	if (rand > wondrousChance.upgradeRoll + luck){
@@ -81,6 +85,9 @@ function generateLoot(luck){
 	}
 	if (mod.attunement){
 		baseItem.description="(Requires Attunement)\n\n" + baseItem.description;
+	}
+	if (typeof baseItem.onGenerate === 'function'){
+		baseItem.onGenerate(luck);
 	}
 	return baseItem;
 }

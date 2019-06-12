@@ -343,6 +343,16 @@ $scope.classFilterExclude=function(num){
 	$scope.updateSpellFilter();
 }
 
+$scope.getCost=function(amount){
+	if (amount%100===0){
+		return (amount/100)+' gp';
+	}
+	if (amount%10===0){
+		return (amount/10)+' sp';
+	}
+	return amount+' cp';
+}
+
 $scope.generateLoot=function(){
 	$scope.loot.push(generateLoot($scope.lootLevel));
 }

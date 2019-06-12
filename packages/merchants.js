@@ -5,7 +5,23 @@ window.merchants=[
 		inventory:['Arrow',50,'Dart',20,'Bolt',30,'Potion of Healing',4],
 		additionalSlots:20,
 		limitation:function(item){
-			return item.categories.hasAny('Junk','Artisan Tool','Tool')
+			return item.categories.hasAny('Junk','Artisan Tool','Tool');
+		}
+	},{
+		name:"Blacksmith",
+		luck:0,
+		inventory:['Arrow',200,'Dart',60,'Bolt',50],
+		additionalSlots:20,
+		limitation:function(item){
+			return item.categories.hasAny('Weapon','Armor');
+		}
+	},{
+		name:"Spell Shop",
+		luck:0,
+		inventory:[],
+		additionalSlots:20,
+		limitation:function(item){
+			return item.categories.hasAny('Scroll');
 		}
 	}
 ]
