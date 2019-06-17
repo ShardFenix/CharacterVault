@@ -2,6 +2,32 @@
 <html>
 <head>
 <style>
+.tab{
+	font-size:20px;
+	font-weight:bold;
+	border: 2px solid #4c4c4c;
+	background-color:#000;
+	color:white;
+	padding:6px 0px;
+	margin-left:-8px;
+	width:14%;
+	display:inline-block;
+	text-align:center;
+	cursor:pointer;
+	font-family: 'Cinzel Decorative';
+	
+	-webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.tab.activetab{
+	background-color:#bb0000;
+}
+
 
 .leftitem{
 	text-align: center;
@@ -65,44 +91,65 @@
 <div ng-app="myApp">
 <div ng-controller="MyController">
 
-<table style="width:100%;"><tr>
-<td width="25%" style="vertical-align:top;">
-	<div class="leftmenu">
-		<div class="leftitem" ng-repeat="folder in mainFolders" ng-click="openSecondaryFolder(folder)">
-			{{folder}}
-		</div>
-	</div>
-</td>
-<td width="25%" style="vertical-align:top;">
-	<div class="secondmenu">
-		<div class="leftitem" ng-repeat="file in files" ng-click="load(primaryFolder+file)">
-			{{file}}
-		</div>
-	</div>
-</td>
-<td width="25%" style="vertical-align:top;">
-	<div class="secondmenu">
-		<div class="leftitem" ng-repeat="file in stingers" ng-click="loadStinger(primaryFolder+file)">
-			{{file}}
-		</div>
-	</div>
-	
-</td>
-<td width="25%">
-	 <input type="range" min="0" max="100" value="50" class="slider" ng-model="volume">
-	 <br>
-	 <div class="leftitem" ng-click="fade=1">Stop</div>
-</td>
+<div style="margin-top:-8px;">
+<span class="tab" ng-click="tab='music'" ng-class="{'activetab':tab=='music'}">Music</span>
+<span class="tab" ng-click="tab='sfx'" ng-class="{'activetab':tab=='sfx'}">SFX</span>
+<span class="tab" ng-click="tab='environments'" ng-class="{'activetab':tab=='environments'}">Environments</span>
+</div>
 
-</tr></table>
+
+<div ng-show="tab==='music'">
+	<table style="width:100%;"><tr>
+	<td width="25%" style="vertical-align:top;">
+		<div class="leftmenu">
+			<div class="leftitem" ng-repeat="folder in musicFolders" ng-click="openSecondaryFolder('Music/'+folder)">
+				{{folder}}
+			</div>
+		</div>
+	</td>
+	<td width="25%" style="vertical-align:top;">
+		<div class="secondmenu">
+			<div class="leftitem" ng-repeat="file in files" ng-click="loadMusic(primaryFolder+file)">
+				{{file}}
+			</div>
+		</div>
+	</td>
+	<td width="25%" style="vertical-align:top;">
+		<div class="secondmenu">
+			<div class="leftitem" ng-repeat="file in stingers" ng-click="loadStinger(primaryFolder+file)">
+				{{file}}
+			</div>
+		</div>
+		
+	</td>
+	<td width="25%">
+		 <input type="range" min="0" max="100" value="50" class="slider" ng-model="volume">
+		 <br>
+		 <div class="leftitem" ng-click="fade=1">Stop</div>
+	</td>
+
+	</tr>
+	</table>
 </div>
+
+<div ng-show="tab==='sfx'">
+
 </div>
+
+<div ng-show="tab==='environments'">
+
+</div>
+
+
+</div></div>
 
 <script type="text/javascript">
 var app=angular.module('myApp',[]);
 app.controller('MyController',['$scope','$timeout','$http','$interval',function($scope,$timeout,$http,$interval){
 
-$scope.mainFolders=[];
+$scope.tab='music';
+
+$scope.musicFolders=[];
 
 $scope.files=[];
 $scope.stingers=[];
@@ -129,7 +176,7 @@ $scope.getFiles=function(rootPath, arrayStore, stingers){
 	});
 }
 //init the folders
-$scope.getFolders('',$scope.mainFolders);
+$scope.getFolders('Music/',$scope.musicFolders);
 
 $scope.openSecondaryFolder=function(rootPath){
 	$scope.files=[];
@@ -142,7 +189,7 @@ $scope.audio1=null;
 $scope.audio2=null;
 $scope.onAudio1=false;
 
-$scope.load=function(filename) {
+$scope.loadMusic=function(filename) {
 	$scope.fade=0;
 	if ($scope.audio1){
 		$scope.audio1.pause();
@@ -151,7 +198,7 @@ $scope.load=function(filename) {
 		$scope.audio2.pause();
 	}
 	var req = new XMLHttpRequest();
-	req.open('GET', 'http://localhost:8080/'+root+filename+'.ogg', true);
+	req.open('GET', 'http://localhost:8080/'+root+'Music/'+filename+'.ogg', true);
 	req.responseType = 'arraybuffer';
 
 	req.onload = function() {

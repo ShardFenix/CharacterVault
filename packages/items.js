@@ -584,14 +584,14 @@ window.items=[
 		description:"",
 		categories:["Jewelry"],
 		count:1,
-		valu:100,
+		value:1000,
 		rarity:3
 	},{
 		name:"Amulet",
 		description:"",
 		categories:["Jewelry"],
 		count:1,
-		valu:100,
+		value:1000,
 		rarity:3
 	},
 	//potions
@@ -666,6 +666,7 @@ window.items=[
 		description:"You regain 2d4+2 hit points when you drink this potion. The potion's red liquid glimmers when agitated.",
 		count:1,
 		value:2500,
+		rarity:3,
 		categories:['Potion']
 	},{
 		name:"Potion of Greater Healing",
@@ -1421,7 +1422,27 @@ window.items=[
 				case 9: this.value=500000;break;
 			}
 		}
-	}
+	},{
+		name:"Gem",
+		description:"",
+		count:1,
+		value:5000,
+		categories:['Component'],
+		rarity:2,
+		onGenerate:function(){
+			this.count=Math.rand(0,4) + Math.rand(1,3);
+			switch (Math.rand(0,10)){
+				case 0:this.name="Diamond";break;
+				case 1:this.name="Diamond";break;
+				case 2:this.name="Ruby";break;
+				case 3:this.name="Agate";break;
+				case 4:this.name="Sapphire";break;
+				case 5:this.name="Onyx";break;
+				case 6:this.name="Pearl";break;
+			}
+		}
+	},
+	
 ];
 
 

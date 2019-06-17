@@ -21,7 +21,7 @@ window.merchants=[
 		inventory:[],
 		additionalSlots:20,
 		limitation:function(item){
-			return item.categories.hasAny('Scroll');
+			return item.categories.hasAny('Scroll','Potion','Component');
 		}
 	}
 ]
