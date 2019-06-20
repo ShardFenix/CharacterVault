@@ -33,6 +33,9 @@ $scope.showSaveMenu=true;
 $scope.char={
 	maxHp:0,
 	hp:0,
+	polyHp:0,
+	polyHpMax:0,
+	tempHp:0,
 	level:0, //total level
 	money:0,
 	classes:[],
@@ -351,6 +354,9 @@ $scope.newChar=function(){
 	$scope.char={
 		maxHp:0,
 		hp:0,
+		tempHp:0,
+		polyHp:0,
+		polyHpMax:0,
 		level:0, //total level
 		money:0,
 		classes:[],
@@ -629,8 +635,24 @@ $scope.spendGold=function(){
 	}
 }
 $scope.takeDamage=function(){
-	$scope.char.hp-=$scope.takeDamageInput;
-	$scope.takeDamageInput=null;
+	//deplete from temp hp first
+	if ($scope.char.tempHp >= $scope.takeDamageInput){
+		$scope.char.tempHp -= $scope.takeDamageInput;
+		$scope.takeDamageInput = 0;
+	} else if ($scope.char.tempHp > 0){
+		$scope.takeDamageInput -= $scope.char.tempHp;
+		$scope.char.tempHp = 0;
+	}
+	//take damage to alternate forms (polymorph)
+	if ($scope.char.polyHp >= $scope.takeDamageInput){
+		$scope.char.polyHp -= $scope.takeDamageInput;
+		$scope.takeDamageInput = 0;
+	} else if ($scope.char.polyHp > 0){
+		$scope.takeDamageInput -= $scope.char.polyHp;
+		$scope.char.polyHp = 0;
+	}
+	$scope.char.hp -= $scope.takeDamageInput;
+	$scope.takeDamageInput = null;
 }
 $scope.unequip=function(item){
 	delete item.equipped;
@@ -1209,6 +1231,8 @@ $scope.updateSpellFilter=function(){
 
 $scope.calculate();
 $scope.updateSpellFilter();
+
+$scope.showSaveMenu=false;
 
 
 }]);

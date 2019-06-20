@@ -665,3 +665,15 @@ i{
     width: calc(100% - 20px);
 	border-top:1px solid black;
 }
+.hpbox{
+	border:1px solid black;
+	width:180px;
+	margin-bottom:24px;
+	height:54px;
+	transition:0.3s ease all;
+	overflow:hidden;
+}
+
+.hpbox.minimize{
+	height:0px;
+}
