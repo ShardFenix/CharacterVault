@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+body{
+	font-size: 30px;
+	
+}
+
+.button{
+	border-radius: 50px;
+	font-size: 40px;
+    font-weight:bold;
+    color: white;
+    background-color: #00982d;
+    width: 47px;
+    cursor:pointer;
+    display: inline-block;
+    text-align: center;
+}
+
+input[type="text"] {
+    font-size: 30px;
+    width: 100px;
+}
+
+.label{
+	font-size:20px;
+	font-weight:bold;
+}
+
+td{
+    text-align: center;
+    border: 1px solid black;
+    background-color: gainsboro;
+    padding: 4px;
+}
+</style>
+<script src="libs/angular.min.js"></script>
+<script type="text/javascript">
+var app=angular.module('myApp',[]);
+
+app.directive('number', ['$parse', function($parse) {
+    return {
+        require: 'ngModel',
+        link: function(scope, element, attrs, ngModelController) {
+
+            ngModelController.$parsers.push(function(data) {
+                return parseInt(data);
+            });
+            ngModelController.$formatters.push(function(data) {
+                if (data) {
+                    var model = $parse(attrs['ngModel']);
+                    model.assign(scope, parseInt(data));
+                }
+                return parseInt(data);
+
+            });
+        }
+    }
+}]);
+
+app.controller('MyController',['$scope',function($scope){
+
+//cost to upgrade to stat level {index}
+//eg the cost to go from 8 to 9 is req[9], not req[8];
+const req = [0,0,0,0,0,0,0,0,0,1,1,1,1,1,2,2,99];
+
+$scope.pointsLeft=27;
+
+$scope.stats=[
+	{name:"Strength",level:8},
+	{name:"Dexterity",level:8},
+	{name:"Constitution",level:8},
+	{name:"Intelligence",level:8},
+	{name:"Wisdom",level:8},
+	{name:"Charisma",level:8}
+];
+
+$scope.statBonuses=[0,0,0,0,0,0];
+
+$scope.incr=function(stat){
+	let requirement = req[stat.level+1];
+	if ($scope.pointsLeft >= requirement){
+		stat.level+=1;
+		$scope.pointsLeft -= requirement;
+	}
+}
+
+$scope.decr=function(stat){
+	if (stat.level<=8){
+		return;
+	}
+	let refund = req[stat.level];
+	stat.level-=1;
+	$scope.pointsLeft += refund;
+}
+
+$scope.canIncrement=function(stat){
+	return $scope.pointsLeft >= req[stat.level+1];
+}
+
+$scope.canDecrement=function(stat){
+	return stat.level>8;
+}
+
+$scope.getModifier=function(index){
+	return Math.floor(($scope.stats[index].level + $scope.statBonuses[index] + 10)/2) - 10;
+}
+}]);
+</script>
+
+</head>
+<body style="background-color:#ffffff;">
+<div ng-app="myApp">
+<div ng-controller="MyController">
+
+<table>
+	<th colspan=4>
+		Points left: {{pointsLeft}}
+	</th>
+	<th>Bonuses<br>(Race/Feats)</th>
+	<th>Total score</th>
+	<th>Modifier</th>
+	<tr ng-repeat="stat in stats track by $index">
+		<td><span class="button" ng-click="decr(stat)" ng-disabled="!canDecrement(stat)">&minus;</span></td>
+		<td><span class="label">{{stat.name}}</span></td>
+		<td style="width:50px;text-align:center;"><span class="label">{{stat.level}}</span></td>
+		<td><span class="button" ng-click="incr(stat)" ng-disabled="!canIncrement(stat)">&plus;</span></td>
+		<td><input type="text" number ng-model="statBonuses[$index]"></td>
+		<td>{{stat.level + statBonuses[$index]}}</td>
+		<td>{{getModifier($index)}}</td>
+	</tr>
+</table>
+</div>
+</div>
+</body>
+</html>

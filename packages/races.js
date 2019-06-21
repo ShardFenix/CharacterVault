@@ -150,5 +150,24 @@ window.races=[
 				}
 			});
 		}
+	},{
+		name:"Elf (Wood)",
+		description:"",
+		onPickup:function(char,scope){
+			char.proficiencies.push("Language: Common");
+			char.proficiencies.push("Language: Elvish");
+			char.speed=35;
+			char.attributes.dex+=2;
+			char.attributes.wis+=1;
+			addPassive(char,"Darkvision");
+			addPassive(char,"Fey Ancestry");
+			addPassive(char,"Trance");
+			addPassive(char,"Mask of the Wild");
+			addProficiency(char,"Perception");
+			char.proficiencies.upush("Longswords");
+			char.proficiencies.upush("Shortswords");
+			char.proficiencies.upush("Shortbows");
+			char.proficiencies.upush("Longbows");
+		}
 	}
 ];

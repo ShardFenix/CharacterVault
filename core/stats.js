@@ -1232,7 +1232,4 @@ $scope.updateSpellFilter=function(){
 $scope.calculate();
 $scope.updateSpellFilter();
 
-$scope.showSaveMenu=false;
-
-
 }]);

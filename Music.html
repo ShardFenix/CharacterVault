@@ -115,11 +115,6 @@
 		</div>
 	</td>
 	<td width="25%" style="vertical-align:top;">
-		<div class="secondmenu">
-			<div class="leftitem" ng-repeat="file in stingers" ng-click="loadStinger(primaryFolder+file)">
-				{{file}}
-			</div>
-		</div>
 		
 	</td>
 	<td width="25%">
@@ -153,6 +148,8 @@ $scope.musicFolders=[];
 
 $scope.files=[];
 $scope.stingers=[];
+
+$scope.periodicSounds=[];
 
 let root="resources/";
 
@@ -198,7 +195,7 @@ $scope.loadMusic=function(filename) {
 		$scope.audio2.pause();
 	}
 	var req = new XMLHttpRequest();
-	req.open('GET', 'http://localhost:8080/'+root+'Music/'+filename+'.ogg', true);
+	req.open('GET', 'http://localhost:8080/'+root+filename+'.ogg', true);
 	req.responseType = 'arraybuffer';
 
 	req.onload = function() {

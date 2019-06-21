@@ -30,7 +30,6 @@ window.classes.push(
 							addToInventory(findItem("Leather Armor"));
 							addToInventory(findItem("Druidic Focus"));
 							openPack("Explorer's Pack");
-							addAbility(char,"Arcane Recovery");
 							learnAllClassSpells(char,$scope);
 						}
 					},{

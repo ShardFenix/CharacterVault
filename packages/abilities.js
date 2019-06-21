@@ -246,6 +246,9 @@ window.passives=[
 	},{
 		name:"Maneuver: Trip Attack",
 		description:"When you hit a creature with a weapon attack, you can expend one superiority die to attempt to knock the target down. You add the superiority die to the attack's damage roll, and if the target is Large or smaller, it must make a Strength saving throw. On a failed save, you knock the target prone."
+	},{
+		name:"Mask of the Wild",
+		description:"You can attempt to hide even when you are only lightly obscured by foliage, heavy rain, falling snow, mist, and other natural phenomena."
 	}
 	
 ];
