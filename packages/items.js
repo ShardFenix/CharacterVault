@@ -596,71 +596,35 @@ window.items=[
 	},
 	//potions
 	{
-		name:"Potion of Acid Resistance",
-		description:"When you drink this potion, you gain resistance to acid damage for one hour.",
+		name:"Potion of {type} Resistance",
+		description:"When you drink this potion, you gain resistance to {type} damage for one hour.",
 		count:1,
 		value:4000,
-		categories:['Potion']
-	},{
-		name:"Potion of Fire Resistance",
-		description:"When you drink this potion, you gain resistance to fire damage for one hour.",
-		count:1,
-		value:4000,
-		categories:['Potion']
-	},{
-		name:"Potion of Force Resistance",
-		description:"When you drink this potion, you gain resistance to force damage for one hour.",
-		count:1,
-		value:4000,
-		categories:['Potion']
-	},{
-		name:"Potion of Cold Resistance",
-		description:"When you drink this potion, you gain resistance to cold damage for one hour.",
-		count:1,
-		value:4000,
-		categories:['Potion']
-	},{
-		name:"Potion of Lightning Resistance",
-		description:"When you drink this potion, you gain resistance to lightning damage for one hour.",
-		count:1,
-		value:4000,
-		categories:['Potion']
-	},{
-		name:"Potion of Acid Resistance",
-		description:"When you drink this potion, you gain resistance to acid damage for one hour.",
-		count:1,
-		value:4000,
-		categories:['Potion']
-	},{
-		name:"Potion of Poison Resistance",
-		description:"When you drink this potion, you gain resistance to poison damage for one hour.",
-		count:1,
-		value:4000,
-		categories:['Potion']
-	},{
-		name:"Potion of Necrotic Resistance",
-		description:"When you drink this potion, you gain resistance to necrotic damage for one hour.",
-		count:1,
-		value:4000,
-		categories:['Potion']
-	},{
-		name:"Potion of Psychic Resistance",
-		description:"When you drink this potion, you gain resistance to psychic damage for one hour.",
-		count:1,
-		value:4000,
-		categories:['Potion']
-	},{
-		name:"Potion of Radiant Resistance",
-		description:"When you drink this potion, you gain resistance to radiant damage for one hour.",
-		count:1,
-		value:4000,
-		categories:['Potion']
-	},{
-		name:"Potion of Thunder Resistance",
-		description:"When you drink this potion, you gain resistance to thunder damage for one hour.",
-		count:1,
-		value:4000,
-		categories:['Potion']
+		categories:['Potion'],
+		onGenerate:function(){
+			let type="";
+			switch (Math.rand(0,16)){
+				case 0: type="Acid";break;
+				case 1: type="Acid";break;
+				case 2: type="Fire";break;
+				case 3: type="Fire";break;
+				case 4: type="Cold";break;
+				case 5: type="Cold";break;
+				case 6: type="Lightning";break;
+				case 7: type="Lightning";break;
+				case 8: type="Thunder";break;
+				case 9: type="Thunder";break;
+				case 10: type="Poison";break;
+				case 11: type="Poison";break;
+
+				case 12: type="Force";break;
+				case 13: type="Necrotic";break;
+				case 14: type="Psychic";break;
+				case 15: type="Radiant";break;
+			}
+			this.name=this.name.replace("{type}",type);
+			this.description=this.description.replace("{type}",type.toLowerCase());
+		}
 	},{
 		name:"Potion of Healing",
 		description:"You regain 2d4+2 hit points when you drink this potion. The potion's red liquid glimmers when agitated.",

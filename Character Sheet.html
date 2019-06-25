@@ -577,49 +577,82 @@
 
 
 <div ng-show="tab=='reference'">
-	
-	<div ng-show="subtab='spells'">
-	<table style="width:100%;"><thead class='label'><tr>
-		<th>Spells</th>
-		<th>Filters</th>
-		<th>&nbsp;</th>
-	</tr></thead><tbody><tr>
-	<td style="width:340px;max-width:340px;display:inherit;vertical-align:top;">
-		<div class="scrollable">
-			<input style="width:340px;" type="text" ng-model="spellSearch" placeholder="Filter..."/>
-			<div class="item greenback" ng-repeat="spell in filteredSpellList | filter:spellSearch"
-					ng-mouseenter="setTip(spell,spell.level)" ng-mouseleave="clearTip()">{{spell.name}} ({{spell.level}})</div>
-		</div>
-	</td>
-	<td style="width:25%;vertical-align:top;margin-left:10px">
-	<br>
-		<span class="item" ng-repeat="i in [0,1,2,3,4,5,6,7,8,9]" style="padding:8px 10px;"
-				ng-class="{'greenback':spellFilters.levels[i]}"
-				ng-click="spellFilters.levels[i]=!spellFilters.levels[i];updateSpellFilter()">{{i}}</span>
-<br><br><table><tr>
-		<td><div class="item" style="display:inherit;" ng-class="{'redback':spellFilters.excludeClass[0]}" ng-click="classFilterExclude(0)">Bard</div></td>
-		<td><div class="item" style="display:inherit;" ng-class="{'greenback':spellFilters.includeClass[0]}" ng-click="classFilterInclude(0)">Bard</div></td></tr><tr>
-		<td><div class="item" style="display:inherit;" ng-class="{'redback':spellFilters.excludeClass[1]}" ng-click="classFilterExclude(1)">Cleric</div></td>
-		<td><div class="item" style="display:inherit;" ng-class="{'greenback':spellFilters.includeClass[1]}" ng-click="classFilterInclude(1)">Cleric</div></td></tr><tr>
-		<td><div class="item" style="display:inherit;" ng-class="{'redback':spellFilters.excludeClass[2]}" ng-click="classFilterExclude(2)">Druid</div></td>
-		<td><div class="item" style="display:inherit;" ng-class="{'greenback':spellFilters.includeClass[2]}" ng-click="classFilterInclude(2)">Druid</div></td></tr><tr>
-		<td><div class="item" style="display:inherit;" ng-class="{'redback':spellFilters.excludeClass[3]}" ng-click="classFilterExclude(3)">Paladin</div></td>
-		<td><div class="item" style="display:inherit;" ng-class="{'greenback':spellFilters.includeClass[3]}" ng-click="classFilterInclude(3)">Paladin</div></td></tr><tr>
-		<td><div class="item" style="display:inherit;" ng-class="{'redback':spellFilters.excludeClass[4]}" ng-click="classFilterExclude(4)">Ranger</div></td>
-		<td><div class="item" style="display:inherit;" ng-class="{'greenback':spellFilters.includeClass[4]}" ng-click="classFilterInclude(4)">Ranger</div></td></tr><tr>
-		<td><div class="item" style="display:inherit;" ng-class="{'redback':spellFilters.excludeClass[5]}" ng-click="classFilterExclude(5)">Sorcerer</div></td>
-		<td><div class="item" style="display:inherit;" ng-class="{'greenback':spellFilters.includeClass[5]}" ng-click="classFilterInclude(5)">Sorcerer</div></td></tr><tr>
-		<td><div class="item" style="display:inherit;" ng-class="{'redback':spellFilters.excludeClass[6]}" ng-click="classFilterExclude(6)">Warlock</div></td>
-		<td><div class="item" style="display:inherit;" ng-class="{'greenback':spellFilters.includeClass[6]}" ng-click="classFilterInclude(6)">Warlock</div></td></tr><tr>
-		<td><div class="item" style="display:inherit;" ng-class="{'redback':spellFilters.excludeClass[7]}" ng-click="classFilterExclude(7)">Wizard</div></td>
-		<td><div class="item" style="display:inherit;" ng-class="{'greenback':spellFilters.includeClass[7]}" ng-click="classFilterInclude(7)">Wizard</div></td></tr>
-	</table>
-
-	</td>
-	<td style="width: 50%;vertical-align: top;font-size: 1.3em;"></td>
-	</tr></tbody></table>
+	<span class="button" style="position:absolute;top:40px;right:8px;" ng-show="subtab==='spells'" ng-click="subtab='creatures'">Creatures &raquo;</span>
+	<span class="button" style="position:absolute;top:40px;right:8px;" ng-show="subtab==='creatures'" ng-click="subtab='spells'">Spells &raquo;</span>
+	<div ng-show="subtab=='spells'">
+		<table style="width:100%;">
+			<thead class='label'>
+				<tr>
+					<th>Spells</th>
+					<th>Filters</th>
+					<th>&nbsp;</th>
+				</tr>
+			</thead>
+			<tbody>
+			<tr>
+				<td style="width:340px;max-width:340px;display:inherit;vertical-align:top;">
+					<div class="scrollable">
+						<input style="width:340px;" type="text" ng-model="spellSearch" placeholder="Filter..."/>
+						<div class="item greenback" ng-repeat="spell in filteredSpellList | filter:spellSearch"
+								ng-mouseenter="setTip(spell,spell.level)" ng-mouseleave="clearTip()">{{spell.name}} ({{spell.level}})</div>
+					</div>
+				</td>
+				<td style="width:25%;vertical-align:top;margin-left:10px">
+				<br>
+					<span class="item" ng-repeat="i in [0,1,2,3,4,5,6,7,8,9]" style="padding:8px 10px;"
+							ng-class="{'greenback':spellFilters.levels[i]}"
+							ng-click="spellFilters.levels[i]=!spellFilters.levels[i];updateSpellFilter()">{{i}}</span>
+				<br><br>
+					<table>
+						<tr>
+							<td><div class="item" style="display:inherit;" ng-class="{'redback':spellFilters.excludeClass[0]}" ng-click="classFilterExclude(0)">Bard</div></td>
+							<td><div class="item" style="display:inherit;" ng-class="{'greenback':spellFilters.includeClass[0]}" ng-click="classFilterInclude(0)">Bard</div></td></tr><tr>
+							<td><div class="item" style="display:inherit;" ng-class="{'redback':spellFilters.excludeClass[1]}" ng-click="classFilterExclude(1)">Cleric</div></td>
+							<td><div class="item" style="display:inherit;" ng-class="{'greenback':spellFilters.includeClass[1]}" ng-click="classFilterInclude(1)">Cleric</div></td></tr><tr>
+							<td><div class="item" style="display:inherit;" ng-class="{'redback':spellFilters.excludeClass[2]}" ng-click="classFilterExclude(2)">Druid</div></td>
+							<td><div class="item" style="display:inherit;" ng-class="{'greenback':spellFilters.includeClass[2]}" ng-click="classFilterInclude(2)">Druid</div></td></tr><tr>
+							<td><div class="item" style="display:inherit;" ng-class="{'redback':spellFilters.excludeClass[3]}" ng-click="classFilterExclude(3)">Paladin</div></td>
+							<td><div class="item" style="display:inherit;" ng-class="{'greenback':spellFilters.includeClass[3]}" ng-click="classFilterInclude(3)">Paladin</div></td></tr><tr>
+							<td><div class="item" style="display:inherit;" ng-class="{'redback':spellFilters.excludeClass[4]}" ng-click="classFilterExclude(4)">Ranger</div></td>
+							<td><div class="item" style="display:inherit;" ng-class="{'greenback':spellFilters.includeClass[4]}" ng-click="classFilterInclude(4)">Ranger</div></td></tr><tr>
+							<td><div class="item" style="display:inherit;" ng-class="{'redback':spellFilters.excludeClass[5]}" ng-click="classFilterExclude(5)">Sorcerer</div></td>
+							<td><div class="item" style="display:inherit;" ng-class="{'greenback':spellFilters.includeClass[5]}" ng-click="classFilterInclude(5)">Sorcerer</div></td></tr><tr>
+							<td><div class="item" style="display:inherit;" ng-class="{'redback':spellFilters.excludeClass[6]}" ng-click="classFilterExclude(6)">Warlock</div></td>
+							<td><div class="item" style="display:inherit;" ng-class="{'greenback':spellFilters.includeClass[6]}" ng-click="classFilterInclude(6)">Warlock</div></td></tr><tr>
+							<td><div class="item" style="display:inherit;" ng-class="{'redback':spellFilters.excludeClass[7]}" ng-click="classFilterExclude(7)">Wizard</div></td>
+							<td><div class="item" style="display:inherit;" ng-class="{'greenback':spellFilters.includeClass[7]}" ng-click="classFilterInclude(7)">Wizard</div></td>
+						</tr>
+					</table>
+				</td>
+				<td style="width: 50%;vertical-align: top;font-size: 1.3em;"></td>
+			</tr>
+			</tbody>
+		</table>
 	</div>
 	
+	<div ng-show="subtab=='creatures'">
+		<div>
+			<input ng-model="cFilter.name" placeholder="Name..."/><br>
+			<input ng-model="cFilter.cr" placeholder="Challenge Rating..."/><br>
+			<input ng-model="ceatureFilter2" placeholder="Other info..."/>
+		</div>
+		<div style="overflow-y:scroll;max-height:calc(100vh - 450px);width:400px;">
+			<table class="borders">
+				<thead><tr>
+					<th>Name</th>
+					<th>CR</th>
+					<th>Type</th>
+				</tr></thead>
+				<tbody>
+					<tr ng-repeat="creature in creatures | filter:creatureFilter | filter:creatureFilter2" ng-mouseenter="setTip(creature)" ng-mouseleave="clearTip()">
+						<td style="width:30%">{{creature.name}}</td>
+						<td style="width:10%">{{creature.cr}}</td>
+						<td style="width:20%">{{creature.type}}</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
 </div>
 <!-- End Reference -->
 
@@ -638,7 +671,7 @@
 
 <!-- Tooltip Modal-->
 <div class="rightModal" ng-class="{'show':currentChoices || tip}" ng-mouseenter="renewTip()" ng-mouseleave="clearTip()">
-	<div>
+	<div ng-if="tip.hpMax===undefined">
 		<div class="label">{{tip.name || tip}}</div>
 		<hr style="border-color:black;">
 		<!-- Spell metadata -->
@@ -715,6 +748,99 @@
 			</div>
 		</div>
 	</div>
+	
+	<!-- Creature statbox tooltip -->
+	<div class="creatureCard box" ng-if="tip.hpMax">
+		<div class="monsterHeader">
+			<div class="headerBg"></div>
+			<span class="white label">{{tip.name}}</span><span class="white"> (CR {{tip.cr}})</span>
+		</div>
+		<div style="position:relative;">
+			<span>&emsp;Max HP: {{tip.hpMax}}</span>
+			<div style="position:absolute;right:4px;top:8px;font-weight:bold;">{{tip.type}}</div>
+		</div>
+		<div>
+			<table class="borders full"><thead><tr>
+				<th></th>
+				<th>STR</th>
+				<th>DEX</th>
+				<th>CON</th>
+				<th>INT</th>
+				<th>WIS</th>
+				<th>CHA</th>
+			</tr></thead>
+			<tr>
+				<td>AC {{tip.ac}}</td>
+				<td>{{att(creature,'str')}}</td>
+				<td>{{att(creature,'dex')}}</td>
+				<td>{{att(creature,'con')}}</td>
+				<td>{{att(creature,'int')}}</td>
+				<td>{{att(creature,'wis')}}</td>
+				<td>{{att(creature,'cha')}}</td>
+			</tr>
+			<tr>
+				<td>Saves:</td>
+				<td>{{saveBonus(creature,'str')}}</td>
+				<td>{{saveBonus(creature,'dex')}}</td>
+				<td>{{saveBonus(creature,'con')}}</td>
+				<td>{{saveBonus(creature,'int')}}</td>
+				<td>{{saveBonus(creature,'wis')}}</td>
+				<td>{{saveBonus(creature,'cha')}}</td>
+			</tr>
+			</table>
+		</div>
+		<div ng-if="tip.immunities.length>0
+		|| tip.conditionImmunities.length>0
+		|| tip.resistances.length>0
+		|| tip.vulnerabilities.length>0">
+			<span class="label subheader">Resistances and Vulnerabilities</span>
+			<div ng-if="tip.immunities" style="margin-bottom:6px;">
+				<span style="font-weight:bold;">Immune to &horbar; </span>{{tip.immunities.join(', ')}}
+			</div>
+			<div ng-if="tip.conditionImmunities" style="margin-bottom:6px;">
+				<span style="font-weight:bold;">Immune to &horbar; </span>{{tip.conditionImmunities.join(', ')}}
+			</div>
+			<div ng-if="tip.resistances" style="margin-bottom:6px;">
+				<span style="font-weight:bold;">Resistant to &horbar; </span>{{tip.resistances.join(', ')}}
+			</div>
+			<div ng-if="tip.vulnerabilities" style="margin-bottom:6px;">
+				<span style="font-weight:bold;">Vulnerable to &horbar; </span>{{tip.vulnerabilities.join(', ')}}
+			</div>
+		</div>
+		<div ng-if="tip.passives.length>0">
+			<span class="label subheader">Passives</span>
+			<table class="full" ng-repeat="p in tip.passives">
+				<thead><tr><th ng-click="p.hidden=!p.hidden">{{p.name}}</th></tr></thead>
+				<tbody ng-hide="p.hidden"><tr><td style="white-space: pre-wrap;">{{p.description}}</td></tr></tbody>
+			</table>
+		</div>
+		<div ng-if="tip.actions">
+			<span class="label subheader">Actions</span>
+			<table class="full" ng-repeat="a in tip.actions">
+				<thead><tr><th ng-click="a.hidden=!a.hidden">{{a.name}}</th></tr></thead>
+				<tbody ng-hide="a.hidden"><tr><td style="white-space: pre-wrap;">{{a.description}}</td></tr></tbody>
+			</table>
+		</div>
+		<div ng-if="tip.spellcasting">
+			<span class="label subheader">Spellcasting</span>
+			<div>{{tip.spellcasting.description}}</div>
+			<div ng-if="tip.spellcasting.will">
+				<span>At will: {{tip.spellcasting.will.join(', ')}}</span>
+			</div>
+			<div ng-if="tip.spellcasting.individual">
+				<span>Individual uses: </span>
+				<span ng-repeat="spell in tip.spellcasting.individual" class="spellButton"
+						ng-click="spell.charges=spell.charges-1" ng-if="spell.charges">{{spell.name}} ({{spell.charges}})</span>
+			</div>
+			<div ng-if="tip.spellcasting.spells"> 
+				<div ng-repeat="level in tip.spellcasting.spells"
+					 ng-click="level.slots=level.slots-1">
+					<span style="font-weight:bold;"> Level {{$index}} ({{level.slots}}): </span>
+					<span ng-repeat="spell in level.spells" class="spellButton">{{spell}}</span>
+				</div>
+			</div>			
+		</div>
+	</div>
 </div>
 
 <div class="modal" style="display:flex;" ng-class="{'show':showSaveMenu}">
@@ -743,6 +869,7 @@
 <script src="./packages/items.js"></script>
 <script src="./packages/races.js"></script>
 <script src="./packages/backgrounds.js"></script>
+<script src="./core/monsters.js"></script>
 
 <script src="./packages/barbarian.js"></script>
 <script src="./packages/bard.js"></script>

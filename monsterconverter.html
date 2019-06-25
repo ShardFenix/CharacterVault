@@ -4,16 +4,16 @@
 <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular-animate.js"></script>
+<script src="5emm.js"></script>
 </head>
 <body style="background-color:#ffffff;">
 <script type="text/javascript">
 
 
 function convertSpells(){
-$.get('http://localhost:8080/5emm.json',function(response){
 	var monsters=[];
 	var print=true;
-	for (let mm of response.monster){
+	for (let mm of window.monsters){
 		try{
 			let monster={name:mm.name,source:mm.source};
 			if (typeof mm.cr === 'string'){
@@ -55,7 +55,6 @@ $.get('http://localhost:8080/5emm.json',function(response){
 		console.log(JSON.stringify(monsters));
 		document.getElementsByTagName('body')[0].innerHTML=JSON.stringify(monsters);
 	}
-});
 }
 
 function populateResistances(monster,mm){
@@ -371,72 +370,7 @@ function getAc(ac){
 	return result;
 }
 
-
-function convertCreatures(){
-$.get('http://localhost:8080/5espells.json',function(response){
-	var creatures=[];
-	var print=true;
-	for (var i=0;i<response.length;i++){
-	try{
-		var s=response.creature[i];
-		if (s.name=='Identify'){
-			var test=123;
-		}
-		var spell={name:s.name};
-		spell.level=s.level;
-		spell.castTime=s.time[0].number+" "+s.time[0].unit;
-		if (s.time[0].number!=1){
-			spell.castTime+='s';
-		}
-		if (s.range.type=='point'){
-			if (s.range.distance.type=='touch'){
-				spell.range="Touch";
-			} else {
-				spell.range=s.range.distance.amount+" "+s.range.distance.type;
-			}
-		} else {
-			spell.range=s.range.type;
-		}
-		spell.classes=[];
-		for (var j=0;j<s.classes.fromClassList.length;j++){
-			spell.classes.push(s.classes.fromClassList[j].name);
-		}
-		spell.school=getSchool(s.school);
-		if (s.duration[0].type=='timed') {
-			spell.duration=s.duration[0].duration.amount+" "+s.duration[0].duration.type;
-			if (s.duration[0].duration.amount!=1){
-				spell.duration+='s';
-			}
-		} else if (s.duration[0].type=='instant') {
-			spell.duration="Instant";
-		} else if (s.duration[0].type=='special') {
-			spell.duration="Special";
-		} else if (s.duration[0].type=='permanent') {
-			spell.duration="permanent";
-		} else {
-			console.log(s.name+" DURATION="+s.duration[0].type);
-			print=false;
-		}
-		spell.description=collapseDescription(s.entries);
-		spell.description=spell.description.replace(/\{@filter ([^|]+)[^}]+\}/gm,'$1');
-		spell.description=spell.description.replace(/\{@[A-Za-z0-9-_() |]+\|([^}]+)\}/gm,'$1');
-		spell.description=spell.description.replace(/\{@\w+ ([^}]+)\}/gm,'$1');
-		spells.push(spell);
-	}catch(error){
-		console.error("Error with "+response.spell[i].name);
-		console.error(error);
-		print=false;
-	}
-	}
-	if (print){
-	console.log(JSON.stringify(spells));
-	document.getElementsByTagName('body')[0].innerHTML=JSON.stringify(spells);
-	}
-});
-}
-
 convertSpells();
-//convertCreatures();
 
 
 </script>

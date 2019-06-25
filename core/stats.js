@@ -465,6 +465,7 @@ $scope.newability={};
 $scope.newpassive={};
 
 $scope.tab='stats';
+$scope.subtab="spells";
 	
 $scope.tooltip=null;
 
@@ -1229,7 +1230,39 @@ $scope.updateSpellFilter=function(){
 	}
 }
 
+$scope.att=function(creature,attribute){
+	let total = Math.floor((creature.attributes[attribute]+20)/2)-15;
+	if (total>=0){total="+"+total;}
+	return creature.attributes[attribute]+" ("+total+")";
+}
+
+$scope.saveBonus=function(creature,attribute){
+	let total = Math.floor((creature.attributes[attribute]+20)/2)-15;
+	if (creature.saves && creature.saves[attribute]){
+		total=creature.saves[attribute];
+	}
+	if (total>0){
+		return "+"+total;
+	}
+	return total;
+}
+
+
 $scope.calculate();
 $scope.updateSpellFilter();
+
+$scope.creatures=window.creatures;
+
+$scope.cFilter={};
+
+$scope.creatureFilter=function(value,index,array){
+	if ($scope.cFilter.name && !value.name.toLowerCase().includes($scope.cFilter.name.toLowerCase())){
+		return false;
+	}
+	if ($scope.cFilter.cr && value.cr !== $scope.cFilter.cr){
+		return false;
+	}
+	return true;
+}
 
 }]);

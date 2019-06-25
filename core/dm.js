@@ -27,6 +27,7 @@ $scope.spellFilters={
 	includeClass:[true,true,true,true,true,true,true,true],
 	excludeClass:[false,false,false,false,false,false,false,false]
 }
+
 $scope.players=[];
 
 $scope.loot=[];

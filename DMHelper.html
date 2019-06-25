@@ -15,11 +15,11 @@
 <script src="libs/angular-sanitize.js"></script>
 
 </head>
-<body style="background-color:#ffffff;width:100vw;overflow-x:hidden;">
+<body style="background-color:#ffffff;width:100vw;overflow-x:hidden;margin:0px;">
 <div ng-app="myApp">
 <div ng-controller="MyController" ng-cloak>
 
-<div style="margin-top:-8px;">
+<div>
 <span class="tab" ng-click="tab='general'" ng-class="{'activetab':tab=='general'}">General</span>
 <span class="tab" ng-click="tab='players'" ng-class="{'activetab':tab=='players'}">Players</span>
 <span class="tab" ng-click="tab='combat'" ng-class="{'activetab':tab=='combat'}">Combat</span>
@@ -582,7 +582,9 @@
 		<td style="display: flex;flex-wrap: wrap;">
 			<input type="text" placeholder="Filter..." ng-model="lootFilter"
 				style="width: 300px;margin-left: calc(50% - 150px);margin-right: calc(50% - 150px);"/>
-			<div class="itembox" ng-repeat="item in loot |filter:lootFilter |orderBy:'description.length' track by $index">
+			<div class="itembox" ng-repeat="item in loot |filter:lootFilter |orderBy:'description.length' track by $index"
+					ng-click="setTip(item)" ng-mouseleave="clearTip()"
+					style="cursor:pointer;">
 				<div class="label subheader">
 					{{item.name}}
 				</div>
