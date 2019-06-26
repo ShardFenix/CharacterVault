@@ -1395,7 +1395,7 @@ window.items=[
 		rarity:2,
 		onGenerate:function(){
 			this.count=Math.rand(0,4) + Math.rand(1,3);
-			switch (Math.rand(0,10)){
+			switch (Math.rand(0,7)){
 				case 0:this.name="Diamond";break;
 				case 1:this.name="Diamond";break;
 				case 2:this.name="Ruby";break;

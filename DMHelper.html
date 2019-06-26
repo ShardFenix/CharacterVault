@@ -290,6 +290,12 @@
 					<input type="text" number ng-model="damageAmount" 
 							placeholder="Deal damage" class="med"/>
 				</form>
+				<table class="borders" style="display:inline-table; width:30%;"><thead><tr><th>Walk</th><th>Fly</th><th>Swim</th></tr>
+				<tbody><tr>
+					<td>{{creature.speed.walk || 0}}</td>
+					<td>{{creature.speed.fly || 0}}</td>
+					<td>{{creature.speed.swim || 0}}</td>
+				</tr></tbody></table>
 				<div style="position:absolute;right:4px;top:8px;font-weight:bold;">{{creature.type}}</div>
 			</div>
 			<div>

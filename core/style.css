@@ -470,14 +470,13 @@ div.rightModal {
     background: url('../images/parchment2.jpg');
 	background-attachment:local;
     box-shadow: 0 0 2px 1px black;
-    width: 35%;
-    padding: 3%;
+    width: 41%;
     left: 110%;
     top: 0%;
     transition: 0.5s ease all;
     text-align: center;
-    min-height: 90%;
-	max-height:90%;
+    min-height: 100%;
+	max-height: 100%;
 	overflow-y:scroll;
     z-index: 2;
 }
@@ -676,4 +675,9 @@ i{
 
 .hpbox.minimize{
 	height:0px;
+}
+
+table.bigcells td{
+	padding:8px 4px;
+	font-size:14px;
 }

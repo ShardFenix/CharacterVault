@@ -632,21 +632,23 @@
 	
 	<div ng-show="subtab=='creatures'">
 		<div>
-			<input ng-model="cFilter.name" placeholder="Name..."/><br>
-			<input ng-model="cFilter.cr" placeholder="Challenge Rating..."/><br>
-			<input ng-model="ceatureFilter2" placeholder="Other info..."/>
+			<input type="text" ng-model="cFilter.name" placeholder="Name..."/><br>
+			<input type="text" ng-model="cFilter.cr" placeholder="Challenge Rating..."/><br>
+			<input type="text" ng-model="creatureFilter2" placeholder="Other info..."/>
 		</div>
-		<div style="overflow-y:scroll;max-height:calc(100vh - 450px);width:400px;">
-			<table class="borders">
+		<div style="overflow-y:scroll;max-height:calc(100vh - 160px);width:400px;">
+			<table class="borders bigcells">
 				<thead><tr>
 					<th>Name</th>
 					<th>CR</th>
+					<th>HP</th>
 					<th>Type</th>
 				</tr></thead>
 				<tbody>
 					<tr ng-repeat="creature in creatures | filter:creatureFilter | filter:creatureFilter2" ng-mouseenter="setTip(creature)" ng-mouseleave="clearTip()">
 						<td style="width:30%">{{creature.name}}</td>
 						<td style="width:10%">{{creature.cr}}</td>
+						<td style="width:20%">{{creature.hp}}</td>
 						<td style="width:20%">{{creature.type}}</td>
 					</tr>
 				</tbody>
@@ -671,7 +673,7 @@
 
 <!-- Tooltip Modal-->
 <div class="rightModal" ng-class="{'show':currentChoices || tip}" ng-mouseenter="renewTip()" ng-mouseleave="clearTip()">
-	<div ng-if="tip.hpMax===undefined">
+	<div ng-if="tip.cr===undefined" style="padding:40px">
 		<div class="label">{{tip.name || tip}}</div>
 		<hr style="border-color:black;">
 		<!-- Spell metadata -->
@@ -750,13 +752,20 @@
 	</div>
 	
 	<!-- Creature statbox tooltip -->
-	<div class="creatureCard box" ng-if="tip.hpMax">
+	<div class="creatureCard box" ng-if="tip.cr" style="width:100%;padding-top:40px;">
 		<div class="monsterHeader">
 			<div class="headerBg"></div>
 			<span class="white label">{{tip.name}}</span><span class="white"> (CR {{tip.cr}})</span>
 		</div>
-		<div style="position:relative;">
-			<span>&emsp;Max HP: {{tip.hpMax}}</span>
+		<div style="position:relative;text-align:left;">
+			<span style="font-size:1.3em">Max HP: {{tip.hp}}</span>
+			<table class="borders" style="display:inline-table; width:30%;margin-left:40px;"><thead><tr><th>Walk</th><th>Fly</th><th>Swim</th></tr>
+				<tbody><tr>
+					<td>{{tip.speed.walk || 0}}</td>
+					<td>{{tip.speed.fly || 0}}</td>
+					<td>{{tip.speed.swim || 0}}</td>
+				</tr></tbody>
+			</table>
 			<div style="position:absolute;right:4px;top:8px;font-weight:bold;">{{tip.type}}</div>
 		</div>
 		<div>
@@ -771,21 +780,21 @@
 			</tr></thead>
 			<tr>
 				<td>AC {{tip.ac}}</td>
-				<td>{{att(creature,'str')}}</td>
-				<td>{{att(creature,'dex')}}</td>
-				<td>{{att(creature,'con')}}</td>
-				<td>{{att(creature,'int')}}</td>
-				<td>{{att(creature,'wis')}}</td>
-				<td>{{att(creature,'cha')}}</td>
+				<td>{{att(tip,'str')}}</td>
+				<td>{{att(tip,'dex')}}</td>
+				<td>{{att(tip,'con')}}</td>
+				<td>{{att(tip,'int')}}</td>
+				<td>{{att(tip,'wis')}}</td>
+				<td>{{att(tip,'cha')}}</td>
 			</tr>
 			<tr>
 				<td>Saves:</td>
-				<td>{{saveBonus(creature,'str')}}</td>
-				<td>{{saveBonus(creature,'dex')}}</td>
-				<td>{{saveBonus(creature,'con')}}</td>
-				<td>{{saveBonus(creature,'int')}}</td>
-				<td>{{saveBonus(creature,'wis')}}</td>
-				<td>{{saveBonus(creature,'cha')}}</td>
+				<td>{{saveBonus(tip,'str')}}</td>
+				<td>{{saveBonus(tip,'dex')}}</td>
+				<td>{{saveBonus(tip,'con')}}</td>
+				<td>{{saveBonus(tip,'int')}}</td>
+				<td>{{saveBonus(tip,'wis')}}</td>
+				<td>{{saveBonus(tip,'cha')}}</td>
 			</tr>
 			</table>
 		</div>
