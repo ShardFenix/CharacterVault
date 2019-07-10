@@ -185,8 +185,9 @@ function listManeuvers(char){
 function listNonProficientInstruments(char){
 	var result=[];
 	for (var i=0;i<window.items.length;i++){
-		if (window.items[i].categories.indexOf('Instrument')!=-1){
-			if (!hasProficiency(char,window.items[i].proficiencies[0])){
+		let item = window.items[i];
+		if (item.categories && item.categories.has('Instrument')){
+			if (!char.proficiencies || !char.proficiencies.hasAny(window.items[i].proficiencies)){
 				result.push(window.items[i].name);
 			}
 		}
@@ -197,9 +198,10 @@ function listNonProficientInstruments(char){
 function listNonProficientTools(char){
 	var result=[];
 	for (var i=0;i<window.items.length;i++){
-		if (window.items[i].categories.indexOf('Artisan Tool')!=-1){
-			if (!hasProficiency(char,window.items[i].proficiencies[0])){
-				result.push(window.items[i].name);
+		let item = window.items[i];
+		if (item.categories && item.categories.hasAny('Artisan Tool','Tool')){
+			if (!item.proficiencies || char.proficiencies.hasAny(item.proficiencies)){
+				result.push(item.name);
 			}
 		}
 	}
@@ -212,18 +214,6 @@ function listNonProficientWeapons(char){
 		if (item.categories.indexOf('Weapon')!=-1){
 			if (!isProficientWith(char,item)){
 				result.push(item.name);
-			}
-		}
-	}
-	return result;
-}
-
-function listNonProficientTools(char){
-	var result=[];
-	for (var i=0;i<window.items.length;i++){
-		if (window.items[i].categories.indexOf('Tool')!=-1){
-			if (!hasProficiency(char,window.items[i].proficiencies[0])){
-				result.push(window.items[i].name);
 			}
 		}
 	}
@@ -260,6 +250,16 @@ function listSimpleWeapons(){
 	for (var i=0;i<window.items.length;i++){
 		let item=window.items[i];
 		if (item.categories.indexOf('Simple')!=-1 && item.categories.indexOf('Weapon')!=-1){
+			result.push(item);
+		}
+	}
+	return result;
+}
+function listSimpleMeleeWeapons(){
+	var result=[];
+	for (var i=0;i<window.items.length;i++){
+		let item=window.items[i];
+		if (item.categories.hasAll('Simple','Melee','Weapon')){
 			result.push(item);
 		}
 	}
