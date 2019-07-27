@@ -5,6 +5,13 @@ window.abilities.append([
 		maxCharges:1,
 		charges:1,
 		onShortRest:function(){this.charges=1;}
+	},{
+		name:"Master Duelist",
+		description:"Your mastery of the blade lets you turn failure into success in combat. If you miss with an attack roll, you can roll it again with advantage. Once you do so, you can't use this feature again until you finish a short or long rest.",
+		maxCharges:1,
+		onShortRest:function(){
+			this.charges=this.maxCharges;
+		}
 	}
 ]);
 
@@ -42,6 +49,21 @@ window.passives.append([
 	},{
 		name:"Death Strike",
 		description:"When you attack and hit a creature that is surprised, it must make a Constitution saving throw (DC 8 + your Dexterity modifier + your proficiency bonus). On a failed save, double the damage of your attack against the creature."
+	},{
+		name:"Fancy Footwork",
+		description:"During your turn, if you make a melee attack against a creature, that creature can't make opportunity attacks against you for the rest of your turn."
+	},{
+		name:"Rakish Audacity",
+		description:"You can give yourself a bonus to your initiative rolls equal to your Charisma modifier.\n\nYou also gain an additional way to use your Sneak Attack; you don't need advantage on the attack roll to use your Sneak Attack against a creature if you are within 5 feet of it, no other creatures are within 5 feet of you, and you don't have disadvantage on the attack roll. All the other rules for Sneak Attack still apply to you.",
+		apply:function(char,scope){
+			scope.derived.initiative += scope.derived.modifiers.cha;
+		}
+	},{
+		name:"Panache",
+		desciption:"Your charm becomes extraordinarily beguiling. As an action, you can make a Charisma (Persuasion) check contested by a creature's Wisdom (Insight) check. The creature must be able to hear you, and the two of you must share a language.\n\nIf you succeed on the check and the creature is hostile to you, it has disadvantage on attack rolls against targets other than you and can't make opportunity attacks against targets other than you. This effect lasts for 1 minute, until one of your companions attacks the target or affects it with a spell, or until you and the target are more than 60 feet apart.\n\nIf you succeed on the check and the creature isn't hostile to you, it is charmed by you for 1 minute. While charmed, it regards you as a friendly acquaintance. This effect ends immediately if you or your companions do anything harmful to it."
+	},{
+		name:"Elegant Maneuver",
+		description:"You can use a bonus action on your turn to gain advantage on the next Dexterity (Acrobatics) or Strength (Athletics) check you make during the same turn."
 	}
 ]);
 
@@ -424,5 +446,60 @@ window.subclasses.push(
 );
 
 window.subclasses.push(
-	
+	{
+		classname:"Rogue",
+		name:"Swashbuckler",
+		subclass:"Swashbuckler",
+		description:"You focus your training on the art of the blade, relying on speed, elegance, and charm in equal parts. While some warriors are brutes clad in heavy armor, your method of fighting looks almost like a performance. Duelists and pirates typically belong to this archetype. \n\nA Swashbuckler excels in single combat, and can fight with two weapons while safely darting away from an opponent.",
+		levels:[{},{},{},
+			{//3
+				summary:[findPassive("Fancy Footwork"),findPassive("Rakish Audacity")],
+				updates:[
+					{
+						choicePrompt:"You gain the following",
+						choices:[findPassive("Rakish Audacity"),findPassive("Fancy Footwork")],
+						action:function(char,derived,choice,$scope){
+							addPassive(char,"Rakish Audacity");
+							addPassive(char,"Fancy Footwork");
+						}
+					}
+				]
+			},{},{},{},{},{},{ //9
+				updates:[
+					{
+						summary:findPassive("Panache"),
+						choicePrompt:"You gain the following",
+						choices:[findPassive("Panache")],
+						action:function(char){
+							addPassive(char,"Panache");
+						}
+					}
+				]
+			},{},{},{},
+			{//13
+				updates:[
+					{
+						summary:findPassive("Elegant Maneuver"),
+						choicePrompt:"You gain the following",
+						choices:[findPassive("Elegant Maneuver")],
+						action:function(char,derived,choice){
+							addPassive(char,"Elegant Maneuver");
+						}
+					}
+				]
+			},{},{},{},
+			{//17
+				updates:[
+					{
+						summary:findAbility("Master Duelist"),
+						choicePrompt:"You gain the following",
+						choices:[findAbility("Master Duelist")],
+						action:function(char){
+							addAbility(char,"Master Duelist");
+						}
+					}
+				]
+			},{},{},{}
+		]
+	}
 );
