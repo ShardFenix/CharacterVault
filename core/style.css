@@ -3,12 +3,21 @@
     margin: 2px;
     padding: 6px 4px;
     font-size: 18px;
+	background-color: white;
+    color: black;
+    font-family: cursive;
+    border-left: 4px solid black;
+    border-right: 4px solid black;
 	-webkit-touch-callout: none;
     -webkit-user-select: none;
     -khtml-user-select: none;
     -moz-user-select: none;
     -ms-user-select: none;
     user-select: none;
+}
+.item:hover {
+	color:white;
+	background-color:#bb0000;
 }
 
 .noselect{
@@ -19,43 +28,40 @@
     -ms-user-select: none;
     user-select: none;
 }
-
 .item.selected{
     box-shadow: 0px 0px 2px 3px #000;
 }
-
 .yellowback{
     background-color: #ffdb77;
 }
-
 .redback{
     background-color: #c11717;
     color: white;
 }
-
+.redback:hover{
+	background-color: #cc3030;
+    color: white;
+}
 .greenback{
     background-color: green;
 	color:white;
 }
-
 .greenback:hover{
-	
+    background-color: #25a525;
+	color:white;
 }
 .greenback.prepared{
 	background-color: #1b5b90;
 }
-
 .green{
 	font-color:green;
 }
 .red{
 	color:red;
 }
-
 .item.grey{
 	background-color:#888;
 }
-
 .redx{
 	color:red;
 	font-weight:bold;
@@ -423,9 +429,9 @@ span.button {
     border-radius: 5px;
     cursor: pointer;
     display: inline-block;
-    width: 51%;
+    width: 45%;
     box-shadow: 0 0 1px 1px #000;
-    margin: 4px 0px;
+    margin: 4px 4px 4px 0px;
 }
 
 div.modal {
@@ -626,7 +632,7 @@ i{
 }
 .scrollable{
 	overflow-y: auto;
-    height: calc(100vh - 90px);
+    height: calc(100vh - 125px);
 }
 .spellButton{
 	background-color: #004e8e;
@@ -672,12 +678,39 @@ i{
 	transition:0.3s ease all;
 	overflow:hidden;
 }
-
 .hpbox.minimize{
 	height:0px;
 }
-
 table.bigcells td{
 	padding:8px 4px;
 	font-size:14px;
 }
+.character-header {
+    color: black;
+    border-bottom: 4px solid #bb0000;
+	display:flex;
+	align-items:center;
+}
+.character-name {
+    font-weight: bold;
+    font-size: 1.8em;
+    text-align: center;
+    font-family: 'Cinzel Decorative';
+}
+.levelhover{
+    position: relative;
+    left: 23px;
+    bottom: 46px;
+    font-size: 1.5em;
+    font-weight: bold;
+    text-align: center;
+    line-height: 0.8em;
+    background: white;
+	opacity:0;
+}
+.levelwrapper:hover .levelhover{
+	opacity:1;
+}
+.flex1{flex:1;}
+.flex2{flex:2;}
+.flex3{flex:3;}

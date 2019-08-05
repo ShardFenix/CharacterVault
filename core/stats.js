@@ -20,6 +20,19 @@ app.directive('number', ['$parse', function($parse) {
     }
 }]);
 
+app.directive('characterStats',function(){
+	return {templateUrl:'templates/characterStats.html'};
+});
+app.directive('characterAbilities',function(){
+	return {templateUrl:'templates/characterAbilities.html'};
+});
+app.directive('sideTip',function(){
+	return {templateUrl:'templates/sidetip.html'};
+});
+app.directive('creatureTip',function(){
+	return {templateUrl:'templates/creaturetip.html'};
+});
+
 app.controller('MyController',['$scope','$timeout','$http','$interval',function($scope,$timeout,$http,$interval){
 
 $scope.spellFilters={
@@ -1175,6 +1188,7 @@ function initLoadedCharacter(){
 	let hp=$scope.char.hp;
 	$scope.calculate();
 	$scope.char.hp=hp;
+	document.title=$scope.char.name+" - Character Sheet"
 }
 
 loadList();

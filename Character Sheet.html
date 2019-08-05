@@ -34,342 +34,11 @@
 </div>
 
 <div ng-show="tab=='stats'">
-
-<table style="width:100%;"><tbody><tr>
-	<td style="width:100px;vertical-align:top;">
-		<div class="attrbox" style="text-align:center;">
-			<label>
-				<span class='label'>STR</span>
-				<br>
-				<span class='attrmod'>{{derived.modifiers.str}}</span>
-				<br>
-				<input type='text' class='attrbase' ng-model='char.attributes.str' number ng-change='calculate()'/>
-			</label>
-		</div>
-
-		<div class="attrbox" style="text-align:center;">
-			<label>
-				<span class='label'>DEX</span>
-				<br>
-				<span class='attrmod'>{{derived.modifiers.dex}}</span>
-				<br>
-				<input type='text' class='attrbase' ng-model='char.attributes.dex' number ng-change='calculate()'/>
-			</label>
-		</div>
-
-		<div class="attrbox" style="text-align:center;">
-			<label>
-				<span class='label'>CON</span>
-				<br>
-				<span class='attrmod'>{{derived.modifiers.con}}</span>
-				<br>
-				<input type='text' class='attrbase' ng-model='char.attributes.con' number ng-change='calculate()'/>
-			</label>
-		</div>
-
-		<div class="attrbox" style="text-align:center;">
-			<label>
-				<span class='label'>INT</span>
-				<br>
-				<span class='attrmod'>{{derived.modifiers.int}}</span>
-				<br>
-				<input type='text' class='attrbase' ng-model='char.attributes.int' number ng-change='calculate()'/>
-			</label>
-		</div>
-
-		<div class="attrbox" style="text-align:center;">
-			<label>
-				<span class='label'>WIS</span>
-				<br>
-				<span class='attrmod'>{{derived.modifiers.wis}}</span>
-				<br>
-				<input type='text' class='attrbase' ng-model='char.attributes.wis' number ng-change='calculate()'/>
-			</label>
-		</div>
-
-		<div class="attrbox" style="text-align:center;">
-			<label>
-				<span class='label'>CHA</span>
-				<br>
-				<span class='attrmod'>{{derived.modifiers.cha}}</span>
-				<br>
-				<input type='text' class='attrbase' ng-model='char.attributes.cha' number ng-change='calculate()'/>
-			</label>
-		</div>
-	</div>
-	</td>
-
-	<td style="width:700px;vertical-align:top;">
-	<table style="width:100%" class="desktop">
-		<tr>
-			<td style="width:150px;text-align:center;">
-				<div>
-					<label>
-						<span class='label'>Level</span><br>
-						<input type='text' class='statbox' ng-model='char.level' number />
-					</label>
-				</div>
-				<span class="button" ng-hide="char.level>=20" ng-click="levelUpStart()">Level Up</span>
-			</td>
-			<td style="width:100px;text-align:center;">
-				<div class="acbox">
-					<label>
-						<br>
-						<span class='label'>AC</span>
-						<br>
-						<input type='text' style="font-size:2.2em;background-color:rgba(0,0,0,0)" class='statmod' ng-model='char.ac'/>
-					</label>
-				</div>
-			</td>
-			<td style="width:150px;text-align:center;">
-				<label>
-					<span class='label'>Proficiency<br>Bonus</span><br>
-					<input type='text' class='statbox' disabled ng-model='derived.proficiency'/>
-				</label>
-			</td>
-			<td style="width:150px;text-align:center;">
-				<label>
-					<span class='label'>Initiative<br>Bonus</span><br>
-					<input type='text' class='statbox' ng-model='derived.initiative'/>
-				</label>
-			</td>
-			<td style="width:150px;text-align:center;">
-				<label>
-					<span class='label'>Move<br>Speed</span><br>
-					<input type='text' class='statbox' ng-model='char.speed'/>
-				</label>
-			</td>
-		</tr>
-	</table>
-
-	<table>
-	<tr>	
-	<td colspan=2 class="top" style="min-width:160px;">
-	<br>
-	<div class='label' style='text-align:left;'>Skills</div>
-	<div ng-repeat="skill in derived.skills">
-		<span ng-show="skill.mult===0" class='redx' ng-click="toggleSkillProf(skill.name);">&#x2716;</span>
-		<span ng-show="skill.mult===1" class='greenx' ng-click="toggleSkillProf(skill.name);">&#x2714;</span>
-		<span ng-show="skill.mult===2" class='greenx' ng-click="toggleSkillProf(skill.name);">&#x271A;</span>
-		<span style="font-weight:bold;font-size:1.3em;"> {{skill.bonus}}</span> {{skill.name}}
-	</div>
-	</td>
-
-	<td style="padding-left:20px;" class="top">
-	<br><br>
-	<div class="hpbox">
-		<span class="bordertitle label">Hit Points</span>
-		<div class="label" style="padding:8px 10px">
-			<input type='text' class='hidden right' ng-model='char.hp' number/>
-			<span>&nbsp;/&nbsp;</span>
-			<input type='text' class='hidden left' disabled ng-model='derived.maxHp'/>
-		</div>
-	</div>
-	<div class="hpbox" ng-class="{'minimize':!showPolyHp}">
-		<span class="bordertitle label" style="cursor:pointer;" ng-click="showPolyHp = !showPolyHp">Shape HP</span>
-		<div class="label" style="padding:8px 10px">
-			<input type='text' class='hidden right' ng-model='char.polyHp' number/>
-			<span>&nbsp;/&nbsp;</span>
-			<input type='text' class='hidden left' ng-model='char.polyHpMax'/>
-		</div>
-	</div>
-	<div class="hpbox" ng-class="{'minimize':!showTempHp}">
-		<span class="bordertitle label" style="cursor:pointer;" ng-click="showTempHp = !showTempHp">Temp HP</span>
-		<div class="label" style="padding:8px 10px">
-			<input type='text' class='hidden right' ng-model='char.tempHp' number/>
-		</div>
-	</div>
-	<form ng-submit="takeDamage()">
-		<input type="text" style="width:170px" ng-model="takeDamageInput" placeholder="Deal damage..." number />
-	</form>
-	<br>
-
-	<div class='label' style='text-align:left;'>Saving Throws</div>
-	<span ng-show='char.saves.str===0' class='redx' ng-click='char.saves.str=1;calculate();'>&#x2716;</span>
-	<span ng-show='char.saves.str===1' class='greenx' ng-click='char.saves.str=0;calculate();'>&#x2714;</span>
-	<span style="font-weight:bold;font-size:1.3em;"> {{derived.saves.str}}</span> Strength
-	<br>
-	<span ng-show='char.saves.dex===0' class='redx' ng-click='char.saves.dex=1;calculate();'>&#x2716;</span>
-	<span ng-show='char.saves.dex===1' class='greenx' ng-click='char.saves.dex=0;calculate();'>&#x2714;</span>
-	<span style="font-weight:bold;font-size:1.3em;"> {{derived.saves.dex}}</span> Dexterity
-	<br>
-	<span ng-show='char.saves.con===0' class='redx' ng-click='char.saves.con=1;calculate();'>&#x2716;</span>
-	<span ng-show='char.saves.con===1' class='greenx' ng-click='char.saves.con=0;calculate();'>&#x2714;</span>
-	<span style="font-weight:bold;font-size:1.3em;"> {{derived.saves.con}}</span> Constitution
-	<br>
-	<span ng-show='char.saves.int===0' class='redx' ng-click='char.saves.int=1;calculate();'>&#x2716;</span>
-	<span ng-show='char.saves.int===1' class='greenx' ng-click='char.saves.int=0;calculate();'>&#x2714;</span>
-	<span style="font-weight:bold;font-size:1.3em;"> {{derived.saves.int}}</span> Intelligence
-	<br>
-	<span ng-show='char.saves.wis===0' class='redx' ng-click='char.saves.wis=1;calculate();'>&#x2716;</span>
-	<span ng-show='char.saves.wis===1' class='greenx' ng-click='char.saves.wis=0;calculate();'>&#x2714;</span>
-	<span style="font-weight:bold;font-size:1.3em;"> {{derived.saves.wis}}</span> Wisdom
-	<br>
-	<span ng-show='char.saves.cha===0' class='redx' ng-click='char.saves.cha=1;calculate();'>&#x2716;</span>
-	<span ng-show='char.saves.cha===1' class='greenx' ng-click='char.saves.cha=0;calculate();'>&#x2714;</span>
-	<span style="font-weight:bold;font-size:1.3em;"> {{derived.saves.cha}}</span> Charisma
-
-	<br>
-		<table><tr><td>Copper:</td><td>
-			<span class='subtract noselect' ng-click="decrCopper()">-</span>
-			<span class='money'>{{getCopper()}}</span>
-			<span class='add noselect' ng-click="incrCopper()">&#x271A;</span></td></tr>
-		<tr><td>Silver:</td><td>
-			<span class='subtract noselect' ng-click="decrSilver()">-</span>
-			<span class='money' >{{getSilver()}}</span>
-			<span class='add noselect' ng-click="incrSilver()">&#x271A;</span></td></tr>
-		<tr><td>Gold:</td><td>
-			<span class='subtract noselect' ng-click="decrGold()">-</span>
-			<span class='money' >{{getGold()}}</span>
-			<span class='add noselect' ng-click="incrGold()">&#x271A;</span></td></tr>
-		<tr>
-		<td colspan=2 style="text-align:right;">
-			<form ng-submit="spendGold()">
-				<input type="text" style="width:75%" ng-model="spendGoldInput" placeholder="Spend Gold..." />
-			</form>
-		</td>
-		</tr>
-		<tr>
-		<td colspan=2>
-			<span class="button" ng-click="showSaveMenu=true;">Save/Load</span>
-		</td>
-		</tr>
-		</table>
-	</td>
-	
-	<td class="top" style="padding-left:30px;width:250px;">
-	<br>
-		<div class="label center">Passives</div>
-		<input type="text" ng-model='passiveFilter' placeholder="Search..."/>
-		<div class="item greenback" ng-mouseenter="setTip(item)" ng-mouseleave="clearTip()"
-				ng-repeat="item in char.passives | filter:passiveFilter | orderBy:'name' track by $index">
-				{{item.name}}
-		</div>
-	</td>
-
-	</tr>
-	</table>
-	</td>
-
-<td style="vertical-align:top;">
-<br><br>
-	<div style="padding:10px;border:1px solid black;" class="desktop">
-		<span class="label bordertitle" style="margin-top:-24px;">Add Passive Ability</span>
-		<label>Name
-			<input type="text" ng-model="newpassive.name" ng-change="checkForPassives(newpassive.name)"/>
-		</label>
-		<br>
-		<label>Description
-		<textarea class="descriptionbox" ng-model="newpassive.description" style="width:100%;min-height:400px;max-height:400px;"></textarea>
-		</label>
-		<button ng-click="addPassive(newpassive)">Add to Passives</button>
-		<br>
-		<button style="display:none"></button>
-	</div>
-	<div class="tablet">
-		<table style="width:100%" class="tablet">
-			<tr>
-				<td style="width:150px;text-align:center;">
-					<div>
-						<label>
-							<span class='label'>Level</span><br>
-							<input type='text' class='statbox' ng-model='char.level' number />
-						</label>
-					</div>
-					<span class="button" ng-hide="char.level>=20" ng-click="levelUpStart()">Level Up</span>
-				</td></tr><tr>
-				<td style="width:100px;text-align:center;">
-					<div class="acbox">
-						<label>
-							<br>
-							<span class='label'>AC</span>
-							<br>
-							<input type='text' style="font-size:2.2em;background-color:rgba(0,0,0,0)" class='statmod' ng-model='char.ac'/>
-						</label>
-					</div>
-				</td></tr><tr>
-				<td style="width:150px;text-align:center;">
-					<label>
-						<span class='label'>Proficiency<br>Bonus</span><br>
-						<input type='text' class='statbox' disabled ng-model='derived.proficiency'/>
-					</label>
-				</td></tr><tr>
-				<td style="width:150px;text-align:center;">
-					<label>
-						<span class='label'>Initiative<br>Bonus</span><br>
-						<input type='text' class='statbox' ng-model='derived.initiative'/>
-					</label>
-				</td></tr><tr>
-				<td style="width:150px;text-align:center;">
-					<label>
-						<span class='label'>Move<br>Speed</span><br>
-						<input type='text' class='statbox' ng-model='char.speed'/>
-					</label>
-				</td>
-			</tr>
-		</table>
-
-	</div>
-</td>
-
-</tr></tbody></table>
+	<div character-stats></div>
 </div>
 
-
 <div ng-show="tab=='abilities'">
-<table style="width:100%;">
-<thead class="header"><tr>
-<th>Available</th>
-<th>Exhausted</th>
-<th>Add Ability</th>
-<th colspan=2>Description</th>
-</tr></thead>
-<tbody><tr>
-<td width="20%" style="vertical-align:top;">
-	<div class="leftmenu">
-		<div class="greenback item" ng-repeat="item in char.abilities | orderBy:'name' track by $index"
-				ng-click="decrementCharges(item)"
-				ng-if="item.charges>0"
-				ng-mouseenter="setTip(item)" ng-mouseleave="clearTip()">
-			<span style="font-weight:bold;">{{item.name}}</span>
-			<span>({{item.charges}})</span>
-		</div>
-	</div>
-</td>
-
-<td width="20%" style="vertical-align:top;">
-	<div class="leftmenu">
-		<div class="redback item" ng-repeat="item in char.abilities | orderBy:'name' track by $index"
-				ng-click="addCharge(item)" 
-				ng-if="item.maxCharges-item.charges>0"
-				ng-mouseenter="setTip(item)" ng-mouseleave="clearTip()">
-			<span style="font-weight:bold;">{{item.name}}</span>
-			<span>({{item.maxCharges-item.charges}})</span>
-			<span class="deletebutton" ng-click="delete(item,char.abilities,$event)">&times;</span>
-		</span>
-	</div>
-</td>
-
-<td width="20%" style="vertical-align:top;text-align:center;">
-	<input type="text" ng-model="newability.name" ng-change="checkForAbilities(newability.name)"/>
-	<br>
-	<input type="text" ng-model="newability.maxCharges"/>
-	<br><br>
-	<span class="button" ng-click="addAbility(newability)">Add to Abilities</span>
-	<br>
-	<span class="button" ng-click="shortRest()">Short Rest</span>
-	<br>
-	<span class="button" ng-click="longRest()">Long Rest</span>
-	<br>
-	<br>
-	<br>
-
-	<button style="display:none"></button>
-</td>
-<td>
-<textarea class="descriptionbox" ng-model="newability.description" style="width:100%;min-height:400px;"></textarea>
-</td>
-</tr></tbody></table>
+	<div character-abilities></div>
 </div>
 <!-- End Abilities -->
 
@@ -419,7 +88,7 @@
 	<div class="label">Proficiencies and Languages</div>
 	<input type="text" ng-model='profSearch' placeholder="Search..." />
 	<div class="leftmenu scrollable">
-		<div class="greenback item" ng-repeat="item in char.proficiencies | filter:profSearch | orderBy:'name'">
+		<div class="item" ng-repeat="item in char.proficiencies | filter:profSearch | orderBy:'name'">
 			<span style="font-weight:bold;">{{item}}</span>
 			<span class="deletebutton" ng-click="delete(item,char.proficiencies,$event)">&times;</span>
 		</div>
@@ -439,7 +108,7 @@
 		<div class="label">Known Spells</div>
 		<input type="text" ng-model="combatSpellFilter" placeholder="Filter spells..."/>
 		<br><br>
-		<span class="item" ng-repeat="i in [0,1,2,3,4,5,6,7,8,9]" style="padding:8px 10px;"
+		<span class="item redback" ng-repeat="i in [0,1,2,3,4,5,6,7,8,9]" style="padding:8px 10px;"
 				ng-class="{'greenback':knownSpellLevelFilter[i]}"
 				ng-click="knownSpellLevelFilter[i]=!knownSpellLevelFilter[i]">{{i}}</span>
 		<br><br>
@@ -502,7 +171,7 @@
 <tbody><tr>
 	<td width="30%" style="vertical-align:top;">
 		<div class="leftmenu" style="overflow-y:auto;height:calc(100vh - 150px);">
-			<div class="greenback item" ng-repeat="item in char.abilities | orderBy:'name' track by $index"
+			<div class="item" ng-repeat="item in char.abilities | orderBy:'name' track by $index"
 					ng-click="decrementCharges(item)"
 					ng-if="item.charges>0"
 					ng-mouseenter="setTip(item)" ng-mouseleave="clearTip()">
@@ -674,196 +343,35 @@
 <!-- Tooltip Modal-->
 <div class="rightModal" ng-class="{'show':currentChoices || tip}" ng-mouseenter="renewTip()" ng-mouseleave="clearTip()">
 	<div ng-if="tip.cr===undefined" style="padding:40px">
-		<div class="label">{{tip.name || tip}}</div>
-		<hr style="border-color:black;">
-		<!-- Spell metadata -->
-		<div ng-show="tip.level>=0" style="text-align:left">
-			<div>
-				Cast Time: {{tip.castTime}}
-				<span style="float:right" ng-show="tip.components.verbal">Verbal</span>
-			</div>
-			<div>
-				Duration: {{tip.duration}}
-				<span style="float:right" ng-show="tip.components.somatic">Somatic</span>
-			</div>
-			<div>
-				Range: {{tip.range}}
-				<span style="float:right" ng-show="tip.ritual">Ritual</span>
-			</div>
-			<div ng-show="tip.components.material">
-				Material component: {{tip.components.material}}
-			</div>
-			<br>
-		</div>
-		<!-- Item metadata -->
-		<div ng-show="tip.value" style="text-align:left;">
-			<div style="display:flex;">
-				<div style="width:49%;text-align:left;">
-					<div ng-show="tip.damage1">
-						1H Damage: {{tip.damage1}} {{tip.damageType}}
-					</div>
-					<div ng-show="tip.damage2">
-						2H Damage: {{tip.damage2}} {{tip.damageType}}
-					</div>
-					<div ng-show="tip.attackRange">
-						Range: {{tip.attackRange[0]}}ft / {{tip.attackRange[1]}}ft
-					</div>
-					<div ng-show="tip.ac">
-						AC: {{tip.ac}}
-					</div>
-				</div>
-				<div style="width:49%;text-align:right;">
-					<div ng-show="tip.finesse">Finesse</div>
-					<div ng-show="tip.heavy">Heavy</div>
-					<div ng-show="tip.reach">Reach</div>
-					<div ng-show="tip.throwRange">Thrown</div>
-				</div>
-			</div>
-			<br>
-			<span class="footnote" ng-show="isWeapon(tip)">Your attack bonus with this item is +{{attackBonus(tip)}}</span>
-		</div>
-		<div ng-bind-html='evalTooltip(tip)' class="tipDescription"></div>
-		<br>
-		<!-- Background metadata -->
-		<div ng-show="tip.featureName">
-			<div class="label subheader">{{tip.featureName}}</div>
-			<div class="tipDescription">{{tip.featureDescription}}</div>
-		</div>
-		<div ng-show="tip.saveDc" style="text-align:left;">
-			<span ng-show="tip.casterClass" class="footnote label">Casting Class: {{tip.casterClass}}</span>
-			<br>
-			<span class="footnote">Spell Attack Bonus: +{{tip.attackBonus}}.</span>
-			<br>
-			<span class="footnote">Spell Save DC: {{tip.saveDc}}.</span>
-		</div>
-		<!-- Package metadata -->
-		<div ng-show="tip.levels">
-			<div ng-repeat="l in tip.levels track by $index"
-				 ng-if="l.updates.length>0 && ($index>1 || ($index===0 && char.level===1) || ($index===1 && char.level>1)) && (getCharacterClass(char,tip.name)===null || getCharacterClass(char,tip.name).level<$index)">
-				<div class="label subheader">Level {{$index===0?1:$index}}</div>
-				<div ng-repeat="summary in l.summary track by $index" class="summary">
-					<span class="bold">{{summary.name}}</span> &mdash; <span style="white-space:pre-wrap;">{{evalTooltip(summary)}}</span>
-				</div>
-				<div ng-repeat="update in l.updates track by $index" ng-if="update.summary" class="summary">
-					<span class="bold">{{update.summary.name}}</span> &mdash; <span style="white-space:pre-wrap;">{{evalTooltip(update.summary)}}</span>
-				</div>
-			</div>
-		</div>
+		<div side-tip></div>
 	</div>
 	
 	<!-- Creature statbox tooltip -->
 	<div class="creatureCard box" ng-if="tip.cr" style="width:100%;padding-top:40px;">
-		<div class="monsterHeader">
-			<div class="headerBg"></div>
-			<span class="white label">{{tip.name}}</span><span class="white"> (CR {{tip.cr}})</span>
-		</div>
-		<div style="position:relative;text-align:left;">
-			<span style="font-size:1.3em">Max HP: {{tip.hp}}</span>
-			<table class="borders" style="display:inline-table; width:30%;margin-left:40px;"><thead><tr><th>Walk</th><th>Fly</th><th>Swim</th></tr>
-				<tbody><tr>
-					<td>{{tip.speed.walk || 0}}</td>
-					<td>{{tip.speed.fly || 0}}</td>
-					<td>{{tip.speed.swim || 0}}</td>
-				</tr></tbody>
-			</table>
-			<div style="position:absolute;right:4px;top:8px;font-weight:bold;">{{tip.type}}</div>
-		</div>
-		<div>
-			<table class="borders full"><thead><tr>
-				<th></th>
-				<th>STR</th>
-				<th>DEX</th>
-				<th>CON</th>
-				<th>INT</th>
-				<th>WIS</th>
-				<th>CHA</th>
-			</tr></thead>
-			<tr>
-				<td>AC {{tip.ac}}</td>
-				<td>{{att(tip,'str')}}</td>
-				<td>{{att(tip,'dex')}}</td>
-				<td>{{att(tip,'con')}}</td>
-				<td>{{att(tip,'int')}}</td>
-				<td>{{att(tip,'wis')}}</td>
-				<td>{{att(tip,'cha')}}</td>
-			</tr>
-			<tr>
-				<td>Saves:</td>
-				<td>{{saveBonus(tip,'str')}}</td>
-				<td>{{saveBonus(tip,'dex')}}</td>
-				<td>{{saveBonus(tip,'con')}}</td>
-				<td>{{saveBonus(tip,'int')}}</td>
-				<td>{{saveBonus(tip,'wis')}}</td>
-				<td>{{saveBonus(tip,'cha')}}</td>
-			</tr>
-			</table>
-		</div>
-		<div ng-if="tip.immunities.length>0
-		|| tip.conditionImmunities.length>0
-		|| tip.resistances.length>0
-		|| tip.vulnerabilities.length>0">
-			<span class="label subheader">Resistances and Vulnerabilities</span>
-			<div ng-if="tip.immunities" style="margin-bottom:6px;">
-				<span style="font-weight:bold;">Immune to &horbar; </span>{{tip.immunities.join(', ')}}
-			</div>
-			<div ng-if="tip.conditionImmunities" style="margin-bottom:6px;">
-				<span style="font-weight:bold;">Immune to &horbar; </span>{{tip.conditionImmunities.join(', ')}}
-			</div>
-			<div ng-if="tip.resistances" style="margin-bottom:6px;">
-				<span style="font-weight:bold;">Resistant to &horbar; </span>{{tip.resistances.join(', ')}}
-			</div>
-			<div ng-if="tip.vulnerabilities" style="margin-bottom:6px;">
-				<span style="font-weight:bold;">Vulnerable to &horbar; </span>{{tip.vulnerabilities.join(', ')}}
-			</div>
-		</div>
-		<div ng-if="tip.passives.length>0">
-			<span class="label subheader">Passives</span>
-			<table class="full" ng-repeat="p in tip.passives">
-				<thead><tr><th ng-click="p.hidden=!p.hidden">{{p.name}}</th></tr></thead>
-				<tbody ng-hide="p.hidden"><tr><td style="white-space: pre-wrap;">{{p.description}}</td></tr></tbody>
-			</table>
-		</div>
-		<div ng-if="tip.actions">
-			<span class="label subheader">Actions</span>
-			<table class="full" ng-repeat="a in tip.actions">
-				<thead><tr><th ng-click="a.hidden=!a.hidden">{{a.name}}</th></tr></thead>
-				<tbody ng-hide="a.hidden"><tr><td style="white-space: pre-wrap;">{{a.description}}</td></tr></tbody>
-			</table>
-		</div>
-		<div ng-if="tip.spellcasting">
-			<span class="label subheader">Spellcasting</span>
-			<div>{{tip.spellcasting.description}}</div>
-			<div ng-if="tip.spellcasting.will">
-				<span>At will: {{tip.spellcasting.will.join(', ')}}</span>
-			</div>
-			<div ng-if="tip.spellcasting.individual">
-				<span>Individual uses: </span>
-				<span ng-repeat="spell in tip.spellcasting.individual" class="spellButton"
-						ng-click="spell.charges=spell.charges-1" ng-if="spell.charges">{{spell.name}} ({{spell.charges}})</span>
-			</div>
-			<div ng-if="tip.spellcasting.spells"> 
-				<div ng-repeat="level in tip.spellcasting.spells"
-					 ng-click="level.slots=level.slots-1">
-					<span style="font-weight:bold;"> Level {{$index}} ({{level.slots}}): </span>
-					<span ng-repeat="spell in level.spells" class="spellButton">{{spell}}</span>
-				</div>
-			</div>			
-		</div>
+		<div creature-tip></div>
 	</div>
 </div>
 
-<div class="modal" style="display:flex;" ng-class="{'show':showSaveMenu}">
-	<div class="half center">
-		<div class="label">Save</div>
-		<hr>
-		<input type='text' ng-model='char.name' placeholder='Character Name'/>
-		<span class="button large" ng-click="save()">Save</span>
-	</div>
-	<div class="half center">
-		<div class="label">Load</div>
-		<hr>
-		<span class="button" style="font-family:'Cinzel Decorative'" ng-click="newChar()">Create New Character</span>
-		<div class="button large" ng-repeat='item in saveList track by $index' ng-click="load(item.saveId)">{{item.name}}</div>
+<div class="modal" ng-class="{'show':showSaveMenu}">
+	
+	<span class="button" style="font-family:'Cinzel Decorative'" ng-click="newChar()">
+		Create New Character
+	</span>
+
+	<div style="display:flex;">
+		<div class="half center">
+			<div class="label">Save</div>
+			<hr>
+			<input type='text' ng-model='char.name' placeholder='Character Name'/>
+			<span class="button large" ng-click="save()">Save</span>
+		</div>
+		<div class="half center">
+			<div class="label">Load</div>
+			<hr>
+			<div style="display:flex;flex-wrap:wrap;">
+				<div class="button large" ng-repeat='item in saveList track by $index' ng-click="load(item.saveId)">{{item.name}}</div>
+			</div>
+		</div>
 	</div>
 </div>
 
@@ -874,24 +382,24 @@
 <script src="./packages/abilities.js"></script>
 <script src="./core/packages.js"></script>
 
-<script src="./packages/feats.js"></script>
-<script src="./packages/items.js"></script>
-<script src="./packages/races.js"></script>
-<script src="./packages/backgrounds.js"></script>
-<script src="./core/monsters.js"></script>
+<script defer src="./packages/feats.js"></script>
+<script defer src="./packages/items.js"></script>
+<script defer src="./packages/races.js"></script>
+<script defer src="./packages/backgrounds.js"></script>
+<script defer src="./core/monsters.js"></script>
 
-<script src="./packages/barbarian.js"></script>
-<script src="./packages/bard.js"></script>
-<script src="./packages/cleric.js"></script>
-<script src="./packages/druid.js"></script>
-<script src="./packages/fighter.js"></script>
-<script src="./packages/monk.js"></script>
-<script src="./packages/paladin.js"></script>
-<script src="./packages/ranger.js"></script>
-<script src="./packages/rogue.js"></script>
-<script src="./packages/sorcerer.js"></script>
-<script src="./packages/warlock.js"></script>
-<script src="./packages/wizard.js"></script>
+<script defer src="./packages/barbarian.js"></script>
+<script defer src="./packages/bard.js"></script>
+<script defer src="./packages/cleric.js"></script>
+<script defer src="./packages/druid.js"></script>
+<script defer src="./packages/fighter.js"></script>
+<script defer src="./packages/monk.js"></script>
+<script defer src="./packages/paladin.js"></script>
+<script defer src="./packages/ranger.js"></script>
+<script defer src="./packages/rogue.js"></script>
+<script defer src="./packages/sorcerer.js"></script>
+<script defer src="./packages/warlock.js"></script>
+<script defer src="./packages/wizard.js"></script>
 
 <script src="./core/stats.js"></script>
 
