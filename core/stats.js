@@ -168,6 +168,9 @@ $scope.updateStep=-1;
 $scope.currentChoices=null;
 $scope.currentPackage=null;
 $scope.chosenClassName=null;
+//if this is true, the character will have all their levelup history saved.
+//useful when making template characters you can scale by level.
+$scope.saveLevelHistory=false;
 
 $scope.choiceQueue=[]; //used for choices that are made outside of a levelup (like subfeats)
 
@@ -225,7 +228,6 @@ function finishLevelUp(){
 		getCharacterClass($scope.char,$scope.chosenClassName).level=$scope.chosenLevel;
 	}
 	$scope.inSubclass=false;
-	$scope.chosenLevel=null;
 	$scope.updateStep=-1;
 	$scope.currentChoices=null;
 	$scope.chosenClassName=null;
@@ -238,6 +240,19 @@ function finishLevelUp(){
 		$timeout.cancel(tipPromise);
 	}
 	$scope.tip=null;
+	if ($scope.saveLevelHistory){
+		if (!$scope.char.levelHistory){
+			$scope.char.levelHistory=[];
+			//initialize with null data up to the previous level
+			for (let i=0;i<$scope.chosenLevel;i++){
+				$scope.char.levelHistory.push(null);
+			}
+		}
+		let tempChar = angular.copy($scope.char);
+		prepForSave(tempChar);
+		$scope.char.levelHistory.push(tempChar);
+	}
+	$scope.chosenLevel=null;
 }
 
 /**
@@ -1015,32 +1030,36 @@ $scope.saveToVault=function(){
 	);
 }
 
+function prepForSave(char){
+	//passives, spells, and abilities can be compressed by removing everything but their name and description.
+	//We can restore them on load.
+	for (let passive of char.passives){
+		delete passive.onShortRest;
+		delete passive.onLongRest;
+		delete passive.apply;
+	}
+	for (let ability of char.abilities){
+		delete ability.onShortRest;
+		delete ability.onLongRest;
+		delete ability.apply;
+		delete ability.maxChargesFunction;
+	}
+	//spell descriptions take up a lot of space.
+	for (let clas of char.classes){
+		for (let spell of clas.spells){
+			if (!spell.edited){
+				delete spell.description;
+			}
+		}
+	}
+}
+
 $scope.save=function(){
 	if (typeof(Storage) !== "undefined") {
 		if ($scope.saveId==-1){
 			$scope.saveId=$scope.saveList.length;
 		}
-		//passives, spells, and abilities can be compressed by removing everything but their name and description.
-		//We can restore them on load.
-		for (let passive of $scope.char.passives){
-			delete passive.onShortRest;
-			delete passive.onLongRest;
-			delete passive.apply;
-		}
-		for (let ability of $scope.char.abilities){
-			delete ability.onShortRest;
-			delete ability.onLongRest;
-			delete ability.apply;
-			delete ability.maxChargesFunction;
-		}
-		//spell descriptions take up a lot of space.
-		for (let clas of $scope.char.classes){
-			for (let spell of clas.spells){
-				if (!spell.edited){
-					delete spell.description;
-				}
-			}
-		}
+		prepForSave($scope.char);
 		if (serverVaultEnabled) {
 			$scope.saveToVault();
 		} else {
@@ -1091,6 +1110,12 @@ function convertLocalStorage(){
 function checkServerVault(){
 	//check to see if a webserver is running
 	$http.get('http://localhost:8080/').then(function(resp){
+		//if we're not viewing this at localhost, redirect to localhost.
+		//This way we dont have to deal with xorigin nonsense.
+		if (window.location.protocol==='file:'){
+			window.location.href = "http://localhost:8080"+window.lcoation.pathname;
+			return;
+		}
 		serverVaultEnabled=true;
 		convertLocalStorage();
 		loadList();
@@ -1107,7 +1132,6 @@ function loadList(){
 	if (serverVaultEnabled){
 		$http.get('http://localhost:8080/characters').then(function(response){
 			for (let filename of response.data){
-				console.log("  Adding "+filename+" to character list");
 				$scope.saveList.push({name:filename,saveId:filename});
 			}
 		},function(error){
