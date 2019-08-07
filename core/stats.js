@@ -78,7 +78,8 @@ $scope.derived={
 	initiative:0,
 	moveSpeed:30,
 	ac:10,
-	proficiency:2
+	proficiency:2,
+	preparations:0, //spell preparation slots
 }
 
 //cache the player's spells for the spell screen
@@ -240,7 +241,7 @@ function finishLevelUp(){
 		$timeout.cancel(tipPromise);
 	}
 	$scope.tip=null;
-	if ($scope.saveLevelHistory){
+	{
 		if (!$scope.char.levelHistory){
 			$scope.char.levelHistory=[];
 			//initialize with null data up to the previous level
@@ -253,6 +254,14 @@ function finishLevelUp(){
 		$scope.char.levelHistory.push(tempChar);
 	}
 	$scope.chosenLevel=null;
+}
+
+$scope.loadFromLevelHistory(char,level){
+	if (char && (typeof level == 'number')){
+		if (char.levelHistory && char.levelHistory.length>level){
+			//TODO: Load this level
+		}
+	}
 }
 
 /**
