@@ -1,0 +1,276 @@
+<table style="width:100%;"><tbody><tr>
+	<td style="width:100px;vertical-align:top;">
+		<div class="attrbox" style="text-align:center;">
+			<label>
+				<span class='label'>STR</span>
+				<br>
+				<span class='attrmod'>{{derived.modifiers.str}}</span>
+				<br>
+				<input type='text' class='attrbase' ng-model='char.attributes.str' number ng-change='calculate()'/>
+			</label>
+		</div>
+
+		<div class="attrbox" style="text-align:center;">
+			<label>
+				<span class='label'>DEX</span>
+				<br>
+				<span class='attrmod'>{{derived.modifiers.dex}}</span>
+				<br>
+				<input type='text' class='attrbase' ng-model='char.attributes.dex' number ng-change='calculate()'/>
+			</label>
+		</div>
+
+		<div class="attrbox" style="text-align:center;">
+			<label>
+				<span class='label'>CON</span>
+				<br>
+				<span class='attrmod'>{{derived.modifiers.con}}</span>
+				<br>
+				<input type='text' class='attrbase' ng-model='char.attributes.con' number ng-change='calculate()'/>
+			</label>
+		</div>
+
+		<div class="attrbox" style="text-align:center;">
+			<label>
+				<span class='label'>INT</span>
+				<br>
+				<span class='attrmod'>{{derived.modifiers.int}}</span>
+				<br>
+				<input type='text' class='attrbase' ng-model='char.attributes.int' number ng-change='calculate()'/>
+			</label>
+		</div>
+
+		<div class="attrbox" style="text-align:center;">
+			<label>
+				<span class='label'>WIS</span>
+				<br>
+				<span class='attrmod'>{{derived.modifiers.wis}}</span>
+				<br>
+				<input type='text' class='attrbase' ng-model='char.attributes.wis' number ng-change='calculate()'/>
+			</label>
+		</div>
+
+		<div class="attrbox" style="text-align:center;">
+			<label>
+				<span class='label'>CHA</span>
+				<br>
+				<span class='attrmod'>{{derived.modifiers.cha}}</span>
+				<br>
+				<input type='text' class='attrbase' ng-model='char.attributes.cha' number ng-change='calculate()'/>
+			</label>
+		</div>
+	</div>
+	</td>
+
+	<td style="width:700px;vertical-align:top;">
+	<div class="character-header">
+		<div class="levelwrapper flex1" style="cursor:pointer;" ng-click="levelUpStart()">
+			<input type='text' class='statbox' ng-model='char.level' disabled='disabled' number />
+			<div style="position:absolute">
+				<div class="levelhover">Level<br>Up</div>
+			</div>
+		</div>
+		<div class="character-name flex3">{{char.name}}</div>
+		<div class="flex1">
+			<span class="button" ng-click="showSaveMenu=true;">Save/Load</span>
+		</div>
+	</div>
+	<table style="width:100%" class="desktop">
+		<tr>
+			<td style="width:100px;text-align:center;">
+				<div class="acbox">
+					<label>
+						<br>
+						<span class='label'>AC</span>
+						<br>
+						<input type='text' style="font-size:2.2em;background-color:rgba(0,0,0,0)" class='statmod' ng-model='char.ac'/>
+					</label>
+				</div>
+			</td>
+			<td style="width:150px;text-align:center;">
+				<label>
+					<span class='label'>Proficiency<br>Bonus</span><br>
+					<input type='text' class='statbox' disabled ng-model='derived.proficiency'/>
+				</label>
+			</td>
+			<td style="width:150px;text-align:center;">
+				<label>
+					<span class='label'>Initiative<br>Bonus</span><br>
+					<input type='text' class='statbox' ng-model='derived.initiative'/>
+				</label>
+			</td>
+			<td style="width:150px;text-align:center;">
+				<label>
+					<span class='label'>Move<br>Speed</span><br>
+					<input type='text' class='statbox' ng-model='char.speed'/>
+				</label>
+			</td>
+		</tr>
+	</table>
+
+	<table>
+	<tr>	
+	<td colspan=2 class="top" style="min-width:160px;">
+	<br>
+	<div class='label' style='text-align:left;'>Skills</div>
+	<div ng-repeat="skill in derived.skills">
+		<span ng-show="skill.mult===0" class='redx' ng-click="toggleSkillProf(skill.name);">&#x2716;</span>
+		<span ng-show="skill.mult===1" class='greenx' ng-click="toggleSkillProf(skill.name);">&#x2714;</span>
+		<span ng-show="skill.mult===2" class='greenx' ng-click="toggleSkillProf(skill.name);">&#x271A;</span>
+		<span style="font-weight:bold;font-size:1.3em;"> {{skill.bonus}}</span> {{skill.name}}
+	</div>
+	</td>
+
+	<td style="padding-left:20px;" class="top">
+	<br><br>
+	<div class="hpbox">
+		<span class="bordertitle label">Hit Points</span>
+		<div class="label" style="padding:8px 10px">
+			<input type='text' class='hidden right' ng-model='char.hp' number/>
+			<span>&nbsp;/&nbsp;</span>
+			<input type='text' class='hidden left' disabled ng-model='derived.maxHp'/>
+		</div>
+	</div>
+	<div class="hpbox" ng-class="{'minimize':!showPolyHp}">
+		<span class="bordertitle label" style="cursor:pointer;" ng-click="showPolyHp = !showPolyHp">Shape HP</span>
+		<div class="label" style="padding:8px 10px">
+			<input type='text' class='hidden right' ng-model='char.polyHp' number/>
+			<span>&nbsp;/&nbsp;</span>
+			<input type='text' class='hidden left' ng-model='char.polyHpMax'/>
+		</div>
+	</div>
+	<div class="hpbox" ng-class="{'minimize':!showTempHp}">
+		<span class="bordertitle label" style="cursor:pointer;" ng-click="showTempHp = !showTempHp">Temp HP</span>
+		<div class="label" style="padding:8px 10px">
+			<input type='text' class='hidden right' ng-model='char.tempHp' number/>
+		</div>
+	</div>
+	<form ng-submit="takeDamage()">
+		<input type="text" style="width:170px" ng-model="takeDamageInput" placeholder="Deal damage..." number />
+	</form>
+	<br>
+
+	<div class='label' style='text-align:left;'>Saving Throws</div>
+	<span ng-show='char.saves.str===0' class='redx' ng-click='char.saves.str=1;calculate();'>&#x2716;</span>
+	<span ng-show='char.saves.str===1' class='greenx' ng-click='char.saves.str=0;calculate();'>&#x2714;</span>
+	<span style="font-weight:bold;font-size:1.3em;"> {{derived.saves.str}}</span> Strength
+	<br>
+	<span ng-show='char.saves.dex===0' class='redx' ng-click='char.saves.dex=1;calculate();'>&#x2716;</span>
+	<span ng-show='char.saves.dex===1' class='greenx' ng-click='char.saves.dex=0;calculate();'>&#x2714;</span>
+	<span style="font-weight:bold;font-size:1.3em;"> {{derived.saves.dex}}</span> Dexterity
+	<br>
+	<span ng-show='char.saves.con===0' class='redx' ng-click='char.saves.con=1;calculate();'>&#x2716;</span>
+	<span ng-show='char.saves.con===1' class='greenx' ng-click='char.saves.con=0;calculate();'>&#x2714;</span>
+	<span style="font-weight:bold;font-size:1.3em;"> {{derived.saves.con}}</span> Constitution
+	<br>
+	<span ng-show='char.saves.int===0' class='redx' ng-click='char.saves.int=1;calculate();'>&#x2716;</span>
+	<span ng-show='char.saves.int===1' class='greenx' ng-click='char.saves.int=0;calculate();'>&#x2714;</span>
+	<span style="font-weight:bold;font-size:1.3em;"> {{derived.saves.int}}</span> Intelligence
+	<br>
+	<span ng-show='char.saves.wis===0' class='redx' ng-click='char.saves.wis=1;calculate();'>&#x2716;</span>
+	<span ng-show='char.saves.wis===1' class='greenx' ng-click='char.saves.wis=0;calculate();'>&#x2714;</span>
+	<span style="font-weight:bold;font-size:1.3em;"> {{derived.saves.wis}}</span> Wisdom
+	<br>
+	<span ng-show='char.saves.cha===0' class='redx' ng-click='char.saves.cha=1;calculate();'>&#x2716;</span>
+	<span ng-show='char.saves.cha===1' class='greenx' ng-click='char.saves.cha=0;calculate();'>&#x2714;</span>
+	<span style="font-weight:bold;font-size:1.3em;"> {{derived.saves.cha}}</span> Charisma
+
+	<br>
+		<table><tr><td>Copper:</td><td>
+			<span class='subtract noselect' ng-click="decrCopper()">-</span>
+			<span class='money'>{{getCopper()}}</span>
+			<span class='add noselect' ng-click="incrCopper()">&#x271A;</span></td></tr>
+		<tr><td>Silver:</td><td>
+			<span class='subtract noselect' ng-click="decrSilver()">-</span>
+			<span class='money' >{{getSilver()}}</span>
+			<span class='add noselect' ng-click="incrSilver()">&#x271A;</span></td></tr>
+		<tr><td>Gold:</td><td>
+			<span class='subtract noselect' ng-click="decrGold()">-</span>
+			<span class='money' >{{getGold()}}</span>
+			<span class='add noselect' ng-click="incrGold()">&#x271A;</span></td></tr>
+		<tr>
+		<td colspan=2 style="text-align:right;">
+			<form ng-submit="spendGold()">
+				<input type="text" style="width:75%" ng-model="spendGoldInput" placeholder="Spend Gold..." />
+			</form>
+		</td>
+		</tr>
+		</table>
+	</td>
+	
+	<td class="top" style="padding-left:30px;width:250px;">
+	<br>
+		<div class="label center">Passives</div>
+		<input type="text" ng-model='passiveFilter' placeholder="Search..."/>
+		<div class="item" ng-mouseenter="setTip(item)" ng-mouseleave="clearTip()"
+				ng-repeat="item in char.passives | filter:passiveFilter | orderBy:'name' track by $index">
+				{{item.name}}
+		</div>
+	</td>
+
+	</tr>
+	</table>
+	</td>
+
+<td style="vertical-align:top;">
+<br><br>
+	<div style="padding:10px;border:1px solid black;" class="desktop">
+		<span class="label bordertitle" style="margin-top:-24px;">Add Passive Ability</span>
+		<label>Name
+			<input type="text" ng-model="newpassive.name" ng-change="checkForPassives(newpassive.name)"/>
+		</label>
+		<br>
+		<label>Description
+		<textarea class="descriptionbox" ng-model="newpassive.description" style="width:100%;min-height:400px;max-height:400px;"></textarea>
+		</label>
+		<button ng-click="addPassive(newpassive)">Add to Passives</button>
+		<br>
+		<button style="display:none"></button>
+	</div>
+	<div class="tablet">
+		<table style="width:100%" class="tablet">
+			<tr>
+				<td style="width:150px;text-align:center;">
+					<div>
+						<label>
+							<span class='label'>Level</span><br>
+							<input type='text' class='statbox' ng-model='char.level' number />
+						</label>
+					</div>
+					<span class="button" ng-hide="char.level>=20" ng-click="levelUpStart()">Level Up</span>
+				</td></tr><tr>
+				<td style="width:100px;text-align:center;">
+					<div class="acbox">
+						<label>
+							<br>
+							<span class='label'>AC</span>
+							<br>
+							<input type='text' style="font-size:2.2em;background-color:rgba(0,0,0,0)" class='statmod' ng-model='char.ac'/>
+						</label>
+					</div>
+				</td></tr><tr>
+				<td style="width:150px;text-align:center;">
+					<label>
+						<span class='label'>Proficiency<br>Bonus</span><br>
+						<input type='text' class='statbox' disabled ng-model='derived.proficiency'/>
+					</label>
+				</td></tr><tr>
+				<td style="width:150px;text-align:center;">
+					<label>
+						<span class='label'>Initiative<br>Bonus</span><br>
+						<input type='text' class='statbox' ng-model='derived.initiative'/>
+					</label>
+				</td></tr><tr>
+				<td style="width:150px;text-align:center;">
+					<label>
+						<span class='label'>Move<br>Speed</span><br>
+						<input type='text' class='statbox' ng-model='char.speed'/>
+					</label>
+				</td>
+			</tr>
+		</table>
+
+	</div>
+</td>
+
+</tr></tbody></table>

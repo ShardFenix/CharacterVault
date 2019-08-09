@@ -256,7 +256,7 @@ function finishLevelUp(){
 	$scope.chosenLevel=null;
 }
 
-$scope.loadFromLevelHistory(char,level){
+$scope.loadFromLevelHistory=function(char,level){
 	if (char && (typeof level == 'number')){
 		if (char.levelHistory && char.levelHistory.length>level){
 			//TODO: Load this level
@@ -1122,7 +1122,9 @@ function checkServerVault(){
 		//if we're not viewing this at localhost, redirect to localhost.
 		//This way we dont have to deal with xorigin nonsense.
 		if (window.location.protocol==='file:'){
-			window.location.href = "http://localhost:8080"+window.lcoation.pathname;
+			let filename = window.location.pathname;
+			filename = filename.substring(filename.lastIndexOf('/'));
+			window.location.href = "http://localhost:8080"+filename;
 			return;
 		}
 		serverVaultEnabled=true;

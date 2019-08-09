@@ -1,0 +1,57 @@
+<table style="width:100%;">
+	<thead class="header"><tr>
+		<th>Available</th>
+		<th>Exhausted</th>
+		<th>Add Ability</th>
+		<th colspan=2>Description</th></tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td width="20%" style="vertical-align:top;">
+				<div class="leftmenu">
+					<div class="item" ng-repeat="item in char.abilities | orderBy:'name' track by $index"
+							ng-click="decrementCharges(item)"
+							ng-if="item.charges>0"
+							ng-mouseenter="setTip(item)" ng-mouseleave="clearTip()">
+						<span style="font-weight:bold;">{{item.name}}</span>
+						<span>({{item.charges}})</span>
+					</div>
+				</div>
+			</td>
+
+			<td width="20%" style="vertical-align:top;">
+				<div class="leftmenu">
+					<div class="redback item" ng-repeat="item in char.abilities | orderBy:'name' track by $index"
+							ng-click="addCharge(item)" 
+							ng-if="item.maxCharges-item.charges>0"
+							ng-mouseenter="setTip(item)" ng-mouseleave="clearTip()">
+						<span style="font-weight:bold;">{{item.name}}</span>
+						<span>({{item.maxCharges-item.charges}})</span>
+						<span class="deletebutton" ng-click="delete(item,char.abilities,$event)">&times;</span>
+					</span>
+				</div>
+			</td>
+
+			<td width="20%" style="vertical-align:top;text-align:center;">
+				<input type="text" ng-model="newability.name" ng-change="checkForAbilities(newability.name)"/>
+				<br>
+				<input type="text" ng-model="newability.maxCharges"/>
+				<br>
+				<br>
+				<span class="button" ng-click="addAbility(newability)">Add to Abilities</span>
+				<br>
+				<span class="button" ng-click="shortRest()">Short Rest</span>
+				<br>
+				<span class="button" ng-click="longRest()">Long Rest</span>
+				<br>
+				<br>
+				<br>
+
+				<button style="display:none"></button>
+			</td>
+			<td>
+				<textarea class="descriptionbox" ng-model="newability.description" style="width:100%;min-height:400px;"></textarea>
+			</td>
+		</tr>
+	</tbody>
+</table>

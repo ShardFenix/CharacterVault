@@ -3,8 +3,8 @@
     margin: 2px;
     padding: 6px 4px;
     font-size: 18px;
-	background-color: white;
-    color: black;
+	background-color: #008200;
+    color: white;
     font-family: cursive;
     border-left: 4px solid black;
     border-right: 4px solid black;
@@ -17,7 +17,7 @@
 }
 .item:hover {
 	color:white;
-	background-color:#bb0000;
+	background-color:#005280;
 }
 
 .noselect{
@@ -32,7 +32,12 @@
     box-shadow: 0px 0px 2px 3px #000;
 }
 .yellowback{
-    background-color: #ffdb77;
+    background-color: #ffd970;
+    color: black;
+}
+.yellowback:hover{
+	background-color: #ffe396;
+	color:black;
 }
 .redback{
     background-color: #c11717;

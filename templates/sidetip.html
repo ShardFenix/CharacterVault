@@ -1,0 +1,75 @@
+<div class="label">{{tip.name || tip}}</div>
+<hr style="border-color:black;">
+<!-- Spell metadata -->
+<div ng-show="tip.level>=0" style="text-align:left">
+	<div>
+		Cast Time: {{tip.castTime}}
+		<span style="float:right" ng-show="tip.components.verbal">Verbal</span>
+	</div>
+	<div>
+		Duration: {{tip.duration}}
+		<span style="float:right" ng-show="tip.components.somatic">Somatic</span>
+	</div>
+	<div>
+		Range: {{tip.range}}
+		<span style="float:right" ng-show="tip.ritual">Ritual</span>
+	</div>
+	<div ng-show="tip.components.material">
+		Material component: {{tip.components.material}}
+	</div>
+	<br>
+</div>
+<!-- Item metadata -->
+<div ng-show="tip.value" style="text-align:left;">
+	<div style="display:flex;">
+		<div style="width:49%;text-align:left;">
+			<div ng-show="tip.damage1">
+				1H Damage: {{tip.damage1}} {{tip.damageType}}
+			</div>
+			<div ng-show="tip.damage2">
+				2H Damage: {{tip.damage2}} {{tip.damageType}}
+			</div>
+			<div ng-show="tip.attackRange">
+				Range: {{tip.attackRange[0]}}ft / {{tip.attackRange[1]}}ft
+			</div>
+			<div ng-show="tip.ac">
+				AC: {{tip.ac}}
+			</div>
+		</div>
+		<div style="width:49%;text-align:right;">
+			<div ng-show="tip.finesse">Finesse</div>
+			<div ng-show="tip.heavy">Heavy</div>
+			<div ng-show="tip.reach">Reach</div>
+			<div ng-show="tip.throwRange">Thrown</div>
+		</div>
+	</div>
+	<br>
+	<span class="footnote" ng-show="isWeapon(tip)">Your attack bonus with this item is +{{attackBonus(tip)}}</span>
+</div>
+<div ng-bind-html='evalTooltip(tip)' class="tipDescription"></div>
+<br>
+<!-- Background metadata -->
+<div ng-show="tip.featureName">
+	<div class="label subheader">{{tip.featureName}}</div>
+	<div class="tipDescription">{{tip.featureDescription}}</div>
+</div>
+<div ng-show="tip.saveDc" style="text-align:left;">
+	<span ng-show="tip.casterClass" class="footnote label">Casting Class: {{tip.casterClass}}</span>
+	<br>
+	<span class="footnote">Spell Attack Bonus: +{{tip.attackBonus}}.</span>
+	<br>
+	<span class="footnote">Spell Save DC: {{tip.saveDc}}.</span>
+</div>
+<!-- Package metadata -->
+<div ng-show="tip.levels">
+	<div ng-repeat="l in tip.levels track by $index"
+		 ng-if="l.updates.length>0 && ($index>1 || ($index===0 && char.level===1) || ($index===1 && char.level>1)) && (getCharacterClass(char,tip.name)===null || getCharacterClass(char,tip.name).level<$index)">
+		<div class="label subheader">Level {{$index===0?1:$index}}</div>
+		<div ng-repeat="summary in l.summary track by $index" class="summary">
+			<span class="bold">{{summary.name}}</span> &mdash; <span style="white-space:pre-wrap;">{{evalTooltip(summary)}}</span>
+		</div>
+		<div ng-repeat="update in l.updates track by $index" ng-if="update.summary" class="summary">
+			<span class="bold">{{update.summary.name}}</span> &mdash; <span style="white-space:pre-wrap;">{{evalTooltip(update.summary)}}</span>
+		</div>
+	</div>
+</div>
