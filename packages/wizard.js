@@ -110,8 +110,9 @@ window.classes.push(
 							addToInventory(char,findItem(choice));
 						}
 					},{
-						"choicePrompt":"Choose two skill proficiencies:",
-						"choices":[function(char){
+						limit:2,
+						choicePrompt:"Choose two skill proficiencies:",
+						choices:[function(char){
 							let result=[];
 							for (let skill of char.skills){
 								if (skill.mult===0){
@@ -122,35 +123,24 @@ window.classes.push(
 							}
 							return result;
 						}],
-						"action":function(char,derived,choice){
+						action:function(char,derived,choice){
 							addProficiency(char,choice);
 						}
 					},{
-						"choicePrompt":"Choose two skill proficiencies:",
-						"choices":[function(char){
-							let result=[];
-							for (let skill of char.skills){
-								if (skill.mult===0){
-									if (["Arcana","History","Insight","Investigation","Medicine","Religion"].indexOf(skill.name)!=-1){
-										result.push(skill.name);
-									}
-								}
-							}
-							return result;
-						}],
-						"action":function(char,derived,choice){
-							addProficiency(char,choice);
+						limit:3,
+						choicePrompt:"Choose three cantrips",
+						choices:[listUnknownWizardCantrips],
+						action:function(char,derived,choice,scope){
+							addSpell(char,choice,scope.chosenClassName);
 						}
-					},
-					helper.chooseWizardCantrip,
-					helper.chooseWizardCantrip,
-					helper.chooseWizardCantrip,
-					helper.chooseSpell,
-					helper.chooseSpell,
-					helper.chooseSpell,
-					helper.chooseSpell,
-					helper.chooseSpell,
-					helper.chooseSpell
+					},{
+						limit:6,
+						choicePrompt:"Choose six spells",
+						choices:[listLearnableSpells],
+						action:function(char,derived,choice,scope){
+							addSpell(char,choice,scope.chosenClassName);
+						}
+					}
 				]
 			},	{ // 1
 				"updates":[

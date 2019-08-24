@@ -167,7 +167,7 @@ function addToInventory(char, item){
 function listSkills(){
 	var result=[];
 	for (var i=0;i<window.skills.length;i++){
-		result.push(window.skills[i].name);
+		result.push({name:window.skills[i].name});
 	}
 	return result;
 }
@@ -187,8 +187,8 @@ function listNonProficientInstruments(char){
 	for (var i=0;i<window.items.length;i++){
 		let item = window.items[i];
 		if (item.categories && item.categories.has('Instrument')){
-			if (!char.proficiencies || !char.proficiencies.hasAny(window.items[i].proficiencies)){
-				result.push(window.items[i].name);
+			if (!char.proficiencies || !char.proficiencies.hasAny(item.proficiencies)){
+				result.push({name:item.name});
 			}
 		}
 	}
@@ -201,7 +201,7 @@ function listNonProficientTools(char){
 		let item = window.items[i];
 		if (item.categories && item.categories.hasAny('Artisan Tool','Tool')){
 			if (!item.proficiencies || char.proficiencies.hasAny(item.proficiencies)){
-				result.push(item.name);
+				result.push({name:item.name});
 			}
 		}
 	}
@@ -213,7 +213,7 @@ function listNonProficientWeapons(char){
 	for (let item of window.items){
 		if (item.categories.indexOf('Weapon')!=-1){
 			if (!isProficientWith(char,item)){
-				result.push(item.name);
+				result.push({name:item.name});
 			}
 		}
 	}
@@ -226,7 +226,7 @@ function listNonProficientSkills(char){
 		for (var j=0;j<char.skills.length;j++){
 			if (char.skills[j].name==window.skills[i].name){
 				if (char.skills[j].mult==0) {
-					result.push(window.skills[i].name);
+					result.push({name:window.skills[i].name});
 				}
 				j=9999;
 			}
@@ -239,7 +239,7 @@ function listProficientSkills(char){
 	var result=[];
 	for (var i=0;i<char.skills.length;i++){
 		if (char.skills[i].mult===1) {
-			result.push(char.skills[i].name);
+			result.push({name:char.skills[i].name});
 		}
 	}
 	return result;
@@ -299,7 +299,7 @@ function listUnknownLanguages(char){
 			}
 		}
 		if (!found){
-			result.push(window.languages[i]);
+			result.push({name:window.languages[i]});
 		}
 	}
 	return result;
@@ -554,22 +554,22 @@ function listLearnableSpells(char,$scope){
 function getAttributesBelow20(char){
 	var result=[];
 	if (char.attributes.str<20){
-		result.push("+1 Strength");
+		result.push({name:"+1 Strength"});
 	}
 	if (char.attributes.dex<20){
-		result.push("+1 Dexterity");
+		result.push({name:"+1 Dexterity"});
 	}
 	if (char.attributes.con<20){
-		result.push("+1 Constitution");
+		result.push({name:"+1 Constitution"});
 	}
 	if (char.attributes.int<20){
-		result.push("+1 Intelligence");
+		result.push({name:"+1 Intelligence"});
 	}
 	if (char.attributes.wis<20){
-		result.push("+1 Wisdom");
+		result.push({name:"+1 Wisdom"});
 	}
 	if (char.attributes.cha<20){
-		result.push("+1 Charisma");
+		result.push({name:"+1 Charisma"});
 	}
 	return result;
 }

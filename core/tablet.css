@@ -1,12 +1,9 @@
 @media (min-width: 768px) and (max-width: 1024px) {
 	div.rightModal{
-		left:98%;
-		width:43%;
-		min-height:136%;
-		max-height:136%;
+		display:none;
 	}
 	div.rightModal.show{
-		left:98%;
+		display:block;
 	}
 	.desktop{
 		display:none;
@@ -14,6 +11,12 @@
 	.scrollable{
 	    max-height: calc(130vh);
 		height: auto;
+	}
+	.modal{
+		display:none;
+	}
+	.modal.show{
+		display:block;
 	}
 }
 

@@ -1,19 +1,21 @@
 .item{
-    box-shadow: 0 0 3px 0px black;
-    margin: 2px;
+    margin-top: -1px;
+    border-bottom: 1px solid black;
+    border-top: 1px solid black;
     padding: 6px 4px;
     font-size: 18px;
-	background-color: #008200;
+    background-color: #008200;
     color: white;
     font-family: cursive;
     border-left: 4px solid black;
     border-right: 4px solid black;
-	-webkit-touch-callout: none;
+    -webkit-touch-callout: none;
     -webkit-user-select: none;
     -khtml-user-select: none;
     -moz-user-select: none;
     -ms-user-select: none;
     user-select: none;
+    position: relative;
 }
 .item:hover {
 	color:white;
@@ -184,23 +186,23 @@ input[type="text"].medium{
 }
 
 .deletebutton{
-	float:right;
+	position:absolute;
 	font-weight:bold;
 	font-size:34px;
-	margin-top:-8px;
+	margin-top:-12px;
 	cursor:pointer;
+	right:10px;
 }
 
 .tab{
 	font-size:20px;
 	font-weight:bold;
-	border: 2px solid #4c4c4c;
+	border: 1px solid #4c4c4c;
 	background-color:#000;
 	color:white;
 	padding:6px 0px;
-	margin-left:-8px;
-	width:14%;
-	display:inline-block;
+	display:block;
+	flex-grow:1;
 	text-align:center;
 	cursor:pointer;
 	font-family: 'Cinzel Decorative';
@@ -511,15 +513,21 @@ div.prompt{
 div.choice{
     font-size: 1.3em;
     border-radius: 5px;
-    border: 1px solid black;
     padding: 8px;
-    background-color: green;
-    color: white;
     text-align: center;
 	display: inline-block;
     width: 44%;
     margin: 2px 1%;
 	cursor:pointer;
+	border: 1px solid green;
+    background-color: white;
+    color: green;
+}
+
+div.choice.selected{
+	border: 1px solid black;
+    background-color: green;
+    color: white;
 }
 
 div.attrbox{

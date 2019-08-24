@@ -16,11 +16,11 @@
 <script src="libs/angular-sanitize.js"></script>
 
 </head>
-<body style="background-color:#ffffff;width:100vw;overflow-x:hidden;">
+<body style="background-color:#ffffff;width:100vw;overflow-x:hidden;margin:0px;">
 <div ng-app="myApp">
 <div ng-controller="MyController" ng-cloak id='tabletPooperDooper'>
 
-<div style="margin-top:-8px;">
+<div style="display:flex;">
 <span class="tab" ng-click="tab='stats'" ng-class="{'activetab':tab=='stats'}">Stats</span>
 <span class="tab" ng-click="tab='abilities'" ng-class="{'activetab':tab=='abilities'}">Abilities</span>
 <span class="tab" ng-click="tab='equipment'" ng-class="{'activetab':tab=='equipment'}">Equipment</span>
@@ -44,7 +44,7 @@
 
 
 <div ng-show="tab=='equipment'">
-<table style="width:100%;">
+<table style="width:99%;">
 <thead class="header"><tr>
 <th></th>
 <th></th>
@@ -53,7 +53,7 @@
 
 <tbody><tr>
 
-<td width="30%" style="vertical-align:top;">
+<td width="29%" style="vertical-align:top;">
 	<div class="leftmenu scrollable">
 		<div class="label">Equipped Items</div>
 		<div class="yellowback item" ng-repeat="item in char.inventory | orderBy:'name' track by $index" ng-click="unequip(item)" ng-if="item.equipped"
@@ -84,7 +84,7 @@
 	<textarea ng-model='item.description' style="min-width:90%;max-width:90%;min-height:400px;font-size:1.3em"></textarea>
 </td>
 
-<td width="20%" style="vertical-align:top;text-align:center;">
+<td style="vertical-align:top;text-align:center;">
 	<div class="label">Proficiencies and Languages</div>
 	<input type="text" ng-model='profSearch' placeholder="Search..." />
 	<div class="leftmenu scrollable">
@@ -259,14 +259,14 @@
 			</thead>
 			<tbody>
 			<tr>
-				<td style="width:340px;max-width:340px;display:inherit;vertical-align:top;">
+				<td style="display:inherit;vertical-align:top;">
 					<div class="scrollable">
 						<input style="width:340px;" type="text" ng-model="spellSearch" placeholder="Filter..."/>
 						<div class="item greenback" ng-repeat="spell in filteredSpellList | filter:spellSearch"
 								ng-mouseenter="setTip(spell,spell.level)" ng-mouseleave="clearTip()">{{spell.name}} ({{spell.level}})</div>
 					</div>
 				</td>
-				<td style="width:25%;vertical-align:top;margin-left:10px">
+				<td style="vertical-align:top;margin-left:10px">
 				<br>
 					<span class="item" ng-repeat="i in [0,1,2,3,4,5,6,7,8,9]" style="padding:8px 10px;"
 							ng-class="{'greenback':spellFilters.levels[i]}"
@@ -333,11 +333,12 @@
 	<br>
 	<hr>
 	<br>
-	<div class="choice" ng-repeat="choice in currentChoices track by $index" ng-click="selectChoice(choice)"
-			ng-mouseenter="setTip(choice)" ng-mouseleave="clearTip()">
+	<div class="choice" ng-repeat="choice in currentChoices track by $index" ng-click="toggleChoice(choice)" ng-mouseenter="setTip(choice)" ng-mouseleave="clearTip()" ng-class="{'selected':choice.selected}">
 			{{choice.name || choice}}
 			<span ng-show="choice.level">({{choice.level}})</span>
 	</div>
+	<br>
+	<button class="button" ng-disabled="disableNextButton()" ng-click="submitStep()">Next</button>
 </div>
 
 <!-- Tooltip Modal-->

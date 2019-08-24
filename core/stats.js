@@ -209,7 +209,11 @@ function checkChoiceQueue(){
 					$scope.currentChoices=$scope.currentChoices.concat(subArray);
 				}
 			} else {
-				$scope.currentChoices.push(step.choices[i]);
+				if (typeof step.choices[i] === 'string'){
+					$scope.currentChoices.push({name:step.choices[i]});
+				} else {
+					$scope.currentChoices.push(step.choices[i]);
+				}
 			}
 		}
 		$scope.currentStep=$scope.choiceQueue[0];
@@ -279,32 +283,92 @@ var setupForCurrentStep=function(){
 			if ($scope.currentStep.choices[i] && typeof($scope.currentStep.choices[i]) === 'function'){
 				var subArray = $scope.currentStep.choices[i]($scope.char,$scope);
 				if (subArray){
+					for (let i=0;i<subArray.length;i++){
+						if (typeof subArray[i] === 'string'){
+							subArray[i]={name:subArray[i]};
+						}
+					}
 					$scope.currentChoices=$scope.currentChoices.concat(subArray);
 				}
 			} else {
-				$scope.currentChoices.push($scope.currentStep.choices[i]);
+				if ((typeof $scope.currentStep.choices[i] === 'string')
+				 || (typeof $scope.currentStep.choices[i] === 'number')){
+					$scope.currentChoices.push({name:$scope.currentStep.choices[i]});
+				} else {
+					$scope.currentChoices.push($scope.currentStep.choices[i]);
+				}
 			}
 		}
 		//if, after all of this, there are no choices to make, send in something bogus
 		if ($scope.currentChoices.length===0){
 			$scope.selectChoice('');
+			nextStep();
 		} else {
 			$scope.prompt=$scope.currentStep.choicePrompt;
 		}
 	} else {
 		//just do the update
 		$scope.selectChoice('');
+		nextStep();
+	}
+}
+
+$scope.toggleChoice=function(choice){
+	//always allow deselection
+	if (choice.selected){
+		choice.selected=false;
+		return;
+	}
+	let count=0;
+	for (let c of $scope.currentChoices){
+		if (c.selected){
+			count++;
+		}
+	}
+	//max amount selected
+	let limit=1;
+	if ($scope.currentStep && $scope.currentStep.limit){
+		limit = $scope.currentStep.limit;
+	}
+	if (limit === 1){
+		//unselect all choices
+		for (let c of $scope.currentChoices){
+			c.selected=false;
+		}
+		choice.selected=true;
+		return;
+	}
+	if (limit === count){
+		return;
+	}
+	choice.selected=true;
+}
+
+$scope.submitStep=function(){
+	let doNextStepAfterThis=true;
+	for (let choice of $scope.currentChoices){
+		if (choice.selected){
+			if (false == $scope.selectChoice(choice)){
+				doNextStepAfterThis=false;
+			}
+		}
+	}
+	if (checkChoiceQueue()){
+		return false;
+	}
+	if (doNextStepAfterThis){
+		$scope.currentChoices=null;
+		$scope.calculate();
+		nextStep();
 	}
 }
 
 $scope.selectChoice=function(choice){
-	$scope.currentChoices=null;
 	if (choice.levels){
 		//they chose a class or subclass
 		if (choice.subclass){
 			//they chose a subclass
 			$scope.currentStep.action($scope.char,$scope.derived,choice,$scope);
-			nextStep();
 		} else {
 			//they chose a class
 			$scope.chosenLevel=nextLevel($scope.char,choice.name);
@@ -325,7 +389,7 @@ $scope.selectChoice=function(choice){
 			}
 			$scope.currentPackage=choice.levels[$scope.chosenLevel].updates;
 			setupForCurrentStep();
-			return;
+			return false;
 		} 
 	} else if ($scope.currentPackage) {
 		//they chose a step inside a package
@@ -333,18 +397,14 @@ $scope.selectChoice=function(choice){
 			choice=choice.name;
 		}
 		$scope.currentStep.action($scope.char,$scope.derived,choice,$scope);
-		nextStep();
 	} else {
 		//they chose something outside of a class/subclass package
 		if (choice.name){
 			choice=choice.name;
 		}
 		$scope.currentStep.action($scope.char,$scope.derived,choice,$scope);
-		$scope.currentStep=null;
-		if (!checkChoiceQueue()){
-			$scope.calculate();
-		}
 	}
+	return true;
 }
 
 function nextStep(){

@@ -1,7 +1,7 @@
 window.backgrounds=[
 	{
 		name:"Acolyte",
-		description:"You have spent your life in the service of a temple to a specific god or pantheon of gods. You act as an intermediary between the realm of the holy and the mortal world, performing sacred rites and offering sacrifices in order to conduct worshipers into the presence of the divine. You are not necessarily a cleric—performing sacred rites is not the same thing as channeling divine power.\n\nChoose a god, a pantheon of gods, or some other quasi-divine being, and work with your DM to detail the nature of your religious service. The Gods of the Multiverse section contains a sample pantheon, from the Forgotten Realms setting. Were you a lesser functionary in a temple, raised from childhood to assist the priests in the sacred rites? Or were you a high priest who suddenly experienced a call to serve your god in a different way? Perhaps you were the leader of a small cult outside of any established temple structure, or even an occult group that served a fiendish master that you now deny.",
+		description:"Skill Proficiencies: Insight, Religion\nLanguages: Two of your choice\nEquipment: Holy Symbol, Prayer Book, Stick of Incense, Vestments, Common Clothes, Belt Pouch containing 15 gp",
 		featureName:"Shelter of the Faithful",
 		featureDescription:"As an acolyte, you command the respect of those who share your faith, and you can perform the religious ceremonies of your deity. You and your adventuring companions can expect to receive free healing and care at a temple, shrine, or other established presence of your faith, though you must provide any material components needed for spells. Those who share your religion will support you (but only you) at a modest lifestyle.\n\nYou might also have ties to a specific temple dedicated to your chosen deity or pantheon, and you have a residence there. This could be the temple where you used to serve, if you remain on good terms with it, or a temple where you have found a new home. While near your temple, you can call upon the priests for assistance, provided the assistance you ask for is not hazardous and you remain in good standing with your temple.",
 		onPickup:function(char,scope){
@@ -195,7 +195,7 @@ window.backgrounds=[
 		}
 	},{
 		name:"Outlander",
-		description:"",
+		description:"Skill Proficiencies: Athletics, Survival\nLanguages: One of your choice\nInstrument Proficiencies: One of your choice\nEquipment: Staff, Hunting Trap, Traveler's Clothes, Animal Trophy, Belt Pouch containing 10gp",
 		featureName:"Wanderer",
 		featureDescription:"You have an excellent memory for maps and geography, and you can always recall the general layout of terrain, settlements, and other features around you. In addition, you can find food and fresh water for yourself and up to five other people each day, provided that the land offers berries, small game, water, and so forth.",
 		onPickup:function(char,scope){
@@ -213,7 +213,7 @@ window.backgrounds=[
 		}
 	},{
 		name:"Sage",
-		description:"",
+		description:"Skill Proficiencies: Arcana, History\nLanguages: Two of your choice\nEquipment: Bottle of Ink, Quill, Small Knife, Common Clothes, Belt Pouch containing 10 gp",
 		featureName:"Researcher",
 		featureDescription:"When you attempt to learn or recall a piece of lore, if you do not know that information, you often know where and from whom you can obtain it. Usually, this information comes from a library, scriptorium, university, or a sage or other learned person or creature, Your DM might rule that the knowledge you seek is secreted away in an almost inaccessible place, or that it simply cannot be found. Unearthing the deepest secrets of the multiverse can require an adventure or even a whole campaign.",
 		onPickup:function(char,scope){
