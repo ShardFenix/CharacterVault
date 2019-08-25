@@ -243,27 +243,25 @@ $scope.loadMusic=function(filename) {
 	req.send(null);
 }
 
-
-$scope.loadStinger=function(filename) {
-	if ($scope.audio){
-		$scope.audio.pause();
-	}	if ($scope.audio1){
-		$scope.audio1.pause();
-	}	if ($scope.audio2){
-		$scope.audio2.pause();
-	}
-	var req = new XMLHttpRequest();
-	req.open('GET', 'http://localhost:8080/'+root+filename+'.ogg', true);
-	req.responseType = 'arraybuffer';
-
-	req.onload = function() {
-		$scope.audio = new Audio(root+filename+'.ogg');
-		$scope.audio.volume=($scope.volume/100.0);
-		$scope.audio.play();
-	};
-	req.send(null);
-}
-	
+//schema for an environment setting
+let schema = {
+	loops:[
+		{
+			file:'',
+			volume:1
+		}
+	],
+	oneShots:[
+		{
+			file:'',
+			volumeMin: 0.5,
+			volumeMax: 1.0,
+			intervalMin: 20,
+			intervalMax: 30,
+			
+		}
+	]
+};
 
 }]);
 
