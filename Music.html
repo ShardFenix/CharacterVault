@@ -139,6 +139,15 @@
 </div></div>
 
 <script type="text/javascript">
+var context;
+try {
+	window.AudioContext = window.AudioContext || window.webkitAudioContext;
+	context = new AudioContext();
+}
+catch(e) {
+	alert('Web Audio API is not supported in this browser');
+}
+
 var app=angular.module('myApp',[]);
 app.controller('MyController',['$scope','$timeout','$http','$interval',function($scope,$timeout,$http,$interval){
 
@@ -200,7 +209,7 @@ $scope.loadMusic=function(filename) {
 
 	req.onload = function() {
 		var metadata = AudioMetadata.ogg(req.response);
-		var loopStart=metadata.loopstart;
+		var loopStart = metadata.loopstart;
 		var bufferPart = req.response.slice(40, 48);
 		var bufferView = new Uint32Array(bufferPart);
 		var samplerate = bufferView[0];
@@ -253,15 +262,101 @@ let schema = {
 	],
 	oneShots:[
 		{
-			file:'',
+			files:[''],
 			volumeMin: 0.5,
 			volumeMax: 1.0,
-			intervalMin: 20,
-			intervalMax: 30,
-			
+			intervalMin: 20, //the min time in seconds to wait after one of the sounds finishes playing
+			intervalMax: 30, //the max time in seconds to wait after one of the sounds finishes playing
 		}
 	]
 };
+
+$scope.environmentAudioList={loops:[],oneShots:[]};
+
+$scope.overallGain = context.createGain();
+$scope.overallGain.gain.value=1;
+$scope.overallGain.connect(context.destination);
+
+$scope.loadEnvironment=function(schema){
+	//move existing environment to temp storage while it fades out
+	let oldEnvironmentAudioList=$scope.environmentAudioList;
+	$scope.environmentAudioList={loops:[],oneShots:[]};
+	//fade out existing
+	for (let sound of oldEnvironmentAudioList.loops){
+		sound.gain.linearRampToValueAtTime(0.0,context.currentTime+2);
+	}
+	for (let sound of oldEnvironmentAudioList.oneShots){
+		sound.gain.linearRampToValueAtTime(0.0,context.currentTime+2);
+	}
+	$timeout(function(){
+		for (let sound of oldEnvironmentAudioList.loops){
+			sound.source.stop(); //this will clean it up from the graph according to SO
+		}
+		for (let sound of oldEnvironmentAudioList.oneShots){
+			sound.buffers=[];//this stops sounds from queueing
+		}
+	},2000)
+	
+	for (let sound of schema.loops){
+		$http.get('http://localhost:8080/'+root+"SFX/Loops/"+sound.file,{responseType:'arraybuffer'}).then(function(response){
+			let source = audioContext.createBufferSource();
+			context.decodeAudioData(response,function(buffer){
+				let gainNode = context.createGain();
+				$scope.environmentAudioList.loops.push(
+					{
+						source:source,
+						gain:gainNode,
+						volume:sound.volume
+					}
+				);
+				gainNode.gain.linearRampToValueAtTime(0.0,context.currentTime);
+				gainNode.gain.linearRampToValueAtTime(sound.volume,context.currentTime+2);
+				source.buffer=buffer;
+				source.loop=true;
+				source.connect(gainNode);
+				gainNode.connect($scope.overallGain);
+				source.start(0);
+			});
+		});
+	}
+	
+	for (let sound of schema.oneShots){
+		//sounds in the one shot groups will share gain, and we will only store the buffers
+		//the webaudio API doesn't allow playing an audiosource multiple times,
+		//so we save the buffer and create a new audionode each time it will play.
+		let gainNode = context.createGain();
+		gainNode.gain.linearRampToValueAtTime(0.0,context.currentTime);
+		gainNode.connect($scope.overallGain);
+		let soundGroup = {
+				buffers:[],
+				gain:gainNode,
+			};
+		let playIt = function(){
+			if (soundGroup.buffers.length===0)
+				{return;}
+			let index = Math.floor(Math.random()*soundGroup.buffers.length);
+			let seconds = sound.intervalMin + Math.random()*(sound.intervalMax - sound.intervalMin);
+			let volume = sound.volumeMin+(Math.random()*(sound.volumeMax-sound.volumeMin));
+			let source = audioContext.createBufferSource();
+			source.buffer=soundGroup.buffers[index];
+			source.connect(gainNode);
+			gainNode.gain.linearRampToValueAtTime(volume,context.currentTime);
+			source.onended=playIt;
+			source.start(context.currentTime + seconds);
+		};
+		playIt();
+		$scope.environmentAudioList.oneShots.push(soundGroup);
+		//load the buffers for this sound group
+		for (let file of sound.files){
+			$http.get('http://localhost:8080/'+root+"SFX/OneShots/"+file,{responseType:'arraybuffer'}).then(function(response){
+				context.decodeAudioData(response,function(buffer){
+					soundGroup.buffers.push(buffer);
+				});
+			});
+		}
+	}
+}
+
 
 }]);
 
