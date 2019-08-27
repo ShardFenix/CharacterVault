@@ -84,6 +84,7 @@
 <script src="libs/jquery.min.js"></script>
 <script src="libs/angular.min.js"></script>
 <script src="libs/angular-animate.js"></script>
+<script src="core/dragndrop.js"></script>
 
 <script src="libs/audiometadata.js"></script>
 </head>
@@ -128,11 +129,59 @@
 </div>
 
 <div ng-show="tab==='sfx'">
-
+	<div>
+		<div class="">Master Volume</div>
+		<input type="range" min="0" max="100" value="50" class="slider" ng-model="sfxVolume">
+	</div>
+	<div style="grid-template-columns: 20%">
+		<div ng-repeat="file in sfx" ng-attr-name="file.fullName" class="griditem"
+			ng-click="playSound(file)">{{file}}</div>
+	</div>
 </div>
 
 <div ng-show="tab==='environments'">
-
+<table>
+	<thead>
+		<tr>
+			<th>Environments</th>
+			<th>Music</th>
+			<th>Loops</th>
+			<th colspan='2'>SFX</th>
+			<th colspan='2'>Data</th>
+		</tr>
+	</thead>
+	<tbody><tr>
+		<td>
+			<div ng-repeat="env in environments" class="leftitem" ng-click="">{{env.name}}</div>
+		</td>
+		<td>
+			<div ng-repeat="mus in musicList" class="leftitem" ng-click="">{{mus}}</div>
+		</td>
+		<td>
+			<div ng-repeat="loop in loops" class="leftitem" ng-click="">{{loop}}</div>
+		</td>
+		<td>
+			<div ng-repeat="sfx in oneShots" class="leftitem" ng-click="playSound(sfx.filename)">{{sfx.name}}</div>
+		</td>
+		<td>
+			<div ng-show="selectedEnvironment">
+				<div>
+					<input type="text" ng-model="selectedEnvironment.name" placeholder="Name"/>
+				</div>
+				<div>
+					<span class="header">Loops</span>
+					<div ng-drop-target="true" on-drop="dropLoop(dource,target)">
+						<div ng-repeat="loop in selectedEnvironment.loops">
+							<span>{{loop.file}}</span>
+							<input type="range" min="0" max="100" value="50" class="slider" ng-model="loop.volume" ng-change="updateLoopVolume(loop)">
+						</div>
+					</div>
+				</div>
+			</div>
+		</td>
+	</tr>
+	</tbody>
+</table>
 </div>
 
 
@@ -149,6 +198,8 @@ catch(e) {
 }
 
 var app=angular.module('myApp',[]);
+_setupAngular(app);
+
 app.controller('MyController',['$scope','$timeout','$http','$interval',function($scope,$timeout,$http,$interval){
 
 $scope.tab='music';
@@ -156,11 +207,19 @@ $scope.tab='music';
 $scope.musicFolders=[];
 
 $scope.files=[];
-$scope.stingers=[];
-
-$scope.periodicSounds=[];
 
 let root="resources/";
+
+if (window.location.protocol==='file:'){
+	$http.get('http://localhost:8080/').then(function(resp){
+		let filename = window.location.pathname;
+		filename = filename.substring(filename.lastIndexOf('/'));
+		window.location.href = "http://localhost:8080"+filename;
+		return;
+	},function(error){
+		console.error("You must run server.bat for this page to work.");
+	});
+}
 
 $scope.getFolders=function(rootPath, arrayStore){
 	$http.get('http://localhost:8080/'+root+rootPath).then(function(response){
@@ -172,7 +231,7 @@ $scope.getFolders=function(rootPath, arrayStore){
 	});
 }
 
-$scope.getFiles=function(rootPath, arrayStore, stingers){
+$scope.getFiles=function(rootPath, arrayStore){
 	$http.get('http://localhost:8080/'+root+rootPath).then(function(response){
 		for (let filename of response.data){
 			if (filename.endsWith('.ogg')){
@@ -186,9 +245,8 @@ $scope.getFolders('Music/',$scope.musicFolders);
 
 $scope.openSecondaryFolder=function(rootPath){
 	$scope.files=[];
-	$scope.stingers=[];
 	$scope.primaryFolder=rootPath;
-	$scope.getFiles(rootPath,$scope.files,$scope.stingers);
+	$scope.getFiles(rootPath,$scope.files);
 }
 
 $scope.audio1=null;
@@ -254,15 +312,16 @@ $scope.loadMusic=function(filename) {
 
 //schema for an environment setting
 let schema = {
+	name:"New Environment",
 	loops:[
 		{
-			file:'cicada1_lp.ogg',
+			file:'',
 			volume:1
 		}
 	],
 	oneShots:[
 		{
-			files:['owl2.ogg'],
+			files:[''],
 			volumeMin: 0.5,
 			volumeMax: 1.0,
 			intervalMin: 35, //the min time in seconds to wait after one of the sounds finishes playing
@@ -358,6 +417,43 @@ $scope.loadEnvironment=function(schema){
 }
 
 $scope.loadEnvironment(schema);
+
+$scope.environments=[];
+
+$scope.newEnvironment=function(){
+	let newEnvironment = angular.copy(schema);
+	$scope.environments.push(newEnvironment);
+	$scope.selectedEnvironment = newEnvironment;
+}
+
+$scope.renameEnvironment = function(env,newName){
+	env.name=newName;
+}
+
+$scope.addLoopToEnvironment=function(env, filename){
+	env.loops.push({
+		file:filename,
+		volume:0.5
+	});
+}
+
+$scope.addOneShotToEnvironment=function(env){
+	env.oneShots.push([{
+			files:[],
+			volumeMin: 0.5,
+			volumeMax: 1.0,
+			intervalMin: 20,
+			intervalMax: 30,
+	}]);
+}
+
+$scope.addOneShotToSoundGroup=function(oneShotList, filename){
+	oneShotList.files.push(filename);
+}
+
+$scope.updateLoopVolume=function(loop){
+	
+}
 
 }]);
 
