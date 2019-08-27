@@ -256,17 +256,17 @@ $scope.loadMusic=function(filename) {
 let schema = {
 	loops:[
 		{
-			file:'',
+			file:'cicada1_lp.ogg',
 			volume:1
 		}
 	],
 	oneShots:[
 		{
-			files:[''],
+			files:['owl2.ogg'],
 			volumeMin: 0.5,
 			volumeMax: 1.0,
-			intervalMin: 20, //the min time in seconds to wait after one of the sounds finishes playing
-			intervalMax: 30, //the max time in seconds to wait after one of the sounds finishes playing
+			intervalMin: 35, //the min time in seconds to wait after one of the sounds finishes playing
+			intervalMax: 60,
 		}
 	]
 };
@@ -299,8 +299,8 @@ $scope.loadEnvironment=function(schema){
 	
 	for (let sound of schema.loops){
 		$http.get('http://localhost:8080/'+root+"SFX/Loops/"+sound.file,{responseType:'arraybuffer'}).then(function(response){
-			let source = audioContext.createBufferSource();
-			context.decodeAudioData(response,function(buffer){
+			let source = context.createBufferSource();
+			context.decodeAudioData(response.data,function(buffer){
 				let gainNode = context.createGain();
 				$scope.environmentAudioList.loops.push(
 					{
@@ -337,19 +337,19 @@ $scope.loadEnvironment=function(schema){
 			let index = Math.floor(Math.random()*soundGroup.buffers.length);
 			let seconds = sound.intervalMin + Math.random()*(sound.intervalMax - sound.intervalMin);
 			let volume = sound.volumeMin+(Math.random()*(sound.volumeMax-sound.volumeMin));
-			let source = audioContext.createBufferSource();
+			let source = context.createBufferSource();
 			source.buffer=soundGroup.buffers[index];
 			source.connect(gainNode);
 			gainNode.gain.linearRampToValueAtTime(volume,context.currentTime);
 			source.onended=playIt;
 			source.start(context.currentTime + seconds);
 		};
-		playIt();
+		$timeout(playIt,1000);
 		$scope.environmentAudioList.oneShots.push(soundGroup);
 		//load the buffers for this sound group
 		for (let file of sound.files){
 			$http.get('http://localhost:8080/'+root+"SFX/OneShots/"+file,{responseType:'arraybuffer'}).then(function(response){
-				context.decodeAudioData(response,function(buffer){
+				context.decodeAudioData(response.data,function(buffer){
 					soundGroup.buffers.push(buffer);
 				});
 			});
@@ -357,6 +357,7 @@ $scope.loadEnvironment=function(schema){
 	}
 }
 
+$scope.loadEnvironment(schema);
 
 }]);
 
