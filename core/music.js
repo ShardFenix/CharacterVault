@@ -178,10 +178,10 @@ $scope.loadEnvironment=function(schema){
 	$scope.environmentAudioList={loops:[],oneShots:[]};
 	//fade out existing
 	for (let sound of oldEnvironmentAudioList.loops){
-		sound.gain.linearRampToValueAtTime(0.0,context.currentTime+2);
+		sound.gain.gain.linearRampToValueAtTime(0.0,context.currentTime+2);
 	}
 	for (let sound of oldEnvironmentAudioList.oneShots){
-		sound.gain.linearRampToValueAtTime(0.0,context.currentTime+2);
+		sound.gain.gain.linearRampToValueAtTime(0.0,context.currentTime+2);
 	}
 	$timeout(function(){
 		for (let sound of oldEnvironmentAudioList.loops){
