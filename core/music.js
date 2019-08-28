@@ -307,6 +307,18 @@ $scope.playSound=function(sound){
 	});
 }
 
+$scope.dropLoop=function(source,target){
+	let src = angular.element('#'+source);
+	let tgt = angular.element('#'+target);
+	let sfx = src.scope().loop;
+	$scope.selectedEnvironment.loops.push({
+		file:[loop.filename],
+		volume: 0.5,
+	});
+	$scope.$apply();
+	$scope.loadEnvironment($scope.selectedEnvironment);
+}
+
 $scope.dropSfx=function(source,target){
 	let src = angular.element('#'+source);
 	let tgt = angular.element('#'+target);
@@ -319,6 +331,7 @@ $scope.dropSfx=function(source,target){
 		intervalMax: 30,
 	});
 	$scope.$apply();
+	$scope.loadEnvironment($scope.selectedEnvironment);
 }
 
 $scope.dropSubSfx=function(source,target){
@@ -327,6 +340,7 @@ $scope.dropSubSfx=function(source,target){
 	let sfx = src.scope().sfx;
 	tgt.scope().soundGroup.files.push(sfx.filename);
 	tgt.scope().$apply();	
+	$scope.loadEnvironment($scope.selectedEnvironment);
 }
 
 }]);
