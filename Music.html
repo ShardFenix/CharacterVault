@@ -34,8 +34,12 @@
     background-color: #ffdb77;
     border: 1px groove black;
     margin: 2px;
-    padding: 4px 0px 4px 0px;
+    padding: 4px;
     font-size: 20px;
+}
+.sidepalette .leftitem{
+	display:inline-grid;
+	padding:4px 8px;
 }
 
 .slidecontainer {
@@ -52,6 +56,19 @@
     opacity: 0.7;
     -webkit-transition: .2s;
     transition: opacity .2s;
+}
+
+.soundItem{
+	display:flex;
+}
+
+.soundItem span{
+	display:block;
+	flex: 1;
+}
+
+.soundItem .slider{
+	flex: 2;
 }
 
 .slider:hover {
@@ -75,6 +92,49 @@
     background: #4CAF50;
     cursor: pointer;
 }
+.dropbox {
+    padding: 10px;
+    border: 1px solid black;
+    vertical-align: top;
+    margin-top: 15px;
+    min-height: 30px;
+}
+
+.borderheader{
+    margin-top: -24px;
+    display: block;
+    font-size: 24px;
+    background-color: #707070;
+    width: fit-content;
+}
+
+.soundGroup {
+    border: 1px solid black;
+    padding: 5px;
+}
+
+.soundItem{
+	margin-left: 10px;
+}
+
+.slider-row{
+	margin: 8px 0px;
+	display:flex;
+}
+
+.slider-row span{
+	flex: 1;
+}
+
+.slider-row .slider{
+	flex: 2;
+}
+
+.header {
+    font-size: 24px;
+    text-align: center;
+}
+
 </style>
 <!--
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
@@ -110,7 +170,7 @@
 	</td>
 	<td width="25%" style="vertical-align:top;">
 		<div class="secondmenu">
-			<div class="leftitem" ng-repeat="file in files" ng-click="loadMusic(primaryFolder+file)">
+			<div class="leftitem" ng-repeat="file in musicFiles" ng-click="loadMusic(primaryFolder+file)">
 				{{file}}
 			</div>
 		</div>
@@ -140,45 +200,75 @@
 </div>
 
 <div ng-show="tab==='environments'">
-<table>
+<table style="width:100%">
 	<thead>
 		<tr>
 			<th>Environments</th>
-			<th>Music</th>
-			<th>Loops</th>
-			<th colspan='2'>SFX</th>
-			<th colspan='2'>Data</th>
+			<th>Data</th>
+			<th></th>
 		</tr>
 	</thead>
 	<tbody><tr>
-		<td>
-			<div ng-repeat="env in environments" class="leftitem" ng-click="">{{env.name}}</div>
+		<td style="width:200px;vertical-align:top;">
+			<div ng-repeat="env in environments" class="leftitem" ng-click="loadEnvironment(env)">{{env.name}}</div>
 		</td>
-		<td>
-			<div ng-repeat="mus in musicList" class="leftitem" ng-click="">{{mus}}</div>
-		</td>
-		<td>
-			<div ng-repeat="loop in loops" class="leftitem" ng-click="">{{loop}}</div>
-		</td>
-		<td>
-			<div ng-repeat="sfx in oneShots" class="leftitem" ng-click="playSound(sfx.filename)">{{sfx.name}}</div>
-		</td>
-		<td>
+		<td style="width:400px;vertical-align:top;">
+			<div class="button" ng-click="newEnvironment()">New Environmenr</div>
 			<div ng-show="selectedEnvironment">
 				<div>
 					<input type="text" ng-model="selectedEnvironment.name" placeholder="Name"/>
 				</div>
-				<div>
-					<span class="header">Loops</span>
-					<div ng-drop-target="true" on-drop="dropLoop(dource,target)">
-						<div ng-repeat="loop in selectedEnvironment.loops">
-							<span>{{loop.file}}</span>
-							<input type="range" min="0" max="100" value="50" class="slider" ng-model="loop.volume" ng-change="updateLoopVolume(loop)">
+				<div class="dropbox" ng-drop-target on-drop="dropLoop(source,target)">
+					<span class="borderheader">Loops</span>
+					<div ng-repeat="loop in selectedEnvironment.loops" class="soundItem">
+						<span>{{loop.name}}</span>
+						<input type="range" min="0" max="1" step="0.01" value="0.5" class="slider" ng-model="loop.volume" ng-change="updateLoopVolume(loop)">
+					</div>
+				</div>
+				<div class="dropbox" ng-drop-target on-drop="dropSfx(source,target)">
+					<span class="borderheader">SFX</span>
+					<div ng-repeat="soundGroup in selectedEnvironment.oneShots" class="soundGroup" >
+						<div class="slider-row">
+							<span>Min Interval: {{soundGroup.intervalMin}}</span>
+							<input type="range" min="1" max="200" value="20" class="slider" ng-model="soundGroup.intervalMin">
+						</div>
+						<div class="slider-row">
+							<span>Max Interval: {{soundGroup.intervalMax}}</span>
+							<input type="range" min="1" max="200" value="30" class="slider" ng-model="soundGroup.intervalMax">
+						</div>
+						<div class="slider-row">
+							<span>Min Volume</span>
+							<input type="range" min="0" max="1" step="0.01" value="0.5" class="slider" ng-model="soundGroup.volumeMin">
+						</div>
+						<div class="slider-row">
+							<span>Max Volume</span>
+							<input type="range" min="0" max="1" step="0.01" value="0.5" class="slider" ng-model="soundGroup.volumeMax">
+						</div>
+						<div ng-drop-target on-drop="dropSubSfx(source,target)">
+							<div class="header">Files</div>
+							<div ng-repeat="file in soundGroup.files" class="soundItem">
+								<span>{{file}}</span>
+								<input type="range" min="0" max="100" value="50" class="slider" ng-model="loop.volume" ng-change="updateLoopVolume(loop)">
+							</div>
 						</div>
 					</div>
 				</div>
 			</div>
 		</td>
+
+
+		<td>
+			<div class="sidepalette">
+				<div ng-repeat="mus in musicList" class="leftitem" ng-click="">{{mus}}</div>
+			</div>
+			<div class="sidepalette">
+				<div ng-repeat="loop in loops" class="leftitem" ng-click="">{{loop.name}}</div>
+			</div>
+			<div class="sidepalette">
+				<div ng-repeat="sfx in oneShots" class="leftitem" ng-click="playSound(sfx.filename)" ng-draggable >{{sfx.name}}</div>
+			</div>
+		</td>
+
 	</tr>
 	</tbody>
 </table>
@@ -187,277 +277,7 @@
 
 </div></div>
 
-<script type="text/javascript">
-var context;
-try {
-	window.AudioContext = window.AudioContext || window.webkitAudioContext;
-	context = new AudioContext();
-}
-catch(e) {
-	alert('Web Audio API is not supported in this browser');
-}
-
-var app=angular.module('myApp',[]);
-_setupAngular(app);
-
-app.controller('MyController',['$scope','$timeout','$http','$interval',function($scope,$timeout,$http,$interval){
-
-$scope.tab='music';
-
-$scope.musicFolders=[];
-
-$scope.files=[];
-
-let root="resources/";
-
-if (window.location.protocol==='file:'){
-	$http.get('http://localhost:8080/').then(function(resp){
-		let filename = window.location.pathname;
-		filename = filename.substring(filename.lastIndexOf('/'));
-		window.location.href = "http://localhost:8080"+filename;
-		return;
-	},function(error){
-		console.error("You must run server.bat for this page to work.");
-	});
-}
-
-$scope.getFolders=function(rootPath, arrayStore){
-	$http.get('http://localhost:8080/'+root+rootPath).then(function(response){
-		for (let filename of response.data){
-			if (filename.endsWith('/')){
-				arrayStore.push(filename);
-			}
-		}
-	});
-}
-
-$scope.getFiles=function(rootPath, arrayStore){
-	$http.get('http://localhost:8080/'+root+rootPath).then(function(response){
-		for (let filename of response.data){
-			if (filename.endsWith('.ogg')){
-				arrayStore.push(filename.substring(0,filename.indexOf('.ogg')));
-			}
-		}
-	});
-}
-//init the folders
-$scope.getFolders('Music/',$scope.musicFolders);
-
-$scope.openSecondaryFolder=function(rootPath){
-	$scope.files=[];
-	$scope.primaryFolder=rootPath;
-	$scope.getFiles(rootPath,$scope.files);
-}
-
-$scope.audio1=null;
-$scope.audio2=null;
-$scope.onAudio1=false;
-
-$scope.loadMusic=function(filename) {
-	$scope.fade=0;
-	if ($scope.audio1){
-		$scope.audio1.pause();
-	}
-	if ($scope.audio2){
-		$scope.audio2.pause();
-	}
-	var req = new XMLHttpRequest();
-	req.open('GET', 'http://localhost:8080/'+root+filename+'.ogg', true);
-	req.responseType = 'arraybuffer';
-
-	req.onload = function() {
-		var metadata = AudioMetadata.ogg(req.response);
-		var loopStart = metadata.loopstart;
-		var bufferPart = req.response.slice(40, 48);
-		var bufferView = new Uint32Array(bufferPart);
-		var samplerate = bufferView[0];
-		var loopStartNum=parseFloat(loopStart)/samplerate;
-		if (!loopStartNum){loopStartNum=0;}
-		
-		$scope.audio2 = new Audio(root+filename+'.ogg');
-		$scope.audio2.volume=($scope.volume/100.0);
-		$scope.audio2.addEventListener('timeupdate', function() {
-			if ($scope.fade>0){
-				$scope.fade++;
-			}
-			this.volume=Math.max(0,(($scope.volume-$scope.fade*5)/100.0));
-			if (this.currentTime>this.duration-0.1){
-				this.pause();
-				this.currentTime=loopStartNum;
-				$scope.audio1.play();
-			}
-		}, false);
-		
-		$scope.audio1 = new Audio(root+filename+'.ogg');
-		$scope.audio1.volume=($scope.volume/100.0);
-		$scope.audio1.addEventListener('timeupdate', function() {
-			if ($scope.fade>0){
-				$scope.fade++;
-			}
-			this.volume=Math.max(0,(($scope.volume-$scope.fade*5)/100.0));
-			if (this.currentTime>4 && this.currentTime<5){
-				//need this to set the initial time of audio2
-				$scope.audio2.currentTime=loopStartNum;
-			}
-			if (this.currentTime>this.duration-0.1){
-				this.pause();
-				this.currentTime=loopStartNum;
-				$scope.audio2.play();
-			}
-		}, false);
-		$scope.audio1.play();
-	};
-	req.send(null);
-}
-
-//schema for an environment setting
-let schema = {
-	name:"New Environment",
-	loops:[
-		{
-			file:'',
-			volume:1
-		}
-	],
-	oneShots:[
-		{
-			files:[''],
-			volumeMin: 0.5,
-			volumeMax: 1.0,
-			intervalMin: 35, //the min time in seconds to wait after one of the sounds finishes playing
-			intervalMax: 60,
-		}
-	]
-};
-
-$scope.environmentAudioList={loops:[],oneShots:[]};
-
-$scope.overallGain = context.createGain();
-$scope.overallGain.gain.value=1;
-$scope.overallGain.connect(context.destination);
-
-$scope.loadEnvironment=function(schema){
-	//move existing environment to temp storage while it fades out
-	let oldEnvironmentAudioList=$scope.environmentAudioList;
-	$scope.environmentAudioList={loops:[],oneShots:[]};
-	//fade out existing
-	for (let sound of oldEnvironmentAudioList.loops){
-		sound.gain.linearRampToValueAtTime(0.0,context.currentTime+2);
-	}
-	for (let sound of oldEnvironmentAudioList.oneShots){
-		sound.gain.linearRampToValueAtTime(0.0,context.currentTime+2);
-	}
-	$timeout(function(){
-		for (let sound of oldEnvironmentAudioList.loops){
-			sound.source.stop(); //this will clean it up from the graph according to SO
-		}
-		for (let sound of oldEnvironmentAudioList.oneShots){
-			sound.buffers=[];//this stops sounds from queueing
-		}
-	},2000)
-	
-	for (let sound of schema.loops){
-		$http.get('http://localhost:8080/'+root+"SFX/Loops/"+sound.file,{responseType:'arraybuffer'}).then(function(response){
-			let source = context.createBufferSource();
-			context.decodeAudioData(response.data,function(buffer){
-				let gainNode = context.createGain();
-				$scope.environmentAudioList.loops.push(
-					{
-						source:source,
-						gain:gainNode,
-						volume:sound.volume
-					}
-				);
-				gainNode.gain.linearRampToValueAtTime(0.0,context.currentTime);
-				gainNode.gain.linearRampToValueAtTime(sound.volume,context.currentTime+2);
-				source.buffer=buffer;
-				source.loop=true;
-				source.connect(gainNode);
-				gainNode.connect($scope.overallGain);
-				source.start(0);
-			});
-		});
-	}
-	
-	for (let sound of schema.oneShots){
-		//sounds in the one shot groups will share gain, and we will only store the buffers
-		//the webaudio API doesn't allow playing an audiosource multiple times,
-		//so we save the buffer and create a new audionode each time it will play.
-		let gainNode = context.createGain();
-		gainNode.gain.linearRampToValueAtTime(0.0,context.currentTime);
-		gainNode.connect($scope.overallGain);
-		let soundGroup = {
-				buffers:[],
-				gain:gainNode,
-			};
-		let playIt = function(){
-			if (soundGroup.buffers.length===0)
-				{return;}
-			let index = Math.floor(Math.random()*soundGroup.buffers.length);
-			let seconds = sound.intervalMin + Math.random()*(sound.intervalMax - sound.intervalMin);
-			let volume = sound.volumeMin+(Math.random()*(sound.volumeMax-sound.volumeMin));
-			let source = context.createBufferSource();
-			source.buffer=soundGroup.buffers[index];
-			source.connect(gainNode);
-			gainNode.gain.linearRampToValueAtTime(volume,context.currentTime);
-			source.onended=playIt;
-			source.start(context.currentTime + seconds);
-		};
-		$timeout(playIt,1000);
-		$scope.environmentAudioList.oneShots.push(soundGroup);
-		//load the buffers for this sound group
-		for (let file of sound.files){
-			$http.get('http://localhost:8080/'+root+"SFX/OneShots/"+file,{responseType:'arraybuffer'}).then(function(response){
-				context.decodeAudioData(response.data,function(buffer){
-					soundGroup.buffers.push(buffer);
-				});
-			});
-		}
-	}
-}
-
-$scope.loadEnvironment(schema);
-
-$scope.environments=[];
-
-$scope.newEnvironment=function(){
-	let newEnvironment = angular.copy(schema);
-	$scope.environments.push(newEnvironment);
-	$scope.selectedEnvironment = newEnvironment;
-}
-
-$scope.renameEnvironment = function(env,newName){
-	env.name=newName;
-}
-
-$scope.addLoopToEnvironment=function(env, filename){
-	env.loops.push({
-		file:filename,
-		volume:0.5
-	});
-}
-
-$scope.addOneShotToEnvironment=function(env){
-	env.oneShots.push([{
-			files:[],
-			volumeMin: 0.5,
-			volumeMax: 1.0,
-			intervalMin: 20,
-			intervalMax: 30,
-	}]);
-}
-
-$scope.addOneShotToSoundGroup=function(oneShotList, filename){
-	oneShotList.files.push(filename);
-}
-
-$scope.updateLoopVolume=function(loop){
-	
-}
-
-}]);
-
-</script>
+<script src="./core/music.js"></script>
 
 
 </body>

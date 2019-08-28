@@ -32,7 +32,6 @@ function _setupAngular(app){
 					id = uuid.new()
 					angular.element(el).attr("id", id);
 				}
-				console.log(id);
 				el.bind("dragstart", function (e) {
 					e.originalEvent.dataTransfer.setData('text', id);
 					$rootScope.$emit("LVL-DRAG-START");
