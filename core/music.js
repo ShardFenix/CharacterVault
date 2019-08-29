@@ -97,7 +97,9 @@ $scope.loadMusic=function(filename) {
 			$scope.musicNode.loopEnd=buffer.duration+4;//make it longer than the length
 		});
 	});
-}
+};
+
+
 
 //schema for an environment setting
 let schema = {
@@ -231,9 +233,38 @@ $scope.loadEnvironment=function(schema){
 	}
 }
 
-$scope.loadEnvironment(schema);
-
 $scope.environments=[];
+
+function loadEnvironmentFile(filename){
+	$http.get('http://localhost:8080/resources/environments/'+filename).then(function(response){
+		console.log(response.data);
+		//$scope.environments.push(response.data);
+	});
+}
+
+//load saved environments
+$http.get('http://localhost:8080/resources/environments').then(function(response){
+	for (let filename of response.data){
+		if (filename.endsWith('.json')){
+			loadEnvironmentFile(filename);
+		}
+	}
+},function(error){
+	console.error("Error loading character vault.");
+	console.error(error);
+});
+
+$scope.saveEnvironments = function(){
+	for (let env of $scope.environments){
+		$http.post('http://localhost:8080/resources/environments/' + env.name + ".json", JSON.stringify(env))
+		.then(function(response){
+			console.log("Saved Environment " + env.name);
+		},function(error){
+			console.error(error);
+		}
+		);
+	}
+}
 
 $scope.newEnvironment=function(){
 	let newEnvironment = {
@@ -330,6 +361,31 @@ $scope.updateMusicVolume=function(vol){
 	if ($scope.musicGain){
 		$scope.musicGain.gain.linearRampToValueAtTime(vol,0);
 	}
+}
+
+//this works for sfx groups, sfx files, and loops
+$scope.deleteSfx(sfx){
+	for (let i=0;i< $scope.selectedEnvironment.oneShots.length;i++){
+		let sound=$scope.selectedEnvironment.oneShots[i];
+		if (sound===sfx){
+			$scope.selectedEnvironment.oneShots.splice(i,1);
+			return;
+		}
+		for (let i=0;i<sound.files.length;i++){
+			if (sound.files[i]===sfx){
+				sound.files.splice(i,1);
+				return;
+			}
+		}
+	}
+	for (let i=0;i< $scope.selectedEnvironment.loops.length;i++){
+		let sound=$scope.selectedEnvironment.loops[i];
+		if (sound===sfx){
+			$scope.selectedEnvironment.loops.splice(i,1);
+			return;
+		}
+	}
+	logger.error("Couldn't delete item: ",sfx);
 }
 
 }]);

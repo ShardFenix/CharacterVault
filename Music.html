@@ -226,6 +226,14 @@ div.column{
 	vertical-align: top;
 	margin: 0px 10px;
 }
+.delete{
+	position:absolute;
+	right:5px;
+	top: 5px;
+	font-size: 24px;
+	color:red;
+	font-weight:bold;
+}
 </style>
 <!--
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
@@ -265,14 +273,17 @@ div.column{
 				<div class="overlay"></div>
 				<span class="borderheader">Loops</span>
 				<div ng-repeat="loop in selectedEnvironment.loops" class="soundItem slider-row">
-					<span>{{loop.filename}}</span>
+					<span class="soundName">{{loop.filename}}
+						<span class="delete" ng-click="deleteSfx(loop)">&times;</span>
+					</span>
 					<input type="range" min="0" max="1" step="0.01" value="0.5" class="slider" ng-model="loop.volume" ng-change="updateLoopVolume(loop)">
 				</div>
 			</div>
 			<div class="dropbox" ng-drop-target on-drop="dropSfx(source,target)">
 				<div class="overlay"></div>
 				<span class="borderheader">SFX</span>
-				<div ng-repeat="soundGroup in selectedEnvironment.oneShots" class="soundGroup" >
+				<div ng-repeat="soundGroup in selectedEnvironment.oneShots" class="soundGroup" style="position:relative;">
+					<span class="delete" ng-click="deleteSfx(soundGroup)">&times;</span>
 					<div class="slider-row">
 						<span>Interval: {{soundGroup.intervalMin}} - {{soundGroup.intervalMax}}</span>
 						<range-slider min='1' max='200' discrete value-min="soundGroup.intervalMin" value-max="soundGroup.intervalMax" />
@@ -285,7 +296,9 @@ div.column{
 						<div class="overlay"></div>
 						<div class="header">Files</div>
 						<div ng-repeat="file in soundGroup.files" class="soundItem">
-							<span>{{file}}</span>
+							<span class="soundName">{{file}}
+								<span class="delete" ng-click="deleteSfx(file)">&times;</span>
+							</span>
 							<input type="range" min="0" max="100" value="50" class="slider" ng-model="loop.volume" ng-change="updateLoopVolume(loop)">
 						</div>
 					</div>
