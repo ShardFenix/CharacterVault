@@ -46,7 +46,12 @@ $scope.getFiles=function(rootPath, arrayStore){
 	$http.get('http://localhost:8080/'+root+rootPath).then(function(response){
 		for (let filename of response.data){
 			if (filename.endsWith('.ogg')){
-				arrayStore.push(filename.substring(0,filename.indexOf('.ogg')));
+				arrayStore.push(
+					{
+					filename:rootPath+filename,
+					name:filename.substring(0,filename.indexOf('.ogg'))
+					}
+				);
 			}
 		}
 	});
@@ -60,65 +65,38 @@ $scope.openSecondaryFolder=function(rootPath){
 	$scope.getFiles(rootPath,$scope.musicFiles);
 }
 
-$scope.audio1=null;
-$scope.audio2=null;
-$scope.onAudio1=false;
+$scope.musicNode;
+$scope.musicGain;
 
 $scope.loadMusic=function(filename) {
-	$scope.fade=0;
-	if ($scope.audio1){
-		$scope.audio1.pause();
+	try{
+		$scope.musicNode.stop();
+	} catch(error){
+		console.log(error);
 	}
-	if ($scope.audio2){
-		$scope.audio2.pause();
-	}
-	var req = new XMLHttpRequest();
-	req.open('GET', 'http://localhost:8080/'+root+filename+'.ogg', true);
-	req.responseType = 'arraybuffer';
-
-	req.onload = function() {
-		var metadata = AudioMetadata.ogg(req.response);
+	$http.get('http://localhost:8080/'+root+filename,{responseType:'arraybuffer'}).then(function(response){
+		var metadata = AudioMetadata.ogg(response.data);
 		var loopStart = metadata.loopstart;
-		var bufferPart = req.response.slice(40, 48);
+		var bufferPart = response.data.slice(40, 48);
 		var bufferView = new Uint32Array(bufferPart);
 		var samplerate = bufferView[0];
 		var loopStartNum=parseFloat(loopStart)/samplerate;
 		if (!loopStartNum){loopStartNum=0;}
 		
-		$scope.audio2 = new Audio(root+filename+'.ogg');
-		$scope.audio2.volume=($scope.volume/100.0);
-		$scope.audio2.addEventListener('timeupdate', function() {
-			if ($scope.fade>0){
-				$scope.fade++;
-			}
-			this.volume=Math.max(0,(($scope.volume-$scope.fade*5)/100.0));
-			if (this.currentTime>this.duration-0.1){
-				this.pause();
-				this.currentTime=loopStartNum;
-				$scope.audio1.play();
-			}
-		}, false);
 		
-		$scope.audio1 = new Audio(root+filename+'.ogg');
-		$scope.audio1.volume=($scope.volume/100.0);
-		$scope.audio1.addEventListener('timeupdate', function() {
-			if ($scope.fade>0){
-				$scope.fade++;
-			}
-			this.volume=Math.max(0,(($scope.volume-$scope.fade*5)/100.0));
-			if (this.currentTime>4 && this.currentTime<5){
-				//need this to set the initial time of audio2
-				$scope.audio2.currentTime=loopStartNum;
-			}
-			if (this.currentTime>this.duration-0.1){
-				this.pause();
-				this.currentTime=loopStartNum;
-				$scope.audio2.play();
-			}
-		}, false);
-		$scope.audio1.play();
-	};
-	req.send(null);
+		$scope.musicNode = context.createBufferSource();
+		context.decodeAudioData(response.data,function(buffer){
+			$scope.musicGain = context.createGain();
+			$scope.musicGain.gain.linearRampToValueAtTime(1,context.currentTime);
+			$scope.musicNode.buffer=buffer;
+			$scope.musicNode.loop=true;
+			$scope.musicNode.connect($scope.musicGain);
+			$scope.musicGain.connect(context.destination);
+			$scope.musicNode.start(0);
+			$scope.musicNode.loopStart=loopStartNum;
+			$scope.musicNode.loopEnd=buffer.duration+4;//make it longer than the length
+		});
+	});
 }
 
 //schema for an environment setting
@@ -201,7 +179,8 @@ $scope.loadEnvironment=function(schema){
 					{
 						source:source,
 						gain:gainNode,
-						volume:sound.volume
+						volume:sound.volume,
+						loop:sound
 					}
 				);
 				gainNode.gain.linearRampToValueAtTime(0.0,context.currentTime);
@@ -259,6 +238,8 @@ $scope.environments=[];
 $scope.newEnvironment=function(){
 	let newEnvironment = {
 		name:"New Environment",
+		music:{
+		},
 		loops:[],
 		oneShots:[]
 	};
@@ -271,29 +252,14 @@ $scope.renameEnvironment = function(env,newName){
 	env.name=newName;
 }
 
-$scope.addLoopToEnvironment=function(env, filename){
-	env.loops.push({
-		file:filename,
-		volume:0.5
-	});
-}
-
-$scope.addOneShotToEnvironment=function(env){
-	env.oneShots.push([{
-			files:[],
-			volumeMin: 0.5,
-			volumeMax: 1.0,
-			intervalMin: 20,
-			intervalMax: 30,
-	}]);
-}
-
-$scope.addOneShotToSoundGroup=function(oneShotList, filename){
-	oneShotList.files.push(filename);
-}
-
 $scope.updateLoopVolume=function(loop){
-	
+	for (let i=0; i<$scope.environmentAudioList.loops.length; i++){
+		let l=$scope.environmentAudioList.loops[i];
+		if (l.loop===loop){
+			l.gain.gain.linearRampToValueAtTime(loop.volume,context.currentTime);
+			return;
+		}
+	}
 }
 
 $scope.playSound=function(sound){
@@ -312,7 +278,7 @@ $scope.dropLoop=function(source,target){
 	let tgt = angular.element('#'+target);
 	let sfx = src.scope().loop;
 	$scope.selectedEnvironment.loops.push({
-		file:[loop.filename],
+		file:[sfx.filename],
 		volume: 0.5,
 	});
 	$scope.$apply();
@@ -341,6 +307,29 @@ $scope.dropSubSfx=function(source,target){
 	tgt.scope().soundGroup.files.push(sfx.filename);
 	tgt.scope().$apply();	
 	$scope.loadEnvironment($scope.selectedEnvironment);
+}
+
+$scope.dropMusic=function(source,target){
+	let src = angular.element('#'+source);
+	let tgt = angular.element('#'+target);
+	let s = src.scope();
+	if (s.music){
+		$scope.selectedEnvironment.music=
+			{
+			filename:s.music.filename,
+			name:s.music.name,
+			volume:1
+			};
+	}
+	
+	tgt.scope().$apply();
+	$scope.loadMusic(s.music.filename);
+}
+
+$scope.updateMusicVolume=function(vol){
+	if ($scope.musicGain){
+		$scope.musicGain.gain.linearRampToValueAtTime(vol,0);
+	}
 }
 
 }]);

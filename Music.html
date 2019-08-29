@@ -67,6 +67,7 @@
 	flex: 2;
 }
 
+/*
 .slider:hover {
     opacity: 1;
 }
@@ -88,6 +89,7 @@
     background: #4CAF50;
     cursor: pointer;
 }
+*/
 .dropbox {
     padding: 10px;
     border: 1px solid black;
@@ -122,6 +124,38 @@
 	flex: 2;
 }
 
+.slider {
+  position: relative;
+  text-align: left;
+  border: 1px solid gray;
+  height: 0.6em;
+}
+
+
+.slider .handle {
+	position: absolute;
+    z-index: 2;
+    width: 1.2em;
+    height: 1.2em;
+    background-color: #ffffff;
+    border-radius: 50px;
+}
+
+.handle {
+  top: -0.3em;
+  margin-left: -0.6em;
+}
+
+.slider .range {
+	position: absolute;
+    z-index: 1;
+    display: block;
+    font-size: .7em;
+    background-color: #00a200;
+    top: 0;
+    height: 100%;
+}
+
 .header {
     font-size: 24px;
     text-align: center;
@@ -137,6 +171,8 @@ div[ng-drop-target]{
 	background-color: rgba(255,255,255,0);
 	transition: 0.3s ease all;
 	position: absolute;
+    margin: -10px 0 0 -10px;
+	pointer-events:none;
 }
 
 div.drop-over>.overlay{
@@ -185,6 +221,11 @@ div.sidePalette>div.title{
 	background-color:#a0a0a0;
 	color: black;
 }
+
+div.column{
+	vertical-align: top;
+	margin: 0px 10px;
+}
 </style>
 <!--
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
@@ -202,140 +243,92 @@ div.sidePalette>div.title{
 <div ng-app="myApp">
 <div ng-controller="MyController" ng-cloak>
 
-<div style="margin-top:-8px;">
-<span class="tab" ng-click="tab='music'" ng-class="{'activetab':tab=='music'}">Music</span>
-<span class="tab" ng-click="tab='sfx'" ng-class="{'activetab':tab=='sfx'}">SFX</span>
-<span class="tab" ng-click="tab='environments'" ng-class="{'activetab':tab=='environments'}">Environments</span>
-</div>
-
-
-<div ng-show="tab==='music'">
-	<table style="width:100%;"><tr>
-	<td width="25%" style="vertical-align:top;">
-		<div class="leftmenu">
-			<div class="leftitem" ng-repeat="folder in musicFolders" ng-click="openSecondaryFolder('Music/'+folder)">
-				{{folder}}
+<div style="display:flex">
+	<div class="column" style="flex: 2;">
+		<div ng-repeat="env in environments" class="leftitem" ng-click="loadEnvironment(env)">{{env.name}}</div>
+	</div>
+	<div class="column" style="flex: 3;">
+		<div class="button" ng-click="newEnvironment()">New Environment</div>
+		<div ng-show="selectedEnvironment">
+			<div>
+				<input type="text" ng-model="selectedEnvironment.name" placeholder="Name"/>
+			</div>
+			<div class="dropbox" ng-drop-target on-drop="dropMusic(source,target)">
+				<div class="overlay"></div>
+				<span class="borderheader">Music</span>
+				<div class="soundItem slider-row" ng-show="selectedEnvironment.music.name">
+					<span>{{selectedEnvironment.music.name}}</span>
+					<input type="range" min="0" max="1" step="0.01" value="0.5" class="slider" ng-model="selectedEnvironment.music.volume" ng-change="updateMusicVolume(selectedEnvironment.music.volume)">
+				</div>
+			</div>
+			<div class="dropbox" ng-drop-target on-drop="dropLoop(source,target)">
+				<div class="overlay"></div>
+				<span class="borderheader">Loops</span>
+				<div ng-repeat="loop in selectedEnvironment.loops" class="soundItem slider-row">
+					<span>{{loop.filename}}</span>
+					<input type="range" min="0" max="1" step="0.01" value="0.5" class="slider" ng-model="loop.volume" ng-change="updateLoopVolume(loop)">
+				</div>
+			</div>
+			<div class="dropbox" ng-drop-target on-drop="dropSfx(source,target)">
+				<div class="overlay"></div>
+				<span class="borderheader">SFX</span>
+				<div ng-repeat="soundGroup in selectedEnvironment.oneShots" class="soundGroup" >
+					<div class="slider-row">
+						<span>Interval: {{soundGroup.intervalMin}} - {{soundGroup.intervalMax}}</span>
+						<range-slider min='1' max='200' discrete value-min="soundGroup.intervalMin" value-max="soundGroup.intervalMax" />
+					</div>
+					<div class="slider-row">
+						<span>Volume</span>
+						<range-slider min='0' max='1' step='0.01' value-min="soundGroup.volumeMin" value-max="soundGroup.volumeMax" />
+					</div>
+					<div ng-drop-target on-drop="dropSubSfx(source,target)">
+						<div class="overlay"></div>
+						<div class="header">Files</div>
+						<div ng-repeat="file in soundGroup.files" class="soundItem">
+							<span>{{file}}</span>
+							<input type="range" min="0" max="100" value="50" class="slider" ng-model="loop.volume" ng-change="updateLoopVolume(loop)">
+						</div>
+					</div>
+				</div>
 			</div>
 		</div>
-	</td>
-	<td width="25%" style="vertical-align:top;">
-		<div class="secondmenu">
-			<div class="leftitem" ng-repeat="file in musicFiles" ng-click="loadMusic(primaryFolder+file)">
-				{{file}}
-			</div>
+	</div>
+
+	<div class="column" style="flex: 5;">
+		<input type="range" min="0" max="100" value="50" class="slider" ng-model="volume">
+		<br>
+		<div class="leftitem" ng-click="fade=1">Stop</div>
+		<br>
+		<br>		
+		<table style="width:100%;"><tr>
+			<td style="vertical-align:top;">
+				<div class="leftmenu">
+					<div class="leftitem" ng-repeat="folder in musicFolders" ng-click="openSecondaryFolder('Music/'+folder)">
+						{{folder}}
+					</div>
+				</div>
+			</td>
+			<td style="vertical-align:top;">
+				<div class="secondmenu">
+					<div class="leftitem" ng-repeat="music in musicFiles" ng-click="loadMusic(music.filename)" ng-draggable>
+						{{music.name}}
+					</div>
+				</div>
+			</td>
+			</tr>
+		</table>
+	</div>
+
+	<div class="column" style="flex: 5;">
+		<div class="sidepalette">
+			<div class="title">Loops</div>
+			<div ng-repeat="loop in loops" class="leftitem" ng-click="" ng-draggable>{{loop.name}}</div>
 		</div>
-	</td>
-	<td width="25%" style="vertical-align:top;">
-		
-	</td>
-	<td width="25%">
-		 <input type="range" min="0" max="100" value="50" class="slider" ng-model="volume">
-		 <br>
-		 <div class="leftitem" ng-click="fade=1">Stop</div>
-	</td>
-
-	</tr>
-	</table>
-</div>
-
-<div ng-show="tab==='sfx'">
-	<div>
-		<div class="">Master Volume</div>
-		<input type="range" min="0" max="100" value="50" class="slider" ng-model="sfxVolume">
+		<div class="sidepalette">
+			<div class="title">Sound Effects</div>
+			<div ng-repeat="sfx in oneShots" class="leftitem" ng-click="playSound(sfx.filename)" ng-draggable >{{sfx.name}}</div>
+		</div>
 	</div>
-	<div style="grid-template-columns: 20%">
-		<div ng-repeat="file in sfx" ng-attr-name="file.fullName" class="griditem"
-			ng-click="playSound(file)">{{file}}</div>
-	</div>
-</div>
-
-<div ng-show="tab==='environments'">
-<table style="width:100%">
-	<thead>
-		<tr>
-			<th>Environments</th>
-			<th>Data</th>
-			<th></th>
-		</tr>
-	</thead>
-	<tbody><tr>
-		<td style="width:200px;vertical-align:top;">
-			<div ng-repeat="env in environments" class="leftitem" ng-click="loadEnvironment(env)">{{env.name}}</div>
-		</td>
-		<td style="width:400px;vertical-align:top;">
-			<div class="button" ng-click="newEnvironment()">New Environmenr</div>
-			<div ng-show="selectedEnvironment">
-				<div>
-					<input type="text" ng-model="selectedEnvironment.name" placeholder="Name"/>
-				</div>
-				<div class="dropbox" ng-drop-target on-drop="dropMusic(source,target)">
-					<div class="overlay"></div>
-					<span class="borderheader">Music</span>
-					<div class="soundItem slider-row">
-						<span>{{env.music.name}}</span>
-						<input type="range" min="0" max="1" step="0.01" value="0.5" class="slider" ng-model="env.music.volume" ng-change="updateLoopVolume(loop)">
-					</div>
-				</div>
-				<div class="dropbox" ng-drop-target on-drop="dropLoop(source,target)">
-					<div class="overlay"></div>
-					<span class="borderheader">Loops</span>
-					<div ng-repeat="loop in selectedEnvironment.loops" class="soundItem slider-row">
-						<span>{{loop.name}}</span>
-						<input type="range" min="0" max="1" step="0.01" value="0.5" class="slider" ng-model="loop.volume" ng-change="updateLoopVolume(loop)">
-					</div>
-				</div>
-				<div class="dropbox" ng-drop-target on-drop="dropSfx(source,target)">
-					<div class="overlay"></div>
-					<span class="borderheader">SFX</span>
-					<div ng-repeat="soundGroup in selectedEnvironment.oneShots" class="soundGroup" >
-						<div class="slider-row">
-							<span>Min Interval: {{soundGroup.intervalMin}}</span>
-							<input type="range" min="1" max="200" value="20" class="slider" ng-model="soundGroup.intervalMin">
-						</div>
-						<div class="slider-row">
-							<span>Max Interval: {{soundGroup.intervalMax}}</span>
-							<input type="range" min="1" max="200" value="30" class="slider" ng-model="soundGroup.intervalMax">
-						</div>
-						<div class="slider-row">
-							<span>Min Volume</span>
-							<input type="range" min="0" max="1" step="0.01" value="0.5" class="slider" ng-model="soundGroup.volumeMin">
-						</div>
-						<div class="slider-row">
-							<span>Max Volume</span>
-							<input type="range" min="0" max="1" step="0.01" value="0.5" class="slider" ng-model="soundGroup.volumeMax">
-						</div>
-						<div ng-drop-target on-drop="dropSubSfx(source,target)">
-							<div class="overlay"></div>
-							<div class="header">Files</div>
-							<div ng-repeat="file in soundGroup.files" class="soundItem">
-								<span>{{file}}</span>
-								<input type="range" min="0" max="100" value="50" class="slider" ng-model="loop.volume" ng-change="updateLoopVolume(loop)">
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</td>
-
-
-		<td>
-			<div class="sidepalette">
-				<div class="title">Music List</div>
-				<div ng-repeat="mus in musicList" class="leftitem" ng-click="">{{mus}}</div>
-			</div>
-			<div class="sidepalette">
-				<div class="title">Loops</div>
-				<div ng-repeat="loop in loops" class="leftitem" ng-click="">{{loop.name}}</div>
-			</div>
-			<div class="sidepalette">
-				<div class="title">Sound Effects</div>
-				<div ng-repeat="sfx in oneShots" class="leftitem" ng-click="playSound(sfx.filename)" ng-draggable >{{sfx.name}}</div>
-			</div>
-		</td>
-
-	</tr>
-	</tbody>
-</table>
 </div>
 
 
