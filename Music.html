@@ -114,6 +114,7 @@
 .slider-row{
 	margin: 8px 0px;
 	display:flex;
+	padding-right:8px;
 }
 
 .slider-row span{
@@ -215,6 +216,13 @@ div.button:hover{
 
 }
 
+.soundName{
+	background-color:#ffdb77;
+	padding:4px;
+	border-radius:3px;
+	position:relative;
+}
+
 div.sidePalette>div.title{
 	font-size:24px;
 	text-align:center;
@@ -226,14 +234,34 @@ div.column{
 	vertical-align: top;
 	margin: 0px 10px;
 }
-.delete{
-	position:absolute;
-	right:5px;
-	top: 5px;
-	font-size: 24px;
-	color:red;
-	font-weight:bold;
+.delete {
+    font-size: 24px;
+    color: black;
+    font-weight: bold;
+    cursor: default;
+    position: absolute;
+    right: 5px;
+    top: 0px;
 }
+
+.sidepalette {
+    height: 45vh;
+    box-shadow: 0 0 3px 1px #191919;
+    background-color: #4a4a4a;
+}
+
+.sidepalette .title {
+    color: white;
+    font-size: 24px;
+    padding: 2px 10px;
+    background-color: black;
+}
+
+.scrollable{
+	overflow-y: auto;
+	max-height: calc(100% - 31px);
+}
+
 </style>
 <!--
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
@@ -253,10 +281,11 @@ div.column{
 
 <div style="display:flex">
 	<div class="column" style="flex: 2;">
+		<div class="button" ng-click="newEnvironment()">New Environment</div>
+		<div class="button" ng-click="saveEnvironments()">Save All</div>
 		<div ng-repeat="env in environments" class="leftitem" ng-click="loadEnvironment(env)">{{env.name}}</div>
 	</div>
-	<div class="column" style="flex: 3;">
-		<div class="button" ng-click="newEnvironment()">New Environment</div>
+	<div class="column" style="min-width:450px;">
 		<div ng-show="selectedEnvironment">
 			<div>
 				<input type="text" ng-model="selectedEnvironment.name" placeholder="Name"/>
@@ -273,7 +302,7 @@ div.column{
 				<div class="overlay"></div>
 				<span class="borderheader">Loops</span>
 				<div ng-repeat="loop in selectedEnvironment.loops" class="soundItem slider-row">
-					<span class="soundName">{{loop.filename}}
+					<span class="soundName">{{loop.name}}
 						<span class="delete" ng-click="deleteSfx(loop)">&times;</span>
 					</span>
 					<input type="range" min="0" max="1" step="0.01" value="0.5" class="slider" ng-model="loop.volume" ng-change="updateLoopVolume(loop)">
@@ -296,10 +325,10 @@ div.column{
 						<div class="overlay"></div>
 						<div class="header">Files</div>
 						<div ng-repeat="file in soundGroup.files" class="soundItem">
-							<span class="soundName">{{file}}
+							<span class="soundName">{{file.name}}
 								<span class="delete" ng-click="deleteSfx(file)">&times;</span>
 							</span>
-							<input type="range" min="0" max="100" value="50" class="slider" ng-model="loop.volume" ng-change="updateLoopVolume(loop)">
+							<input type="range" min="0" max="1" step="0.01" class="slider" ng-model="file.volume">
 						</div>
 					</div>
 				</div>
@@ -308,9 +337,9 @@ div.column{
 	</div>
 
 	<div class="column" style="flex: 5;">
-		<input type="range" min="0" max="100" value="50" class="slider" ng-model="volume">
+		<input type="range" min="0" max="1" step="0.01" ng-model="musicVolume" class="slider" ng-change="updateMusicVolume(musicVolume)">
 		<br>
-		<div class="leftitem" ng-click="fade=1">Stop</div>
+		<div class="leftitem" ng-click="stopMusic()">Stop</div>
 		<br>
 		<br>		
 		<table style="width:100%;"><tr>
@@ -333,13 +362,18 @@ div.column{
 	</div>
 
 	<div class="column" style="flex: 5;">
+		<div><input type="text" ng-model="paletteFilter" placeholder="Search"/></div>
 		<div class="sidepalette">
 			<div class="title">Loops</div>
-			<div ng-repeat="loop in loops" class="leftitem" ng-click="" ng-draggable>{{loop.name}}</div>
+			<div class="scrollable">
+				<div ng-repeat="loop in loops | filter:paletteFilter" class="leftitem" ng-click="" ng-draggable>{{loop.name}}</div>
+			</div>
 		</div>
 		<div class="sidepalette">
 			<div class="title">Sound Effects</div>
-			<div ng-repeat="sfx in oneShots" class="leftitem" ng-click="playSound(sfx.filename)" ng-draggable >{{sfx.name}}</div>
+			<div class="scrollable">
+				<div ng-repeat="sfx in oneShots | filter:paletteFilter" class="leftitem" ng-click="playSound(sfx.filename)" ng-draggable >{{sfx.name}}</div>
+			</div>
 		</div>
 	</div>
 </div>

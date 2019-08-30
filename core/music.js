@@ -68,7 +68,16 @@ $scope.openSecondaryFolder=function(rootPath){
 $scope.musicNode;
 $scope.musicGain;
 
+$scope.stopMusic=function(){
+	if ($scope.musicGain){
+		$scope.musicGain.gain.linearRampToValueAtTime(0,context.currentTime+2.0);
+	}
+};
+
 $scope.loadMusic=function(filename) {
+	if (!filename){
+		return;
+	}
 	try{
 		$scope.musicNode.stop();
 	} catch(error){
@@ -83,11 +92,10 @@ $scope.loadMusic=function(filename) {
 		var loopStartNum=parseFloat(loopStart)/samplerate;
 		if (!loopStartNum){loopStartNum=0;}
 		
-		
 		$scope.musicNode = context.createBufferSource();
 		context.decodeAudioData(response.data,function(buffer){
 			$scope.musicGain = context.createGain();
-			$scope.musicGain.gain.linearRampToValueAtTime(1,context.currentTime);
+			$scope.musicGain.gain.linearRampToValueAtTime($scope.musicVolume,context.currentTime);
 			$scope.musicNode.buffer=buffer;
 			$scope.musicNode.loop=true;
 			$scope.musicNode.connect($scope.musicGain);
@@ -95,24 +103,40 @@ $scope.loadMusic=function(filename) {
 			$scope.musicNode.start(0);
 			$scope.musicNode.loopStart=loopStartNum;
 			$scope.musicNode.loopEnd=buffer.duration+4;//make it longer than the length
+		},function(error){
+			console.error(error);
 		});
+	},function(error){
+		console.error(error);
 	});
 };
 
 
 
 //schema for an environment setting
+/*
 let schema = {
 	name:"New Environment",
+	music:{
+		name:"",
+		filename:"",
+		volume:1
+	}
 	loops:[
 		{
-			file:'',
+			files:[''],
 			volume:1
 		}
 	],
 	oneShots:[
 		{
-			files:[''],
+			files:[
+				{
+				filename:'',
+				name:''
+				volume:1
+				}
+			],
 			volumeMin: 0.5,
 			volumeMax: 1.0,
 			intervalMin: 35, //the min time in seconds to wait after one of the sounds finishes playing
@@ -120,7 +144,7 @@ let schema = {
 		}
 	]
 };
-
+*/
 $http.get('http://localhost:8080/'+root+"SFX/Loops/").then(function(response){
 	$scope.loops=[];
 	for (let filename of response.data){
@@ -205,7 +229,7 @@ $scope.loadEnvironment=function(schema){
 		gainNode.connect($scope.overallGain);
 		let soundGroup = {
 				buffers:[],
-				gain:gainNode,
+				gain:gainNode
 			};
 		let playIt = function(){
 			if (soundGroup.buffers.length===0)
@@ -213,6 +237,7 @@ $scope.loadEnvironment=function(schema){
 			let index = Math.floor(Math.random()*soundGroup.buffers.length);
 			let seconds = sound.intervalMin + Math.random()*(sound.intervalMax - sound.intervalMin);
 			let volume = sound.volumeMin+(Math.random()*(sound.volumeMax-sound.volumeMin));
+			volume = volume * sound.files[index].volume;//mix with individual sound volume
 			let source = context.createBufferSource();
 			source.buffer=soundGroup.buffers[index];
 			source.connect(gainNode);
@@ -224,26 +249,32 @@ $scope.loadEnvironment=function(schema){
 		$scope.environmentAudioList.oneShots.push(soundGroup);
 		//load the buffers for this sound group
 		for (let file of sound.files){
-			$http.get('http://localhost:8080/'+root+"SFX/OneShots/"+file,{responseType:'arraybuffer'}).then(function(response){
+			$http.get('http://localhost:8080/'+root+"SFX/OneShots/"+file.file,{responseType:'arraybuffer'}).then(function(response){
 				context.decodeAudioData(response.data,function(buffer){
 					soundGroup.buffers.push(buffer);
 				});
 			});
 		}
 	}
+	$scope.loadMusic(schema.music.filename);
+	$scope.updateMusicVolume(schema.music.volume);
+	$scope.selectedEnvironment=schema;
 }
 
 $scope.environments=[];
 
 function loadEnvironmentFile(filename){
-	$http.get('http://localhost:8080/resources/environments/'+filename).then(function(response){
-		console.log(response.data);
-		//$scope.environments.push(response.data);
+	$http.get('http://localhost:8080/resources/Environments/'+filename).then(function(response){
+		//console.log(response.data);
+		delete response.data.$$hashKey;
+		$scope.environments.push(response.data);
+	},function(error){
+		console.log(error);
 	});
 }
 
 //load saved environments
-$http.get('http://localhost:8080/resources/environments').then(function(response){
+$http.get('http://localhost:8080/resources/Environments').then(function(response){
 	for (let filename of response.data){
 		if (filename.endsWith('.json')){
 			loadEnvironmentFile(filename);
@@ -256,7 +287,7 @@ $http.get('http://localhost:8080/resources/environments').then(function(response
 
 $scope.saveEnvironments = function(){
 	for (let env of $scope.environments){
-		$http.post('http://localhost:8080/resources/environments/' + env.name + ".json", JSON.stringify(env))
+		$http.post('http://localhost:8080/resources/Environments/' + env.name + ".json", JSON.stringify(env))
 		.then(function(response){
 			console.log("Saved Environment " + env.name);
 		},function(error){
@@ -310,6 +341,7 @@ $scope.dropLoop=function(source,target){
 	let sfx = src.scope().loop;
 	$scope.selectedEnvironment.loops.push({
 		file:[sfx.filename],
+		name:sfx.name,
 		volume: 0.5,
 	});
 	$scope.$apply();
@@ -321,7 +353,13 @@ $scope.dropSfx=function(source,target){
 	let tgt = angular.element('#'+target);
 	let sfx = src.scope().sfx;
 	$scope.selectedEnvironment.oneShots.push({
-		files:[sfx.filename],
+		files:[
+			{
+			file:sfx.filename,
+			volume: 1,
+			name:sfx.name
+			}
+		],
 		volumeMin: 0.5,
 		volumeMax: 1.0,
 		intervalMin: 20,
@@ -335,7 +373,13 @@ $scope.dropSubSfx=function(source,target){
 	let src = angular.element('#'+source);
 	let tgt = angular.element('#'+target);
 	let sfx = src.scope().sfx;
-	tgt.scope().soundGroup.files.push(sfx.filename);
+	tgt.scope().soundGroup.files.push(
+		{
+		file: sfx.filename,
+		volume: 1,
+		name: sfx.name
+		}
+	);
 	tgt.scope().$apply();	
 	$scope.loadEnvironment($scope.selectedEnvironment);
 }
@@ -359,21 +403,23 @@ $scope.dropMusic=function(source,target){
 
 $scope.updateMusicVolume=function(vol){
 	if ($scope.musicGain){
-		$scope.musicGain.gain.linearRampToValueAtTime(vol,0);
+		$scope.musicGain.gain.linearRampToValueAtTime(vol,context.currentTime+0.2);
 	}
 }
 
 //this works for sfx groups, sfx files, and loops
-$scope.deleteSfx(sfx){
+$scope.deleteSfx=function(sfx){
 	for (let i=0;i< $scope.selectedEnvironment.oneShots.length;i++){
 		let sound=$scope.selectedEnvironment.oneShots[i];
 		if (sound===sfx){
 			$scope.selectedEnvironment.oneShots.splice(i,1);
+			$scope.loadEnvironment($scope.selectedEnvironment);
 			return;
 		}
 		for (let i=0;i<sound.files.length;i++){
 			if (sound.files[i]===sfx){
 				sound.files.splice(i,1);
+				$scope.loadEnvironment($scope.selectedEnvironment);
 				return;
 			}
 		}
@@ -382,10 +428,13 @@ $scope.deleteSfx(sfx){
 		let sound=$scope.selectedEnvironment.loops[i];
 		if (sound===sfx){
 			$scope.selectedEnvironment.loops.splice(i,1);
+			$scope.loadEnvironment($scope.selectedEnvironment);
 			return;
 		}
 	}
 	logger.error("Couldn't delete item: ",sfx);
 }
+
+$scope.newEnvironment();
 
 }]);
