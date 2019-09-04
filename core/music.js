@@ -76,6 +76,7 @@ $scope.stopMusic=function(){
 		stopMusicPromise = $timeout(function(){
 			$scope.musicNode.stop();
 		},2000);
+		return stopMusicPromise;
 	} else {
 		return Promise.resolve();
 	}
@@ -236,8 +237,7 @@ $scope.loadEnvironment=function(schema){
 		}
 	}
 	$scope.selectedEnvironment=schema;
-	$scope.stopMusic();
-	stopMusicPromise.then(function(){
+	$scope.stopMusic().then(function(){
 		$scope.loadMusic(schema.music.filename);
 		$scope.updateMusicVolume(schema.music.volume);
 	});
