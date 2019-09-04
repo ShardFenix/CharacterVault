@@ -52,10 +52,12 @@ function handleGet(request, response){
             // return a list of filenames/foldernames in this folder
 			let files=[];
 			fs.readdirSync(filename, {withFileTypes:true}).forEach(file => {
-				if (file.isDirectory()){
-					files.push(decodeURI(file.name)+"/");
-				} else {
-					files.push(decodeURI(file.name));
+				if (typeof file.isDirectory === 'function'){
+					if (file.isDirectory()){
+						files.push(decodeURI(file.name)+"/");
+					} else {
+						files.push(decodeURI(file.name));
+					}
 				}
 			});
             var headers = {'Access-Control-Allow-Origin':'*'};

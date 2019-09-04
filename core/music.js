@@ -76,6 +76,8 @@ $scope.stopMusic=function(){
 		stopMusicPromise = $timeout(function(){
 			$scope.musicNode.stop();
 		},2000);
+	} else {
+		return Promise.resolve();
 	}
 };
 
@@ -83,9 +85,9 @@ $scope.loadMusic=function(filename) {
 	if (!filename){
 		return;
 	}
-	if (stopMusicPromise){
-		$timeout.cancel(stopMusicPromise);
-	}
+//	if (stopMusicPromise){
+//		$timeout.cancel(stopMusicPromise);
+//	}
 	if ($scope.musicNode){
 		$scope.musicNode.stop();
 	}
@@ -108,7 +110,8 @@ $scope.loadMusic=function(filename) {
 			$scope.musicGain.connect(context.destination);
 			$scope.musicNode.start(0);
 			$scope.musicNode.loopStart=loopStartNum;
-			$scope.musicNode.loopEnd=buffer.duration+4;//make it longer than the length
+			//loopEnd is required for loopStart to work properly in chrome
+			$scope.musicNode.loopEnd=buffer.duration+4;
 		},function(error){
 			console.error(error);
 		});
@@ -153,8 +156,6 @@ $scope.overallGain.gain.value=1;
 $scope.overallGain.connect(context.destination);
 
 $scope.loadEnvironment=function(schema){
-	//TODO: Make the old music fade out before loading the new one.
-	$scope.stopMusic();
 	//move existing environment to temp storage while it fades out
 	let oldEnvironmentAudioList=$scope.environmentAudioList;
 	$scope.environmentAudioList={loops:[],oneShots:[]};
@@ -234,9 +235,12 @@ $scope.loadEnvironment=function(schema){
 			});
 		}
 	}
-	$scope.loadMusic(schema.music.filename);
-	$scope.updateMusicVolume(schema.music.volume);
 	$scope.selectedEnvironment=schema;
+	$scope.stopMusic();
+	stopMusicPromise.then(function(){
+		$scope.loadMusic(schema.music.filename);
+		$scope.updateMusicVolume(schema.music.volume);
+	});
 }
 
 $scope.environments=[];
