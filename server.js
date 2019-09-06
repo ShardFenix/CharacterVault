@@ -9,9 +9,12 @@ var fs = require('fs');
 var port = 8080;
 var root = process.cwd();
 // Colors for CLI output
-var WHT = '\033[39m';
+var WHT = "\033[0m";
 var RED = '\033[91m';
-var GRN = '\033[32m';
+var GRN = '\033[92m';
+var UND = "\033[4m";
+var BLU = "\033[96m";
+var HIL = "\033[1m";
 
 var args={};
 for (let i=2;i<process.argv.length;i++){
@@ -48,7 +51,7 @@ function handleGet(request, response){
             filename = path.join(process.cwd(), '/404.html');
         } else if (fs.statSync(filename).isDirectory()) {
             // Output a green line to the console explaining what folder was requested
-            console.log(GRN + 'FLDR: ' + WHT + filename);
+            console.log(BLU + 'FOLDER: ' + WHT + filename);
             // return a list of filenames/foldernames in this folder
 			let files=[];
 			fs.readdirSync(filename, {withFileTypes:true}).forEach(file => {
@@ -57,6 +60,15 @@ function handleGet(request, response){
 						files.push(decodeURI(file.name)+"/");
 					} else {
 						files.push(decodeURI(file.name));
+					}
+				} else {
+					//older versions of node will use this
+					if (file.includes('.')){
+						//file
+						files.push(decodeURI(file));
+					} else {
+						//directory
+						files.push(decodeURI(file)+'/');
 					}
 				}
 			});
@@ -107,7 +119,7 @@ function handlePost(request, response){
     // Check if the requested file exists
     fs.exists(filename, function (exists) {
 		if (request.method==='PUT' && exists){
-			console.log(RED+'ERROR: '+ WHT + 'File already exists. To overwrite a file, use OST instead.');
+			console.log(RED+'ERROR: '+ WHT + 'File already exists. To overwrite a file, use POST instead.');
 			var headers = {};
 			headers['Access-Control-Allow-Origin']='*';
 			response.writeHead(500,headers);
@@ -123,7 +135,7 @@ function handlePost(request, response){
 				response.end();
 				return;
 			} catch (err){
-				console.log(err);
+				console.log(RED + err + WHT);
 			}		
 		});
     });
@@ -131,7 +143,7 @@ function handlePost(request, response){
 
 // Create the server
 http.createServer(function (request, response) {
-	console.log(request.method + ' ' + request.url);
+	console.log(HIL + request.method + ' ' + request.url + WHT);
     if (request.method==='GET'){
 		handleGet(request,response);
 	} else if (request.method==='OPTIONS') {
