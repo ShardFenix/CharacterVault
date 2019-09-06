@@ -115,14 +115,21 @@ window.classes.push(
 							addToInventory(char,findItem("Leather Armor"));
 							addToInventory(char,findItem("Dagger"));
 						}
-					},
-					helper.learnInstrument,
-					helper.learnInstrument,
-					helper.learnInstrument,
-					helper.learnSkillProficiency,
-					helper.learnSkillProficiency,
-					helper.learnSkillProficiency,
-					{
+					},{
+						limit:3,
+						choicePrompt:"Choose three instrument proficiencies",
+						choices:[listNonProficientInstruments],
+						action:function(char,derived,choice){
+							char.proficiencies.upush(choice);
+						}
+					},{
+						limit:3,
+						choicePrompt:"Choose three skill proficiencies",
+						choices:[listNonProficientSkills],
+						action:function(char,derived,choice){
+							addProficiency(char,choice);
+						}
+					},{
 						choicePrompt:"Choose a weapon to start with",
 						choices:[listSimpleWeapons,findItem("Longsword"),findItem("Rapier")],
 						action:function(char,derived,choice){
@@ -134,13 +141,15 @@ window.classes.push(
 						action:function(char,derived,choice){
 							openPack(char,choice);
 						}
+					},{
+						limit:2,
+						choicePrompt:"Choose two cantrips",
+						choices:[listUnknownBardCantrips],
+						action:function(char,derived,choice,scope){
+							addSpell(char,choice,scope.chosenClassName);
+						}
 					},
-					helper.chooseBardCantrip,
-					helper.chooseBardCantrip,
-					helper.chooseSpell,
-					helper.chooseSpell,
-					helper.chooseSpell,
-					helper.chooseSpell
+					helper.chooseSpell4
 				]
 			},	{ // 1
 				summary:[
@@ -149,12 +158,15 @@ window.classes.push(
 				],
 				updates:[
 					helper.hitDice8,
-					helper.chooseBardCantrip,
-					helper.chooseBardCantrip,
-					helper.chooseSpell,
-					helper.chooseSpell,
-					helper.chooseSpell,
-					helper.chooseSpell
+					{
+						limit:2,
+						choicePrompt:"Choose two cantrips",
+						choices:[listUnknownBardCantrips],
+						action:function(char,derived,choice,scope){
+							addSpell(char,choice,scope.chosenClassName);
+						}
+					},
+					helper.chooseSpell4
 				]
 			}, { // 2
 				summary:[
@@ -220,8 +232,7 @@ window.classes.push(
 					helper.hitDice8,
 					helper.attributeOrFeat,
 					helper.chooseFeat,
-					helper.increaseAttribute,
-					helper.increaseAttribute,
+					helper.asi,
 					helper.chooseBardCantrip,
 					helper.chooseSpell,
 					{
@@ -317,8 +328,7 @@ window.classes.push(
 					helper.hitDice8,
 					helper.attributeOrFeat,
 					helper.chooseFeat,
-					helper.increaseAttribute,
-					helper.increaseAttribute,
+					helper.asi,
 					helper.chooseSpell,
 					{
 						"choicePrompt":"Do you want to replace one of your known Bard spells?",
@@ -371,21 +381,14 @@ window.classes.push(
 					helper.chooseExpertise,
 					helper.chooseExpertise,
 					{
-						choicePrompt:"Learn a spell from any class:",
-						choices:[listAllUnknownSpells],
-						action:function(char,derived,choice){
-							addSpell(char,choice,'Bard');
-						}
-					},{
-						choicePrompt:"Learn a spell from any class:",
+						choicePrompt:"Learn two spells from any class:",
 						choices:[listAllUnknownSpells],
 						action:function(char,derived,choice){
 							addSpell(char,choice,'Bard');
 						}
 					},
 					helper.chooseBardCantrip,
-					helper.chooseSpell,
-					helper.chooseSpell,
+					helper.chooseSpell2,
 					{
 						"choicePrompt":"Do you want to replace one of your known Bard spells?",
 						"choices":["Yes","No"],
@@ -422,8 +425,7 @@ window.classes.push(
 					helper.hitDice8,
 					helper.attributeOrFeat,
 					helper.chooseFeat,
-					helper.increaseAttribute,
-					helper.increaseAttribute,
+					helper.asi,
 					{
 						"choicePrompt":"Do you want to replace one of your known Bard spells?",
 						"choices":["Yes","No"],
@@ -461,8 +463,7 @@ window.classes.push(
 				],
 				"updates":[
 					helper.hitDice8,
-					helper.chooseSpell,
-					helper.chooseSpell,
+					helper.chooseSpell2,
 					{
 						"choicePrompt":"Do you want to replace one of your known Bard spells?",
 						"choices":["Yes","No"],
@@ -507,8 +508,7 @@ window.classes.push(
 					helper.hitDice8,
 					helper.attributeOrFeat,
 					helper.chooseFeat,
-					helper.increaseAttribute,
-					helper.increaseAttribute,
+					helper.asi,
 					{
 						"choicePrompt":"Do you want to replace one of your known Bard spells?",
 						"choices":["Yes","No"],
@@ -548,20 +548,13 @@ window.classes.push(
 				"updates":[
 					helper.hitDice8,
 					{
-						choicePrompt:"Learn a spell from any class:",
-						choices:[listAllUnknownSpells],
-						action:function(char,derived,choice){
-							addSpell(char,choice,'Bard');
-						}
-					},{
-						choicePrompt:"Learn a spell from any class:",
+						choicePrompt:"Learn two spells from any class:",
 						choices:[listAllUnknownSpells],
 						action:function(char,derived,choice){
 							addSpell(char,choice,'Bard');
 						}
 					},
-					helper.chooseSpell,
-					helper.chooseSpell,
+					helper.chooseSpell2,
 					{
 						"choicePrompt":"Do you want to replace one of your known Bard spells?",
 						"choices":["Yes","No"],
@@ -579,8 +572,7 @@ window.classes.push(
 					helper.hitDice8,
 					helper.attributeOrFeat,
 					helper.chooseFeat,
-					helper.increaseAttribute,
-					helper.increaseAttribute,
+					helper.asi,
 					{
 						"choicePrompt":"Do you want to replace one of your known Bard spells?",
 						"choices":["Yes","No"],
@@ -663,13 +655,8 @@ window.subclasses.push(
 			{//6
 				updates:[
 					{
-						choicePrompt:"Learn a spell from any class:",
-						choices:[listAllUnknownSpells],
-						action:function(char,derived,choice){
-							addSpell(char,choice,'Bard');
-						}
-					},{
-						choicePrompt:"Learn a spell from any class:",
+						limit:2,
+						choicePrompt:"Learn two spells from any class:",
 						choices:[listAllUnknownSpells],
 						action:function(char,derived,choice){
 							addSpell(char,choice,'Bard');

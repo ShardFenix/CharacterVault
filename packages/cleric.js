@@ -158,6 +158,7 @@ window.classes.push(
 							addToInventory(char,findItem(choice));
 						}
 					},{
+						limit:2,
 						choicePrompt:"Choose two skill proficiencies:",
 						choices:[function(char){
 							let result=[];
@@ -174,26 +175,13 @@ window.classes.push(
 							addProficiency(char,choice);
 						}
 					},{
-						choicePrompt:"Choose two skill proficiencies:",
-						choices:[function(char){
-							let result=[];
-							for (let skill of char.skills){
-								if (skill.mult===0){
-									if (["History","Religion","Insight","Medicine","Persuasion"].indexOf(skill.name)!=-1){
-										result.push(skill.name);
-									}
-								}
-							}
-							return result;
-						}],
-						action:function(char,derived,choice){
-							addProficiency(char,choice);
+						limit:3,
+						choicePrompt:"Choose three cantrips",
+						choices:[listUnknownClericCantrips],
+						action:function(char,derived,choice,scope){
+							addSpell(char,choice,scope.chosenClassName);
 						}
-					},
-					helper.chooseClericCantrip,
-					helper.chooseClericCantrip,
-					helper.chooseClericCantrip,
-					{
+					},{
 						choicePrompt:"Choose a Divine Domain:",
 						choices:[listSpecializations],
 						action:function(char,derived,choice){
@@ -239,8 +227,7 @@ window.classes.push(
 					helper.hitDice8,
 					helper.attributeOrFeat,
 					helper.chooseFeat,
-					helper.increaseAttribute,
-					helper.increaseAttribute
+					helper.asi
 				]
 			},{//5
 				"updates":[
@@ -276,8 +263,7 @@ window.classes.push(
 					},
 					helper.attributeOrFeat,
 					helper.chooseFeat,
-					helper.increaseAttribute,
-					helper.increaseAttribute
+					helper.asi
 				]
 			},{//9
 				"updates":[
@@ -313,8 +299,7 @@ window.classes.push(
 					helper.hitDice8,
 					helper.attributeOrFeat,
 					helper.chooseFeat,
-					helper.increaseAttribute,
-					helper.increaseAttribute
+					helper.asi
 				]
 			},{//13
 				"updates":[
@@ -342,8 +327,7 @@ window.classes.push(
 					helper.hitDice8,
 					helper.attributeOrFeat,
 					helper.chooseFeat,
-					helper.increaseAttribute,
-					helper.increaseAttribute
+					helper.asi
 				]
 			},{//17
 				"updates":[
@@ -367,8 +351,7 @@ window.classes.push(
 					helper.hitDice8,
 					helper.attributeOrFeat,
 					helper.chooseFeat,
-					helper.increaseAttribute,
-					helper.increaseAttribute
+					helper.asi
 				]
 			},{//20
 				"updates":[
@@ -601,6 +584,7 @@ window.subclasses.push(
 						choices:[],
 						action:function(char){
 							addSpell(char,"Destructive Wave","Cleric");
+							addSpell(char,"Insect Plague","Cleric");
 							getPlayerSpell(char,"Destructive Wave","Cleric").alwaysPrepared=true;
 							getPlayerSpell(char,"Insect Plague","Cleric").alwaysPrepared=true;
 						}

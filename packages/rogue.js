@@ -83,8 +83,8 @@ window.classes.push(
 				],
 				"updates":[
 					{
-						"choices":[],
-						"action":function(char,derived,choice,$scope){
+						choices:[],
+						action:function(char,derived,choice,$scope){
 							char.maxHp=8;
 							char.proficiencies.push("Light Armor");
 							char.proficiencies.push("Simple Weapons");
@@ -123,8 +123,9 @@ window.classes.push(
 							openPack(char,choice);
 						}
 					},{
-						"choicePrompt":"Choose four skill proficiencies:",
-						"choices":[function(char){
+						limit:4,
+						choicePrompt:"Choose four skill proficiencies:",
+						choices:[function(char){
 							let result=[];
 							for (let skill of char.skills){
 								if (skill.mult===0){
@@ -135,55 +136,7 @@ window.classes.push(
 							}
 							return result;
 						}],
-						"action":function(char,derived,choice){
-							addProficiency(char,choice);
-						}
-					},{
-						"choicePrompt":"Choose four skill proficiencies:",
-						"choices":[function(char){
-							let result=[];
-							for (let skill of char.skills){
-								if (skill.mult===0){
-									if (["Acrobatics","Athletics","Deception","Insight","Intimidation","Investigation","Perception","Performance","Persuasion","Sleight of Hand","Stealth"].indexOf(skill.name)!=-1){
-										result.push(skill.name);
-									}
-								}
-							}
-							return result;
-						}],
-						"action":function(char,derived,choice){
-							addProficiency(char,choice);
-						}
-					},{
-						"choicePrompt":"Choose four skill proficiencies:",
-						"choices":[function(char){
-							let result=[];
-							for (let skill of char.skills){
-								if (skill.mult===0){
-									if (["Acrobatics","Athletics","Deception","Insight","Intimidation","Investigation","Perception","Performance","Persuasion","Sleight of Hand","Stealth"].indexOf(skill.name)!=-1){
-										result.push(skill.name);
-									}
-								}
-							}
-							return result;
-						}],
-						"action":function(char,derived,choice){
-							addProficiency(char,choice);
-						}
-					},{
-						"choicePrompt":"Choose four skill proficiencies:",
-						"choices":[function(char){
-							let result=[];
-							for (let skill of char.skills){
-								if (skill.mult===0){
-									if (["Acrobatics","Athletics","Deception","Insight","Intimidation","Investigation","Perception","Performance","Persuasion","Sleight of Hand","Stealth"].indexOf(skill.name)!=-1){
-										result.push(skill.name);
-									}
-								}
-							}
-							return result;
-						}],
-						"action":function(char,derived,choice){
+						action:function(char,derived,choice){
 							addProficiency(char,choice);
 						}
 					},
@@ -199,13 +152,18 @@ window.classes.push(
 					helper.hitDice8,
 					{
 						choicePrompt:"You gain the following",
-						"choices":[findPassive("Sneak Attack")],
-						"action":function(char,derived,choice){
+						choices:[findPassive("Sneak Attack")],
+						action:function(char,derived,choice){
 							addPassive(char,"Sneak Attack");
 						}
-					},
-					helper.chooseExpertise,
-					helper.chooseExpertise
+					},{
+						limit:2,
+						choicePrompt:"Choose two skill expertises (proficiency will be doubled for these skills):",
+						choices:[listProficientSkills],
+						action:function(char,derived,choice){
+							addExpertise(char,choice);
+						}
+					}
 				]
 			}, { // 2
 				"updates":[
@@ -213,8 +171,8 @@ window.classes.push(
 					{
 						summary:findPassive("Cunning Action"),
 						choicePrompt:"You gain the following",
-						"choices":[findPassive("Cunning Action")],
-						"action":function(char,derived,choice){
+						choices:[findPassive("Cunning Action")],
+						action:function(char,derived,choice){
 							addPassive(char,"Cunning Action");
 						}
 					}
@@ -236,8 +194,7 @@ window.classes.push(
 					helper.hitDice8,
 					helper.attributeOrFeat,
 					helper.chooseFeat,
-					helper.increaseAttribute,
-					helper.increaseAttribute
+					helper.asi
 				]
 			},{//5
 				"updates":[
@@ -245,8 +202,8 @@ window.classes.push(
 					{
 						summary:findPassive("Uncanny Dodge"),
 						choicePrompt:"You gain the following",
-						"choices":[findPassive("Uncanny Dodge")],
-						"action":function(char,derived){
+						choices:[findPassive("Uncanny Dodge")],
+						action:function(char,derived){
 							addPassive(char,"Uncanny Dodge");
 						}
 					}
@@ -257,8 +214,14 @@ window.classes.push(
 				],
 				"updates":[
 					helper.hitDice8,
-					helper.chooseExpertise,
-					helper.chooseExpertise,
+					{
+						limit:2,
+						choicePrompt:"Choose two skill expertises (proficiency will be doubled for these skills):",
+						choices:[listProficientSkills],
+						action:function(char,derived,choice){
+							addExpertise(char,choice);
+						}
+					}
 				]
 			},{//7
 				"updates":[
@@ -266,8 +229,8 @@ window.classes.push(
 					{
 						summary:findPassive("Evasion"),
 						choicePrompt:"You gain the following",
-						"choices":[findPassive("Evasion")],
-						"action":function(char,derived){
+						choices:[findPassive("Evasion")],
+						action:function(char,derived){
 							addPassive(char,"Evasion");
 						}
 					}
@@ -277,8 +240,7 @@ window.classes.push(
 					helper.hitDice8,
 					helper.attributeOrFeat,
 					helper.chooseFeat,
-					helper.increaseAttribute,
-					helper.increaseAttribute
+					helper.asi
 				]
 			},{//9
 				"updates":[
@@ -305,8 +267,7 @@ window.classes.push(
 					helper.hitDice8,
 					helper.attributeOrFeat,
 					helper.chooseFeat,
-					helper.increaseAttribute,
-					helper.increaseAttribute
+					helper.asi
 				]
 			},{//13
 				"updates":[
@@ -318,8 +279,8 @@ window.classes.push(
 					{
 						summary:findPassive("Blindsense"),
 						choicePrompt:"You gain the following",
-						"choices":[findPassive("Blindsense")],
-						"action":function(char){
+						choices:[findPassive("Blindsense")],
+						action:function(char){
 							addPassive(char,"Blindsense");
 						}
 					}
@@ -341,8 +302,7 @@ window.classes.push(
 					helper.hitDice8,
 					helper.attributeOrFeat,
 					helper.chooseFeat,
-					helper.increaseAttribute,
-					helper.increaseAttribute
+					helper.asi
 				]
 			},{//17
 				"updates":[
@@ -354,8 +314,8 @@ window.classes.push(
 					{
 						summary:findPassive("Elusive"),
 						choicePrompt:"You gain the following",
-						"choices":[findPassive("Elusive")],
-						"action":function(char){
+						choices:[findPassive("Elusive")],
+						action:function(char){
 							addPassive(char,"Elusive");
 						}
 					}
@@ -365,8 +325,7 @@ window.classes.push(
 					helper.hitDice8,
 					helper.attributeOrFeat,
 					helper.chooseFeat,
-					helper.increaseAttribute,
-					helper.increaseAttribute
+					helper.asi
 				]
 			},{//20
 				"updates":[
@@ -374,8 +333,8 @@ window.classes.push(
 					{
 						summary:findAbility("Stroke of Luck"),
 						choicePrompt:"You gain the following",
-						"choices":[],
-						"action":function(char){
+						choices:[],
+						action:function(char){
 							addAbility(char,"Stroke of Luck");
 						}
 					}

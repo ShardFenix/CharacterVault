@@ -106,22 +106,7 @@ window.classes.push(
 							openPack(choice);
 						}
 					},{
-						choicePrompt:"Choose two skill proficiencies:",
-						choices:[function(char){
-							let result=[];
-							for (let skill of char.skills){
-								if (skill.mult===0){
-									if (["Athletics","Insight","Medicine","Persuasion","Religion"].indexOf(skill.name)!=-1){
-										result.push(skill.name);
-									}
-								}
-							}
-							return result;
-						}],
-						action:function(char,derived,choice){
-							addProficiency(char,choice);
-						}
-					},{
+						limit:2,
 						choicePrompt:"Choose two skill proficiencies:",
 						choices:[function(char){
 							let result=[];
@@ -198,8 +183,7 @@ window.classes.push(
 					helper.hitDice10,
 					helper.attributeOrFeat,
 					helper.chooseFeat,
-					helper.increaseAttribute,
-					helper.increaseAttribute
+					helper.asi
 				]
 			},{//5
 				"updates":[
@@ -234,8 +218,7 @@ window.classes.push(
 					helper.hitDice8,
 					helper.attributeOrFeat,
 					helper.chooseFeat,
-					helper.increaseAttribute,
-					helper.increaseAttribute
+					helper.asi
 				]
 			},{//9
 				"updates":[
@@ -270,8 +253,7 @@ window.classes.push(
 					helper.hitDice10,
 					helper.attributeOrFeat,
 					helper.chooseFeat,
-					helper.increaseAttribute,
-					helper.increaseAttribute
+					helper.asi
 				]
 			},{//13
 				"updates":[
@@ -298,8 +280,7 @@ window.classes.push(
 					helper.hitDice8,
 					helper.attributeOrFeat,
 					helper.chooseFeat,
-					helper.increaseAttribute,
-					helper.increaseAttribute
+					helper.asi
 				]
 			},{//17
 				"updates":[
@@ -314,8 +295,7 @@ window.classes.push(
 					helper.hitDice8,
 					helper.attributeOrFeat,
 					helper.chooseFeat,
-					helper.increaseAttribute,
-					helper.increaseAttribute
+					helper.asi
 				]
 			},{//20
 				"updates":[

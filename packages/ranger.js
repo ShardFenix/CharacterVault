@@ -125,8 +125,8 @@ window.classes.push(
 				updates:[
 					{
 						choicePrompt:"You gain all of the following proficiencies:",
-						"choices":["Strength saves","Dexterity saves","Light Armor","Medium Armor","Simple Weapons","Martial Weapons","Shields"],
-						"action":function(char,derived,choice){
+						choices:["Strength saves","Dexterity saves","Light Armor","Medium Armor","Simple Weapons","Martial Weapons","Shields"],
+						action:function(char,derived,choice){
 							char.maxHp=10;
 							char.proficiencies.push("Light Armor");
 							char.proficiencies.push("Simple Weapons");
@@ -144,26 +144,27 @@ window.classes.push(
 							addToInventory(char,findItem("Arrow",20));
 						}
 					},{
-						"choicePrompt":"Choose a weapon to start with",
-						"choices":[listSimpleWeapons,findItem("Shortsword")],
-						"action":function(char,derived,choice){
+						choicePrompt:"Choose a weapon to start with",
+						choices:[listSimpleWeapons,findItem("Shortsword")],
+						action:function(char,derived,choice){
 							addToInventory(char,findItem(choice,2));
 						}
 					},{
-						"choicePrompt":"Choose a pack",
-						"choices":[findItem("Dungeoneer's Pack"),findItem("Explorer's Pack")],
-						"action":function(char,derived,choice){
+						choicePrompt:"Choose a pack",
+						choices:[findItem("Dungeoneer's Pack"),findItem("Explorer's Pack")],
+						action:function(char,derived,choice){
 							openPack(char,choice);
 						}
 					},{
-						"choicePrompt":"Choose starting armor",
-						"choices":[findItem("Scale Mail"),findItem("Leather Armor")],
-						"action":function(char,derived,choice){
+						choicePrompt:"Choose starting armor",
+						choices:[findItem("Scale Mail"),findItem("Leather Armor")],
+						action:function(char,derived,choice){
 							openPack(char,choice);
 						}
 					},{
-						"choicePrompt":"Choose two skill proficiencies:",
-						"choices":[function(char){
+						limit:2,
+						choicePrompt:"Choose two skill proficiencies:",
+						choices:[function(char){
 							let result=[];
 							for (let skill of char.skills){
 								if (skill.mult===0){
@@ -174,23 +175,7 @@ window.classes.push(
 							}
 							return result;
 						}],
-						"action":function(char,derived,choice){
-							addProficiency(char,choice);
-						}
-					},{
-						"choicePrompt":"Choose two skill proficiencies:",
-						"choices":[function(char){
-							let result=[];
-							for (let skill of char.skills){
-								if (skill.mult===0){
-									if (["Animal Handling","Athletics","Insight","Investigation","Nature","Perception","Stealth","Survival"].indexOf(skill.name)!=-1){
-										result.push(skill.name);
-									}
-								}
-							}
-							return result;
-						}],
-						"action":function(char,derived,choice){
+						action:function(char,derived,choice){
 							addProficiency(char,choice);
 						}
 					},
@@ -207,25 +192,24 @@ window.classes.push(
 				"updates":[
 					helper.hitDice10,
 					helper.chooseFightingStyle,
-					helper.chooseSpell,
-					helper.chooseSpell
+					helper.chooseSpell2
 				]
 			}, { // 3
 				"updates":[
 					helper.hitDice10,
 					{
-						"choicePrompt":"Choose a Ranger Archetype:",
-						"choices":[listSpecializations],
-						"action":function(char,derived,choice){
+						choicePrompt:"Choose a Ranger Archetype:",
+						choices:[listSpecializations],
+						action:function(char,derived,choice){
 							addSubclass(char,"Ranger",choice);
 							addPassive(char,"Primeval Awareness");
 						}
 					},
 					helper.chooseSpell,
 					{
-						"choicePrompt":"Do you want to replace one of your known Ranger spells?",
-						"choices":["Yes","No"],
-						"action":function(char,derived,choice,scope){
+						choicePrompt:"Do you want to replace one of your known Ranger spells?",
+						choices:["Yes","No"],
+						action:function(char,derived,choice,scope){
 							if (choice==="No"){
 								scope.updateStep+=2;//exit this level up
 							}
@@ -239,8 +223,7 @@ window.classes.push(
 					helper.hitDice10,
 					helper.attributeOrFeat,
 					helper.chooseFeat,
-					helper.increaseAttribute,
-					helper.increaseAttribute
+					helper.asi
 				]
 			},{//5
 				"updates":[
@@ -254,9 +237,9 @@ window.classes.push(
 					},
 					helper.chooseSpell,
 					{
-						"choicePrompt":"Do you want to replace one of your known Ranger spells?",
-						"choices":["Yes","No"],
-						"action":function(char,derived,choice,scope){
+						choicePrompt:"Do you want to replace one of your known Ranger spells?",
+						choices:["Yes","No"],
+						action:function(char,derived,choice,scope){
 							if (choice==="No"){
 								scope.updateStep+=2;//exit this level up
 							}
@@ -276,9 +259,9 @@ window.classes.push(
 					helper.hitDice10,
 					helper.chooseSpell,
 					{
-						"choicePrompt":"Do you want to replace one of your known Ranger spells?",
-						"choices":["Yes","No"],
-						"action":function(char,derived,choice,scope){
+						choicePrompt:"Do you want to replace one of your known Ranger spells?",
+						choices:["Yes","No"],
+						action:function(char,derived,choice,scope){
 							if (choice==="No"){
 								scope.updateStep+=2;//exit this level up
 							}
@@ -292,8 +275,7 @@ window.classes.push(
 					helper.hitDice10,
 					helper.attributeOrFeat,
 					helper.chooseFeat,
-					helper.increaseAttribute,
-					helper.increaseAttribute,
+					helper.asi,
 					{
 						choicePrompt:"You gain the following:",
 						choices:[findPassive("Land's Stride")],
@@ -307,9 +289,9 @@ window.classes.push(
 					helper.hitDice10,
 					helper.chooseSpell,
 					{
-						"choicePrompt":"Do you want to replace one of your known Ranger spells?",
-						"choices":["Yes","No"],
-						"action":function(char,derived,choice,scope){
+						choicePrompt:"Do you want to replace one of your known Ranger spells?",
+						choices:["Yes","No"],
+						action:function(char,derived,choice,scope){
 							if (choice==="No"){
 								scope.updateStep+=2;//exit this level up
 							}
@@ -324,7 +306,7 @@ window.classes.push(
 					{
 						choicePrompt:"You gain the following:",
 						choices:[findPassive("Hide in Plain Sight")],
-						"action":function(char){
+						action:function(char){
 							addPassive(char,"Hide in Plain Sight");
 						}
 					},
@@ -335,9 +317,9 @@ window.classes.push(
 					helper.hitDice10,
 					helper.chooseSpell,
 					{
-						"choicePrompt":"Do you want to replace one of your known Ranger spells?",
-						"choices":["Yes","No"],
-						"action":function(char,derived,choice,scope){
+						choicePrompt:"Do you want to replace one of your known Ranger spells?",
+						choices:["Yes","No"],
+						action:function(char,derived,choice,scope){
 							if (choice==="No"){
 								scope.updateStep+=2;//exit this level up
 							}
@@ -351,8 +333,7 @@ window.classes.push(
 					helper.hitDice10,
 					helper.attributeOrFeat,
 					helper.chooseFeat,
-					helper.increaseAttribute,
-					helper.increaseAttribute
+					helper.asi
 				]
 			},{//13
 				"updates":[
@@ -387,9 +368,9 @@ window.classes.push(
 					helper.hitDice10,
 					helper.chooseSpell,
 					{
-						"choicePrompt":"Do you want to replace one of your known Ranger spells?",
-						"choices":["Yes","No"],
-						"action":function(char,derived,choice,scope){
+						choicePrompt:"Do you want to replace one of your known Ranger spells?",
+						choices:["Yes","No"],
+						action:function(char,derived,choice,scope){
 							if (choice==="No"){
 								scope.updateStep+=2;//exit this level up
 							}
@@ -403,17 +384,16 @@ window.classes.push(
 					helper.hitDice10,
 					helper.attributeOrFeat,
 					helper.chooseFeat,
-					helper.increaseAttribute,
-					helper.increaseAttribute
+					helper.asi
 				]
 			},{//17
 				"updates":[
 					helper.hitDice10,
 					helper.chooseSpell,
 					{
-						"choicePrompt":"Do you want to replace one of your known Ranger spells?",
-						"choices":["Yes","No"],
-						"action":function(char,derived,choice,scope){
+						choicePrompt:"Do you want to replace one of your known Ranger spells?",
+						choices:["Yes","No"],
+						action:function(char,derived,choice,scope){
 							if (choice==="No"){
 								scope.updateStep+=2;//exit this level up
 							}
@@ -438,13 +418,12 @@ window.classes.push(
 					helper.hitDice10,
 					helper.attributeOrFeat,
 					helper.chooseFeat,
-					helper.increaseAttribute,
-					helper.increaseAttribute,
+					helper.asi,
 					helper.chooseSpell,
 					{
-						"choicePrompt":"Do you want to replace one of your known Ranger spells?",
-						"choices":["Yes","No"],
-						"action":function(char,derived,choice,scope){
+						choicePrompt:"Do you want to replace one of your known Ranger spells?",
+						choices:["Yes","No"],
+						action:function(char,derived,choice,scope){
 							if (choice==="No"){
 								scope.updateStep+=2;//exit this level up
 							}
@@ -482,7 +461,7 @@ window.subclasses.push(
 					{
 						choicePrompt:"You gain the following:",
 						choices:[findPassive("Ranger's Companion")],
-						"action":function(char){
+						action:function(char){
 							addPassive(char,"Ranger's Companion");
 						}
 					}
@@ -493,7 +472,7 @@ window.subclasses.push(
 					{
 						choicePrompt:"You gain the following:",
 						choices:[findPassive("Exceptional Training")],
-						"action":function(char){
+						action:function(char){
 							addPassive(char,"Exceptional Training");
 						}
 					}

@@ -93,9 +93,49 @@ var helper={
 						}
 					},
 	chooseSpell:{
-						"choicePrompt":"Choose a spell.",
-						"choices":[listLearnableSpells],
-						"action":function(char,derived,choice,scope){
+						choicePrompt:"Choose a spell",
+						choices:[listLearnableSpells],
+						action:function(char,derived,choice,scope){
+							addSpell(char,choice,scope.chosenClassName);
+						}
+					},
+	chooseSpell2:{
+						limit:2,
+						choicePrompt:"Choose two spells",
+						choices:[listLearnableSpells],
+						action:function(char,derived,choice,scope){
+							addSpell(char,choice,scope.chosenClassName);
+						}
+					},
+	chooseSpell3:{
+						limit:3,
+						choicePrompt:"Choose three spells",
+						choices:[listLearnableSpells],
+						action:function(char,derived,choice,scope){
+							addSpell(char,choice,scope.chosenClassName);
+						}
+					},
+	chooseSpell4:{
+						limit:4,
+						choicePrompt:"Choose four spells",
+						choices:[listLearnableSpells],
+						action:function(char,derived,choice,scope){
+							addSpell(char,choice,scope.chosenClassName);
+						}
+					},
+	chooseSpell5:{
+						limit:5,
+						choicePrompt:"Choose five spells",
+						choices:[listLearnableSpells],
+						action:function(char,derived,choice,scope){
+							addSpell(char,choice,scope.chosenClassName);
+						}
+					},
+	chooseSpell6:{
+						limit:6,
+						choicePrompt:"Choose six spells",
+						choices:[listLearnableSpells],
+						action:function(char,derived,choice,scope){
 							addSpell(char,choice,scope.chosenClassName);
 						}
 					},
@@ -165,16 +205,48 @@ var helper={
 						}
 					},
 	learnSkillProficiency:{
-						"choicePrompt":"Choose a skill proficiency.",
-						"choices":[listNonProficientSkills],
-						"action":function(char,derived,choice){
+						choicePrompt:"Choose a skill proficiency",
+						choices:[listNonProficientSkills],
+						action:function(char,derived,choice){
+							addProficiency(char,choice);
+						}
+					},
+	learnSkillProficiency2:{
+						limit:2,
+						choicePrompt:"Choose two skill proficiencies",
+						choices:[listNonProficientSkills],
+						action:function(char,derived,choice){
+							addProficiency(char,choice);
+						}
+					},
+	learnSkillProficiency3:{
+						limit:3,
+						choicePrompt:"Choose three skill proficiencies",
+						choices:[listNonProficientSkills],
+						action:function(char,derived,choice){
 							addProficiency(char,choice);
 						}
 					},
 	chooseExpertise:{
-						"choicePrompt":"Choose a skill expertise (proficiency will be doubled for this skill):",
-						"choices":[listProficientSkills],
-						"action":function(char,derived,choice){
+						choicePrompt:"Choose a skill expertise (proficiency will be doubled for this skill):",
+						choices:[listProficientSkills],
+						action:function(char,derived,choice){
+							addExpertise(char,choice);
+						}
+					},
+	chooseExpertise2:{
+						limit:2,
+						choicePrompt:"Choose two skill expertises (proficiency will be doubled for these skills):",
+						choices:[listProficientSkills],
+						action:function(char,derived,choice){
+							addExpertise(char,choice);
+						}
+					},
+	chooseExpertise3:{
+						limit:3,
+						choicePrompt:"Choose three skill expertises (proficiency will be doubled for these skills):",
+						choices:[listProficientSkills],
+						action:function(char,derived,choice){
 							addExpertise(char,choice);
 						}
 					},
@@ -182,6 +254,20 @@ var helper={
 						"choicePrompt":"Choose one:",
 						"choices":[getAttributesBelow20],
 						"action":function(char,derived,choice,scope){
+							switch (choice){
+								case "+1 Strength":char.attributes.str+=1;break;
+								case "+1 Dexterity":char.attributes.dex+=1;break;
+								case "+1 Constitution":char.attributes.con+=1;break;
+								case "+1 Intelligence":char.attributes.int+=1;break;
+								case "+1 Wisdom":char.attributes.wis+=1;break;
+								case "+1 Charisma":char.attributes.cha+=1;break;
+							}
+						}
+					},
+	asi:{				limit:2,
+						choicePrompt:"Choose Two:",
+						choices:[getAttributesBelow20,getAttributesBelow20], //show each option twice
+						action:function(char,derived,choice,scope){
 							switch (choice){
 								case "+1 Strength":char.attributes.str+=1;break;
 								case "+1 Dexterity":char.attributes.dex+=1;break;

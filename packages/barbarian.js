@@ -112,24 +112,9 @@ window.classes.push(
 							addToInventory(char,findItem(choice));
 						}
 					},{
+						limit:2,
 						choicePrompt:"Choose two skill proficiencies:",
 						choices:[function(char){
-							let result=[];
-							for (let skill of char.skills){
-								if (skill.mult===0){
-									if (["Animal Handling","Athletics","Intimidation","Nature","Perception","Survival"].indexOf(skill.name)!=-1){
-										result.push(skill.name);
-									}
-								}
-							}
-							return result;
-						}],
-						"action":function(char,derived,choice){
-							addProficiency(char,choice);
-						}
-					},{
-						"choicePrompt":"Choose two skill proficiencies:",
-						"choices":[function(char){
 							let result=[];
 							for (let skill of char.skills){
 								if (skill.mult===0){
@@ -192,8 +177,7 @@ window.classes.push(
 					helper.hitDice12,
 					helper.attributeOrFeat,
 					helper.chooseFeat,
-					helper.increaseAttribute,
-					helper.increaseAttribute
+					helper.asi
 				]
 			},{//5
 				summary:[
@@ -232,8 +216,7 @@ window.classes.push(
 					helper.hitDice12,
 					helper.attributeOrFeat,
 					helper.chooseFeat,
-					helper.increaseAttribute,
-					helper.increaseAttribute
+					helper.asi
 				]
 			},{//9
 				summary:[
@@ -270,8 +253,7 @@ window.classes.push(
 					helper.hitDice12,
 					helper.attributeOrFeat,
 					helper.chooseFeat,
-					helper.increaseAttribute,
-					helper.increaseAttribute
+					helper.asi
 				]
 			},{//13
 				"updates":[
@@ -299,8 +281,7 @@ window.classes.push(
 					helper.hitDice12,
 					helper.attributeOrFeat,
 					helper.chooseFeat,
-					helper.increaseAttribute,
-					helper.increaseAttribute
+					helper.asi
 				]
 			},{//17
 				"updates":[
@@ -324,8 +305,7 @@ window.classes.push(
 					helper.hitDice12,
 					helper.attributeOrFeat,
 					helper.chooseFeat,
-					helper.increaseAttribute,
-					helper.increaseAttribute
+					helper.asi
 				]
 			},{//20
 				summary:[

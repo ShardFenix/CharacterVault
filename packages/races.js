@@ -97,11 +97,32 @@ window.races=[
 			addPassive(char,"Darkvision");
 			addPassive(char,"Fey Ancestry");
 			//race abilities
-			scope.choiceQueue.push(helper.increaseAttribute);
-			scope.choiceQueue.push(helper.increaseAttribute);
+			$scope.choiceQueue.push(
+				{
+					limit:2,
+					choicePrompt:"Choose two:",
+					choices:[getAttributesBelow20],
+					action:function(char,derived,choice,scope){
+						switch (choice){
+							case "+1 Strength":char.attributes.str+=1;break;
+							case "+1 Dexterity":char.attributes.dex+=1;break;
+							case "+1 Constitution":char.attributes.con+=1;break;
+							case "+1 Intelligence":char.attributes.int+=1;break;
+							case "+1 Wisdom":char.attributes.wis+=1;break;
+							case "+1 Charisma":char.attributes.cha+=1;break;
+						}
+					}
+				});
 			scope.choiceQueue.push(helper.learnLanguage);
-			scope.choiceQueue.push(helper.learnSkillProficiency);
-			scope.choiceQueue.push(helper.learnSkillProficiency);
+			scope.choiceQueue.push({
+					limit:2,
+					choicePrompt:"Choose two skill proficiencies",
+					choices:[listNonProficientSkills],
+					action:function(char,derived,choice){
+						addProficiency(char,choice);
+					}
+				}
+			);
 		}
 	},{
 		name:"Half-Orc",

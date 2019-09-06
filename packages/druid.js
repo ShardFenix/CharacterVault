@@ -54,8 +54,9 @@ window.classes.push(
 							addToInventory(char,findItem(choice));
 						}
 					},{
-						"choicePrompt":"Choose two skill proficiencies:",
-						"choices":[function(char){
+						limit:2,
+						choicePrompt:"Choose two skill proficiencies:",
+						choices:[function(char){
 							let result=[];
 							for (let skill of char.skills){
 								if (skill.mult===0){
@@ -66,28 +67,17 @@ window.classes.push(
 							}
 							return result;
 						}],
-						"action":function(char,derived,choice){
+						action:function(char,derived,choice){
 							addProficiency(char,choice);
 						}
 					},{
-						"choicePrompt":"Choose two skill proficiencies:",
-						"choices":[function(char){
-							let result=[];
-							for (let skill of char.skills){
-								if (skill.mult===0){
-									if (["Arcana","Animal Handling","Insight","Medicine","Nature","Perception","Religion","Survival"].indexOf(skill.name)!=-1){
-										result.push(skill.name);
-									}
-								}
-							}
-							return result;
-						}],
-						"action":function(char,derived,choice){
-							addProficiency(char,choice);
+						limit:2,
+						choicePrompt:"Choose two cantrips",
+						choices:[listUnknownDruidCantrips],
+						action:function(char,derived,choice,scope){
+							addSpell(char,choice,scope.chosenClassName);
 						}
-					},
-					helper.chooseDruidCantrip,
-					helper.chooseDruidCantrip
+					}
 				]
 			},	{ // 1
 				"updates":[
@@ -100,10 +90,14 @@ window.classes.push(
 							char.proficiencies.upush("Medium Armor");
 							char.proficiencies.upush("Shields");
 						}
-					},
-					
-					helper.chooseDruidCantrip,
-					helper.chooseDruidCantrip
+					},{
+						limit:2,
+						choicePrompt:"Choose two cantrips",
+						choices:[listUnknownDruidCantrips],
+						action:function(char,derived,choice,scope){
+							addSpell(char,choice,scope.chosenClassName);
+						}
+					}
 				]
 			}, { // 2
 				"updates":[
@@ -126,8 +120,7 @@ window.classes.push(
 					helper.hitDice8,
 					helper.attributeOrFeat,
 					helper.chooseFeat,
-					helper.increaseAttribute,
-					helper.increaseAttribute,
+					helper.asi,
 					helper.chooseDruidCantrip
 				]
 			},{//5
@@ -147,8 +140,7 @@ window.classes.push(
 					helper.hitDice8,
 					helper.attributeOrFeat,
 					helper.chooseFeat,
-					helper.increaseAttribute,
-					helper.increaseAttribute
+					helper.asi
 				]
 			},{//9
 				"updates":[
@@ -168,8 +160,7 @@ window.classes.push(
 					helper.hitDice8,
 					helper.attributeOrFeat,
 					helper.chooseFeat,
-					helper.increaseAttribute,
-					helper.increaseAttribute
+					helper.asi
 				]
 			},{//13
 				"updates":[
@@ -188,8 +179,7 @@ window.classes.push(
 					helper.hitDice8,
 					helper.attributeOrFeat,
 					helper.chooseFeat,
-					helper.increaseAttribute,
-					helper.increaseAttribute
+					helper.asi
 				]
 			},{//17
 				"updates":[
@@ -211,8 +201,7 @@ window.classes.push(
 					helper.hitDice8,
 					helper.attributeOrFeat,
 					helper.chooseFeat,
-					helper.increaseAttribute,
-					helper.increaseAttribute
+					helper.asi
 				]
 			},{//20
 				"updates":[

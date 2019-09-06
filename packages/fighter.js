@@ -154,8 +154,9 @@ window.classes.push(
 							openPack(char,choice);
 						}
 					},{
-						"choicePrompt":"Choose two skill proficiencies:",
-						"choices":[function(char){
+						limit:2,
+						choicePrompt:"Choose two skill proficiencies:",
+						choices:[function(char){
 							let result=[];
 							for (let skill of char.skills){
 								if (skill.mult===0){
@@ -166,23 +167,7 @@ window.classes.push(
 							}
 							return result;
 						}],
-						"action":function(char,derived,choice){
-							addProficiency(char,choice);
-						}
-					},{
-						"choicePrompt":"Choose two skill proficiencies:",
-						"choices":[function(char){
-							let result=[];
-							for (let skill of char.skills){
-								if (skill.mult===0){
-									if (["Acrobatics","Animal Handling","Athletics","History","Insight","Intimidation","Perception","Survival"].indexOf(skill.name)!=-1){
-										result.push(skill.name);
-									}
-								}
-							}
-							return result;
-						}],
-						"action":function(char,derived,choice){
+						action:function(char,derived,choice){
 							addProficiency(char,choice);
 						}
 					},
@@ -227,8 +212,7 @@ window.classes.push(
 					helper.hitDice10,
 					helper.attributeOrFeat,
 					helper.chooseFeat,
-					helper.increaseAttribute,
-					helper.increaseAttribute
+					helper.asi
 				]
 			},{//5
 				"updates":[
@@ -246,8 +230,7 @@ window.classes.push(
 					helper.hitDice10,
 					helper.attributeOrFeat,
 					helper.chooseFeat,
-					helper.increaseAttribute,
-					helper.increaseAttribute
+					helper.asi
 				]
 			},{//7
 				"updates":[
@@ -258,8 +241,7 @@ window.classes.push(
 					helper.hitDice10,
 					helper.attributeOrFeat,
 					helper.chooseFeat,
-					helper.increaseAttribute,
-					helper.increaseAttribute
+					helper.asi
 				]
 			},{//9
 				"updates":[
@@ -293,8 +275,7 @@ window.classes.push(
 					helper.hitDice10,
 					helper.attributeOrFeat,
 					helper.chooseFeat,
-					helper.increaseAttribute,
-					helper.increaseAttribute
+					helper.asi
 				]
 			},{//13
 				"updates":[
@@ -305,8 +286,7 @@ window.classes.push(
 					helper.hitDice10,
 					helper.attributeOrFeat,
 					helper.chooseFeat,
-					helper.increaseAttribute,
-					helper.increaseAttribute
+					helper.asi
 				]
 			},{//15
 				"updates":[
@@ -317,8 +297,7 @@ window.classes.push(
 					helper.hitDice10,
 					helper.attributeOrFeat,
 					helper.chooseFeat,
-					helper.increaseAttribute,
-					helper.increaseAttribute
+					helper.asi
 				]
 			},{//17
 				"updates":[
@@ -333,8 +312,7 @@ window.classes.push(
 					helper.hitDice10,
 					helper.attributeOrFeat,
 					helper.chooseFeat,
-					helper.increaseAttribute,
-					helper.increaseAttribute
+					helper.asi
 				]
 			},{//20
 				"updates":[
@@ -526,10 +504,14 @@ window.subclasses.push(
 						action:function(char){
 							addAbility(char,"Superiority d8");
 						}
-					},
-					helper.chooseManeuver,
-					helper.chooseManeuver,
-					helper.chooseManeuver
+					},{
+						limit:3,
+						choicePrompt:"Choose three Maneuvers",
+						choices:[listManeuvers],
+						action:function(char,derived,choice){
+							addPassive(char,findPassive(choice));
+						}
+					}
 				]
 			},{},{},{},
 			{ //7
@@ -544,9 +526,14 @@ window.subclasses.push(
 						action:function(char,derived,choice){
 							addPassive(char,"Know your Enemy");
 						}
-					},
-					helper.chooseManeuver,
-					helper.chooseManeuver
+					},{
+						limit:2,
+						choicePrompt:"Choose two Maneuvers",
+						choices:[listManeuvers],
+						action:function(char,derived,choice){
+							addPassive(char,findPassive(choice));
+						}
+					}
 				]
 			},{},{},
 			{//10
@@ -558,9 +545,14 @@ window.subclasses.push(
 							removeAbility("Superiority d8");
 							addAbility(char,"Superiority d10");
 						}
-					},
-					helper.chooseManeuver,
-					helper.chooseManeuver
+					},{
+						limit:2,
+						choicePrompt:"Choose two Maneuvers",
+						choices:[listManeuvers],
+						action:function(char,derived,choice){
+							addPassive(char,findPassive(choice));
+						}
+					}
 				]
 			},{},{},{},{},
 			{//15
@@ -571,9 +563,14 @@ window.subclasses.push(
 						action:function(char,derived,choice){
 							addPassive(char,"Relentless");
 						}
-					},
-					helper.chooseManeuver,
-					helper.chooseManeuver
+					},{
+						limit:2,
+						choicePrompt:"Choose two Maneuvers",
+						choices:[listManeuvers],
+						action:function(char,derived,choice){
+							addPassive(char,findPassive(choice));
+						}
+					}
 				]
 			},{},{},
 			{//18
@@ -585,9 +582,14 @@ window.subclasses.push(
 							removeAbility("Superiority d10");
 							addAbility(char,"Superiority d12");
 						}
-					},
-					helper.chooseManeuver,
-					helper.chooseManeuver
+					},{
+						limit:2,
+						choicePrompt:"Choose two Maneuvers",
+						choices:[listManeuvers],
+						action:function(char,derived,choice){
+							addPassive(char,findPassive(choice));
+						}
+					}
 				]
 			},{},{}
 		]
