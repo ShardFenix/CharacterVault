@@ -53,6 +53,25 @@ window.abilities.append([
 		maxChargesFunction:function(char,scope){
 			return scope.derived.modifiers.wis;
 		}
+	},{
+		name:"War Priest",
+		description:"Your god delivers bolts of inspiration to you while you are engaged in battle. When you use the Attack action, you can make one weapon attack as a bonus action. You can use this feature a number of times equal to your Wisdom modifier (a minimum of once). You regain all expended uses when you finish a long rest.",
+		onLongRest:function(char,scope){
+			this.charges=this.maxCharges;
+		},
+		maxChargesFunction:function(char,scope){
+			return scope.derived.modifiers.wis;
+		}
+	},{
+		name:"Guided Strike",
+		description:"You can use your Channel Divinity to strike with supernatural accuracy. When you make an attack roll, you can use your Channel Divinity to gain a +10 bonus to the roll. You make this choice after you see the roll, but before the DM says whether the attack hits or misses.",
+		resourceName:"Channel Divinity",
+		resourceCost:1
+	},{
+		name:"War God's Blessing",
+		description:"When a creature within 30 feet of you makes an attack roll, you can use your reaction to grant that creature a +10 bonus to the roll, using your Channel Divinity. You make this choice after you see the roll, but before the DM says whether the attack hits or misses.",
+		resourceName:"Channel Divinity",
+		resourceCost:1
 	}
 ]);
 
@@ -96,6 +115,9 @@ window.passives.append([
 	},{
 		name:"Stormborn",
 		description:"You have a flying speed equal to your current walking speed whenever you are not underground or indoors."
+	},{
+		name:"Avatar of Battle",
+		description:"You gain resistance to bludgeoning, piercing, and slashing damage from nonmagical weapons."
 	}
 ]);
 
@@ -475,6 +497,120 @@ window.subclasses.push(
 						choices:[findPassive("Supreme Healing")],
 						action:function(char){
 							addPassive(char,"Supreme Healing");
+						}
+					}
+				]
+			}
+		]
+	}
+);
+
+
+window.subclasses.push(
+	{
+		classname:"Cleric",
+		name:"War Domain",
+		subclass:"War Domain",
+		description:"War has many manifestations. It can make heroes of ordinary people. It can be desperate and horrific, with acts of cruelty and cowardice eclipsing instances of excellence and courage. In either case, the gods of war watch over warriors and reward them for their great deeds. The clerics of such gods excel in battle, inspiring others to fight the good fight or offering acts of violence as prayers. Gods of war include champions of honor and chivalry (such as Torm, Heironeous, and Kiri-Jolith) as well as gods of destruction and pillage (such as Erythnul, the Fury, Gruumsh, and Ares) and gods of conquest and domination (such as Bane, Hextor, and Maglubiyet). Other war gods (such as Tempus, Nike, and Nuada) take a more neutral stance, promoting war in all its manifestations and supporting warriors in any circumstance.",
+		levels:[{},
+			{//1
+				updates:[
+					{
+						summary:findAbility("War Priest"),
+						choicePrompt:"You gain the following",
+						choices:[findAbility("War Priest")],
+						action:function(char,derived,choice,$scope){
+							char.proficiencies.upush("Heavy Armor");
+							addAbility(char,"War Priest");
+							getPlayerSpell(char,"Divine Favor","Cleric").alwaysPrepared=true;
+							getPlayerSpell(char,"Shield of Faith","Cleric").alwaysPrepared=true;
+						}
+					}
+				]
+			},{ //2
+				updates:[
+					{
+						summary:findAbility("Guided Strike"),
+						choicePrompt:"You gain the following",
+						choices:[findAbility("Guided Strike")],
+						action:function(char){
+							addAbility(char,"Guided Strike");
+						}
+					}
+				]
+			},{ //3
+				updates:[
+					{
+						choices:[],
+						action:function(char){
+							getPlayerSpell(char,"Spiritual Weapon","Cleric").alwaysPrepared=true;
+							getPlayerSpell(char,"Magic Weapon","Cleric").alwaysPrepared=true;
+						}
+					}
+				]
+			},{},{ //5
+				updates:[
+					{
+						choices:[],
+						action:function(char){
+							getPlayerSpell(char,"Spirit Guardians","Cleric").alwaysPrepared=true;
+							getPlayerSpell(char,"Crusader's Mantle","Cleric").alwaysPrepared=true;
+						}
+					}
+				]
+			},
+			{//6
+				updates:[
+					{
+						summary:findAbility("War God's Blessing"),
+						choicePrompt:"You gain the following",
+						choices:[findAbility("War God's Blessing")],
+						action:function(char,derived,choice){
+							addAbility(char,"War God's Blessing");
+						}
+					}
+				]
+			},{ //7
+				updates:[
+					{
+						choices:[],
+						action:function(char){
+							getPlayerSpell(char,"Freedom of Movement","Cleric").alwaysPrepared=true;
+							getPlayerSpell(char,"Stoneskin","Cleric").alwaysPrepared=true;
+						}
+					}
+				]
+			},
+			{//8
+				updates:[
+					{
+						summary:findPassive("Divine Strike"),
+						choicePrompt:"You gain the following",
+						choices:[findPassive("Divine Strike")],
+						action:function(char){
+							addPassive(char,"Divine Strike");
+						}
+					}
+				]
+			},{ //9
+				updates:[
+					{
+						choices:[],
+						action:function(char){
+							getPlayerSpell(char,"Flame Strike","Cleric").alwaysPrepared=true;
+							getPlayerSpell(char,"Hold Monster","Cleric").alwaysPrepared=true;
+						}
+					}
+				]
+			},{},{},{},{},{},{},{},
+			{//17
+				updates:[
+					{
+						summary:findPassive("Avatar of Battle"),
+						choicePrompt:"You gain the following",
+						choices:[findPassive("Avatar of Battle")],
+						action:function(char){
+							addPassive(char,"Avatar of Battle");
 						}
 					}
 				]

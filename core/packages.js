@@ -33,58 +33,58 @@ var helper={
 					},
 	attributeOrFeat:{
 						summary:{name:"Attribute Score Increase",description:"Add +2 to one attribute, or +1 to two attributes, or take a Feat."},
-						"choicePrompt":"Choose one:",
-						"choices":["+2 to Ability Scores","Take a Feat"],
-						"action":function(char,derived,choice,scope){
+						choicePrompt:"Choose one:",
+						choices:["+2 to Ability Scores","Take a Feat"],
+						action:function(char,derived,choice,scope){
 							if (choice==="+2 to Ability Scores"){
 								scope.updateStep+=1;
 							}
 						}
 					},
 	learnInstrument:{
-						"choicePrompt":"Choose an instrument proficiency.",
-						"choices":[listNonProficientInstruments],
-						"action":function(char,derived,choice){
+						choicePrompt:"Choose an instrument proficiency.",
+						choices:[listNonProficientInstruments],
+						action:function(char,derived,choice){
 							char.proficiencies.upush(choice);
 						}
 					},
 	learnTool:{
-						"choicePrompt":"Choose a tool proficiency.",
-						"choices":[listNonProficientTools],
-						"action":function(char,derived,choice){
+						choicePrompt:"Choose a tool proficiency.",
+						choices:[listNonProficientTools],
+						action:function(char,derived,choice){
 							char.proficiencies.upush(choice);
 						}
 					},
 	chooseWeaponProficiency:{
-						"choicePrompt":"Choose a weapon proficiency:",
-						"choices":[listNonProficientWeapons],
-						"action":function(char,derived,choice){
+						choicePrompt:"Choose a weapon proficiency:",
+						choices:[listNonProficientWeapons],
+						action:function(char,derived,choice){
 							char.proficiencies.upush(choice);
 						}
 					},
 	learnLanguage:{
-						"choicePrompt":"Choose a language:",
-						"choices":[listUnknownLanguages],
-						"action":function(char,derived,choice){
+						choicePrompt:"Choose a language:",
+						choices:[listUnknownLanguages],
+						action:function(char,derived,choice){
 							char.proficiencies.upush(choice);
 						}
 					},
 	chooseFeat:{
-						"choicePrompt":"Choose a Feat",
-						"choices":[getUnknownFeats],
-						"action":function(char,derived,choice,scope){
+						choicePrompt:"Choose a Feat",
+						choices:[getUnknownFeats],
+						action:function(char,derived,choice,scope){
 							let f = angular.copy(findFeat(choice));
 							char.passives.push(f);
 							if (f.onPickup){
 								f.onPickup(char,scope);
 							}
-							scope.updateStep+=2;
+							scope.updateStep+=1;
 						}
 					},
 	chooseRaceFeat:{ //same as above, but dont skip 2 steps
-						"choicePrompt":"Choose a Feat",
-						"choices":[getUnknownFeats],
-						"action":function(char,derived,choice,scope){
+						choicePrompt:"Choose a Feat",
+						choices:[getUnknownFeats],
+						action:function(char,derived,choice,scope){
 							let f = angular.copy(findFeat(choice));
 							char.passives.push(f);
 							if (f.onPickup){
@@ -140,58 +140,58 @@ var helper={
 						}
 					},
 	chooseAnyCantrip:{
-						"choicePrompt":"Choose a cantrip.",
-						"choices":[listAllUnknownCantrips],
-						"action":function(char,derived,choice,scope){
+						choicePrompt:"Choose a cantrip.",
+						choices:[listAllUnknownCantrips],
+						action:function(char,derived,choice,scope){
 							addSpell(char,choice,scope.chosenClassName);
 						}
 					},
 	chooseBardCantrip:{
-						"choicePrompt":"Choose a cantrip.",
-						"choices":[listUnknownBardCantrips],
-						"action":function(char,derived,choice,scope){
+						choicePrompt:"Choose a cantrip.",
+						choices:[listUnknownBardCantrips],
+						action:function(char,derived,choice,scope){
 							addSpell(char,choice,scope.chosenClassName);
 						}
 					},
 	chooseClericCantrip:{
-						"choicePrompt":"Choose a cantrip.",
-						"choices":[listUnknownClericCantrips],
-						"action":function(char,derived,choice,scope){
+						choicePrompt:"Choose a cantrip.",
+						choices:[listUnknownClericCantrips],
+						action:function(char,derived,choice,scope){
 							addSpell(char,choice,scope.chosenClassName);
 						}
 					},
 	chooseDruidCantrip:{
-						"choicePrompt":"Choose a cantrip.",
-						"choices":[listUnknownDruidCantrips],
-						"action":function(char,derived,choice,scope){
+						choicePrompt:"Choose a cantrip.",
+						choices:[listUnknownDruidCantrips],
+						action:function(char,derived,choice,scope){
 							addSpell(char,choice,scope.chosenClassName);
 						}
 					},
 	chooseSorcererCantrip:{
-						"choicePrompt":"Choose a cantrip.",
-						"choices":[listUnknownSorcererCantrips],
-						"action":function(char,derived,choice,scope){
+						choicePrompt:"Choose a cantrip.",
+						choices:[listUnknownSorcererCantrips],
+						action:function(char,derived,choice,scope){
 							addSpell(char,choice,scope.chosenClassName);
 						}
 					},
 	chooseWarlockCantrip:{
-						"choicePrompt":"Choose a cantrip.",
-						"choices":[listUnknownWarlockCantrips],
-						"action":function(char,derived,choice,scope){
+						choicePrompt:"Choose a cantrip.",
+						choices:[listUnknownWarlockCantrips],
+						action:function(char,derived,choice,scope){
 							addSpell(char,choice,scope.chosenClassName);
 						}
 					},
 	chooseWizardCantrip:{
-						"choicePrompt":"Choose a cantrip.",
-						"choices":[listUnknownWizardCantrips],
-						"action":function(char,derived,choice,scope){
+						choicePrompt:"Choose a cantrip.",
+						choices:[listUnknownWizardCantrips],
+						action:function(char,derived,choice,scope){
 							addSpell(char,choice,scope.chosenClassName);
 						}
 					},
 	unlearnSpell:{
-						"choicePrompt":"Choose a spell to unlearn:",
-						"choices":[listUnlearnableSpells],
-						"action":function(char,derived,choice,scope){
+						choicePrompt:"Choose a spell to unlearn:",
+						choices:[listUnlearnableSpells],
+						action:function(char,derived,choice,scope){
 							for (let clas of char.classes){
 								if (clas.name===scope.chosenClassName){
 									for (let i=0;i<clas.spells.length;i++){
@@ -251,9 +251,9 @@ var helper={
 						}
 					},
 	increaseAttribute:{
-						"choicePrompt":"Choose one:",
-						"choices":[getAttributesBelow20],
-						"action":function(char,derived,choice,scope){
+						choicePrompt:"Choose one:",
+						choices:[getAttributesBelow20],
+						action:function(char,derived,choice,scope){
 							switch (choice){
 								case "+1 Strength":char.attributes.str+=1;break;
 								case "+1 Dexterity":char.attributes.dex+=1;break;
@@ -279,30 +279,30 @@ var helper={
 						}
 					},
 	hitDice6:{
-						"choicePrompt":"What did you roll for your hit dice?",
-						"choices":[1,2,3,4,5,6],
-						"action":function(char,derived,choice){
+						choicePrompt:"What did you roll for your hit dice?",
+						choices:[1,2,3,4,5,6],
+						action:function(char,derived,choice){
 							char.maxHp+=choice;
 						}
 					},
 	hitDice8:{
-						"choicePrompt":"What did you roll for your hit dice?",
-						"choices":[1,2,3,4,5,6,7,8],
-						"action":function(char,derived,choice){
+						choicePrompt:"What did you roll for your hit dice?",
+						choices:[1,2,3,4,5,6,7,8],
+						action:function(char,derived,choice){
 							char.maxHp+=choice;
 						}
 					},
 	hitDice10:{
-						"choicePrompt":"What did you roll for your hit dice?",
-						"choices":[1,2,3,4,5,6,7,8,9,10],
-						"action":function(char,derived,choice){
+						choicePrompt:"What did you roll for your hit dice?",
+						choices:[1,2,3,4,5,6,7,8,9,10],
+						action:function(char,derived,choice){
 							char.maxHp+=choice;
 						}
 					},
 	hitDice12:{
-						"choicePrompt":"What did you roll for your hit dice?",
-						"choices":[1,2,3,4,5,6,7,8,9,10,11,12],
-						"action":function(char,derived,choice){
+						choicePrompt:"What did you roll for your hit dice?",
+						choices:[1,2,3,4,5,6,7,8,9,10,11,12],
+						action:function(char,derived,choice){
 							char.maxHp+=choice;
 						}
 					}
