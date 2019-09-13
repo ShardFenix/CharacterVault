@@ -97,7 +97,7 @@ window.races=[
 			addPassive(char,"Darkvision");
 			addPassive(char,"Fey Ancestry");
 			//race abilities
-			$scope.choiceQueue.push(
+			scope.choiceQueue.push(
 				{
 					limit:2,
 					choicePrompt:"Choose two:",

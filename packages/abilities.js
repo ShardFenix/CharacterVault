@@ -249,6 +249,9 @@ window.passives=[
 	},{
 		name:"Mask of the Wild",
 		description:"You can attempt to hide even when you are only lightly obscured by foliage, heavy rain, falling snow, mist, and other natural phenomena."
+	},{
+		name:"Fey Ancestry",
+		description:"You have advantage on saving throws against being charmed, and magic can't put you to sleep."
 	}
 	
 ];

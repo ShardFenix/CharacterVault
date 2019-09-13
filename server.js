@@ -126,9 +126,13 @@ function handlePost(request, response){
 			response.end();
 			return;
 		}
-		request.on('data', function(data) {
+		let body=[];
+		request.on('data', (chunk) => {
+			body.push(chunk);
+		}).on('end', () => {
+			body = Buffer.concat(body).toString();
 			try{
-				fs.writeFileSync(filename,data);
+				fs.writeFileSync(filename,body);
 				var headers = {};
 				headers['Access-Control-Allow-Origin']='*';
 				response.writeHead(204,headers);

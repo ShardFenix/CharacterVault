@@ -1089,9 +1089,9 @@ $scope.setTip=function(choice,spellLevel){
 $scope.saveToVault=function(){
 	let name=$scope.char.name;
 	console.log("Saving character to vault "+name);
-	$http.post('http://localhost:8080/characters/' + name,
-				JSON.stringify($scope.char))
-	.then(function(response){
+	let jsonChar=JSON.stringify($scope.char);
+	$http.post('http://localhost:8080/characters/' + name, jsonChar)
+		.then(function(response){
 			console.log("Saved character "+name);
 		},function(error){
 			console.error(error);
@@ -1124,37 +1124,16 @@ function prepForSave(char){
 }
 
 $scope.save=function(){
-	if (typeof(Storage) !== "undefined") {
-		if ($scope.saveId==-1){
-			$scope.saveId=$scope.saveList.length;
-		}
-		prepForSave($scope.char);
-		if (serverVaultEnabled) {
-			$scope.saveToVault();
-		} else {
-			localStorage.setItem("dnd"+$scope.saveId,JSON.stringify($scope.char));
-		}
-		loadList();
+	prepForSave($scope.char);
+	if (serverVaultEnabled) {
+		$scope.saveToVault();
 	}
+	loadList();
 }
 
 let serverVaultEnabled=false;
 
 function convertLocalStorage(){
-	console.log("Converting local storage");
-	if (typeof(Storage) !== "undefined") {
-		for (var i=0;i<99;i++){
-			var jsonString = localStorage.getItem("dnd"+i);
-			if (jsonString){
-				console.log("Converting local slot "+i);
-				var c = JSON.parse(jsonString);
-				$scope.char=c;
-				console.log(c);
-				$scope.saveToVault();
-			}
-		}
-	}
-
 	$scope.char={
 		maxHp:0,
 		hp:0,
@@ -1192,7 +1171,7 @@ function checkServerVault(){
 		loadList();
 	},function(error){
 		serverVaultEnabled=false;
-		loadList();
+		alert("Run server.bat, then refresh the page.");
 	});
 }
 
@@ -1209,35 +1188,19 @@ function loadList(){
 			console.error("Error loading character vault.");
 			console.error(error);
 		});
-	} else {
-		if (typeof(Storage) !== "undefined") {
-			for (var i=0;i<90;i++){
-				var jsonString = localStorage.getItem("dnd"+i);
-				if (jsonString){
-					var lists = JSON.parse(jsonString);
-					$scope.saveList.push({name:lists.name,saveId:i});
-				}
-			}
-		}
 	}
 }
 
-$scope.load=function(num){
-	console.log("Loading "+num);
+$scope.load=function(characterName){
+	console.log("Loading "+characterName);
 	if (serverVaultEnabled){
-		$http.get('http://localhost:8080/characters/'+num).then(function(response){
+		$http.get('http://localhost:8080/characters/'+characterName).then(function(response){
 			$scope.char=response.data;
 			initLoadedCharacter();
 		},function(error){
-			console.error("Error loading character "+num+" from vault.");
+			console.error("Error loading character "+characterName+" from vault.");
 			console.error(error);
 		});
-	} else {
-		if (typeof(Storage) !== "undefined" && (num || num==0)) {
-			$scope.char = JSON.parse(localStorage.getItem("dnd"+num));
-			$scope.saveId=num;
-			initLoadedCharacter();
-		}
 	}
 }
 
