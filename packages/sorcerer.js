@@ -7,8 +7,8 @@ window.classes.push(
 			{ //1, first player level
 				"updates":[
 					{
-						"choices":[],
-						"action":function(char,derived,choice,$scope){
+						choices:[],
+						action:function(char,derived,choice,$scope){
 							char.maxHp=6;
 							char.proficiencies.push("Saggers");
 							char.proficiencies.push("Darts");
@@ -35,8 +35,9 @@ window.classes.push(
 							openPack(char,choice);
 						}
 					},{
-						"choicePrompt":"Choose two skill proficiencies:",
-						"choices":[function(char){
+						limit:2,
+						choicePrompt:"Choose two skill proficiencies:",
+						choices:[function(char){
 							let result=[];
 							for (let skill of char.skills){
 								if (skill.mult===0){
@@ -47,32 +48,19 @@ window.classes.push(
 							}
 							return result;
 						}],
-						"action":function(char,derived,choice){
-							addProficiency(char,choice);
-						}
-					},{
-						"choicePrompt":"Choose two skill proficiencies:",
-						"choices":[function(char){
-							let result=[];
-							for (let skill of char.skills){
-								if (skill.mult===0){
-									if (["Arcana","Deception","Insight","Intimidation","Persuasion","Religion"].indexOf(skill.name)!=-1){
-										result.push(skill.name);
-									}
-								}
-							}
-							return result;
-						}],
-						"action":function(char,derived,choice){
+						action:function(char,derived,choice){
 							addProficiency(char,choice);
 						}
 					},
-					helper.chooseSorcererCantrip,
-					helper.chooseSorcererCantrip,
-					helper.chooseSorcererCantrip,
-					helper.chooseSorcererCantrip,
-					helper.chooseSpell,
-					helper.chooseSpell,
+					{
+						limit:4,
+						choicePrompt:"Choose four cantrips",
+						choices:[listUnknownSorcererCantrips],
+						action:function(char,derived,choice,scope){
+							addSpell(char,choice,scope.chosenClassName);
+						}
+					},
+					helper.chooseSpell2,
 					{
 						choicePrompt:"Choose a Sorcerous Origin",
 						choices:[listSpecializations],
@@ -84,12 +72,15 @@ window.classes.push(
 			},	{ // 1
 				"updates":[
 					helper.hitDice6,
-					helper.chooseSorcererCantrip,
-					helper.chooseSorcererCantrip,
-					helper.chooseSorcererCantrip,
-					helper.chooseSorcererCantrip,
-					helper.chooseSpell,
-					helper.chooseSpell,
+					{
+						limit:4,
+						choicePrompt:"Choose four cantrips",
+						choices:[listUnknownSorcererCantrips],
+						action:function(char,derived,choice,scope){
+							addSpell(char,choice,scope.chosenClassName);
+						}
+					},
+					helper.chooseSpell2,
 					{
 						choicePrompt:"Choose a Sorcerous Origin",
 						choices:[listSpecializations],
@@ -102,8 +93,8 @@ window.classes.push(
 				"updates":[
 					helper.hitDice6,
 					{
-						"choices":[],
-						"action":function(char,derived,choice){
+						choices:[],
+						action:function(char,derived,choice){
 							addAbility(char,"Sorcery Point");
 							addAbility(char,"Create Lv 1 Slot");
 							addAbility(char,"Create Lv 2 Slot");
@@ -114,9 +105,9 @@ window.classes.push(
 					},
 					helper.chooseSpell,
 					{
-						"choicePrompt":"Do you want to replace one of your known Sorcerer spells?",
-						"choices":["Yes","No"],
-						"action":function(char,derived,choice,scope){
+						choicePrompt:"Do you want to replace one of your known Sorcerer spells?",
+						choices:["Yes","No"],
+						action:function(char,derived,choice,scope){
 							if (choice==="No"){
 								scope.updateStep+=2;
 							}
@@ -129,30 +120,7 @@ window.classes.push(
 				"updates":[
 					helper.hitDice6,
 					{
-						choicePrompt:"Choose two metamagic feats.",
-						choices:[function(char){
-							let result=[findAbility('Careful Spell'),
-										findAbility('Distant Spell'),
-										findAbility('Empowered Spell'),
-										findAbility('Extended Spell'),
-										findAbility('Heightened Spell'),
-										findAbility('Quickened Spell'),
-										findAbility('Subtle Spell'),
-										findAbility('Twinned Spell')];
-							for (let abil of char.abilities){
-								for (let i=0;i<result.length;i++){
-									if (abil.name===result[i].name){
-										result.splice(i,1);
-										i=result.length;
-									}
-								}
-							}
-							return result;
-						}],
-						action:function(char,derived,choice){
-							addAbility(char,choice);
-						}
-					},{
+						limit:2,
 						choicePrompt:"Choose two metamagic feats.",
 						choices:[function(char){
 							let result=[findAbility('Careful Spell'),
@@ -179,9 +147,9 @@ window.classes.push(
 					},
 					helper.chooseSpell,
 					{
-						"choicePrompt":"Do you want to replace one of your known Sorcerer spells?",
-						"choices":["Yes","No"],
-						"action":function(char,derived,choice,scope){
+						choicePrompt:"Do you want to replace one of your known Sorcerer spells?",
+						choices:["Yes","No"],
+						action:function(char,derived,choice,scope){
 							if (choice==="No"){
 								scope.updateStep+=2;
 							}
@@ -195,13 +163,12 @@ window.classes.push(
 					helper.hitDice6,
 					helper.attributeOrFeat,
 					helper.chooseFeat,
-					helper.increaseAttribute,
-					helper.increaseAttribute,
+					helper.asi,
 					helper.chooseSpell,
 					{
-						"choicePrompt":"Do you want to replace one of your known Sorcerer spells?",
-						"choices":["Yes","No"],
-						"action":function(char,derived,choice,scope){
+						choicePrompt:"Do you want to replace one of your known Sorcerer spells?",
+						choices:["Yes","No"],
+						action:function(char,derived,choice,scope){
 							if (choice==="No"){
 								scope.updateStep+=2;
 							}
@@ -215,9 +182,9 @@ window.classes.push(
 					helper.hitDice6,
 					helper.chooseSpell,
 					{
-						"choicePrompt":"Do you want to replace one of your known Sorcerer spells?",
-						"choices":["Yes","No"],
-						"action":function(char,derived,choice,scope){
+						choicePrompt:"Do you want to replace one of your known Sorcerer spells?",
+						choices:["Yes","No"],
+						action:function(char,derived,choice,scope){
 							if (choice==="No"){
 								scope.updateStep+=2;
 							}
@@ -231,9 +198,9 @@ window.classes.push(
 					helper.hitDice6,
 					helper.chooseSpell,
 					{
-						"choicePrompt":"Do you want to replace one of your known Sorcerer spells?",
-						"choices":["Yes","No"],
-						"action":function(char,derived,choice,scope){
+						choicePrompt:"Do you want to replace one of your known Sorcerer spells?",
+						choices:["Yes","No"],
+						action:function(char,derived,choice,scope){
 							if (choice==="No"){
 								scope.updateStep+=2;
 							}
@@ -247,9 +214,9 @@ window.classes.push(
 					helper.hitDice6,
 					helper.chooseSpell,
 					{
-						"choicePrompt":"Do you want to replace one of your known Sorcerer spells?",
-						"choices":["Yes","No"],
-						"action":function(char,derived,choice,scope){
+						choicePrompt:"Do you want to replace one of your known Sorcerer spells?",
+						choices:["Yes","No"],
+						action:function(char,derived,choice,scope){
 							if (choice==="No"){
 								scope.updateStep+=2;
 							}
@@ -263,13 +230,12 @@ window.classes.push(
 					helper.hitDice6,
 					helper.attributeOrFeat,
 					helper.chooseFeat,
-					helper.increaseAttribute,
-					helper.increaseAttribute,
+					helper.asi,
 					helper.chooseSpell,
 					{
-						"choicePrompt":"Do you want to replace one of your known Sorcerer spells?",
-						"choices":["Yes","No"],
-						"action":function(char,derived,choice,scope){
+						choicePrompt:"Do you want to replace one of your known Sorcerer spells?",
+						choices:["Yes","No"],
+						action:function(char,derived,choice,scope){
 							if (choice==="No"){
 								scope.updateStep+=2;
 							}
@@ -283,9 +249,9 @@ window.classes.push(
 					helper.hitDice6,
 					helper.chooseSpell,
 					{
-						"choicePrompt":"Do you want to replace one of your known Sorcerer spells?",
-						"choices":["Yes","No"],
-						"action":function(char,derived,choice,scope){
+						choicePrompt:"Do you want to replace one of your known Sorcerer spells?",
+						choices:["Yes","No"],
+						action:function(char,derived,choice,scope){
 							if (choice==="No"){
 								scope.updateStep+=2;
 							}
@@ -324,9 +290,9 @@ window.classes.push(
 					},
 					helper.chooseSpell,
 					{
-						"choicePrompt":"Do you want to replace one of your known Sorcerer spells?",
-						"choices":["Yes","No"],
-						"action":function(char,derived,choice,scope){
+						choicePrompt:"Do you want to replace one of your known Sorcerer spells?",
+						choices:["Yes","No"],
+						action:function(char,derived,choice,scope){
 							if (choice==="No"){
 								scope.updateStep+=2;
 							}
@@ -340,9 +306,9 @@ window.classes.push(
 					helper.hitDice6,
 					helper.chooseSpell,
 					{
-						"choicePrompt":"Do you want to replace one of your known Sorcerer spells?",
-						"choices":["Yes","No"],
-						"action":function(char,derived,choice,scope){
+						choicePrompt:"Do you want to replace one of your known Sorcerer spells?",
+						choices:["Yes","No"],
+						action:function(char,derived,choice,scope){
 							if (choice==="No"){
 								scope.updateStep+=2;
 							}
@@ -356,17 +322,16 @@ window.classes.push(
 					helper.hitDice6,
 					helper.attributeOrFeat,
 					helper.chooseFeat,
-					helper.increaseAttribute,
-					helper.increaseAttribute
+					helper.asi
 				]
 			},{//13
 				"updates":[
 					helper.hitDice6,
 					helper.chooseSpell,
 					{
-						"choicePrompt":"Do you want to replace one of your known Sorcerer spells?",
-						"choices":["Yes","No"],
-						"action":function(char,derived,choice,scope){
+						choicePrompt:"Do you want to replace one of your known Sorcerer spells?",
+						choices:["Yes","No"],
+						action:function(char,derived,choice,scope){
 							if (choice==="No"){
 								scope.updateStep+=2;
 							}
@@ -384,9 +349,9 @@ window.classes.push(
 					helper.hitDice6,
 					helper.chooseSpell,
 					{
-						"choicePrompt":"Do you want to replace one of your known Sorcerer spells?",
-						"choices":["Yes","No"],
-						"action":function(char,derived,choice,scope){
+						choicePrompt:"Do you want to replace one of your known Sorcerer spells?",
+						choices:["Yes","No"],
+						action:function(char,derived,choice,scope){
 							if (choice==="No"){
 								scope.updateStep+=2;
 							}
@@ -400,8 +365,7 @@ window.classes.push(
 					helper.hitDice6,
 					helper.attributeOrFeat,
 					helper.chooseFeat,
-					helper.increaseAttribute,
-					helper.increaseAttribute
+					helper.asi
 				]
 			},{//17
 				"updates":[
@@ -433,9 +397,9 @@ window.classes.push(
 					},
 					helper.chooseSpell,
 					{
-						"choicePrompt":"Do you want to replace one of your known Sorcerer spells?",
-						"choices":["Yes","No"],
-						"action":function(char,derived,choice,scope){
+						choicePrompt:"Do you want to replace one of your known Sorcerer spells?",
+						choices:["Yes","No"],
+						action:function(char,derived,choice,scope){
 							if (choice==="No"){
 								scope.updateStep+=2;
 							}
@@ -453,15 +417,14 @@ window.classes.push(
 					helper.hitDice6,
 					helper.attributeOrFeat,
 					helper.chooseFeat,
-					helper.increaseAttribute,
-					helper.increaseAttribute
+					helper.asi
 				]
 			},{//20
 				"updates":[
 					helper.hitDice6,
 					{
-						"choices":[],
-						"action":function(char){
+						choices:[],
+						action:function(char){
 							addPassive(char,"Sorcerous Restoration");
 						}
 					}
