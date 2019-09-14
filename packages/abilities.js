@@ -157,6 +157,9 @@ window.passives=[
 		name:"Stonecunning",
 		description:"Whenever you make an Intelligence (History) check related to the origin of stonework, you are considered proficient in the History skill and add double your proficiency bonus to the check, instead of your normal proficiency bonus."
 	},{
+		name:"Trance",
+		description:"You do not need to sleep. You instead meditate for 4 hours, resulting in the equivalent of a long rest."
+	},{
 		name:"Dwarven Resilience",
 		description:"You have advantage on saving throws against poison, and you have resistance against poison damage."
 	},{

@@ -446,11 +446,13 @@ function listUnknownCantripsForClass(char,classname){
 		if (spell.classes.indexOf(classname)==-1){continue;}
 		
 		let found=false;
-		for (var cspell of clas.spells){
-			//check if they already know this spell
-			if (cspell.name===spell.name){
-				found=true;
-				break;
+		if (clas && clas.spells){
+			for (var cspell of clas.spells){
+				//check if they already know this spell
+				if (cspell.name===spell.name){
+					found=true;
+					break;
+				}
 			}
 		}
 		if (!found){

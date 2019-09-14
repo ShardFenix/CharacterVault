@@ -733,6 +733,19 @@ $scope.spendGold=function(){
 	}
 }
 $scope.takeDamage=function(){
+	if ($scope.takeDamageInput < 0){
+		//heal shape HP if they have any, otherwise heal health
+		if ($scope.char.polyHp>0){
+			let amount = Math.min($scope.char.polyHpMax-$scope.char.polyHp, -$scope.takeDamageInput);
+			$scope.char.polyHp+=amount;
+			$scope.takeDamageInput+=amount;
+		}
+		//apply the remainder to the regular HP
+		let amount = Math.min($scope.derived.maxHp - $scope.char.hp, -$scope.takeDamageInput);
+		$scope.char.hp+=amount;
+		$scope.takeDamageInput = null;
+		return;
+	}
 	//deplete from temp hp first
 	if ($scope.char.tempHp >= $scope.takeDamageInput){
 		$scope.char.tempHp -= $scope.takeDamageInput;
