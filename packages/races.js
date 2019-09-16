@@ -182,9 +182,7 @@ window.races=[
 				action:function(char,derived,choice,scope){
 					let spell = findSpell(choice);
 					spell=angular.copy(spell);
-					spell.name="High Elf "+spell.name;
-					spell.description=spell.description+"\n\nIntelligence is your spellcasting ability for this cantrip.";
-					addPassive(char,spell);
+					addSpell(char,spell,"SpecialInt");
 				}
 			});
 		}

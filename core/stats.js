@@ -98,12 +98,14 @@ $scope.loadSpells=function(){
 				case "Wizard":
 				case "Rogue":
 				case "Fighter":
+				case "SpecialInt":
 					s.attackBonus = $scope.derived.proficiency + $scope.derived.modifiers.int;
 					break;
 				case "Bard":
 				case "Warlock":
 				case "Sorcerer":
 				case "Paladin":
+				case "SpecialCha":
 					s.attackBonus = $scope.derived.proficiency + $scope.derived.modifiers.cha;
 					break;
 				case "Barbarian":
@@ -111,6 +113,7 @@ $scope.loadSpells=function(){
 				case "Cleric":
 				case "Ranger":
 				case "Monk":
+				case "SpecialWis":
 					s.attackBonus = $scope.derived.proficiency + $scope.derived.modifiers.wis;
 					break;
 			}

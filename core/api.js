@@ -627,8 +627,17 @@ function addSpell(char,spell,forClass){
 					}
 				}
 				c.spells.push(s);
+				return;
 			}
 		}
+		//if the player doesnt have this class yet, give them a level 0 version of it
+		char.classes.push({
+			name:forClass,
+			level:0,
+			subclass:null,
+			spellcasting:[forClass],
+			spells:[s]
+		});
 	}
 }
 
