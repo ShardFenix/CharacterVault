@@ -181,7 +181,10 @@ window.races=[
 				choices:[listUnknownWizardCantrips],
 				action:function(char,derived,choice,scope){
 					let spell = findSpell(choice);
-					char.abilities.push(spell);
+					spell=angular.copy(spell);
+					spell.name="High Elf "+spell.name;
+					spell.description=spell.description+"\n\nIntelligence is your spellcasting ability for this cantrip.";
+					addPassive(char,spell);
 				}
 			});
 		}
