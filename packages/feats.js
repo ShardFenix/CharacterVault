@@ -164,7 +164,18 @@ window.feats=[
 	},{
 			name:"Magic Initiate (doesnt work)",
 			description:"Choose a class: bard, cleric, druid, sorcerer, warlock, or wizard. You learn two cantrips of your choice from that class's spell list.\nIn addition, choose one 1st-level spell from that same list. You learn that spell and can cast it at its lowest level. Once you cast it, you must finish a long rest before you can cast it again using this feat.\nYour spellcasting ability for these spells depends on the class you chose: Charisma for bard, sorcerer, or warlock; Wisdom for cleric or druid: or Intelligence for wizard.",
-			requirement:function(){return false;}
+			requirement:function(){return false;},
+			onPickup:function(char,scope){
+				scope.choiceQueue.push(
+					{
+						choicePrompt:"Choose a class for Magic Initiate",
+						choices:['Bard','Cleric','Druid','Sorcerer','Warlock','Wizard'],
+						action:function(char,derived,choice){
+							
+						}
+					}
+				);
+			}
 	},{
 			name:"Martial Adept",
 			identity:"Martial Adept",
