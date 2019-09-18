@@ -166,15 +166,41 @@ window.feats=[
 			description:"Choose a class: bard, cleric, druid, sorcerer, warlock, or wizard. You learn two cantrips of your choice from that class's spell list.\nIn addition, choose one 1st-level spell from that same list. You learn that spell and can cast it at its lowest level. Once you cast it, you must finish a long rest before you can cast it again using this feat.\nYour spellcasting ability for these spells depends on the class you chose: Charisma for bard, sorcerer, or warlock; Wisdom for cleric or druid: or Intelligence for wizard.",
 			requirement:function(){return false;},
 			onPickup:function(char,scope){
-				scope.choiceQueue.push(
-					{
-						choicePrompt:"Choose a class for Magic Initiate",
-						choices:['Bard','Cleric','Druid','Sorcerer','Warlock','Wizard'],
-						action:function(char,derived,choice){
-							
+				scope.choiceQueue.push({
+					choicePrompt:"Choose a class for Magic Initiate",
+					choices:['Bard','Cleric','Druid','Sorcerer','Warlock','Wizard'],
+					action:function(char,derived,choice,scope){
+						var cantripList = listUnknownCantripsForClass(char,choice);
+						scope.choiceQueue.push({
+							limit:2,
+							choicePrompt:"Choose two Cantrips",
+							choices:cantripList,
+							action:function(char2,derived2,choice2){
+								addSpell(char2,choice2,choice);
+							}
+						});
+						var spellList = [];
+						for (let spell of window.spells){
+							if (spell.level==1 && spell.classes.includes(choice)){
+								spellList.push(spell);
+							}
 						}
+						scope.choiceQueue.push({
+							choicePrompt:"Choose a Spell (Magic Initiate)",
+							choices:spellList,
+							action:function(char2,derived2,choice2){
+								var abil = angular.copy(findSpell(choice2));
+								abil.charges=1;
+								abil.maxCharges=1;
+								abil.onLongRest=function(){
+										this.charges=this.maxCharges;
+								};
+								abil.description+="\n\nYou may cast this once per long rest.";
+								char.abilities.push(abil);
+							}
+						});
 					}
-				);
+				});
 			}
 	},{
 			name:"Martial Adept",

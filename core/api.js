@@ -508,12 +508,20 @@ function highestSpellLevel(char){
  * list all the spells they can currently learn from that class.
  */
 function listLearnableSpells(char,$scope){
+	return listLearnableSpellsForClass(char,$scope,$scope.chosenClassName);
+}
+
+/**
+ * Based on which class the user picked ($scope.chosenClassName),
+ * list all the spells they can currently learn from that class.
+ */
+function listLearnableSpellsForClass(char,$scope,className){
 	let result=[];
 	let spellcasting=[];
 	let clas={};
 	let extraSpells=[];
 	for (var c of char.classes){
-		if (c.name===$scope.chosenClassName){
+		if (c.name===className){
 			clas=c;
 			spellcasting=c.spellcasting;
 			if (c.extraSpells){
@@ -552,6 +560,7 @@ function listLearnableSpells(char,$scope){
 	}
 	return result;
 }
+
 
 function getAttributesBelow20(char){
 	var result=[];
