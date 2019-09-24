@@ -133,11 +133,11 @@ Undying | No
 Wizard | Supported
 ------------- | -------------
 Core | Yes
-Abjuration | No
+Abjuration | Yes
 Bladesinging | No
-Conjuration | No
+Conjuration | Yes
 Divination | Yes
-Enchantment | No
+Enchantment | Yes
 Evocation | Yes
 Illusion | No
 Necromancy | No

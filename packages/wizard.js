@@ -26,16 +26,58 @@ window.abilities.append([
 		onLongRest:function(char,scope){
 			this.charges=this.maxCharges;
 		}
+	},{
+		name:"Arcane Ward",
+		description:"When you cast an Abjuration spell of 1st level or higher, you can simultaneously use a strand of the spell's magic to create a magical ward on yourself that lasts until you finish a long rest. The ward has hit points equal to twice your wizard level + your Intelligence modifier. Whenever you take damage, the ward takes the damage instead. If this damage reduces the ward to 0 hit points, you take any remaining damage.\n\nWhile the ward has 0 hit points, it can't absorb damage, but its magic remains. Whenever you cast an abjuration spell of 1st level or higher, the ward regains a number of hit points equal to twice the level of the spell.\n\nOnce you create the ward, you can't create it again until you finish a long rest.",
+		maxCharges:1,
+		charges:1,
+		onLongRest:function(char,scope){
+			this.charges=this.maxCharges;
+		}
+	},{
+		name:"Benign Transposition",
+		description:"You can use your action to teleport up to 30 feet to an unoccupied space that you can see. Alternatively, you can choose a space within range that is occupied by a Small or Medium creature. If that creature is willing, you both teleport, swapping places.\n\nOnce you use this feature, you can't use it again until you finish a long rest or you cast a conjuration spell of 1st level or higher.",
+		maxCharges:1,
+		charges:1,
+		onLongRest:function(char,scope){
+			this.charges=this.maxCharges;
+		}
+	},{
+		name:"Hypnotic Gaze",
+		description:"Your soft words and enchanting gaze can magically enthrall another creature. As an action, choose one creature that you can see within 5 feet of you. If the target can see or hear you, it must succeed on a Wisdom saving throw against your wizard spell save DC or be charmed by you until the end of your next turn. The charmed creature's speed drops to 0, and the creature is incapacitated and visibly dazed.\n\nOn subsequent turns, you can use your action to maintain this effect, extending its duration until the end of your next turn. However, the effect ends if you move more than 5 feet away from the creature, if the creature can neither see nor hear you, or if the creature takes damage.\n\nOnce the effect ends, or if the creature succeeds on its initial saving throw against this effect, you can't use this feature on that creature again until you finish a long rest.",
+		maxCharges:1,
+		charges:1,
+		onLongRest:function(char,scope){
+			this.charges=this.maxCharges;
+		}
 	}
 ]);
 
 window.passives.append([
 	{
+		name:"Abjuration Savant",
+		description:"The gold and time you must spend to copy an abjuration spell into your spellbook is halved."
+	},{
+		name:"Conjuration Savant",
+		description:"The gold and time you must spend to copy a conjuration spell into your spellbook is halved."
+	},{
 		name:"Divination Savant",
 		description:"The gold and time you must spend to copy a divination spell into your spellbook is halved."
 	},{
+		name:"Enchantment Savant",
+		description:"The gold and time you must spend to copy an enchantment spell into your spellbook is halved."
+	},{
 		name:"Evocation Savant",
 		description:"The gold and time you must spend to copy an evocation spell into your spellbook is halved."
+	},{
+		name:"Illusion Savant",
+		description:"The gold and time you must spend to copy an illusion spell into your spellbook is halved."
+	},{
+		name:"Necromancy Savant",
+		description:"The gold and time you must spend to copy a necromancy spell into your spellbook is halved."
+	},{
+		name:"Transmutation Savant",
+		description:"The gold and time you must spend to copy a transmutation spell into your spellbook is halved."
 	},{
 		name:"Portent",
 		description:"Glimpses of the future begin to press in on your awareness. When you finish a long rest, roll ${getClassLevel($scope.char,'Wizard')>=14?'three':'two'} d20s and record the numbers rolled. You can replace any attack roll, saving throw, or ability check made by you or a creature that you can see with one of these foretelling rolls. You must choose to do so before the roll, and you can replace a roll in this way only once per turn.\nEach foretelling roll can be used only once. When you finish a long rest, you lose any unused foretelling rolls."
@@ -60,6 +102,33 @@ window.passives.append([
 	},{
 		name:"Signature Spells",
 		description:"You gain mastery over two powerful spells and can cast them with little effort. Choose two 3rd-level wizard spells in your spellbook as your signature spells. You always have these spells prepared, they don't count against the number of spells you have prepared, and you can cast each of them once at 3rd level without expending a spell slot. When you do so, you can't do so again until you finish a short or long rest.\n\nIf you want to cast either spell at a higher level, you must expend a spell slot as normal."
+	},{
+		name:"Projected Ward",
+		description:"When a creature that you can see within 30 feet of you takes damage, you can use your reaction to cause your Arcane Ward to absorb that damage. If this damage reduces the ward to 0 hit points, the warded creature takes any remaining damage."
+	},{
+		name:"Improved Abjuration",
+		description:"When you cast an abjuration spell that requires you to make an ability check as a part of casting that spell (as in counterspell and dispel magic), you add your proficiency bonus to that ability check."
+	},{
+		name:"Spell Resistance",
+		description:"You have advantage on saving throws against spells, and you have resistance against the damage dealt by spells."
+	},{
+		name:"Durable Summons",
+		description:"Any creature that you summon or create with a conjuration spell has 30 temporary hit points."
+	},{
+		name:"Minor Conjuration",
+		description:"You can use your action to conjure up an inanimate object in your hand or on the ground in an unoccupied space that you can see within 10 feet of you. This object can be no larger than 3 feet on a side and weigh no more than 10 pounds, and its form must be that of a nonmagical object that you have seen. The object is visibly magical, radiating dim light out to 5 feet.\n\nThe object disappears after 1 hour, when you use this feature again, if it takes any damage, or if it deals any damage."
+	},{
+		name:"Forced Conjuration",
+		description:"While you are concentrating on a conjuration spell, your concentration can't be broken as a result of taking damage."
+	},{
+		name:"Split Enchantment",
+		description:"When you cast an enchantment spell of 1st level or higher that targets only one creature, you can have it target a second creature."
+	},{
+		name:"Alter Memories",
+		description:"You gain the ability to make a creature unaware of your magical influence on it. When you cast an enchantment spell to charm one or more creatures, you can alter one creature's understanding so that it remains unaware of being charmed.\n\nAdditionally, once before the spell expires, you can use your action to try to make the chosen creature forget some of the time it spent charmed. The creature must succeed on an Intelligence saving throw against your wizard spell save DC or lose a number of hours of its memories equal to 1 + your Charisma modifier (minimum of 1). You can make the creature forget less time, and the amount of time can't exceed the duration of your enchantment spell."
+	},{
+		name:"Instinctive Charm",
+		description:"When a creature you can see within 30 feet of you makes an attack roll against you, you can use your reaction to divert the attack, provided that another creature is within the attack's range. The attacker must make a Wisdom saving throw against your wizard spell save DC. On a failed save, the attacker must target the creature that is closest to it, not including you or itself. If multiple creatures are closest, the attacker chooses which one to target. On a successful save, you can't use this feature on the attacker again until you finish a long rest.\n\nYou must choose to use this feature before knowing whether the attack hits or misses. Creatures that can't be charmed are immune to this effect.",
 	}
 ]);
 
@@ -443,6 +512,192 @@ window.subclasses.push(
 						choices:[findPassive("Overchannel")],
 						action:function(char){
 							addPassive(char,"Overchannel");
+						}
+					}
+				]
+			},{},{},{},{},{},{}
+		]
+	}
+);
+
+window.subclasses.push(
+	{
+		classname:"Wizard",
+		name:"Abjuration",
+		subclass:"Abjuration",
+		description:"The School of Abjuration emphasizes magic that blocks, banishes, or protects. Detractors of this school say that its tradition is about denial, negation rather than positive assertion. You understand, however, that ending harmful effects, protecting the weak, and banishing evil influences is anything but a philosophical void. It is a proud and respected vocation.",
+		levels:[{},{},
+			{//2
+				summary:[
+					findPassive("Abjuration Savant"),
+					findAbility("Arcane Ward")
+				],
+				updates:[
+					{
+						choicePrompt:"You gain the following",
+						choices:[findPassive("Abjuration Savant"),findAbility("Arcane Ward")],
+						action:function(char,derived,choice,$scope){
+							addPassive(char,"Abjuration Savant");
+							addAbility(char,"Arcane Ward");
+						}
+					}
+				]
+			},{},{},{},{ //6
+				updates:[
+					{
+						summary:findPassive("Projected Ward"),
+						choicePrompt:"You gain the following",
+						choices:[findPassive("Projected Ward")],
+						action:function(char){
+							addPassive(char,"Projected Ward");
+						}
+					}
+				]
+			},{},{},{},
+			{//10
+				updates:[
+					{
+						summary:findPassive("Improved Abjuration"),
+						choicePrompt:"You gain the following",
+						choices:[findPassive("Improved Abjuration")],
+						action:function(char,derived,choice){
+							addPassive(char,"Improved Abjuration");
+						}
+					}
+				]
+			},{},{},{},
+			{//14
+				updates:[
+					{
+						summary:findPassive("Spell Resistance"),
+						choicePrompt:"You gain the following",
+						choices:[findPassive("Spell Resistance")],
+						action:function(char){
+							addPassive(char,"Spell Resistance");
+						}
+					}
+				]
+			},{},{},{},{},{},{}
+		]
+	}
+);
+
+window.subclasses.push(
+	{
+		classname:"Wizard",
+		name:"Conjuration",
+		subclass:"Conjuration",
+		description:"As a conjurer, you favor spells that produce objects and creatures out of thin air. You can conjure billowing clouds of killing fog or summon creatures from elsewhere to fight on your behalf. As your mastery grows, you learn spells of transportation and can teleport yourself across vast distances, even to other planes of existence, in an instant.",
+		levels:[{},{},
+			{//2
+				summary:[
+					findPassive("Conjuration Savant"),
+					findPassive("Minor Conjuration")
+				],
+				updates:[
+					{
+						choicePrompt:"You gain the following",
+						choices:[findPassive("Conjuration Savant"),findPassive("Minor Conjuration")],
+						action:function(char,derived,choice,$scope){
+							addPassive(char,"Conjuration Savant");
+							addPassive(char,"Minor Conjuration");
+						}
+					}
+				]
+			},{},{},{},{ //6
+				updates:[
+					{
+						summary:findAbility("Benign Transposition"),
+						choicePrompt:"You gain the following",
+						choices:[findAbility("Benign Transposition")],
+						action:function(char){
+							addAbility(char,"Benign Transposition");
+						}
+					}
+				]
+			},{},{},{},
+			{//10
+				updates:[
+					{
+						summary:findPassive("Focused Conjuration"),
+						choicePrompt:"You gain the following",
+						choices:[findPassive("Focused Conjuration")],
+						action:function(char,derived,choice){
+							addPassive(char,"Focused Conjuration");
+						}
+					}
+				]
+			},{},{},{},
+			{//14
+				updates:[
+					{
+						summary:findPassive("Durable Summons"),
+						choicePrompt:"You gain the following",
+						choices:[findPassive("Durable Summons")],
+						action:function(char){
+							addPassive(char,"Durable Summons");
+						}
+					}
+				]
+			},{},{},{},{},{},{}
+		]
+	}
+);
+
+window.subclasses.push(
+	{
+		classname:"Wizard",
+		name:"Enchantment",
+		subclass:"Enchantment",
+		description:"As a member of the School of Enchantment, you have honed your ability to magically entrance and beguile other people and monsters. Some enchanters are peacemakers who bewitch the violent to lay down their arms and charm the cruel into showing mercy. Others are tyrants who magically bind the unwilling into their service. Most enchanters fall somewhere in between.",
+		levels:[{},{},
+			{//2
+				summary:[
+					findPassive("Enchantment Savant"),
+					findPassive("Hypnotic Gaze")
+				],
+				updates:[
+					{
+						choicePrompt:"You gain the following",
+						choices:[findPassive("Enchantment Savant"),findAbility("Hypnotic Gaze")],
+						action:function(char,derived,choice,$scope){
+							addPassive(char,"Enchantment Savant");
+							addPassive(char,"Hypnotic Gaze");
+						}
+					}
+				]
+			},{},{},{},{ //6
+				updates:[
+					{
+						summary:findAbility("Instinctive Charm"),
+						choicePrompt:"You gain the following",
+						choices:[findAbility("Instinctive Charm")],
+						action:function(char){
+							addAbility(char,"Instinctive Charm");
+						}
+					}
+				]
+			},{},{},{},
+			{//10
+				updates:[
+					{
+						summary:findPassive("Split Enchantment"),
+						choicePrompt:"You gain the following",
+						choices:[findPassive("Split Enchantment")],
+						action:function(char,derived,choice){
+							addPassive(char,"Split Enchantment");
+						}
+					}
+				]
+			},{},{},{},
+			{//14
+				updates:[
+					{
+						summary:findPassive("Alter Memories"),
+						choicePrompt:"You gain the following",
+						choices:[findPassive("Alter Memories")],
+						action:function(char){
+							addPassive(char,"Alter Memories");
 						}
 					}
 				]
