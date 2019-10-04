@@ -18,12 +18,12 @@ Toolset for keeping track of your D&amp;D characters.
 Barbarian | Supported
 ------------- | -------------
 Core | Yes
-Ancestral Guardian | No
+Ancestral Guardian | Yes
 Battlerager | No
-Berserker | No
+Berserker | Yes
 Storm Herald | No
 Totem Warrior | No
-Zealot | No
+Zealot | Yes
 Whirlwind (homebrew) | Yes
 
 Bard | Supported
@@ -48,7 +48,7 @@ Nature | No
 Order | No
 Tempest | Yes
 Trickery | No
-War | No
+War | Yes
 
 Druid | Supported
 ------------- | -------------
