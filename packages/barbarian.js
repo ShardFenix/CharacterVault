@@ -15,6 +15,22 @@ window.abilities.append([
 		description:"When you enter a rage, you may make it a Whirlwind. While whirlwinding, you continuously spin your weapons around you, striking any objects and creatures that may be nearby. You gain the following while spinning, in lieu of your rage bonuses:\n\n\u2022 You cannot take the Attack action on your turn, you can't cast spells, and you can't make opportunity attacks.\n\u2022 Other creatures can't make opportunity attacks against you.\n\u2022 Melee attacks against you have disadvantage.\n\u2022 At the end of every 15 feet of continuous movement, you may immediately make a free melee attack on a target in your melee range. The attack does half damage.\n\u2022 At the end of each of your turns, if you moved less than 15 feet since your last turn, the whirlwind ends.",
 		resourceName:"Rage",
 		resourceCost:1
+	},{
+		name:"Consult the Spirits",
+		description:"You gain the ability to consult with your ancestral spirits. When you do so, you cast the Augury or Clairvoyance spell, without using a spell slot or material components. Rather than creating a spherical sensor, this use of clairvoyance invisibly summons one of your ancestral spirits to the chosen location. Wisdom is your spellcasting ability for these spells.\n\nAfter you cast either spell in this way, you can't use this feature again until you finish a short or long rest.",
+		onShortRest:function(){
+			this.charges=this.maxCharges;
+		},
+		maxCharges:1,
+		charges:1
+	},{
+		name:"Zealous Presence",
+		description:"You learn to channel divine power to inspire zealotry in others. As a bonus action, you unleash a battle cry infused with divine energy. Up to ten other creatures of your choice within 60 feet of you that can hear you gain advantage on attack rolls and saving throws until the start of your next turn.\n\nOnce you use this feature, you can't use it again until you finish a long rest.",
+		charges:1,
+		maxCharges:1,
+		onLongRest:function(){
+			this.charges=this.maxCharges;
+		}
 	}
 ]);
 
@@ -64,6 +80,39 @@ window.passives.append([
 	},{
 		name:"Spin to Win",
 		description:"Whenever you bring a creature to 0 hit points during your turn, you can move up to 30 additional feet this turn."
+	},{
+		name:"Ancestral Protectors",
+		description:"Spectral warriors appear when you enter your rage. While you're raging, the first creature you hit with an attack on your turn becomes the target of the warriors, which hinder its attacks. Until the start of your next turn, that target has disadvantage on any attack roll that isn't against you, and when the target hits a creature other than you with an attack, that creature has resistance to the damage dealt by the attack. The effect on the target ends early if your rage ends."
+	},{
+		name:"Spirit Shield",
+		description:"The guardian spirits that aid you can provide supernatural protection to those you defend. If you are raging and another creature you can see within 30 feet of you takes damage, you can use your reaction to reduce that damage by ${ladder(classlevel(char,'Barbarian'),6,2,10,3,14,4)}d6.\n\nWhen you reach certain levels in this class, you can reduce the damage by more: by 3d6 at 10th level and by 4d6 at 14th level."
+	},{
+		name:"Vengeful Ancestors",
+		description:"Your ancestral spirits grow powerful enough to retaliate. When you use your Spirit Shield to reduce the damage of an attack, the attacker takes an amount of force damage equal to the damage that your Spirit Shield prevents."
+	},{
+		name:"Frenzy",
+		description:"You can go into a frenzy when you rage. If you do so, for the duration of your rage you can make a single melee weapon attack as a bonus action on each of your turns after this one. When your rage ends, you suffer one level of exhaustion."
+	},{
+		name:"Mindless Rage",
+		description:"You can't be charmed or frightened while raging. If you are charmed or frightened when you enter your rage, the effect is suspended for the duration of the rage."
+	},{
+		name:"Intimidating Presence",
+		description:"You can use your action to frighten someone with your menacing presence. When you do so, choose one creature that you can see within 30 feet of you. If the creature can see or hear you, it must succeed on a Wisdom saving throw (DC equal to 8 + your proficiency bonus + your Charisma modifier - DC ${8 + derived.proficiency + derived.modifiers.cha}) or be frightened of you until the end of your next turn. On subsequent turns, you can use your action to extend the duration of this effect on the frightened creature until the end of your next turn. This effect ends if the creature ends its turn out of line of sight or more than 60 feet away from you.\n\nIf the creature succeeds on its saving throw, you can't use this feature on that creature again for 24 hours."
+	},{
+		name:"Retaliation",
+		description:"When you take damage from a creature that is within 5 feet of you. you can use your reaction to make a melee weapon attack against that creature."
+	},{
+		name:"Divine Fury",
+		description:"You can channel divine fury into your weapon strikes. While you're raging, the first creature you hit on each of your turns with a weapon attack takes extra damage equal to 1d6 + half your barbarian level. The extra damage is necrotic or radiant; you choose the type of damage when you gain this feature."
+	},{
+		name:"Warrior of the Gods",
+		description:"Your soul is marked for endless battle. If a spell, such as raise dead, has the sole effect of restoring you to life (but not undeath), the caster doesn't need material components to cast the spell on you."
+	},{
+		name:"Fanatical Focus",
+		description:"The divine power that fuels your rage can protect you. If you fail a saving throw while you're raging, you can reroll it, and you must use the new roll. You can use this ability only once per rage."
+	},{
+		name:"Rage Beyond Death",
+		description:"While you're raging, having 0 hit points doesn't knock you unconscious. You still must make death saving throws, and you suffer the normal effects of taking damage while at 0 hit points. However, if you would die due to failing death saving throws, you don't die until your rage ends, and you die then only if you still have 0 hit points."
 	}
 ]);
 
@@ -386,3 +435,184 @@ window.subclasses.push(
 	}
 );
 
+window.subclasses.push(
+	{
+		classname:"Barbarian",
+		name:"Ancestral Guardian",
+		subclass:"Ancestral Guardian",
+		description:"Some barbarians hail from cultures that revere their ancestors. These tribes teach that the warriors of the past linger in the world as mighty spirits, who can guide and protect the living. When a barbarian who follows this path rages, the barbarian contacts the spirit world and calls on these guardian spirits for aid.\n\nBarbarians who draw on their ancestral guardians can better fight to protect their tribes and their allies. In order to cement ties to their ancestral guardians, barbarians who follow this path cover themselves in elaborate tattoos that celebrate their ancestors' deeds. These tattoos tell sagas of victories against terrible monsters and other fearsome rivals.",
+		levels:[{},{},{},
+			{//3
+				updates:[
+					{
+						summary:findPassive("Ancestral Protectors"),
+						choicePrompt:"You gain the following",
+						choices:[findPassive("Ancestral Protectors")],
+						action:function(char,derived,choice,$scope){
+							addPassive(char,"Ancestral Protectors");
+						}
+					}
+				]
+			},{},{},{ //6
+				updates:[
+					{
+						summary:findPassive("Spirit Shield"),
+						choicePrompt:"You gain the following",
+						choices:[findPassive("Spirit Shield")],
+						action:function(char){
+							addPassive(char,"Spirit Shield");
+						}
+					}
+				]
+			},{},{},{},
+			{//10
+				updates:[
+					{
+						choicePrompt:"You gain the following",
+						summary:findAbility("Consult the Spirits"),
+						choices:[findAbility("Consult the Spirits")],
+						action:function(char,derived,choice){
+							addAbility(char,"Consult the Spirits");
+						}
+					}
+				]
+			},{},{},{},
+			{//14
+				updates:[
+					{
+						choicePrompt:"You gain the following",
+						summary:findPassive("Vengeful Ancestors"),
+						choices:[findPassive("Vengeful Ancestors")],
+						action:function(char){
+							addPassive(char,"Vengeful Ancestors");
+						}
+					}
+				]
+
+			},{},{},{},{},{},{}
+		]
+	}
+);
+
+
+window.subclasses.push(
+	{
+		classname:"Barbarian",
+		name:"Berserker",
+		subclass:"Berserker",
+		description:"For some barbarians, rage is a means to an end—that end being violence. The Path of the Berserker is a path of untrammeled fury, slick with blood. As you enter the berserker's rage, you thrill in the chaos of battle, heedless of your own health or well-being.",
+		levels:[{},{},{},
+			{//3
+				updates:[
+					{
+						summary:findPassive("Frenzy"),
+						choicePrompt:"You gain the following",
+						choices:[findPassive("Frenzy")],
+						action:function(char,derived,choice,$scope){
+							addPassive(char,"Frenzy");
+						}
+					}
+				]
+			},{},{},{ //6
+				updates:[
+					{
+						summary:findPassive("Mindless Rage"),
+						choicePrompt:"You gain the following",
+						choices:[findPassive("Mindless Rage")],
+						action:function(char){
+							addPassive(char,"Mindless Rage");
+						}
+					}
+				]
+			},{},{},{},
+			{//10
+				updates:[
+					{
+						choicePrompt:"You gain the following",
+						summary:findPassive("Intimidating Presence"),
+						choices:[findPassive("Intimidating Presence")],
+						action:function(char,derived,choice){
+							addPassive(char,"Intimidating Presence");
+						}
+					}
+				]
+			},{},{},{},
+			{//14
+				updates:[
+					{
+						choicePrompt:"You gain the following",
+						summary:findPassive("Retaliation"),
+						choices:[findPassive("Retaliation")],
+						action:function(char){
+							addPassive(char,"Retaliation");
+						}
+					}
+				]
+
+			},{},{},{},{},{},{}
+		]
+	}
+);
+
+window.subclasses.push(
+	{
+		classname:"Barbarian",
+		name:"Zealot",
+		subclass:"Zealot",
+		description:"Some deities inspire their followers to pitch themselves into a ferocious battle fury. These barbarians are zealots—warriors who channel their rage into powerful displays of divine power.\n\nA variety of gods across the worlds of D&D inspire their followers to embrace this path. Tempus from the Forgotten Realms and Hextor and Erythnul of Greyhawk are all prime examples. In general, the gods who inspire zealots are deities of combat, destruction, and violence. Not all are evil, but few are good.",
+		levels:[{},{},{},
+			{//3
+				summary:[
+					findPassive("Divine Fury"),
+					findPassive("Warrior of the Gods")
+				],
+				updates:[
+					{
+						choicePrompt:"You gain the following",
+						choices:[findPassive("Divine Fury"),findPassive("Warrior of the Gods")],
+						action:function(char,derived,choice,$scope){
+							addPassive(char,"Divine Fury");
+							addPassive(char,"Warrior of the Gods");
+						}
+					}
+				]
+			},{},{},{ //6
+				updates:[
+					{
+						summary:findPassive("Fanatical Focus"),
+						choicePrompt:"You gain the following",
+						choices:[findPassive("Fanatical Focus")],
+						action:function(char){
+							addPassive(char,"Fanatical Focus");
+						}
+					}
+				]
+			},{},{},{},
+			{//10
+				updates:[
+					{
+						choicePrompt:"You gain the following",
+						summary:findAbility("Zealous Presence"),
+						choices:[findAbility("Zealous Presence")],
+						action:function(char,derived,choice){
+							addAbility(char,"Zealous Presence");
+						}
+					}
+				]
+			},{},{},{},
+			{//14
+				updates:[
+					{
+						choicePrompt:"You gain the following",
+						summary:findPassive("Rage Beyond Death"),
+						choices:[findPassive("Rage Beyond Death")],
+						action:function(char){
+							addPassive(char,"Rage Beyond Death");
+						}
+					}
+				]
+
+			},{},{},{},{},{},{}
+		]
+	}
+);

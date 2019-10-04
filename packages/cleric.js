@@ -521,6 +521,7 @@ window.subclasses.push(
 						choices:[findAbility("War Priest")],
 						action:function(char,derived,choice,$scope){
 							char.proficiencies.upush("Heavy Armor");
+							char.proficiencies.upush("Martial Weapons");
 							addAbility(char,"War Priest");
 							getPlayerSpell(char,"Divine Favor","Cleric").alwaysPrepared=true;
 							getPlayerSpell(char,"Shield of Faith","Cleric").alwaysPrepared=true;
@@ -660,8 +661,6 @@ window.subclasses.push(
 					{
 						choices:[],
 						action:function(char){
-							addSpell(char,"Gust of Wind","Cleric");
-							addSpell(char,"Shatter","Cleric");
 							getPlayerSpell(char,"Gust of Wind","Cleric").alwaysPrepared=true;
 							getPlayerSpell(char,"Shatter","Cleric").alwaysPrepared=true;
 						}
@@ -672,8 +671,6 @@ window.subclasses.push(
 					{
 						choices:[],
 						action:function(char){
-							addSpell(char,"Call Lightning","Cleric");
-							addSpell(char,"Sleet Storm","Cleric");
 							getPlayerSpell(char,"Call Lightning","Cleric").alwaysPrepared=true;
 							getPlayerSpell(char,"Sleet Storm","Cleric").alwaysPrepared=true;
 						}
@@ -695,8 +692,6 @@ window.subclasses.push(
 					{
 						choices:[],
 						action:function(char){
-							addSpell(char,"Control Weather","Cleric");
-							addSpell(char,"Ice Storm","Cleric");
 							getPlayerSpell(char,"Control Weather","Cleric").alwaysPrepared=true;
 							getPlayerSpell(char,"Ice Storm","Cleric").alwaysPrepared=true;
 						}
@@ -719,24 +714,12 @@ window.subclasses.push(
 					{
 						choices:[],
 						action:function(char){
-							addSpell(char,"Destructive Wave","Cleric");
-							addSpell(char,"Insect Plague","Cleric");
 							getPlayerSpell(char,"Destructive Wave","Cleric").alwaysPrepared=true;
 							getPlayerSpell(char,"Insect Plague","Cleric").alwaysPrepared=true;
 						}
 					}
 				]
-			},{},{},{},{},{ //14
-				updates:[
-					{
-						choices:[],
-						action:function(char){
-							removePassive(char,"Divine Strike (1d8)");
-							addPassive(char,"Divine Strike (2d8)");
-						}
-					}
-				]
-			},{},{},
+			},{},{},{},{},{},{},{},
 			{//17
 				updates:[
 					{
@@ -752,3 +735,4 @@ window.subclasses.push(
 		]
 	}
 );
+
