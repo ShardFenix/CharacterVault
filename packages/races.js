@@ -1,3 +1,62 @@
+window.passives.append([
+	{
+		name:"Fire Resistance",
+		description:"Fire damage dealt to you is halved, rounded down."
+	},{
+		name:"Lightning Resistance",
+		description:"Lightning damage dealt to you is halved, rounded down."
+	},{
+		name:"Acid Resistance",
+		description:"Acid damage dealt to you is halved, rounded down."
+	},{
+		name:"Cold Resistance",
+		description:"Cold damage dealt to you is halved, rounded down."
+	},{
+		name:"Poison Resistance",
+		description:"Poison damage dealt to you is halved, rounded down."
+	}
+]);
+
+window.abilities.append([
+	{
+		name:"Acid Breath (Line)",
+		description:"You can use your action to exhale destructive energy. Each creature in a 30 foot line must make a DEX saving throw (DC <i>${8 + $scope.derived.modifiers.con + $scope.derived.proficiency}</i>). A creature takes <i>${ladder($scope.char.level,0,2,6,3,11,4,16,5)}</i>d6 acid damage on a failed save, or half as much on a successful save.\nYou can't use this again until you finish a short or long rest.",
+		maxCharges:1,
+		charges:1,
+		onShortRest:helper.recharge,
+	},{
+		name:"Lightning Breath (Line)",
+		description:"You can use your action to exhale destructive energy. Each creature in a 30 foot line must make a DEX saving throw (DC <i>${8 + $scope.derived.modifiers.con + $scope.derived.proficiency}</i>). A creature takes <i>${ladder($scope.char.level,0,2,6,3,11,4,16,5)}</i>d6 lightning damage on a failed save, or half as much on a successful save.\nYou can't use this again until you finish a short or long rest.",
+		maxCharges:1,
+		charges:1,
+		onShortRest:helper.recharge,
+	},{
+		name:"Fire Breath (Line)",
+		description:"You can use your action to exhale destructive energy. Each creature in a 30 foot line must make a DEX saving throw (DC <i>${8 + $scope.derived.modifiers.con + $scope.derived.proficiency}</i>). A creature takes <i>${ladder($scope.char.level,0,2,6,3,11,4,16,5)}</i>d6 fire damage on a failed save, or half as much on a successful save.\nYou can't use this again until you finish a short or long rest.",
+		maxCharges:1,
+		charges:1,
+		onShortRest:helper.recharge,
+	},{
+		name:"Fire Breath (Cone)",
+		description:"You can use your action to exhale destructive energy. Each creature in a 15 foot cone must make a DEX saving throw (DC <i>${8 + $scope.derived.modifiers.con + $scope.derived.proficiency}</i>). A creature takes <i>${ladder($scope.char.level,0,2,6,3,11,4,16,5)}</i>d6 fire damage on a failed save, or half as much on a successful save.\nYou can't use this again until you finish a short or long rest.",
+		maxCharges:1,
+		charges:1,
+		onShortRest:helper.recharge,
+	},{
+		name:"Poison Breath (Cone)",
+		description:"You can use your action to exhale destructive energy. Each creature in a 15 foot cone must make a CON saving throw (DC <i>${8 + $scope.derived.modifiers.con + $scope.derived.proficiency}</i>). A creature takes <i>${ladder($scope.char.level,0,2,6,3,11,4,16,5)}</i>d6 poison damage on a failed save, or half as much on a successful save.\nYou can't use this again until you finish a short or long rest.",
+		maxCharges:1,
+		charges:1,
+		onShortRest:helper.recharge,
+	},{
+		name:"Cold Breath (Cone)",
+		description:"You can use your action to exhale destructive energy. Each creature in a 15 foot cone must make a CON saving throw (DC <i>${8 + $scope.derived.modifiers.con + $scope.derived.proficiency}</i>). A creature takes <i>${ladder($scope.char.level,0,2,6,3,11,4,16,5)}</i>d6 cold damage on a failed save, or half as much on a successful save.\nYou can't use this again until you finish a short or long rest.",
+		maxCharges:1,
+		charges:1,
+		onShortRest:helper.recharge,
+	}
+]);
+
 window.races=[
 	{
 		name:"Human",
@@ -204,6 +263,54 @@ window.races=[
 			char.proficiencies.upush("Shortswords");
 			char.proficiencies.upush("Shortbows");
 			char.proficiencies.upush("Longbows");
+		}
+	},{
+		name:"Dragonborn",
+		description:"Attributes: +2 STR, +1 CHA.\nLanguages: Common and Draconic.\nBreath Weapon and damage resistance based on draconic ancestry.",
+		onPickup:function(char,scope){
+			char.proficiencies.push("Language: Common");
+			char.proficiencies.push("Language: Draconic");
+			char.speed=30;
+			scope.choiceQueue.push(
+				{
+					choicePrompt:"Choose your Draconic Ancestry",
+					choices:["Black","Blue","Brass","Bronze","Copper","Gold","Green","Red","Silver","White"],
+					action:function(char,derived,choice,$scope){
+						switch (choice){
+							case "Black":
+								addAbility(char,"Acid Breath (Line)");
+								addPassive(char,"Acid Resistance");break;
+							case "Blue":
+								addAbility(char,"Lightning Breath (Line)");
+								addPassive(char,"Lightning Resistance");break;
+							case "Brass":
+								addAbility(char,"Fire Breath (Line)");
+								addPassive(char,"Fire Resistance");break;
+							case "Bronze":
+								addAbility(char,"Lightning Breath (Line)");
+								addPassive(char,"Lightning Resistance");break;
+							case "Copper":
+								addAbility(char,"Acid Breath (Line)");
+								addPassive(char,"Acid Resistance");break;
+							case "Gold":
+								addAbility(char,"Fire Breath (Cone)");
+								addPassive(char,"Fire Resistance");break;
+							case "Green":
+								addAbility(char,"Poison Breath (Cone)");
+								addPassive(char,"Poison Resistance");break;
+							case "Red":
+								addAbility(char,"Fire Breath (Cone)");
+								addPassive(char,"Fire Resistance");break;
+							case "Silver":
+								addAbility(char,"Cold Breath (Cone)");
+								addPassive(char,"Cold Resistance");break;
+							case "White":
+								addAbility(char,"Cold Breath (Cone)");
+								addPassive(char,"Cold Resistance");break;
+						}
+					}
+				}
+			);
 		}
 	}
 ];

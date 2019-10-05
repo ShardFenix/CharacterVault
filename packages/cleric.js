@@ -136,6 +136,7 @@ window.classes.push(
 				],
 				"updates":[
 					{
+						always:true,
 						choicePrompt:"You gain the following proficiencies",
 						choices:["Light Armor","Medium Armor","Shields","Simple Weapons"],
 						action:function(char,derived,choice,$scope){
@@ -411,6 +412,8 @@ window.subclasses.push(
 							addPassive(char,"Disciple of Life");
 							getPlayerSpell(char,"Cure Wounds","Cleric").alwaysPrepared=true;
 							getPlayerSpell(char,"Bless","Cleric").alwaysPrepared=true;
+							getPlayerSpell(char,"Cure Wounds","Cleric").prepared=true;
+							getPlayerSpell(char,"Bless","Cleric").prepared=true;
 						}
 					}
 				]
@@ -432,6 +435,8 @@ window.subclasses.push(
 						action:function(char){
 							getPlayerSpell(char,"Spiritual Weapon","Cleric").alwaysPrepared=true;
 							getPlayerSpell(char,"Lesser Restoration","Cleric").alwaysPrepared=true;
+							getPlayerSpell(char,"Spiritual Weapon","Cleric").prepared=true;
+							getPlayerSpell(char,"Lesser Restoration","Cleric").prepared=true;
 						}
 					}
 				]
@@ -442,6 +447,8 @@ window.subclasses.push(
 						action:function(char){
 							getPlayerSpell(char,"Beacon of Hope","Cleric").alwaysPrepared=true;
 							getPlayerSpell(char,"Revivify","Cleric").alwaysPrepared=true;
+							getPlayerSpell(char,"Beacon of Hope","Cleric").prepared=true;
+							getPlayerSpell(char,"Revivify","Cleric").prepared=true;
 						}
 					}
 				]
@@ -463,6 +470,8 @@ window.subclasses.push(
 						action:function(char){
 							getPlayerSpell(char,"Death Ward","Cleric").alwaysPrepared=true;
 							getPlayerSpell(char,"Guardian of Faith","Cleric").alwaysPrepared=true;
+							getPlayerSpell(char,"Death Ward","Cleric").prepared=true;
+							getPlayerSpell(char,"Guardian of Faith","Cleric").prepared=true;
 						}
 					}
 				]
@@ -485,6 +494,8 @@ window.subclasses.push(
 						action:function(char){
 							getPlayerSpell(char,"Mass Cure Wounds","Cleric").alwaysPrepared=true;
 							getPlayerSpell(char,"Raise Dead","Cleric").alwaysPrepared=true;
+							getPlayerSpell(char,"Mass Cure Wounds","Cleric").prepared=true;
+							getPlayerSpell(char,"Raise Dead","Cleric").prepared=true;
 						}
 					}
 				]
@@ -523,8 +534,11 @@ window.subclasses.push(
 							char.proficiencies.upush("Heavy Armor");
 							char.proficiencies.upush("Martial Weapons");
 							addAbility(char,"War Priest");
+							addSpell(char,"Divine Favor","Cleric");
 							getPlayerSpell(char,"Divine Favor","Cleric").alwaysPrepared=true;
 							getPlayerSpell(char,"Shield of Faith","Cleric").alwaysPrepared=true;
+							getPlayerSpell(char,"Divine Favor","Cleric").prepared=true;
+							getPlayerSpell(char,"Shield of Faith","Cleric").prepared=true;
 						}
 					}
 				]
@@ -544,8 +558,11 @@ window.subclasses.push(
 					{
 						choices:[],
 						action:function(char){
+							addSpell(char,"Magic Weapon","Cleric");
 							getPlayerSpell(char,"Spiritual Weapon","Cleric").alwaysPrepared=true;
 							getPlayerSpell(char,"Magic Weapon","Cleric").alwaysPrepared=true;
+							getPlayerSpell(char,"Spiritual Weapon","Cleric").prepared=true;
+							getPlayerSpell(char,"Magic Weapon","Cleric").prepared=true;
 						}
 					}
 				]
@@ -554,8 +571,11 @@ window.subclasses.push(
 					{
 						choices:[],
 						action:function(char){
+							addSpell(char,"Crusader's Mantle","Cleric");
 							getPlayerSpell(char,"Spirit Guardians","Cleric").alwaysPrepared=true;
 							getPlayerSpell(char,"Crusader's Mantle","Cleric").alwaysPrepared=true;
+							getPlayerSpell(char,"Spirit Guardians","Cleric").prepared=true;
+							getPlayerSpell(char,"Crusader's Mantle","Cleric").prepared=true;
 						}
 					}
 				]
@@ -576,8 +596,11 @@ window.subclasses.push(
 					{
 						choices:[],
 						action:function(char){
+							addSpell(char,"Stoneskin","Cleric");
 							getPlayerSpell(char,"Freedom of Movement","Cleric").alwaysPrepared=true;
 							getPlayerSpell(char,"Stoneskin","Cleric").alwaysPrepared=true;
+							getPlayerSpell(char,"Freedom of Movement","Cleric").prepared=true;
+							getPlayerSpell(char,"Stoneskin","Cleric").prepared=true;
 						}
 					}
 				]
@@ -598,8 +621,11 @@ window.subclasses.push(
 					{
 						choices:[],
 						action:function(char){
+							addSpell(char,"Hold Monster","Cleric");
 							getPlayerSpell(char,"Flame Strike","Cleric").alwaysPrepared=true;
 							getPlayerSpell(char,"Hold Monster","Cleric").alwaysPrepared=true;
+							getPlayerSpell(char,"Flame Strike","Cleric").prepared=true;
+							getPlayerSpell(char,"Hold Monster","Cleric").prepared=true;
 						}
 					}
 				]
@@ -642,6 +668,8 @@ window.subclasses.push(
 							addSpell(char,"Thunderwave","Cleric");
 							getPlayerSpell(char,"Fog Cloud","Cleric").alwaysPrepared=true;
 							getPlayerSpell(char,"Thunderwave","Cleric").alwaysPrepared=true;
+							getPlayerSpell(char,"Fog Cloud","Cleric").prepared=true;
+							getPlayerSpell(char,"Thunderwave","Cleric").prepared=true;
 						}
 					}
 				]
@@ -661,8 +689,12 @@ window.subclasses.push(
 					{
 						choices:[],
 						action:function(char){
+							addSpell(char,"Gust of Wind","Cleric");
+							addSpell(char,"Shatter","Cleric");
 							getPlayerSpell(char,"Gust of Wind","Cleric").alwaysPrepared=true;
 							getPlayerSpell(char,"Shatter","Cleric").alwaysPrepared=true;
+							getPlayerSpell(char,"Gust of Wind","Cleric").prepared=true;
+							getPlayerSpell(char,"Shatter","Cleric").prepared=true;
 						}
 					}
 				]
@@ -671,8 +703,12 @@ window.subclasses.push(
 					{
 						choices:[],
 						action:function(char){
+							addSpell(char,"Call Lightning","Cleric");
+							addSpell(char,"Sleet Storm","Cleric");
 							getPlayerSpell(char,"Call Lightning","Cleric").alwaysPrepared=true;
 							getPlayerSpell(char,"Sleet Storm","Cleric").alwaysPrepared=true;
+							getPlayerSpell(char,"Call Lightning","Cleric").prepared=true;
+							getPlayerSpell(char,"Sleet Storm","Cleric").prepared=true;
 						}
 					}
 				]
@@ -692,8 +728,12 @@ window.subclasses.push(
 					{
 						choices:[],
 						action:function(char){
+							addSpell(char,"Control Weather","Cleric");
+							addSpell(char,"Ice Storm","Cleric");
 							getPlayerSpell(char,"Control Weather","Cleric").alwaysPrepared=true;
 							getPlayerSpell(char,"Ice Storm","Cleric").alwaysPrepared=true;
+							getPlayerSpell(char,"Control Weather","Cleric").prepared=true;
+							getPlayerSpell(char,"Ice Storm","Cleric").prepared=true;
 						}
 					}
 				]
@@ -714,8 +754,11 @@ window.subclasses.push(
 					{
 						choices:[],
 						action:function(char){
+							addSpell(char,"Destructive Wave","Cleric");
 							getPlayerSpell(char,"Destructive Wave","Cleric").alwaysPrepared=true;
 							getPlayerSpell(char,"Insect Plague","Cleric").alwaysPrepared=true;
+							getPlayerSpell(char,"Destructive Wave","Cleric").prepared=true;
+							getPlayerSpell(char,"Insect Plague","Cleric").prepared=true;
 						}
 					}
 				]

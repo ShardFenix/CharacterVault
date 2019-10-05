@@ -308,6 +308,18 @@ var setupForCurrentStep=function(){
 			nextStep();
 		} else {
 			$scope.prompt=$scope.currentStep.choicePrompt;
+			//if it's informational, select all choices
+			if ($scope.currentStep.always===true){
+				for (let c of $scope.currentChoices){
+					c.selected=true;
+				}
+				$scope.currentStep.limit=$scope.currentChoices.length;
+			} else if ($scope.currentChoices.length===1 || $scope.currentStep.limit>=$scope.currentChoices.length){
+				//there are less choices than the player is allowed to pick, so pick them all
+				for (let c of $scope.currentChoices){
+					c.selected=true;
+				}
+			}
 		}
 	} else {
 		//just do the update
@@ -349,10 +361,14 @@ $scope.toggleChoice=function(choice){
 
 $scope.submitStep=function(){
 	let doNextStepAfterThis=true;
-	for (let choice of $scope.currentChoices){
-		if (choice.selected){
-			if (false == $scope.selectChoice(choice)){
-				doNextStepAfterThis=false;
+	if ($scope.currentStep && $scope.currentStep.always===true){
+		$scope.selectChoice("");
+	} else {
+		for (let choice of $scope.currentChoices){
+			if (choice.selected){
+				if (false == $scope.selectChoice(choice)){
+					doNextStepAfterThis=false;
+				}
 			}
 		}
 	}

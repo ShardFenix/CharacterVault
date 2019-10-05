@@ -305,7 +305,10 @@ var helper={
 						action:function(char,derived,choice){
 							char.maxHp+=choice;
 						}
-					}
+					},
+	recharge:function(){
+		this.charges=this.maxCharges;
+	}
 };
 
 function openPack(char,packname){

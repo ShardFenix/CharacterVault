@@ -40,10 +40,10 @@ window.passives.append([
 		description:"Whenever you hit a creature with a melee weapon, the creature takes an extra 1d8 radiant damage."
 	},{
 		name:"Aura of Protection",
-		description:"Whenever you or a friendly creature within ${clevel($scope.char,'Paladin')<18?10:30} feet of you must make a saving throw, the creature gains a bonus to the saving throw equal to your Charisma modifier (minimum bonus of +1). You must be conscious to grant this bonus."
+		description:"Whenever you or a friendly creature within ${classLevel($scope.char,'Paladin')<18?10:30} feet of you must make a saving throw, the creature gains a bonus to the saving throw equal to your Charisma modifier (minimum bonus of +1). You must be conscious to grant this bonus."
 	},{
 		name:"Aura of Courage",
-		description:"You and friendly creatures within ${clevel($scope.char,'Paladin')<18?10:30} feet of you can't be frightened while you are conscious."
+		description:"You and friendly creatures within ${classLevel($scope.char,'Paladin')<18?10:30} feet of you can't be frightened while you are conscious."
 	}
 ]);
 
