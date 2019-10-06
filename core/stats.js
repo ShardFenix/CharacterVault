@@ -172,9 +172,6 @@ $scope.updateStep=-1;
 $scope.currentChoices=null;
 $scope.currentPackage=null;
 $scope.chosenClassName=null;
-//if this is true, the character will have all their levelup history saved.
-//useful when making template characters you can scale by level.
-$scope.saveLevelHistory=false;
 
 $scope.choiceQueue=[]; //used for choices that are made outside of a levelup (like subfeats)
 
@@ -251,13 +248,6 @@ function finishLevelUp(){
 	}
 	$scope.tip=null;
 	{
-		if (!$scope.char.levelHistory){
-			$scope.char.levelHistory=[];
-			//initialize with null data up to the previous level
-			for (let i=0;i<$scope.chosenLevel;i++){
-				$scope.char.levelHistory.push(null);
-			}
-		}
 		let tempChar = angular.copy($scope.char);
 		prepForSave(tempChar);
 		$scope.char.levelHistory.push(tempChar);
