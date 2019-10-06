@@ -235,6 +235,14 @@ $scope.setTip=function(choice,spellLevel){
 	} else {
 		$scope.spellLevel=null;
 	}
+	$scope.tipRight=true;
+	$scope.tipLeft=false;
+}
+
+$scope.setLeftTip=function(choice,spellLevel){
+	$scope.setTip(choice,spellLevel);
+	$scope.tipRight=false;
+	$scope.tipLeft=true;
 }
 
 $scope.spellList=window.spells;

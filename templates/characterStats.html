@@ -214,6 +214,7 @@
 
 <td style="vertical-align:top;">
 <br><br>
+<!--
 	<div style="padding:10px;border:1px solid black;" class="desktop">
 		<span class="label bordertitle" style="margin-top:-24px;">Add Passive Ability</span>
 		<label>Name
@@ -227,6 +228,46 @@
 		<br>
 		<button style="display:none"></button>
 	</div>
+-->
+
+	<div style="display:flex;">
+		<div style="vertical-align:top;text-align:center;flex:1;padding-right:10px;">
+			<div class="label">Abilities</div>
+			<div class="leftmenu">
+				<div class="item" ng-repeat="item in char.abilities | orderBy:'name' track by $index"
+						ng-click="decrementCharges(item)"
+						ng-if="item.charges>0"
+						ng-mouseenter="setLeftTip(item)" ng-mouseleave="clearTip()">
+					<span style="font-weight:bold;">{{item.name}}</span>
+					<span>({{item.charges}})</span>
+				</div>
+			</div>
+			<br><br>
+			<div class="label">Exhausted</div>
+			<div class="leftmenu">
+				<div class="redback item" ng-repeat="item in char.abilities | orderBy:'name' track by $index"
+						ng-click="addCharge(item)" 
+						ng-if="item.maxCharges-item.charges>0"
+						ng-mouseenter="setLeftTip(item)" ng-mouseleave="clearTip()">
+					<span style="font-weight:bold;">{{item.name}}</span>
+					<span>({{item.maxCharges-item.charges}})</span>
+					<span class="deletebutton" ng-click="delete(item,char.abilities,$event)">&times;</span>
+				</span>
+				</div>
+			</div>
+		</div>
+		<div style="vertical-align:top;text-align:center;flex:1;padding-right:10px;">
+			<div class="label">Proficiencies and Languages</div>
+			<input type="text" ng-model='profSearch' placeholder="Search..." />
+			<div class="leftmenu scrollable">
+				<div class="item" ng-repeat="item in char.proficiencies | filter:profSearch | orderBy:'name'">
+					<span style="font-weight:bold;">{{item}}</span>
+					<span class="deletebutton" ng-click="delete(item,char.proficiencies,$event)">&times;</span>
+				</div>
+			</div>
+		</div>
+	</div>
+	
 	<div class="tablet">
 		<table style="width:100%" class="tablet">
 			<tr>

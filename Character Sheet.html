@@ -342,7 +342,17 @@
 </div>
 
 <!-- Tooltip Modal-->
-<div class="rightModal" ng-class="{'show':currentChoices || tip}" ng-mouseenter="renewTip()" ng-mouseleave="clearTip()">
+<div class="rightTip" ng-class="{'show':(currentChoices || tip) && tipRight}" ng-mouseenter="renewTip()" ng-mouseleave="clearTip()">
+	<div ng-if="tip.cr===undefined" style="padding:40px">
+		<div side-tip></div>
+	</div>
+	
+	<!-- Creature statbox tooltip -->
+	<div class="creatureCard box" ng-if="tip.cr" style="width:100%;padding-top:40px;">
+		<div creature-tip></div>
+	</div>
+</div>
+<div class="leftTip" ng-class="{'show':(currentChoices || tip) && tipLeft}" ng-mouseenter="renewTip()" ng-mouseleave="clearTip()">
 	<div ng-if="tip.cr===undefined" style="padding:40px">
 		<div side-tip></div>
 	</div>

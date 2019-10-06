@@ -478,7 +478,7 @@ div.leftModal.show{
 	left:0%;
 }
 
-div.rightModal {
+div.rightTip {
     position: absolute;
     background: url('../images/parchment2.jpg');
 	background-attachment:local;
@@ -493,8 +493,27 @@ div.rightModal {
 	overflow-y:scroll;
     z-index: 2;
 }
-div.rightModal.show{
+div.rightTip.show{
 	left:59%;
+}
+
+div.leftTip {
+    position: absolute;
+    background: url('../images/parchment2.jpg');
+	background-attachment:local;
+    box-shadow: 0 0 2px 1px black;
+    width: 41%;
+    right: 110%;
+    top: 0%;
+    transition: 0.5s ease all;
+    text-align: center;
+    min-height: 100%;
+	max-height: 100%;
+	overflow-y:scroll;
+    z-index: 2;
+}
+div.leftTip.show{
+	right:59%;
 }
 
 .tipDescription{

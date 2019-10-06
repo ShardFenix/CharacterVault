@@ -221,16 +221,21 @@ window.classes.push(
 						action:function(char,derived,choice){
 							addAbility(char,"Arcane Recovery");
 						}
-					},
-					helper.chooseWizardCantrip,
-					helper.chooseWizardCantrip,
-					helper.chooseWizardCantrip,
-					helper.chooseSpell,
-					helper.chooseSpell,
-					helper.chooseSpell,
-					helper.chooseSpell,
-					helper.chooseSpell,
-					helper.chooseSpell
+					},{
+						limit:3,
+						choicePrompt:"Choose three cantrips",
+						choices:[listUnknownWizardCantrips],
+						action:function(char,derived,choice,scope){
+							addSpell(char,choice,scope.chosenClassName);
+						}
+					},{
+						limit:6,
+						choicePrompt:"Choose six spells",
+						choices:[listLearnableSpells],
+						action:function(char,derived,choice,scope){
+							addSpell(char,choice,scope.chosenClassName);
+						}
+					}
 				]
 			}, { // 2
 				"updates":[
