@@ -256,13 +256,6 @@ function finishLevelUp(){
 	$scope.history[$scope.char.level-1]=$scope.charBackup;
 }
 
-$scope.loadFromLevelHistory=function(char,level){
-	if (char && (typeof level == 'number')){
-		if (char.levelHistory && char.levelHistory.length>level){
-			//TODO: Load this level
-		}
-	}
-}
 
 /**
  * Bu this time, it is assumed that $scope.currentChoice has been set to
@@ -1126,7 +1119,6 @@ $scope.setLeftTip=function(choice,spellLevel){
 
 $scope.saveToVault=function(){
 	let name=$scope.char.name;
-	console.log("Saving character to vault "+name);
 	let jsonChar=JSON.stringify($scope.char);
 	$http.post('http://localhost:8080/characters/' + name, jsonChar)
 		.then(function(response){
@@ -1222,7 +1214,7 @@ $scope.load=function(characterName){
 			$http.get('http://localhost:8080/characters/'+characterName+".history").then(function(response2){
 				$scope.history=response2.data;
 			},function(error){
-				console.error("Error loading history for "+characterName,error);
+				console.warn("Error loading history for "+characterName,error);
 				$scope.history=[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null];
 				$scope.history[$scope.char.level]=angular.copy($scope.char);
 			}
@@ -1232,11 +1224,11 @@ $scope.load=function(characterName){
 	}
 }
 
-$scope.selectHistory(level){
+$scope.loadFromLevelHistory(level){
 	if (history.length>level){
 		if (history[level].level===level){
 			//TODO: push current level into history if it's not there yet
-			$scope.char=history[level];
+			$scope.char=angular.copy(history[level]);
 			initLoadedCharacter($scope.char);
 		}
 	}
@@ -1373,6 +1365,11 @@ $scope.creatureFilter=function(value,index,array){
 		return false;
 	}
 	return true;
+}
+
+$scope.historyStyle=function(){
+	let perc=100*($scope.historyLevel-1)/19;
+	return {"background": "linear-gradient(90deg, #4CAF50, #4CAF50 "+perc+"%, #e0e0e0 "+perc+"%, #e0e0e0)"};
 }
 
 }]);

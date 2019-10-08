@@ -315,3 +315,10 @@
 </td>
 
 </tr></tbody></table>
+<div>
+	<input type="range" class="level-slider" min="1" max="20" list="steplist" style="width:100%;"
+			ng-model="historyLevel" ng-change="loadFromLevelHistory(historyLevel)" ng-style="historyStyle()"/>
+	<datalist id="steplist">
+		<option ng-repeat="hist in history"></option>
+	</datalist>
+</div>

@@ -746,3 +746,46 @@ table.bigcells td{
 .flex1{flex:1;}
 .flex2{flex:2;}
 .flex3{flex:3;}
+
+input[type="range"].level-slider {
+  -webkit-appearance: none;
+  width: 100%;
+  height: 10px;
+  border-radius: 5px;  
+  background: #e0e0e0;
+  outline: none;
+  -webkit-transition: .2s;
+  transition: opacity .2s;
+}
+
+input[type="range"].level-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 25px;
+  height: 25px;
+  border-radius: 50%; 
+  background: #4CAF50;
+  cursor: pointer;
+}
+
+datalist.level-slider {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    margin-top: -19px;
+    padding-top: 0px;
+    margin-left: 2px;
+}
+datalist.level-slider option {
+    width: 2ex;
+    display: flex;
+    justify-content: center;
+    align-items: end;
+    background-position-y: -15px;
+    background-position-x: center;
+    z-index: -1;
+    color: transparent;
+    background-color: #e0e0e0;
+    border-radius: 500px;
+	user-select:none;
+}
