@@ -253,6 +253,7 @@ function finishLevelUp(){
 		$scope.char.levelHistory.push(tempChar);
 	}
 	$scope.chosenLevel=null;
+	$scope.history[$scope.char.level-1]=$scope.charBackup;
 }
 
 $scope.loadFromLevelHistory=function(char,level){
@@ -457,14 +458,10 @@ function nextStep(){
 	}
 }
 
-$scope.newChar=function(){
-	
+function resetChar(){
 	$scope.char={
 		maxHp:0,
 		hp:0,
-		tempHp:0,
-		polyHp:0,
-		polyHpMax:0,
 		level:0, //total level
 		money:0,
 		classes:[],
@@ -481,6 +478,12 @@ $scope.newChar=function(){
 		proficiencies:[],
 		inventory:[]
 	};
+}
+
+$scope.newChar=function(){
+	
+	resetChar();
+	$scope.history=[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null];
 
 	$scope.derived={
 		modifiers:{
@@ -852,6 +855,10 @@ $scope.longRest=function(){
 			}
 		}
 	}
+	$scope.char.hp=$scope.char.maxHp;
+	$scope.char.tempHp=0;
+	$scope.char.polyHp=0;
+	$scope.char.polyHpMax=0;
 	$scope.calculateSharedResources();
 }
 
@@ -1062,11 +1069,10 @@ $scope.attackBonus=function(item){
 		canUseDex=true;
 	}
 	//monk weapon and the player is a monk
-	if (getClassLevel($scope.char,"Monk")>0 && item.proficiencies.includes("Shortswords") || 
-			(item.categories.includes("Simple") && item.categories.includes("Melee")
-			&& item.heavy===false && !item.damage2)){
-				canUseDex=true;
-			}
+	if (getClassLevel($scope.char,"Monk")>0 && item.heavy===false && !item.damage2 
+		&& (item.proficiencies.includes("Shortswords") || (item.categories.includes("Simple") && item.categories.includes("Melee")))){
+			canUseDex=true;
+		}
 	
 	if (!canUseStr){
 		total+=$scope.derived.modifiers.dex;
@@ -1125,14 +1131,21 @@ $scope.saveToVault=function(){
 	$http.post('http://localhost:8080/characters/' + name, jsonChar)
 		.then(function(response){
 			console.log("Saved character "+name);
+			$scope.messages.push("Character saved!");
+			if ($scope.history){
+				let jsonHist = JSON.stringify($scope.history);
+				$http.post('http://localhost:8080/characters/'+name+'.history',jsonHist)
+					.then(function(response){
+						console.log("Saved history for "+name);
+					});
+			}
 		},function(error){
 			console.error(error);
-		}
-	);
+		});
 }
 
 function prepForSave(char){
-	//passives, spells, and abilities can be compressed by removing everything but their name and description.
+	//passives and abilities can be compressed by removing everything but their name and description.
 	//We can restore them on load.
 	for (let passive of char.passives){
 		delete passive.onShortRest;
@@ -1157,6 +1170,7 @@ function prepForSave(char){
 
 $scope.save=function(){
 	prepForSave($scope.char);
+	$scope.history[$scope.char.level]=angular.copy($scope.char);
 	if (serverVaultEnabled) {
 		$scope.saveToVault();
 	}
@@ -1165,60 +1179,35 @@ $scope.save=function(){
 
 let serverVaultEnabled=false;
 
-function convertLocalStorage(){
-	$scope.char={
-		maxHp:0,
-		hp:0,
-		level:0, //total level
-		money:0,
-		classes:[],
-		//multipliers for save proficiencies
-		saves:{
-			str:0,dex:0,con:0,wis:0,int:0,cha:0
-		},
-		attributes:{
-			str:10,dex:10,con:10,wis:10,int:10,cha:10
-		},
-		skills:[],
-		passives:[],
-		abilities:[],
-		proficiencies:[],
-		inventory:[]
-	};
-}
-
-function checkServerVault(){
-	//check to see if a webserver is running
-	$http.get('http://localhost:8080/').then(function(resp){
-		//if we're not viewing this at localhost, redirect to localhost.
-		//This way we dont have to deal with xorigin nonsense.
-		if (window.location.protocol==='file:'){
-			let filename = window.location.pathname;
-			filename = filename.substring(filename.lastIndexOf('/'));
-			window.location.href = "http://localhost:8080"+filename;
-			return;
-		}
-		serverVaultEnabled=true;
-		convertLocalStorage();
-		loadList();
-	},function(error){
-		serverVaultEnabled=false;
-		alert("Run server.bat, then refresh the page.");
-	});
-}
-
-checkServerVault();
+//check to see if a webserver is running
+$http.get('http://localhost:8080/').then(function(resp){
+	//if we're not viewing this at localhost, redirect to localhost.
+	//This way we dont have to deal with xorigin nonsense.
+	if (window.location.protocol==='file:'){
+		let filename = window.location.pathname;
+		filename = filename.substring(filename.lastIndexOf('/'));
+		window.location.href = "http://localhost:8080"+filename;
+		return;
+	}
+	serverVaultEnabled=true;
+	convertLocalStorage();
+	loadList();
+},function(error){
+	serverVaultEnabled=false;
+	alert("Run server.bat, then refresh the page.");
+});
 
 function loadList(){
 	$scope.saveList=[];
 	if (serverVaultEnabled){
 		$http.get('http://localhost:8080/characters').then(function(response){
 			for (let filename of response.data){
-				$scope.saveList.push({name:filename,saveId:filename});
+				if (!filename.endsWith('.history')){
+					$scope.saveList.push({name:filename,saveId:filename});
+				}
 			}
 		},function(error){
-			console.error("Error loading character vault.");
-			console.error(error);
+			console.error("Error loading character list from vault.",error);
 		});
 	}
 }
@@ -1228,17 +1217,34 @@ $scope.load=function(characterName){
 	if (serverVaultEnabled){
 		$http.get('http://localhost:8080/characters/'+characterName).then(function(response){
 			$scope.char=response.data;
-			initLoadedCharacter();
+			initLoadedCharacter($scope.char);
+			//load history
+			$http.get('http://localhost:8080/characters/'+characterName+".history").then(function(response2){
+				$scope.history=response2.data;
+			},function(error){
+				console.error("Error loading history for "+characterName,error);
+				$scope.history=[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null];
+				$scope.history[$scope.char.level]=angular.copy($scope.char);
+			}
 		},function(error){
-			console.error("Error loading character "+characterName+" from vault.");
-			console.error(error);
+			console.error("Error loading character "+characterName+" from vault.",error);
 		});
 	}
 }
 
-function initLoadedCharacter(){
+$scope.selectHistory(level){
+	if (history.length>level){
+		if (history[level].level===level){
+			//TODO: push current level into history if it's not there yet
+			$scope.char=history[level];
+			initLoadedCharacter($scope.char);
+		}
+	}
+}
+
+function initLoadedCharacter(char){
 	//hook up passive and ability functions, since those can't be serialized
-	for (let passive of $scope.char.passives){
+	for (let passive of char.passives){
 		let found=false;
 		let p = findPassive(passive.name);
 		if (p){
@@ -1256,7 +1262,7 @@ function initLoadedCharacter(){
 			}
 		}
 	}
-	for (let ability of $scope.char.abilities){
+	for (let ability of char.abilities){
 		let a = findAbility(ability.name);
 		if (a){
 			ability.onShortRest=a.onShortRest;
@@ -1265,7 +1271,7 @@ function initLoadedCharacter(){
 			ability.maxChargesFunction=a.maxChargesFunction;
 		}
 	}
-	for (let clas of $scope.char.classes){
+	for (let clas of char.classes){
 		for (let spell of clas.spells){
 			let pSpell = findSpell(spell.name);
 			if (pSpell){
@@ -1275,10 +1281,10 @@ function initLoadedCharacter(){
 	}
 	$scope.showSaveMenu=false;
 	//calculate breaks HP on loaded creatures
-	let hp=$scope.char.hp;
+	let hp=char.hp;
 	$scope.calculate();
-	$scope.char.hp=hp;
-	document.title=$scope.char.name+" - Character Sheet"
+	char.hp=hp;
+	document.title=char.name+" - Character Sheet"
 }
 
 loadList();
