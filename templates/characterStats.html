@@ -66,7 +66,7 @@
 	<div class="character-header">
 		<div class="levelwrapper flex1" style="cursor:pointer;" ng-click="levelUpStart()">
 			<input type='text' class='statbox' ng-model='char.level' disabled='disabled' number />
-			<div style="position:absolute">
+			<div style="position:absolute;margin-top:-40px;">
 				<div class="levelhover">Level<br>Up</div>
 			</div>
 		</div>
@@ -74,6 +74,13 @@
 		<div class="flex1">
 			<span class="button" ng-click="showSaveMenu=true;">Save/Load</span>
 		</div>
+	</div>
+	<div style="margin-bottom:8px;">
+		<input type="range" class="level-slider" min="1" max="20" list="steplist" style="width:100%;"
+				ng-model="historyLevel" ng-change="loadFromLevelHistory(historyLevel)" ng-style="historyStyle()"/>
+		<datalist class="level-sliderzzz" id="steplist">
+			<option ng-repeat="hist in history track by $index" ng-if="$index>0"></option>
+		</datalist>
 	</div>
 	<table style="width:100%" class="desktop">
 		<tr>
@@ -213,7 +220,7 @@
 	</td>
 
 <td style="vertical-align:top;">
-<br><br>
+<br>
 <!--
 	<div style="padding:10px;border:1px solid black;" class="desktop">
 		<span class="label bordertitle" style="margin-top:-24px;">Add Passive Ability</span>
@@ -259,7 +266,7 @@
 		<div style="vertical-align:top;text-align:center;flex:1;padding-right:10px;">
 			<div class="label">Proficiencies and Languages</div>
 			<input type="text" ng-model='profSearch' placeholder="Search..." />
-			<div class="leftmenu scrollable">
+			<div class="leftmenu scrollable" style="height:calc(100vh - 160px);">
 				<div class="item" ng-repeat="item in char.proficiencies | filter:profSearch | orderBy:'name'">
 					<span style="font-weight:bold;">{{item}}</span>
 					<span class="deletebutton" ng-click="delete(item,char.proficiencies,$event)">&times;</span>
@@ -315,10 +322,3 @@
 </td>
 
 </tr></tbody></table>
-<div>
-	<input type="range" class="level-slider" min="1" max="20" list="steplist" style="width:100%;"
-			ng-model="historyLevel" ng-change="loadFromLevelHistory(historyLevel)" ng-style="historyStyle()"/>
-	<datalist id="steplist">
-		<option ng-repeat="hist in history"></option>
-	</datalist>
-</div>

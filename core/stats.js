@@ -247,13 +247,13 @@ function finishLevelUp(){
 		$timeout.cancel(tipPromise);
 	}
 	$scope.tip=null;
-	{
-		let tempChar = angular.copy($scope.char);
-		prepForSave(tempChar);
-		$scope.char.levelHistory.push(tempChar);
-	}
+	let tempChar = angular.copy($scope.char);
+	prepForSave(tempChar);
 	$scope.chosenLevel=null;
+	$scope.historyLevel=$scope.char.level;
+	prepForSave($scope.charBackup);
 	$scope.history[$scope.char.level-1]=$scope.charBackup;
+	$scope.history[$scope.char.level]=tempChar;
 }
 
 
@@ -1182,7 +1182,7 @@ $http.get('http://localhost:8080/').then(function(resp){
 		return;
 	}
 	serverVaultEnabled=true;
-	convertLocalStorage();
+	resetChar();
 	loadList();
 },function(error){
 	serverVaultEnabled=false;
@@ -1215,20 +1215,20 @@ $scope.load=function(characterName){
 				$scope.history=response2.data;
 			},function(error){
 				console.warn("Error loading history for "+characterName,error);
-				$scope.history=[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null];
+				$scope.history=[{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{}];
 				$scope.history[$scope.char.level]=angular.copy($scope.char);
-			}
+			});
 		},function(error){
 			console.error("Error loading character "+characterName+" from vault.",error);
 		});
 	}
 }
 
-$scope.loadFromLevelHistory(level){
-	if (history.length>level){
-		if (history[level].level===level){
+$scope.loadFromLevelHistory=function(level){
+	if ($scope.history.length>level){
+		if ($scope.history[level].level===level){
 			//TODO: push current level into history if it's not there yet
-			$scope.char=angular.copy(history[level]);
+			$scope.char=angular.copy($scope.history[level]);
 			initLoadedCharacter($scope.char);
 		}
 	}
@@ -1276,7 +1276,8 @@ function initLoadedCharacter(char){
 	let hp=char.hp;
 	$scope.calculate();
 	char.hp=hp;
-	document.title=char.name+" - Character Sheet"
+	document.title=char.name+" - Character Sheet";
+	$scope.historyLevel=$scope.char.level;
 }
 
 loadList();
@@ -1369,7 +1370,7 @@ $scope.creatureFilter=function(value,index,array){
 
 $scope.historyStyle=function(){
 	let perc=100*($scope.historyLevel-1)/19;
-	return {"background": "linear-gradient(90deg, #4CAF50, #4CAF50 "+perc+"%, #e0e0e0 "+perc+"%, #e0e0e0)"};
+	return {"background": "linear-gradient(90deg, #bb0000, #bb0000 "+perc+"%, #e0e0e0 "+perc+"%, #e0e0e0)"};
 }
 
 }]);

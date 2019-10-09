@@ -719,8 +719,7 @@ table.bigcells td{
 }
 .character-header {
     color: black;
-    border-bottom: 4px solid #bb0000;
-	display:flex;
+    display:flex;
 	align-items:center;
 }
 .character-name {
@@ -732,7 +731,7 @@ table.bigcells td{
 .levelhover{
     position: relative;
     left: 23px;
-    bottom: 46px;
+    bottom: 6px;
     font-size: 1.5em;
     font-weight: bold;
     text-align: center;
@@ -750,7 +749,7 @@ table.bigcells td{
 input[type="range"].level-slider {
   -webkit-appearance: none;
   width: 100%;
-  height: 10px;
+  height: 4px;
   border-radius: 5px;  
   background: #e0e0e0;
   outline: none;
@@ -761,10 +760,10 @@ input[type="range"].level-slider {
 input[type="range"].level-slider::-webkit-slider-thumb {
   -webkit-appearance: none;
   appearance: none;
-  width: 25px;
-  height: 25px;
+  width: 18px;
+  height: 18px;
   border-radius: 50%; 
-  background: #4CAF50;
+  background: #bb0000;
   cursor: pointer;
 }
 
@@ -772,12 +771,14 @@ datalist.level-slider {
     display: flex;
     width: 100%;
     justify-content: space-between;
-    margin-top: -19px;
+    margin-top: -12px;
     padding-top: 0px;
     margin-left: 2px;
 }
 datalist.level-slider option {
-    width: 2ex;
+    width: 10px;
+	height: 10px;
+	min-height: 10px;
     display: flex;
     justify-content: center;
     align-items: end;
