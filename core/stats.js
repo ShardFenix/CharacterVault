@@ -1226,13 +1226,16 @@ $scope.load=function(characterName){
 }
 
 $scope.loadFromLevelHistory=function(level){
+	let currentLevel = $scope.char.level;
 	if ($scope.history.length>level){
 		if ($scope.history[level].level===level){
 			//TODO: push current level into history if it's not there yet
 			$scope.char=angular.copy($scope.history[level]);
 			initLoadedCharacter($scope.char);
+			return;
 		}
 	}
+	$scope.historyLevel=currentLevel;
 }
 
 function initLoadedCharacter(char){
