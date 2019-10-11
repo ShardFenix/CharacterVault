@@ -253,6 +253,7 @@ function finishLevelUp(){
 	$scope.historyLevel=$scope.char.level;
 	prepForSave($scope.charBackup);
 	$scope.history[$scope.char.level-1]=$scope.charBackup;
+	$scope.history[$scope.char.level-1]=$scope.char.level-1;
 	$scope.history[$scope.char.level]=tempChar;
 }
 
