@@ -267,7 +267,7 @@ $scope.evalTooltip=function(tip){
 		while (token!=-1){
 			let endtoken=desc.indexOf("}");
 			let expression = desc.substring(token+2,endtoken);
-			expression=expression.replace(/clevel/mg,$scope.char.level);
+			expression=expression.replace(/clevel/mg,1);
 			if ($scope.spellLevel){
 				expression=expression.replace(/slevel/mg,$scope.spellLevel);
 			} else {
@@ -317,6 +317,10 @@ $scope.setLeftTip=function(choice,spellLevel){
 $scope.spellTipLeft=function(choice,spellLevel){
 	let spell = findSpell(choice);
 	$scope.setLeftTip(spell,spellLevel);
+}
+$scope.spellTipRight=function(choice,spellLevel){
+	let spell = findSpell(choice);
+	$scope.setTip(spell,spellLevel);
 }
 
 $scope.spellList=window.spells;

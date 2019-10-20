@@ -380,7 +380,7 @@
 					<span>Individual uses: </span>
 					<span ng-repeat="spell in creature.spellcasting.individual" class="spellButton"
 							ng-click="spell.charges=spell.charges-1" ng-if="spell.charges"
-							ng-mouseenter="spellTipLeft(spell)"
+							ng-mouseenter="spellTipRight(spell)"
 							ng-mouseleave="clearTip()">{{spell.name}} ({{spell.charges}})</span>
 				</div>
 				<div ng-if="creature.spellcasting.spells"> 
@@ -388,7 +388,7 @@
 						 ng-click="level.slots=level.slots-1">
 						<span style="font-weight:bold;"> Level {{$index}} ({{level.slots}}): </span>
 						<span ng-repeat="spell in level.spells" class="spellButton"
-							  ng-mouseenter="spellTipLeft(spell,$index)"
+							  ng-mouseenter="spellTipRight(spell,$index)"
 							  ng-mouseleave="clearTip()">{{spell}}</span>
 					</div>
 				</div>
