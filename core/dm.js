@@ -19,6 +19,13 @@ app.directive('number', ['$parse', function($parse) {
         }
     }
 }]);
+app.directive('sideTip',function(){
+	return {templateUrl:'templates/sidetip.html'};
+});
+app.directive('creatureTip',function(){
+	return {templateUrl:'templates/creaturetip.html'};
+});
+
 
 app.controller('MyController',['$scope','$timeout','$http','$interval',function($scope,$timeout,$http,$interval){
 
@@ -253,10 +260,19 @@ $scope.checkForPassives=function(name){
 $scope.evalTooltip=function(tip){
 	if (tip && tip.description){
 		let desc=tip.description;
+		if (tip.level && $scope.chosenSpell && tip.level<$scope.chosenSpell.level){
+			return $scope.chosenSpell.name+' can only be cast at level '+$scope.chosenSpell.level+' or higher.';
+		}
 		let token=desc.indexOf('${');
 		while (token!=-1){
 			let endtoken=desc.indexOf("}");
 			let expression = desc.substring(token+2,endtoken);
+			expression=expression.replace(/clevel/mg,$scope.char.level);
+			if ($scope.spellLevel){
+				expression=expression.replace(/slevel/mg,$scope.spellLevel);
+			} else {
+				expression=expression.replace(/slevel/mg,tip.level?tip.level:0);
+			}
 			expression=eval(expression);
 			desc=desc.substring(0,token)+expression+desc.substring(endtoken+1);
 			token=desc.indexOf('${');
@@ -298,14 +314,27 @@ $scope.setLeftTip=function(choice,spellLevel){
 	$scope.tipLeft=true;
 }
 
+$scope.spellTipLeft=function(choice,spellLevel){
+	let spell = findSpell(choice);
+	$scope.setLeftTip(spell,spellLevel);
+}
+
 $scope.spellList=window.spells;
 $scope.creatures=window.creatures;
 
-//load player info into the creatures array if server is available
+//check to see if a webserver is running
 $http.get('http://localhost:8080/').then(function(resp){
+	//if we're not viewing this at localhost, redirect to localhost.
+	//This way we dont have to deal with xorigin nonsense.
+	if (window.location.protocol==='file:'){
+		let filename = window.location.pathname;
+		filename = filename.substring(filename.lastIndexOf('/'));
+		window.location.href = "http://localhost:8080"+filename;
+		return;
+	}
 	loadPlayerList();
 },function(error){
-	console.warn("Couldn't load player info from character vault. Start the server and refresh the page.");
+	alert("Run server.bat, then refresh the page.");
 });
 
 function loadPlayerList(){

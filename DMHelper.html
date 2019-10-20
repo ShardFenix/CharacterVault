@@ -239,7 +239,8 @@
 <div ng-show="tab=='combat'" ng-click="dismissContextMenu()">
 
 <div class="contextMenu" id='contextMenu' style="display:none;">
-	<div class="greenback item" ng-repeat="option in conditions" ng-click="applyCondition(option)">{{option.name}}</div>
+	<div class="greenback item" ng-repeat="option in conditions" ng-click="applyCondition(option)"
+		ng-disabled="chosenMonster.conditionImmunities.has(option.name.toLowerCase())">{{option.name}}</div>
 </div>
 
 <table style="width:100%"><tbody><tr>
@@ -378,13 +379,17 @@
 				<div ng-if="creature.spellcasting.individual">
 					<span>Individual uses: </span>
 					<span ng-repeat="spell in creature.spellcasting.individual" class="spellButton"
-							ng-click="spell.charges=spell.charges-1" ng-if="spell.charges">{{spell.name}} ({{spell.charges}})</span>
+							ng-click="spell.charges=spell.charges-1" ng-if="spell.charges"
+							ng-mouseenter="spellTipLeft(spell)"
+							ng-mouseleave="clearTip()">{{spell.name}} ({{spell.charges}})</span>
 				</div>
 				<div ng-if="creature.spellcasting.spells"> 
 					<div ng-repeat="level in creature.spellcasting.spells"
 						 ng-click="level.slots=level.slots-1">
 						<span style="font-weight:bold;"> Level {{$index}} ({{level.slots}}): </span>
-						<span ng-repeat="spell in level.spells" class="spellButton">{{spell}}</span>
+						<span ng-repeat="spell in level.spells" class="spellButton"
+							  ng-mouseenter="spellTipLeft(spell,$index)"
+							  ng-mouseleave="clearTip()">{{spell}}</span>
 					</div>
 				</div>
 				
@@ -522,67 +527,27 @@
 <!-- End Reference -->
 
 <!-- Tooltip Modal-->
-<div class="rightModal" ng-class="{'show':currentChoices || tip}" ng-mouseenter="renewTip()" ng-mouseleave="clearTip()">
-	<div>
-		<div class="label">{{tip.name || tip}}</div>
-		<hr>
-		<!-- Spell metadata -->
-		<div ng-show="tip.level>=0" style="text-align:left">
-			<div>
-				Cast Time: {{tip.castTime}}
-				<span style="float:right" ng-show="tip.components.verbal">Verbal</span>
-			</div>
-			<div>
-				Duration: {{tip.duration}}
-				<span style="float:right" ng-show="tip.components.somatic">Somatic</span>
-			</div>
-			<div>
-				Range: {{tip.range}}
-				<span style="float:right" ng-show="tip.ritual">Ritual</span>
-			</div>
-			<div ng-show="tip.components.material">
-				Material component: {{tip.components.material}}
-			</div>
-			<br>
-		</div>
-		<!-- Item metadata -->
-		<div ng-show="tip.value" style="text-align:left;">
-			<div style="display:flex;">
-				<div style="width:49%;text-align:left;">
-					<div ng-show="tip.damage1">
-						1H Damage: {{tip.damage1}} {{tip.damageType}}
-					</div>
-					<div ng-show="tip.damage2">
-						2H Damage: {{tip.damage2}} {{tip.damageType}}
-					</div>
-					<div ng-show="tip.attackRange">
-						Range: {{tip.attackRange[0]}}ft / {{tip.attackRange[1]}}ft
-					</div>
-					<div ng-show="tip.ac">
-						AC: {{tip.ac}}
-					</div>
-				</div>
-				<div style="width:49%;text-align:right;">
-					<div ng-show="tip.finesse">Finesse</div>
-					<div ng-show="tip.heavy">Heavy</div>
-					<div ng-show="tip.reach">Reach</div>
-					<div ng-show="tip.throwRange">Thrown</div>
-				</div>
-			</div>
-			<br>
-			<span class="footnote" ng-show="isWeapon(tip)">Your attack bonus with this item is +{{attackBonus(tip)}}</span>
-		</div>
-		<div ng-bind-html='evalTooltip(tip)' class="tipDescription"></div>
-		<br>
-		<div ng-show="tip.saveDc" style="text-align:left;">
-			<span ng-show="tip.casterClass" class="footnote label">Casting Class: {{tip.casterClass}}</span>
-			<br>
-			<span class="footnote">Spell Attack Bonus: +{{tip.attackBonus}}.</span>
-			<br>
-			<span class="footnote">Spell Save DC: {{tip.saveDc}}.</span>
-		</div>
+<div class="rightTip" ng-class="{'show':(currentChoices || tip) && tipRight}" ng-mouseenter="renewTip()" ng-mouseleave="clearTip()">
+	<div ng-if="tip.cr===undefined" style="padding:40px">
+		<div side-tip></div>
+	</div>
+	
+	<!-- Creature statbox tooltip -->
+	<div class="creatureCard box" ng-if="tip.cr" style="width:100%;padding-top:40px;">
+		<div creature-tip></div>
 	</div>
 </div>
+<div class="leftTip" ng-class="{'show':(currentChoices || tip) && tipLeft}" ng-mouseenter="renewTip()" ng-mouseleave="clearTip()">
+	<div ng-if="tip.cr===undefined" style="padding:40px">
+		<div side-tip></div>
+	</div>
+	
+	<!-- Creature statbox tooltip -->
+	<div class="creatureCard box" ng-if="tip.cr" style="width:100%;padding-top:40px;">
+		<div creature-tip></div>
+	</div>
+</div>
+
 
 <div ng-show="tab=='loot'">
 	<table><tr>

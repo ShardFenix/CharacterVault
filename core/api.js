@@ -132,7 +132,7 @@ function findAbility(name){
 
 function findSpell(name){
 	for (let spell of window.spells){
-		if (spell.name===name){
+		if (spell.name.toLowerCase() === name.toLowerCase()){
 			return spell;
 		}
 	}
