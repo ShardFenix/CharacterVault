@@ -1,10 +1,12 @@
 # CharacterVault
 Toolset for keeping track of your D&amp;D characters.
 
+Requires Node.js version 10.0.0 or higher (to run the included server for character storage)
+
 # Features
 - Guided levelups
 - Comes with all core packages (still adding subclasses - see below)
-- Skill bonuses, saving throws,  save DCs, and weapon attack bonuses automatically calculated from ability scores
+- Skill bonuses, saving throws, save DCs, and weapon attack bonuses automatically calculated from ability scores
 - Passive abilities can update your stats (eg the Alert feat adds +5 to initiative automatically)
 - Track ability uses per rest. Short/Long rest button refresh abilities appropriately
 - Basically everything has a tooltip

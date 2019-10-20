@@ -236,7 +236,11 @@
 </div>
 
 
-<div ng-show="tab=='combat'">
+<div ng-show="tab=='combat'" ng-click="dismissContextMenu()">
+
+<div class="contextMenu" id='contextMenu' style="display:none;">
+	<div class="greenback item" ng-repeat="option in conditions" ng-click="applyCondition(option)">{{option.name}}</div>
+</div>
 
 <table style="width:100%"><tbody><tr>
 	<td style="width:400px;vertical-align: top;">
@@ -247,8 +251,13 @@
 			<div ng-repeat="item in initiativeOrder track by $index" ng-click="initUp(item)"
 				 class="yellowback item"
 				 ng-mouseenter="chooseMonster(item)"
-				 ng-mouseleave="chooseMonster()">
-				{{item.name || item}}
+				 ng-mouseleave="chooseMonster()"
+				 ng-mousedown="rightClickInitiative(item,$event)"
+				 oncontextmenu="return false">
+				 <span style="flex: 3">{{item.name || item}}</span>
+				<div class="conditionList">
+					<span ng-repeat="condition in item.conditions">{{condition.name}} {{condition.duration}}</span>
+				</div>
 				<span class="deletebutton" ng-click="deleteInit(item,$event)">&times;</span>
 			</div>
 			<button class="redback item" ng-click="initiativeOrder=[]">Clear Initiative</button>
@@ -276,7 +285,7 @@
 	</td>
 	<td style="vertical-align: top;display: flex;flex-wrap: wrap;">
 		<div ng-repeat="creature in initiativeOrder track by $index"
-			 class="creatureCard box" ng-if="creature.name">
+			 class="creatureCard box" ng-if="creature.hp">
 			<div class="monsterHeader" ng-class="{'selected':creature===chosenMonster}">
 				<div class="headerBg"></div>
 				<span class="white label">{{creature.name}}</span><span class="white"> (CR {{creature.cr}})</span>

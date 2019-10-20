@@ -1,4 +1,5 @@
 .item{
+	display:flex;
     margin-top: -1px;
     border-bottom: 1px solid black;
     border-top: 1px solid black;
@@ -789,4 +790,18 @@ datalist.level-slider option {
     background-color: #e0e0e0;
     border-radius: 500px;
 	user-select:none;
+}
+.contextMenu{
+	position: absolute;
+    display: flex;
+    flex-direction: column;
+    z-index: 1;
+    text-align: center;
+}
+.conditionList{
+	display: flex;
+    flex-direction: column;
+    font-size: 13px;
+    flex: 1;
+    min-width: 130px;
 }

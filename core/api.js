@@ -3,11 +3,17 @@ Math.rand=function(min,max){
 }
 
 Array.prototype.has=function(string){
-	for (let element of this){
-		if (typeof element === 'string' && element===string){
-			return true;
-		} else if (typeof element === 'Object' && element.name===string) {
-			return true;
+	if (string.name){
+		for (let element of this){
+			if (element.name===string.name){
+				return true;
+			}
+		}
+	} else {
+		for (let element of this) {
+			if (element===string) {
+				return true;
+			}
 		}
 	}
 	return false;
@@ -44,7 +50,24 @@ Array.prototype.upush=function(element){
 			this.push(element);
 		}
 	}
-};
+}
+
+Array.prototype.remove=function(element){
+	if (element && element.name) {
+		for (var i=0;i<this.length;i++){
+			if (element.name==this[i].name){
+				this.splice(i,1);
+				return;
+			}
+		}
+	} else {
+		let index = this.indexOf(element);
+		if (index!=-1){
+			this.splice(index,1);
+			return;
+		}
+	}
+}
 
 Array.prototype.append=function(otherArray){
 	if (Array.isArray(otherArray)){

@@ -130,7 +130,7 @@ $scope.initiativeOrder=[];
 $scope.newInitiative='';
 
 $scope.addInitiative=function(){
-	$scope.initiativeOrder.push($scope.newInitiative);
+	$scope.initiativeOrder.push({name:$scope.newInitiative});
 	$scope.newInitiative='';
 }
 
@@ -144,13 +144,66 @@ $scope.chooseMonster=function(monster){
 
 $scope.initUp=function(item){
 	var index=$scope.initiativeOrder.indexOf(item);
-	var newIndex=index-1;
-	$scope.initiativeOrder.splice(index,1);
-	if (newIndex<0){
-		$scope.initiativeOrder.push(item);
-	} else {
-		$scope.initiativeOrder.splice(newIndex,0,item);
+	if (event.which===1){
+		var newIndex=index-1;
+		$scope.initiativeOrder.splice(index,1);
+		if (newIndex<0){
+			$scope.initiativeOrder.push(item);
+			//this was the top creature. Decrement their conditions
+			if (item.conditions){
+				for (let i=item.conditions.length-1;i>=0;i--){
+					item.conditions[i].duration-=1;
+					if (item.conditions[i].duration===0){
+						item.conditions.splice(i,1);
+					}
+				}
+			}
+		} else {
+			$scope.initiativeOrder.splice(newIndex,0,item);
+		}
 	}
+}
+
+$scope.conditions = [
+	{name:"Hasted",duration:10},
+	{name:"Slowed",duration:10},
+	{name:"Concentrating",duration:10},
+	{name:"Burning",duration:10},
+	{name:"Blinded",duration:10},
+	{name:"Deafened",duration:10},
+	{name:"Frightened",duration:10},
+	{name:"Stunned",duration:1},
+	{name:"Paralyzed",duration:10},
+	{name:"Bane",duration:10},
+	{name:"Cursed",duration:10},
+	{name:"Confused",duration:10}
+];
+
+$scope.rightClickInitiative=function(item,event){
+	if (event.which===3) {
+		console.log(event);
+		//create context menu
+		let elem = angular.element('#contextMenu');
+		elem.attr("style","display:flex;left:"+(event.clientX+2)+"px;top:"+(event.clientY+2)+"px;");
+		$scope.contextTarget=item;
+		event.stopPropagation();
+    }
+}
+
+$scope.dismissContextMenu=function(){
+	angular.element('#contextMenu').attr("style","display:none;");
+}
+
+$scope.applyCondition=function(option){
+	if (!$scope.contextTarget.conditions){
+		$scope.contextTarget.conditions=[];
+	}
+	if ($scope.contextTarget.conditions.has(option)){
+		$scope.contextTarget.conditions.remove(option);
+	} else {
+		$scope.contextTarget.conditions.upush(option);
+	}
+	$scope.dismissContextMenu();
 }
 
 $scope.deleteInit=function(item,event){
