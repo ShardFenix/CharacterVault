@@ -55,7 +55,7 @@ Array.prototype.upush=function(element){
 Array.prototype.remove=function(element){
 	if (element && element.name) {
 		for (var i=0;i<this.length;i++){
-			if (element.name==this[i].name){
+			if (element.name == this[i].name){
 				this.splice(i,1);
 				return;
 			}

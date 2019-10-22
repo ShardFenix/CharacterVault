@@ -245,7 +245,7 @@
 
 <table style="width:100%"><tbody><tr>
 	<td style="width:400px;vertical-align: top;">
-		<div>
+		<div id='initiativeDiv'>
 			<form ng-submit="addInitiative()">
 				<input type='text' placeholder="Enter Name" ng-model="newInitiative"/>
 			</form>
@@ -257,7 +257,11 @@
 				 oncontextmenu="return false">
 				 <span style="flex: 3">{{item.name || item}}</span>
 				<div class="conditionList">
-					<span ng-repeat="condition in item.conditions">{{condition.name}} {{condition.duration}}</span>
+					<span ng-repeat-start="condition in item.conditions track by $index"
+						ng-mouseenter="focusConditionDuration($parent.$index, $index)"
+						ng-mouseleave="unfocusConditionDuration($parent.$index, $index)">{{condition.name}} {{condition.duration}}</span>
+					<input type="text" style="position:absolute;left:-300px;" ng-repeat-end
+						ng-keydown="incrDuration(item, condition, $event)" />
 				</div>
 				<span class="deletebutton" ng-click="deleteInit(item,$event)">&times;</span>
 			</div>

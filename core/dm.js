@@ -188,7 +188,6 @@ $scope.conditions = [
 
 $scope.rightClickInitiative=function(item,event){
 	if (event.which===3) {
-		console.log(event);
 		//create context menu
 		let elem = angular.element('#contextMenu');
 		elem.attr("style","display:flex;left:"+(event.clientX+2)+"px;top:"+(event.clientY+2)+"px;");
@@ -211,6 +210,26 @@ $scope.applyCondition=function(option){
 		$scope.contextTarget.conditions.upush(option);
 	}
 	$scope.dismissContextMenu();
+}
+
+$scope.focusConditionDuration=function(a,b){
+	$('#initiativeDiv>div:nth-of-type('+(a+1)+')>div>input:nth-of-type('+(b+1)+')').focus();
+}
+$scope.unfocusConditionDuration=function(a,b){
+	$('#initiativeDiv>div:nth-of-type('+(a+1)+')>div>input:nth-of-type('+(b+1)+')').blur();
+}
+
+$scope.incrDuration=function(item, condition, event){
+	if (event.which === 107 || event.which === 187){ //plus
+		condition.duration+=1;
+	} else if (event.which === 109 || event.which === 189){ //minus
+		condition.duration-=1;
+		if (condition.duration===0){
+			item.conditions.remove(condition);
+		}
+	}
+	event.stopPropagation();
+	event.preventDefault();
 }
 
 $scope.deleteInit=function(item,event){
