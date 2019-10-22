@@ -14,6 +14,12 @@ window.passives.append([
 	},{
 		name:"Poison Resistance",
 		description:"Poison damage dealt to you is halved, rounded down."
+	},{
+		name:"Radiant Resistance",
+		description:"Radiant damage dealt to you is halved, rounded down."
+	},{
+		name:"Necrotic Resistance",
+		description:"Necrotic damage dealt to you is halved, rounded down."
 	}
 ]);
 
@@ -54,6 +60,20 @@ window.abilities.append([
 		maxCharges:1,
 		charges:1,
 		onShortRest:helper.recharge,
+	},{
+		name:"Healing Hands",
+		description:"As an action, you can touch a creature and cause it to regain a number of hit points equal to your level. Once you use this trait, you can't use it again until you finish a long rest.",
+		maxCharges:1,
+		charges:1,
+		onLongRest:helper.recharge,
+	},{
+		name:"Radiant Soul",
+		description:"You can use your action to unleash the divine energy within yourself, causing your eyes to glimmer and two luminous, incorporeal wings to sprout from your back.\nYour transformation lasts for 1 minute or until you end it as a bonus action. During it, you have a flying speed of 30 feet, and once on each of your turns, you can deal extra radiant damage to one target when you deal damage to it with an attack or a spell. The extra radiant damage equals your level.\nOnce you use this trait, you can't use it again until you finish a long rest.",
+		maxChargesFunction:function(char){
+			if (char.level<3)return 0;
+			return 1;
+		},
+		onLongRest:helper.recharge
 	}
 ]);
 
@@ -311,6 +331,24 @@ window.races=[
 					}
 				}
 			);
+		}
+	},{
+		name:"Aasimar (Protector)",
+		description:"",
+		onPickup:function(char,scope){
+			char.proficiencies.push("Language: Common");
+			char.proficiencies.push("Language: Celestial");
+			char.speed=30;
+			char.attributes.cha+=2;
+			char.attributes.wis+=1;
+			addPassive(char,"Darkvision");
+			addPassive(char,"Radiant Resistance");
+			addPassive(char,"Necrotic Resistance");
+			addAbility(char,"Healing Hands");
+			addAbility(char,"Radiant Soul");
+			let spell = findSpell("Light");
+			spell=angular.copy(spell);
+			addSpell(char,spell,"SpecialCha");
 		}
 	}
 ];

@@ -752,7 +752,13 @@ function nextLevel(char,className){
 			return 1 + char.classes[i].level;
 		}
 	}
-	if (char.classes.length==0){
+	let count=0;
+	for (let c of char.classes){
+		if (!['SpecialInt','SpecialWis','SpecialCha'].includes(c.name)){
+			count++;
+		}
+	}
+	if (count===0){
 		return 0;
 	}
 	return 1;

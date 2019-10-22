@@ -158,13 +158,21 @@ $scope.initUp=function(item){
 			$scope.initiativeOrder.push(item);
 			//this was the top creature. Decrement their conditions
 			if (item.conditions){
+				let queue = [];
 				for (let i=item.conditions.length-1;i>=0;i--){
 					item.conditions[i].duration-=1;
 					if (item.conditions[i].duration===0){
+						if (item.conditions[i].name === 'Hasted'){
+							queue.push({name:"Stunned",duration:1});
+						}
 						item.conditions.splice(i,1);
 					}
 				}
+				for (let cond of queue){
+					item.conditions.push(cond);
+				}
 			}
+			
 		} else {
 			$scope.initiativeOrder.splice(newIndex,0,item);
 		}
@@ -175,7 +183,7 @@ $scope.conditions = [
 	{name:"Hasted",duration:10},
 	{name:"Slowed",duration:10},
 	{name:"Concentrating",duration:10},
-	{name:"Burning",duration:10},
+	{name:"On Fire",duration:10},
 	{name:"Blinded",duration:10},
 	{name:"Deafened",duration:10},
 	{name:"Frightened",duration:10},
@@ -183,7 +191,9 @@ $scope.conditions = [
 	{name:"Paralyzed",duration:10},
 	{name:"Bane",duration:10},
 	{name:"Cursed",duration:10},
-	{name:"Confused",duration:10}
+	{name:"Confused",duration:10},
+	{name:"Invisible",duration:10},
+	{name:"Restrained",duration:10}
 ];
 
 $scope.rightClickInitiative=function(item,event){

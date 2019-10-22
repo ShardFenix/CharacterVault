@@ -810,3 +810,18 @@ datalist.level-slider option {
     flex: 1;
     min-width: 130px;
 }
+.nextInitiative{
+    background-image: url(/images/refresh.png);
+    width: 32px;
+    height: 32px;
+    background-size: contain;
+    background-color: black;
+    border-radius: 4px;
+    display: inline;
+    float: right;
+    transition: 0.2s ease all;
+    cursor: pointer;
+}
+.nextInitiative:hover{
+	background-color:red;
+}
