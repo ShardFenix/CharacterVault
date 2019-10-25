@@ -1,4 +1,39 @@
-<table style="width:100%;"><tbody><tr>
+<table style="width:100%;"><tbody>
+<tr>
+	<div class="character-header">
+		<div class="levelwrapper flex1" style="cursor:pointer;" ng-click="levelUpStart()">
+			<input type='text' class='statbox' ng-model='char.level' disabled='disabled' number />
+			<div style="position:absolute;margin-top:-40px;">
+				<div class="levelhover">Level<br>Up</div>
+			</div>
+		</div>
+		<div class="character-name flex3">{{char.name}}</div>
+		<label>
+			<span class='label'>Proficiency<br>Bonus</span><br>
+			<input type='text' class='statbox' disabled ng-model='derived.proficiency'/>
+		</label>
+		<label>
+			<span class='label'>Initiative<br>Bonus</span><br>
+			<input type='text' class='statbox' ng-model='derived.initiative'/>
+		</label>
+		<label>
+			<span class='label'>Move<br>Speed</span><br>
+			<input type='text' class='statbox' ng-model='char.speed'/>
+		</label>
+		<div class="acbox">
+			<input type='text' style="font-size:2.2em;background-color:rgba(0,0,0,0)" class='statmod' ng-model='char.ac'/>
+		</div>
+	</div>
+	<div style="margin-bottom:8px;">
+		<input type="range" class="level-slider" min="1" max="20" list="steplist" style="width:100%;"
+				ng-model="historyLevel" ng-change="loadFromLevelHistory(historyLevel)" ng-style="historyStyle()"/>
+		<datalist class="level-sliderzzz" id="steplist">
+			<option ng-repeat="hist in history track by $index" ng-if="$index>0"></option>
+		</datalist>
+	</div>
+</tr>
+
+<tr>
 	<td id="attributes">
 		<div class="attrbox" style="text-align:center;">
 			<label>
@@ -61,200 +96,85 @@
 		</div>
 	</td>
 
-	<td style="width:700px;vertical-align:top;">
-	<div class="character-header">
-		<div class="levelwrapper flex1" style="cursor:pointer;" ng-click="levelUpStart()">
-			<input type='text' class='statbox' ng-model='char.level' disabled='disabled' number />
-			<div style="position:absolute;margin-top:-40px;">
-				<div class="levelhover">Level<br>Up</div>
+	<td id="middleStats">
+		<div class='label' style='text-align:left;'>Skills</div>
+		<div class="skillList">
+			<div ng-repeat="skill in derived.skills" class="skillBonus">
+				<span ng-show="skill.mult===0" class='redx' ng-click="toggleSkillProf(skill.name);">&#x2716;</span>
+				<span ng-show="skill.mult===1" class='greenx' ng-click="toggleSkillProf(skill.name);">&#x2714;</span>
+				<span ng-show="skill.mult===2" class='greenx' ng-click="toggleSkillProf(skill.name);">&#x271A;</span>
+				<span style="font-weight:bold;font-size:1.3em;"> {{skill.bonus}}</span>
+				<span>{{skill.name}}</span>
 			</div>
 		</div>
-		<div class="character-name flex3">{{char.name}}</div>
-		<div class="flex1">
-			<span class="button" ng-click="showSaveMenu=true;">Save/Load</span>
+		
+		<div class='label' style='text-align:left;'>Saving Throws</div>
+		<div class="skillList" style="max-height: 65px;">
+			<div class="skillBonus">
+				<span ng-show='char.saves.str===0' class='redx' ng-click='char.saves.str=1;calculate();'>&#x2716;</span>
+				<span ng-show='char.saves.str===1' class='greenx' ng-click='char.saves.str=0;calculate();'>&#x2714;</span>
+				<span style="font-weight:bold;font-size:1.3em;"> {{derived.saves.str}}</span> Strength
+			</div>
+			<div class="skillBonus">
+				<span ng-show='char.saves.dex===0' class='redx' ng-click='char.saves.dex=1;calculate();'>&#x2716;</span>
+				<span ng-show='char.saves.dex===1' class='greenx' ng-click='char.saves.dex=0;calculate();'>&#x2714;</span>
+				<span style="font-weight:bold;font-size:1.3em;"> {{derived.saves.dex}}</span> Dexterity
+			</div>
+			<div class="skillBonus">
+				<span ng-show='char.saves.con===0' class='redx' ng-click='char.saves.con=1;calculate();'>&#x2716;</span>
+				<span ng-show='char.saves.con===1' class='greenx' ng-click='char.saves.con=0;calculate();'>&#x2714;</span>
+				<span style="font-weight:bold;font-size:1.3em;"> {{derived.saves.con}}</span> Constitution
+			</div>
+			<div class="skillBonus">
+				<span ng-show='char.saves.int===0' class='redx' ng-click='char.saves.int=1;calculate();'>&#x2716;</span>
+				<span ng-show='char.saves.int===1' class='greenx' ng-click='char.saves.int=0;calculate();'>&#x2714;</span>
+				<span style="font-weight:bold;font-size:1.3em;"> {{derived.saves.int}}</span> Intelligence
+			</div>
+			<div class="skillBonus">
+				<span ng-show='char.saves.wis===0' class='redx' ng-click='char.saves.wis=1;calculate();'>&#x2716;</span>
+				<span ng-show='char.saves.wis===1' class='greenx' ng-click='char.saves.wis=0;calculate();'>&#x2714;</span>
+				<span style="font-weight:bold;font-size:1.3em;"> {{derived.saves.wis}}</span> Wisdom
+			</div>
+			<div class="skillBonus">
+				<span ng-show='char.saves.cha===0' class='redx' ng-click='char.saves.cha=1;calculate();'>&#x2716;</span>
+				<span ng-show='char.saves.cha===1' class='greenx' ng-click='char.saves.cha=0;calculate();'>&#x2714;</span>
+				<span style="font-weight:bold;font-size:1.3em;"> {{derived.saves.cha}}</span> Charisma
+			</div>
 		</div>
-	</div>
-	<div style="margin-bottom:8px;">
-		<input type="range" class="level-slider" min="1" max="20" list="steplist" style="width:100%;"
-				ng-model="historyLevel" ng-change="loadFromLevelHistory(historyLevel)" ng-style="historyStyle()"/>
-		<datalist class="level-sliderzzz" id="steplist">
-			<option ng-repeat="hist in history track by $index" ng-if="$index>0"></option>
-		</datalist>
-	</div>
-	<table style="width:100%" class="desktop">
-		<tr>
-			<td style="width:100px;text-align:center;">
-				<div class="acbox">
-					<label>
-						<br>
-						<span class='label'>AC</span>
-						<br>
-						<input type='text' style="font-size:2.2em;background-color:rgba(0,0,0,0)" class='statmod' ng-model='char.ac'/>
-					</label>
-				</div>
-			</td>
-			<td style="width:150px;text-align:center;">
-				<label>
-					<span class='label'>Proficiency<br>Bonus</span><br>
-					<input type='text' class='statbox' disabled ng-model='derived.proficiency'/>
-				</label>
-			</td>
-			<td style="width:150px;text-align:center;">
-				<label>
-					<span class='label'>Initiative<br>Bonus</span><br>
-					<input type='text' class='statbox' ng-model='derived.initiative'/>
-				</label>
-			</td>
-			<td style="width:150px;text-align:center;">
-				<label>
-					<span class='label'>Move<br>Speed</span><br>
-					<input type='text' class='statbox' ng-model='char.speed'/>
-				</label>
-			</td>
-		</tr>
+
+		<td class="top">
+		<div class="hpbox">
+			<span class="bordertitle label">Hit Points</span>
+			<div class="label">
+				<input type='text' class='hidden right' ng-model='char.hp' number/>
+				<span>&nbsp;/&nbsp;</span>
+				<input type='text' class='hidden left' disabled ng-model='derived.maxHp'/>
+			</div>
+		</div>
+		<div class="hpbox" ng-class="{'minimize':!showPolyHp}">
+			<span class="bordertitle label" style="cursor:pointer;" ng-click="showPolyHp = !showPolyHp">Shape HP</span>
+			<div class="label">
+				<input type='text' class='hidden right' ng-model='char.polyHp' number/>
+				<span>&nbsp;/&nbsp;</span>
+				<input type='text' class='hidden left' ng-model='char.polyHpMax' number/>
+			</div>
+		</div>
+		<div class="hpbox" ng-class="{'minimize':!showTempHp}">
+			<span class="bordertitle label" style="cursor:pointer;" ng-click="showTempHp = !showTempHp">Temp HP</span>
+			<div class="label">
+				<input type='text' class='hidden right' style="text-align:center" ng-model='char.tempHp' number/>
+			</div>
+		</div>
+		<form ng-submit="takeDamage()">
+			<input type="text" style="width:170px" ng-model="takeDamageInput" placeholder="Deal damage..." number />
+		</form>
+		
+		<div class="right">
+			<span class="button" ng-click="showSaveMenu=true">Save/Load</span>
+		</div>
+	</tr>
 	</table>
 
-	<table>
-	<tr>	
-	<td colspan=2 class="top" style="min-width:160px;">
-	<br>
-	<div class='label' style='text-align:left;'>Skills</div>
-	<div ng-repeat="skill in derived.skills">
-		<span ng-show="skill.mult===0" class='redx' ng-click="toggleSkillProf(skill.name);">&#x2716;</span>
-		<span ng-show="skill.mult===1" class='greenx' ng-click="toggleSkillProf(skill.name);">&#x2714;</span>
-		<span ng-show="skill.mult===2" class='greenx' ng-click="toggleSkillProf(skill.name);">&#x271A;</span>
-		<span style="font-weight:bold;font-size:1.3em;"> {{skill.bonus}}</span> {{skill.name}}
-	</div>
 	</td>
-
-	<td style="padding-left:20px;" class="top">
-	<br><br>
-	<div class="hpbox">
-		<span class="bordertitle label">Hit Points</span>
-		<div class="label" style="padding:8px 10px">
-			<input type='text' class='hidden right' ng-model='char.hp' number/>
-			<span>&nbsp;/&nbsp;</span>
-			<input type='text' class='hidden left' disabled ng-model='derived.maxHp'/>
-		</div>
-	</div>
-	<div class="hpbox" ng-class="{'minimize':!showPolyHp}">
-		<span class="bordertitle label" style="cursor:pointer;" ng-click="showPolyHp = !showPolyHp">Shape HP</span>
-		<div class="label" style="padding:8px 10px">
-			<input type='text' class='hidden right' ng-model='char.polyHp' number/>
-			<span>&nbsp;/&nbsp;</span>
-			<input type='text' class='hidden left' ng-model='char.polyHpMax' number/>
-		</div>
-	</div>
-	<div class="hpbox" ng-class="{'minimize':!showTempHp}">
-		<span class="bordertitle label" style="cursor:pointer;" ng-click="showTempHp = !showTempHp">Temp HP</span>
-		<div class="label" style="padding:8px 10px">
-			<input type='text' class='hidden right' ng-model='char.tempHp' number/>
-		</div>
-	</div>
-	<form ng-submit="takeDamage()">
-		<input type="text" style="width:170px" ng-model="takeDamageInput" placeholder="Deal damage..." number />
-	</form>
-	<br>
-
-	<div class='label' style='text-align:left;'>Saving Throws</div>
-	<span ng-show='char.saves.str===0' class='redx' ng-click='char.saves.str=1;calculate();'>&#x2716;</span>
-	<span ng-show='char.saves.str===1' class='greenx' ng-click='char.saves.str=0;calculate();'>&#x2714;</span>
-	<span style="font-weight:bold;font-size:1.3em;"> {{derived.saves.str}}</span> Strength
-	<br>
-	<span ng-show='char.saves.dex===0' class='redx' ng-click='char.saves.dex=1;calculate();'>&#x2716;</span>
-	<span ng-show='char.saves.dex===1' class='greenx' ng-click='char.saves.dex=0;calculate();'>&#x2714;</span>
-	<span style="font-weight:bold;font-size:1.3em;"> {{derived.saves.dex}}</span> Dexterity
-	<br>
-	<span ng-show='char.saves.con===0' class='redx' ng-click='char.saves.con=1;calculate();'>&#x2716;</span>
-	<span ng-show='char.saves.con===1' class='greenx' ng-click='char.saves.con=0;calculate();'>&#x2714;</span>
-	<span style="font-weight:bold;font-size:1.3em;"> {{derived.saves.con}}</span> Constitution
-	<br>
-	<span ng-show='char.saves.int===0' class='redx' ng-click='char.saves.int=1;calculate();'>&#x2716;</span>
-	<span ng-show='char.saves.int===1' class='greenx' ng-click='char.saves.int=0;calculate();'>&#x2714;</span>
-	<span style="font-weight:bold;font-size:1.3em;"> {{derived.saves.int}}</span> Intelligence
-	<br>
-	<span ng-show='char.saves.wis===0' class='redx' ng-click='char.saves.wis=1;calculate();'>&#x2716;</span>
-	<span ng-show='char.saves.wis===1' class='greenx' ng-click='char.saves.wis=0;calculate();'>&#x2714;</span>
-	<span style="font-weight:bold;font-size:1.3em;"> {{derived.saves.wis}}</span> Wisdom
-	<br>
-	<span ng-show='char.saves.cha===0' class='redx' ng-click='char.saves.cha=1;calculate();'>&#x2716;</span>
-	<span ng-show='char.saves.cha===1' class='greenx' ng-click='char.saves.cha=0;calculate();'>&#x2714;</span>
-	<span style="font-weight:bold;font-size:1.3em;"> {{derived.saves.cha}}</span> Charisma
-
-	<br>
-		<table><tr><td>Copper:</td><td>
-			<span class='subtract noselect' ng-click="decrCopper()">-</span>
-			<span class='money'>{{getCopper()}}</span>
-			<span class='add noselect' ng-click="incrCopper()">&#x271A;</span></td></tr>
-		<tr><td>Silver:</td><td>
-			<span class='subtract noselect' ng-click="decrSilver()">-</span>
-			<span class='money' >{{getSilver()}}</span>
-			<span class='add noselect' ng-click="incrSilver()">&#x271A;</span></td></tr>
-		<tr><td>Gold:</td><td>
-			<span class='subtract noselect' ng-click="decrGold()">-</span>
-			<span class='money' >{{getGold()}}</span>
-			<span class='add noselect' ng-click="incrGold()">&#x271A;</span></td></tr>
-		<tr>
-		<td colspan=2 style="text-align:right;">
-			<form ng-submit="spendGold()">
-				<input type="text" style="width:75%" ng-model="spendGoldInput" placeholder="Spend Gold..." />
-			</form>
-		</td>
-		</tr>
-		</table>
-	</td>
-</tr>
-</table>
-
-</td>
-
-<td style="vertical-align:top;">
-
-	
-	<div class="tablet">
-		<table style="width:100%" class="tablet">
-			<tr>
-				<td style="width:150px;text-align:center;">
-					<div>
-						<label>
-							<span class='label'>Level</span><br>
-							<input type='text' class='statbox' ng-model='char.level' number />
-						</label>
-					</div>
-					<span class="button" ng-hide="char.level>=20" ng-click="levelUpStart()">Level Up</span>
-				</td></tr><tr>
-				<td style="width:100px;text-align:center;">
-					<div class="acbox">
-						<label>
-							<br>
-							<span class='label'>AC</span>
-							<br>
-							<input type='text' style="font-size:2.2em;background-color:rgba(0,0,0,0)" class='statmod' ng-model='char.ac'/>
-						</label>
-					</div>
-				</td></tr><tr>
-				<td style="width:150px;text-align:center;">
-					<label>
-						<span class='label'>Proficiency<br>Bonus</span><br>
-						<input type='text' class='statbox' disabled ng-model='derived.proficiency'/>
-					</label>
-				</td></tr><tr>
-				<td style="width:150px;text-align:center;">
-					<label>
-						<span class='label'>Initiative<br>Bonus</span><br>
-						<input type='text' class='statbox' ng-model='derived.initiative'/>
-					</label>
-				</td></tr><tr>
-				<td style="width:150px;text-align:center;">
-					<label>
-						<span class='label'>Move<br>Speed</span><br>
-						<input type='text' class='statbox' ng-model='char.speed'/>
-					</label>
-				</td>
-			</tr>
-		</table>
-
-	</div>
-</td>
 
 </tr></tbody></table>

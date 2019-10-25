@@ -716,6 +716,9 @@ i{
 	transition:0.3s ease all;
 	overflow:hidden;
 }
+.hpbox>div.label{
+	padding:8px 10px;
+}
 .hpbox.minimize{
 	height:0px;
 }
@@ -828,4 +831,11 @@ datalist.level-slider option {
 #attributes{
 	width:100px;
 	vertical-align:top;
+}
+#middleStats{
+	width:700px;
+	vertical-align:top;
+}
+.skillList{
+	
 }

@@ -44,6 +44,50 @@
 	div.attrbox .attrmod{
 		line-height:25px;
 	}
+	input.statbox{
+		width:65px;
+		height:30px;
+	}
+	.tab{
+		font-size:16px;
+		padding: 4px 0px;
+	}
+	#middleStats{
+		width:320px;
+	}
+	.skillBonus{
+		font-size: 14px;
+		margin-top:-6px;
+	}
+	.skillList {
+		display: flex;
+		flex-direction: column;
+		flex-wrap: wrap;
+		max-height: 220px;
+	}
+	.label{
+		font-size:1.1em;
+	}
+	.hpbox{
+		height:36px;
+	}
+	.hpbox>div.label{
+		padding:2px 0px;
+	}
+	div.acbox{
+		width: 46px;
+		height: 52px;
+		margin:0px;
+		font-size:12px;
+		text-align:center;
+	}
+	div.acbox>input{
+		margin-top: 6px;
+		margin-left: -8px;
+	}
+	.character-header{
+		margin-bottom:-8px;
+	}
 }
 
 @media (min-width: 768px) and (max-width: 1024px) and (orientation: landscape) {
