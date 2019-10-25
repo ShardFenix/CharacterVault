@@ -444,24 +444,17 @@ window.subclasses.push(
 			{//1
 				updates:[
 					{
-						choices:[],
-						action:function(char){
+						choicePrompt:"Choose a Divine spell.",
+						choices:[findSpell('Cure Wounds'),findSpell('Inflict Wounds'),findSpell('Bless'),findSpell('Bane'),findSpell('Protection from Evil and Good')],
+						action:function(char,derived,choice,$scope){
 							getCharacterClass(char,"Sorcerer").spellcasting.push('Cleric');
+							addAbility(char,"Favored by the Gods");
+							addSpell(char,choice,"Sorcerer");
 						}
 					}
 				]
 			},{},
-			{//3
-				updates:[
-					{
-						choicePrompt:"Choose a Divine spell.",
-						choices:[findSpell('Cure Wounds'),findSpell('Inflict Wounds'),findSpell('Bless'),findSpell('Bane'),findSpell('Protection from Evil and Eood')],
-						action:function(char,derived,choice,$scope){
-							addAbility(char,"Favored by the Gods");
-						}
-					}
-				]
-			},{},{},{ //6
+			{},{},{},{ //6
 				updates:[
 					{
 						choices:[],
