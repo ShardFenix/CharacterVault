@@ -23,6 +23,12 @@ app.directive('number', ['$parse', function($parse) {
 app.directive('characterStats',function(){
 	return {templateUrl:'templates/characterStats.html'};
 });
+app.directive('characterStatsTablet',function(){
+	return {templateUrl:'templates/characterStatsTablet.html'};
+});
+app.directive('characterAttributes',function(){
+	return {templateUrl:'templates/characterAttributes.html',replace:true};
+});
 app.directive('characterAbilities',function(){
 	return {templateUrl:'templates/characterAbilities.html'};
 });

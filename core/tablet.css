@@ -1,8 +1,10 @@
-@media (min-width: 768px) and (max-width: 1024px) {
-	div.rightModal{
+@media (min-width: 700px) and (max-width: 1024px) {
+	div.rightTip,
+	div.leftTip{
 		display:none;
 	}
-	div.rightModal.show{
+	div.rightTip.show,
+	div.leftTip.show{
 		display:block;
 	}
 	.desktop{
@@ -12,11 +14,35 @@
 	    max-height: calc(130vh);
 		height: auto;
 	}
-	.modal{
+	div.modal{
 		display:none;
 	}
-	.modal.show{
+	div.modal.show{
 		display:block;
+		width:100%;
+		left:0px;
+		top:0px;
+		height:100%;
+		padding:0;
+	}
+	#attributes{
+		display: flex;
+		flex-direction: column;
+		vertical-align: top;
+		flex-wrap: wrap;
+		height: 375px;
+		width: 170px;
+	}
+	div.attrbox{
+		width: 80px;
+		height: 94px;
+		margin-bottom:5px;
+	}
+	div.attrbox .label{
+		line-height:30px;
+	}
+	div.attrbox .attrmod{
+		line-height:25px;
 	}
 }
 

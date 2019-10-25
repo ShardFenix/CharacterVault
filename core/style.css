@@ -810,3 +810,7 @@ datalist.level-slider option {
     flex: 1;
     min-width: 130px;
 }
+#attributes{
+	width:100px;
+	vertical-align:top;
+}

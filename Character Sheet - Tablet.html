@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0' name='viewport' />
+<link rel="stylesheet" href="./core/style.css">
+<link rel="stylesheet" href="./core/tablet.css">
+<link href="https://fonts.googleapis.com/css?family=Cinzel+Decorative:700" rel="stylesheet">
+<!--
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular-animate.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular-sanitize.js"></script>
+-->
+<script src="libs/jquery.min.js"></script>
+<script src="libs/angular.min.js"></script>
+<script src="libs/angular-animate.js"></script>
+<script src="libs/angular-sanitize.js"></script>
+
+</head>
+<body style="background-color:#ffffff;width:100vw;overflow-x:hidden;margin:0px;">
+<div ng-app="myApp">
+<div ng-controller="MyController" ng-cloak id='tabletPooperDooper'>
+
+<div style="display:flex;">
+<span class="tab" ng-click="tab='stats'" ng-class="{'activetab':tab=='stats'}">Stats</span>
+<span class="tab" ng-click="tab='abilities'" ng-class="{'activetab':tab=='abilities'}">Abilities</span>
+<span class="tab" ng-click="tab='equipment'" ng-class="{'activetab':tab=='equipment'}">Equipment</span>
+<span class="tab" ng-click="tab='spells';loadSpells()" ng-class="{'activetab':tab=='spells'}">Spells</span>
+<span class="tab" ng-click="tab='combat';loadSpells()" ng-class="{'activetab':tab=='combat'}">Combat</span>
+</div>
+
+<div ng-show="tab=='stats'" character-stats-tablet></div>
+
+<div ng-show="tab=='abilities'">
+	<div character-abilities></div>
+</div>
+<!-- End Abilities -->
+
+
+<div ng-show="tab=='equipment'">
+<table style="width:99%;">
+<thead class="header"><tr>
+<th></th>
+<th></th>
+<th></th>
+</tr>
+
+<tbody><tr>
+
+<td width="29%" style="vertical-align:top;">
+	<div class="leftmenu scrollable">
+		<div class="label">Equipped Items</div>
+		<div class="yellowback item" ng-repeat="item in char.inventory | orderBy:'name' track by $index" ng-click="unequip(item)" ng-if="item.equipped"
+		ng-mouseenter="setTip(item)" ng-mouseleave="clearTip()">
+			<span style="font-weight:bold;">{{item.name}}</span>
+			<span>({{item.count}})</span>
+			<span class="deletebutton" ng-click="delete(item,char.equipment,$event)">&times;</span>
+		</div>
+		<br>
+		<div class="label">Inventory</div>
+		<div class="yellowback item" ng-repeat="item in char.inventory | orderBy:'name' track by $index" ng-click="item.equipped=true" ng-if="!(item.equipped)"
+		ng-mouseenter="setTip(item)" ng-mouseleave="clearTip()">
+			<span style="font-weight:bold;">{{item.name}}</span>
+			<span>({{item.count}})</span>
+			<span class="deletebutton" ng-click="delete(item,char.inventory,$event)">&times;</span>
+		</div>
+	</div>
+</td>
+
+<td width="50%" style="vertical-align:top;text-align:center;">
+	<input type="text" ng-model="item.name" placeholder="Item name..." ng-change="checkItems()"/>
+	<br>
+	<input type="text" ng-model="item.count" placeholder="Quantity..."/>
+	<br>
+	<span class="button" ng-click="add(item,char.inventory)">&laquo; Inventory</span>
+	<span class="button" ng-click="char.proficiencies.upush(item.name)">Proficiencies &raquo;</span>
+	<br>
+	<textarea ng-model='item.description' style="min-width:90%;max-width:90%;min-height:400px;font-size:1.3em"></textarea>
+</td>
+
+<td style="vertical-align:top;text-align:center;">
+	<div class="label">Proficiencies and Languages</div>
+	<input type="text" ng-model='profSearch' placeholder="Search..." />
+	<div class="leftmenu scrollable">
+		<div class="item" ng-repeat="item in char.proficiencies | filter:profSearch | orderBy:'name'">
+			<span style="font-weight:bold;">{{item}}</span>
+			<span class="deletebutton" ng-click="delete(item,char.proficiencies,$event)">&times;</span>
+		</div>
+	</div>
+</td>
+
+</tr></tbody></table>
+</div>
+<!-- End equipment -->
+
+
+<div ng-show="tab=='spells'">
+<table style="width:100%;">
+<tbody><tr>
+<td width="30%" style="vertical-align:top;">
+	<div class="leftmenu scrollable">
+		<div class="label">Known Spells</div>
+		<input type="text" ng-model="combatSpellFilter" placeholder="Filter spells..."/>
+		<br><br>
+		<span class="item redback" ng-repeat="i in [0,1,2,3,4,5,6,7,8,9]" style="padding:8px 10px;"
+				ng-class="{'greenback':knownSpellLevelFilter[i]}"
+				ng-click="knownSpellLevelFilter[i]=!knownSpellLevelFilter[i]">{{i}}</span>
+		<br><br>
+		<div class="label">Cantrips</div>
+		<div class="greenback prepared item" ng-repeat="spell in knownSpells | filter:combatSpellFilter | orderBy:'name' track by $index"
+				ng-click="selectSpell(spell)" ng-class="{'selected':chosenSpell==spell}" ng-if="spell.level==0"
+				ng-show="knownSpellLevelFilter[0]">
+			<span style="font-weight:bold;">{{spell.name}}</span>
+			<span class="deletebutton" ng-if="false" ng-click="delete(spell,char.spells,$event)">&times;</span>			
+		</div>
+		<br>
+		<div ng-repeat="lv in [1,2,3,4,5,6,7,8,9]" ng-show="knownSpellLevelFilter[lv]">
+			<div class="label">Level {{lv}}</div>
+			<div class="greenback item" ng-repeat="spell in knownSpells | filter:combatSpellFilter | orderBy:'name' track by $index" ng-click="selectSpell(spell)" ng-class="{'selected':chosenSpell==spell,'prepared':spell.prepared}" ng-if="spell.level==lv">
+				<span style="font-weight:bold;">{{spell.name}}</span>
+				<span ng-if="!spell.alwaysPrepared" ng-show="spell.prepared" class="preparedSpell" ng-click="prepSpell(spell,$event)">prepared</span>
+				<span ng-if="!spell.alwaysPrepared" ng-show="!spell.prepared" class="preparedSpell" ng-click="prepSpell(spell,$event)">unprepared</span>
+				<span class="deletebutton" ng-if="false" ng-click="delete(spell,char.spells,$event)">&times;</span>			
+			</div>
+			<br>
+		</div>
+	</div>
+</td>
+
+<td width="25%" style="vertical-align:top;">
+<div class="label">Spell Preview</div>
+<div class="greenback item" ng-repeat="lv in [0,1,2,3,4,5,6,7,8,9]"
+		ng-mouseenter="setTip(chosenSpell,lv)"
+		ng-class="{'grey':chosenSpell.level>lv}">Level {{lv}}</div>
+		<br>
+<div class="redback item" ng-click='selectSpell(null);clearTip()'>Clear Selection</div>
+</td>
+
+<td style="vertical-align:top;">
+	<span class="label">Spell Name</span>
+	<br>
+	<input type="text" placeholder="Spell Name" ng-model="newspell.name"/>
+	<br></br>
+	<span class="label">Spell Level</span>
+	</br>
+	<input type="text" placeholder="Spell Level" ng-model="newspell.level"/>
+	<br>
+	<span class="label">Spell Description</span>
+	<textarea class="descriptionbox" ng-model="newspell.description" style="width:100%;min-height:400px;"></textarea>
+	<button ng-click="add(newspell,char.spells)">Add to Spells</button>
+
+</td>
+</tr>
+</tbody></table>
+</div>
+<!-- End Spells -->
+
+
+<div ng-show="tab=='combat'">
+<table style="width:100%;"><thead class="label center"><tr>
+	<th>Abilities</th>
+	<th>Spells</th>
+	<th>Initiative Order</th>
+</tr></thead>
+<tbody><tr>
+	<td width="30%" style="vertical-align:top;">
+		<div class="leftmenu" style="overflow-y:auto;height:calc(100vh - 150px);">
+			<div class="item" ng-repeat="item in char.abilities | orderBy:'name' track by $index"
+					ng-click="decrementCharges(item)"
+					ng-if="item.charges>0"
+					ng-mouseenter="setTip(item)" ng-mouseleave="clearTip()">
+				<span style="font-weight:bold;">{{item.name}}</span>
+				<span>({{item.charges}})</span>
+			</div>
+			
+			<br>
+			<div class="label">Items</div>
+			<div class="yellowback item" ng-repeat="item in char.equipment | orderBy:'name' track by $index" ng-if="combatRelevant(item)" ng-mouseenter="setTip(item)">
+				<span style="font-weight:bold;">{{item.name}}</span>
+				<span>({{item.count}})</span>
+			</div>
+			<div class="yellowback item" ng-repeat="item in char.inventory | orderBy:'name' track by $index" ng-if="combatRelevant(item)" ng-mouseenter="setTip(item)">
+				<span style="font-weight:bold;">{{item.name}}</span>
+				<span>({{item.count}})</span>
+				<span class="deletebutton" ng-click="delete(item,char.inventory,$event)">&times;</span>
+			</div>
+		</div>
+	</td>
+
+	<td width="30%" style="vertical-align:top;">
+		<div class="leftmenu" style="overflow-y:auto;height:calc(100vh - 150px);">
+			<input type="text" placeholder="Filter spells..." ng-model="combatSpellFilter" />
+			<br><br>
+			<span class="item" ng-repeat="i in [0,1,2,3,4,5,6,7,8,9]" style="padding:8px 10px;"
+					ng-class="{'greenback':combatSpellLevelFilter[i]}"
+					ng-click="combatSpellLevelFilter[i]=!combatSpellLevelFilter[i]">{{i}}</span>
+					<br><br>
+			<div class="label">Cantrips</div>
+			<div class="greenback item" ng-repeat="spell in knownSpells | filter:combatSpellFilter | orderBy:'name' track by $index"
+					ng-mouseenter="setTip(spell,lv)" ng-mouseleave="clearTip()" ng-if="spell.level==0"
+					ng-show="combatSpellLevelFilter[0]">
+				<span style="font-weight:bold;">{{spell.name}}</span>
+			</div>
+			<br>
+			<div ng-repeat="lv in [1,2,3,4,5,6,7,8,9]" ng-show="highestSlot()>=lv && combatSpellLevelFilter[lv]">
+				<div class="label">Level {{lv}}</div>
+				<div class="greenback item" ng-repeat="spell in knownSpells | filter:combatSpellFilter | orderBy:'name' track by $index" ng-if="spell.level<=lv && spell.prepared && spell.level>0" ng-mouseenter="setTip(spell,lv)" ng-mouseleave="clearTip()">
+					<span style="font-weight:bold;">{{spell.name}}</span>
+				</div>
+				<br>
+			</div>
+		</div>
+	</td>
+
+	<td width="40%" style="vertical-align:top;">
+	<div>
+		<form ng-submit="addInitiative()">
+			<input type='text' placeholder="Enter Name" ng-model="newInitiative"/>
+		</form>
+		<div ng-repeat="item in initiativeOrder" ng-click="initUp(item)" class="yellowback item">
+			{{item}}
+			<span class="deletebutton" ng-click="deleteInit(item,$event)">&times;</span>
+		</div>
+		<button class="redback item" ng-click="initiativeOrder=[]">Clear Initiative</button>
+	</div>
+	<textarea class="descriptionbox2" ng-show="tooltip" ng-model="tooltip" style="width:100%;min-height:400px;"></textarea>
+	</td>
+
+	</tr>
+	</tbody>
+	</table>
+</div>
+<!-- End Combat -->
+
+<div ng-show="tab=='reference'">
+	<span class="button" style="position:absolute;top:40px;right:8px;" ng-show="subtab==='spells'" ng-click="subtab='creatures'">Creatures &raquo;</span>
+	<span class="button" style="position:absolute;top:40px;right:8px;" ng-show="subtab==='creatures'" ng-click="subtab='spells'">Spells &raquo;</span>
+	<div ng-show="subtab=='spells'">
+		<table style="width:100%;">
+			<thead class='label'>
+				<tr>
+					<th>Spells</th>
+					<th>Filters</th>
+					<th>&nbsp;</th>
+				</tr>
+			</thead>
+			<tbody>
+			<tr>
+				<td style="display:inherit;vertical-align:top;">
+					<div class="scrollable">
+						<input style="width:340px;" type="text" ng-model="spellSearch" placeholder="Filter..."/>
+						<div class="item greenback" ng-repeat="spell in filteredSpellList | filter:spellSearch"
+								ng-mouseenter="setTip(spell,spell.level)" ng-mouseleave="clearTip()">{{spell.name}} ({{spell.level}})</div>
+					</div>
+				</td>
+				<td style="vertical-align:top;margin-left:10px">
+				<br>
+					<span class="item" ng-repeat="i in [0,1,2,3,4,5,6,7,8,9]" style="padding:8px 10px;"
+							ng-class="{'greenback':spellFilters.levels[i]}"
+							ng-click="spellFilters.levels[i]=!spellFilters.levels[i];updateSpellFilter()">{{i}}</span>
+				<br><br>
+					<table>
+						<tr>
+							<td><div class="item" style="display:inherit;" ng-class="{'redback':spellFilters.excludeClass[0]}" ng-click="classFilterExclude(0)">Bard</div></td>
+							<td><div class="item" style="display:inherit;" ng-class="{'greenback':spellFilters.includeClass[0]}" ng-click="classFilterInclude(0)">Bard</div></td></tr><tr>
+							<td><div class="item" style="display:inherit;" ng-class="{'redback':spellFilters.excludeClass[1]}" ng-click="classFilterExclude(1)">Cleric</div></td>
+							<td><div class="item" style="display:inherit;" ng-class="{'greenback':spellFilters.includeClass[1]}" ng-click="classFilterInclude(1)">Cleric</div></td></tr><tr>
+							<td><div class="item" style="display:inherit;" ng-class="{'redback':spellFilters.excludeClass[2]}" ng-click="classFilterExclude(2)">Druid</div></td>
+							<td><div class="item" style="display:inherit;" ng-class="{'greenback':spellFilters.includeClass[2]}" ng-click="classFilterInclude(2)">Druid</div></td></tr><tr>
+							<td><div class="item" style="display:inherit;" ng-class="{'redback':spellFilters.excludeClass[3]}" ng-click="classFilterExclude(3)">Paladin</div></td>
+							<td><div class="item" style="display:inherit;" ng-class="{'greenback':spellFilters.includeClass[3]}" ng-click="classFilterInclude(3)">Paladin</div></td></tr><tr>
+							<td><div class="item" style="display:inherit;" ng-class="{'redback':spellFilters.excludeClass[4]}" ng-click="classFilterExclude(4)">Ranger</div></td>
+							<td><div class="item" style="display:inherit;" ng-class="{'greenback':spellFilters.includeClass[4]}" ng-click="classFilterInclude(4)">Ranger</div></td></tr><tr>
+							<td><div class="item" style="display:inherit;" ng-class="{'redback':spellFilters.excludeClass[5]}" ng-click="classFilterExclude(5)">Sorcerer</div></td>
+							<td><div class="item" style="display:inherit;" ng-class="{'greenback':spellFilters.includeClass[5]}" ng-click="classFilterInclude(5)">Sorcerer</div></td></tr><tr>
+							<td><div class="item" style="display:inherit;" ng-class="{'redback':spellFilters.excludeClass[6]}" ng-click="classFilterExclude(6)">Warlock</div></td>
+							<td><div class="item" style="display:inherit;" ng-class="{'greenback':spellFilters.includeClass[6]}" ng-click="classFilterInclude(6)">Warlock</div></td></tr><tr>
+							<td><div class="item" style="display:inherit;" ng-class="{'redback':spellFilters.excludeClass[7]}" ng-click="classFilterExclude(7)">Wizard</div></td>
+							<td><div class="item" style="display:inherit;" ng-class="{'greenback':spellFilters.includeClass[7]}" ng-click="classFilterInclude(7)">Wizard</div></td>
+						</tr>
+					</table>
+				</td>
+				<td style="width: 50%;vertical-align: top;font-size: 1.3em;"></td>
+			</tr>
+			</tbody>
+		</table>
+	</div>
+	
+	<div ng-show="subtab=='creatures'">
+		<div>
+			<input type="text" ng-model="cFilter.name" placeholder="Name..."/><br>
+			<input type="text" ng-model="cFilter.cr" placeholder="Challenge Rating..."/><br>
+			<input type="text" ng-model="creatureFilter2" placeholder="Other info..."/>
+		</div>
+		<div style="overflow-y:scroll;max-height:calc(100vh - 160px);width:400px;">
+			<table class="borders bigcells">
+				<thead><tr>
+					<th>Name</th>
+					<th>CR</th>
+					<th>HP</th>
+					<th>Type</th>
+				</tr></thead>
+				<tbody>
+					<tr ng-repeat="creature in creatures | filter:creatureFilter | filter:creatureFilter2" ng-mouseenter="setTip(creature)" ng-mouseleave="clearTip()">
+						<td style="width:30%">{{creature.name}}</td>
+						<td style="width:10%">{{creature.cr}}</td>
+						<td style="width:20%">{{creature.hp}}</td>
+						<td style="width:20%">{{creature.type}}</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+</div>
+<!-- End Reference -->
+
+<!-- Levelup Modal -->
+<div class="leftModal" ng-class="{'show':currentChoices}">
+	<div class="prompt">{{prompt}}</div>
+	<br>
+	<hr>
+	<br>
+	<div class="choice" ng-repeat="choice in currentChoices track by $index" ng-click="toggleChoice(choice)" ng-mouseenter="setTip(choice)" ng-mouseleave="clearTip()" ng-class="{'selected':choice.selected}">
+			{{choice.name || choice}}
+			<span ng-show="choice.level">({{choice.level}})</span>
+	</div>
+	<br>
+	<button class="button" ng-disabled="disableNextButton()" ng-click="submitStep()">Next</button>
+</div>
+
+<!-- Tooltip Modal-->
+<div class="rightTip" ng-class="{'show':(currentChoices || tip) && tipRight}" ng-mouseenter="renewTip()" ng-mouseleave="clearTip()">
+	<div ng-if="tip.cr===undefined" style="padding:40px">
+		<div side-tip></div>
+	</div>
+	
+	<!-- Creature statbox tooltip -->
+	<div class="creatureCard box" ng-if="tip.cr" style="width:100%;padding-top:40px;">
+		<div creature-tip></div>
+	</div>
+</div>
+<div class="leftTip" ng-class="{'show':(currentChoices || tip) && tipLeft}" ng-mouseenter="renewTip()" ng-mouseleave="clearTip()">
+	<div ng-if="tip.cr===undefined" style="padding:40px">
+		<div side-tip></div>
+	</div>
+	
+	<!-- Creature statbox tooltip -->
+	<div class="creatureCard box" ng-if="tip.cr" style="width:100%;padding-top:40px;">
+		<div creature-tip></div>
+	</div>
+</div>
+
+<div class="modal" ng-class="{'show':showSaveMenu}">
+	
+	<span class="button" style="font-family:'Cinzel Decorative'" ng-click="newChar()">
+		Create New Character
+	</span>
+
+	<div style="display:flex;">
+		<div class="half center">
+			<div class="label">Save</div>
+			<hr>
+			<input type='text' ng-model='char.name' placeholder='Character Name'/>
+			<span class="button large" ng-click="save()">Save</span>
+		</div>
+		<div class="half center">
+			<div class="label">Load</div>
+			<hr>
+			<div style="display:flex;flex-wrap:wrap;">
+				<div class="button large" ng-repeat='item in saveList track by $index' ng-click="load(item.saveId)">{{item.name}}</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+</div>
+</div>
+<script src="./core/spells.js"></script>
+<script src="./core/api.js"></script>
+<script src="./packages/abilities.js"></script>
+<script src="./core/packages.js"></script>
+
+<script defer src="./packages/feats.js"></script>
+<script defer src="./packages/items.js"></script>
+<script defer src="./packages/races.js"></script>
+<script defer src="./packages/backgrounds.js"></script>
+
+<script defer src="./packages/barbarian.js"></script>
+<script defer src="./packages/bard.js"></script>
+<script defer src="./packages/cleric.js"></script>
+<script defer src="./packages/druid.js"></script>
+<script defer src="./packages/fighter.js"></script>
+<script defer src="./packages/monk.js"></script>
+<script defer src="./packages/paladin.js"></script>
+<script defer src="./packages/ranger.js"></script>
+<script defer src="./packages/rogue.js"></script>
+<script defer src="./packages/sorcerer.js"></script>
+<script defer src="./packages/warlock.js"></script>
+<script defer src="./packages/wizard.js"></script>
+
+<script src="./core/stats.js"></script>
+
+
+</body>
+</html>
