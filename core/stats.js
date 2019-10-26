@@ -746,38 +746,41 @@ $scope.spendGold=function(){
 		$scope.spendGoldInput=null;
 	}
 }
-$scope.takeDamage=function(){
-	if ($scope.takeDamageInput < 0){
+$scope.takeDamage=function(damageAmount){
+	if (damageAmount === undefined){
+		damageAmount = $scope.takeDamageInput;
+	}
+	if (damageAmount < 0){
 		//heal shape HP if they have any, otherwise heal health
 		if ($scope.char.polyHp>0){
-			let amount = Math.min($scope.char.polyHpMax-$scope.char.polyHp, -$scope.takeDamageInput);
+			let amount = Math.min($scope.char.polyHpMax-$scope.char.polyHp, -damageAmount);
 			$scope.char.polyHp+=amount;
-			$scope.takeDamageInput+=amount;
+			damageAmount+=amount;
 		}
 		//apply the remainder to the regular HP
-		let amount = Math.min($scope.derived.maxHp - $scope.char.hp, -$scope.takeDamageInput);
+		let amount = Math.min($scope.derived.maxHp - $scope.char.hp, -damageAmount);
 		$scope.char.hp+=amount;
-		$scope.takeDamageInput = null;
+		damageAmount = null;
 		return;
 	}
 	//deplete from temp hp first
-	if ($scope.char.tempHp >= $scope.takeDamageInput){
-		$scope.char.tempHp -= $scope.takeDamageInput;
-		$scope.takeDamageInput = 0;
+	if ($scope.char.tempHp >= damageAmount){
+		$scope.char.tempHp -= damageAmount;
+		damageAmount = 0;
 	} else if ($scope.char.tempHp > 0){
-		$scope.takeDamageInput -= $scope.char.tempHp;
+		damageAmount -= $scope.char.tempHp;
 		$scope.char.tempHp = 0;
 	}
 	//take damage to alternate forms (polymorph)
-	if ($scope.char.polyHp >= $scope.takeDamageInput){
-		$scope.char.polyHp -= $scope.takeDamageInput;
-		$scope.takeDamageInput = 0;
+	if ($scope.char.polyHp >= damageAmount){
+		$scope.char.polyHp -= damageAmount;
+		damageAmount = 0;
 	} else if ($scope.char.polyHp > 0){
-		$scope.takeDamageInput -= $scope.char.polyHp;
+		damageAmount -= $scope.char.polyHp;
 		$scope.char.polyHp = 0;
 	}
-	$scope.char.hp -= $scope.takeDamageInput;
-	$scope.takeDamageInput = null;
+	$scope.char.hp -= damageAmount;
+	damageAmount = null;
 }
 $scope.unequip=function(item){
 	delete item.equipped;
