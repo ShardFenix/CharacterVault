@@ -31,10 +31,7 @@
 
 <div ng-show="tab=='stats'" character-stats-tablet></div>
 
-<div ng-show="tab=='abilities'">
-	<div character-abilities></div>
-</div>
-<!-- End Abilities -->
+<div ng-show="tab=='abilities'" character-abilities-tablet></div>
 
 
 <div ng-show="tab=='equipment'">
@@ -47,7 +44,7 @@
 
 <tbody><tr>
 
-<td width="29%" style="vertical-align:top;">
+<td style="vertical-align:top;">
 	<div class="leftmenu scrollable">
 		<div class="label">Equipped Items</div>
 		<div class="yellowback item" ng-repeat="item in char.inventory | orderBy:'name' track by $index" ng-click="unequip(item)" ng-if="item.equipped"
@@ -67,21 +64,9 @@
 	</div>
 </td>
 
-<td width="50%" style="vertical-align:top;text-align:center;">
-	<input type="text" ng-model="item.name" placeholder="Item name..." ng-change="checkItems()"/>
-	<br>
-	<input type="text" ng-model="item.count" placeholder="Quantity..."/>
-	<br>
-	<span class="button" ng-click="add(item,char.inventory)">&laquo; Inventory</span>
-	<span class="button" ng-click="char.proficiencies.upush(item.name)">Proficiencies &raquo;</span>
-	<br>
-	<textarea ng-model='item.description' style="min-width:90%;max-width:90%;min-height:400px;font-size:1.3em"></textarea>
-</td>
-
 <td style="vertical-align:top;text-align:center;">
-	<div class="label">Proficiencies and Languages</div>
-	<input type="text" ng-model='profSearch' placeholder="Search..." />
 	<div class="leftmenu scrollable">
+		<div class="label">Proficiencies and Languages</div>
 		<div class="item" ng-repeat="item in char.proficiencies | filter:profSearch | orderBy:'name'">
 			<span style="font-weight:bold;">{{item}}</span>
 			<span class="deletebutton" ng-click="delete(item,char.proficiencies,$event)">&times;</span>

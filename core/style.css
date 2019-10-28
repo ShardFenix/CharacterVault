@@ -839,3 +839,9 @@ datalist.level-slider option {
 .skillList{
 	
 }
+.tooltipIcon {
+    background-image: url(/images/tooltip.png);
+    width: 24px;
+    height: 24px;
+    background-size: cover;
+}

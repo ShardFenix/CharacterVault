@@ -26,11 +26,11 @@ app.directive('characterStats',function(){
 app.directive('characterStatsTablet',function(){
 	return {templateUrl:'templates/characterStatsTablet.html'};
 });
-app.directive('characterAttributes',function(){
-	return {templateUrl:'templates/characterAttributes.html',replace:true};
-});
 app.directive('characterAbilities',function(){
 	return {templateUrl:'templates/characterAbilities.html'};
+});
+app.directive('characterAbilitiesTablet',function(){
+	return {templateUrl:'templates/characterAbilitiesTablet.html'};
 });
 app.directive('sideTip',function(){
 	return {templateUrl:'templates/sidetip.html'};

@@ -1,0 +1,34 @@
+<table style="width:100%;">
+	<thead class="header"><tr>
+		<th>Available</th>
+		<th>Exhausted</th>
+	</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td style="vertical-align:top;">
+				<div class="leftmenu">
+					<div class="item" ng-repeat="item in char.abilities | orderBy:'name' track by $index"
+							ng-click="decrementCharges(item)"
+							ng-if="item.charges>0">
+						<span class="tooltipIcon" ng-click="setTip(item)">&nbsp;</span>
+						<span style="font-weight:bold;">&emsp;{{item.name}}</span>
+						<span> ({{item.charges}})</span>
+					</div>
+				</div>
+			</td>
+
+			<td style="vertical-align:top;">
+				<div class="leftmenu">
+					<div class="redback item" ng-repeat="item in char.abilities | orderBy:'name' track by $index"
+							ng-click="addCharge(item)" 
+							ng-if="item.maxCharges-item.charges>0">
+						<span class="tooltipIcon" ng-click="setTip(item)">&nbsp;</span>
+						<span style="font-weight:bold;">{{item.name}}</span>
+						<span> ({{item.maxCharges-item.charges}})</span>
+					</span>
+				</div>
+			</td>
+		</tr>
+	</tbody>
+</table>
