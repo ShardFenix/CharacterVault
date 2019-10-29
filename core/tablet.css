@@ -2,10 +2,12 @@
 	div.rightTip,
 	div.leftTip{
 		display:none;
+		width:100%;
 	}
 	div.rightTip.show,
 	div.leftTip.show{
 		display:block;
+		left:0%;
 	}
 	.desktop{
 		display:none;
