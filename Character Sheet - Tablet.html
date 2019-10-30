@@ -47,16 +47,18 @@
 <td style="vertical-align:top;">
 	<div class="leftmenu scrollable">
 		<div class="label">Equipped Items</div>
-		<div class="yellowback item" ng-repeat="item in char.inventory | orderBy:'name' track by $index" ng-click="unequip(item)" ng-if="item.equipped"
-		ng-mouseenter="setTip(item)" ng-mouseleave="clearTip()">
-			<span style="font-weight:bold;">{{item.name}}</span>
+		<div class="yellowback item" ng-repeat="item in char.inventory | orderBy:'name' track by $index"
+			ng-click="unequip(item)" ng-if="item.equipped">
+			<span class="tooltipIcon" ng-click="setTip(item,null,$event)"></span>
+			<span style="font-weight:bold;">&emsp;{{item.name}}</span>
 			<span>({{item.count}})</span>
 			<span class="deletebutton" ng-click="delete(item,char.equipment,$event)">&times;</span>
 		</div>
 		<br>
 		<div class="label">Inventory</div>
-		<div class="yellowback item" ng-repeat="item in char.inventory | orderBy:'name' track by $index" ng-click="item.equipped=true" ng-if="!(item.equipped)"
-		ng-mouseenter="setTip(item)" ng-mouseleave="clearTip()">
+		<div class="yellowback item" ng-repeat="item in char.inventory | orderBy:'name' track by $index" 
+			ng-click="item.equipped=true" ng-if="!(item.equipped)">
+			<span class="tooltipIcon" ng-click="setTip(item,null,$event)"></span>
 			<span style="font-weight:bold;">{{item.name}}</span>
 			<span>({{item.count}})</span>
 			<span class="deletebutton" ng-click="delete(item,char.inventory,$event)">&times;</span>
@@ -87,9 +89,12 @@
 		<div class="label">Known Spells</div>
 		<input type="text" ng-model="combatSpellFilter" placeholder="Filter spells..."/>
 		<br><br>
-		<span class="item redback" ng-repeat="i in [0,1,2,3,4,5,6,7,8,9]" style="padding:8px 10px;"
-				ng-class="{'greenback':knownSpellLevelFilter[i]}"
+		<div style="display: flex;">
+			<span class="healthChangeButton" ng-repeat="i in [0,1,2,3,4,5,6,7,8,9]" style="padding:8px 10px;"
+				ng-class="{'plus':knownSpellLevelFilter[i],'minus':!knownSpellLevelFilter[i]}"
 				ng-click="knownSpellLevelFilter[i]=!knownSpellLevelFilter[i]">{{i}}</span>
+		</div>
+		
 		<br><br>
 		<div class="label">Cantrips</div>
 		<div class="greenback prepared item" ng-repeat="spell in knownSpells | filter:combatSpellFilter | orderBy:'name' track by $index"
@@ -110,30 +115,6 @@
 			<br>
 		</div>
 	</div>
-</td>
-
-<td width="25%" style="vertical-align:top;">
-<div class="label">Spell Preview</div>
-<div class="greenback item" ng-repeat="lv in [0,1,2,3,4,5,6,7,8,9]"
-		ng-mouseenter="setTip(chosenSpell,lv)"
-		ng-class="{'grey':chosenSpell.level>lv}">Level {{lv}}</div>
-		<br>
-<div class="redback item" ng-click='selectSpell(null);clearTip()'>Clear Selection</div>
-</td>
-
-<td style="vertical-align:top;">
-	<span class="label">Spell Name</span>
-	<br>
-	<input type="text" placeholder="Spell Name" ng-model="newspell.name"/>
-	<br></br>
-	<span class="label">Spell Level</span>
-	</br>
-	<input type="text" placeholder="Spell Level" ng-model="newspell.level"/>
-	<br>
-	<span class="label">Spell Description</span>
-	<textarea class="descriptionbox" ng-model="newspell.description" style="width:100%;min-height:400px;"></textarea>
-	<button ng-click="add(newspell,char.spells)">Add to Spells</button>
-
 </td>
 </tr>
 </tbody></table>

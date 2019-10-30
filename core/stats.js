@@ -1098,7 +1098,12 @@ $scope.attackBonus=function(item){
 var tipPromise=null;
 
 $scope.clearTip=function(){
-	tipPromise=$timeout(function(){$scope.tip=null;$scope.spellLevel=null;},1000);
+	tipPromise=$timeout($scope.clearTipNow,1000);
+}
+
+$scope.clearTipNow=function(){
+	$scope.tip=null;
+	$scope.spellLevel=null;
 }
 
 $scope.renewTip=function(){
@@ -1107,7 +1112,7 @@ $scope.renewTip=function(){
 	}
 }
 
-$scope.setTip=function(choice,spellLevel){
+$scope.setTip=function(choice,spellLevel,event){
 	if (tipPromise){
 		$timeout.cancel(tipPromise);
 	}
@@ -1119,10 +1124,13 @@ $scope.setTip=function(choice,spellLevel){
 	}
 	$scope.tipRight=true;
 	$scope.tipLeft=false;
+	if (event){
+		event.stopPropagation();
+	}
 }
 
-$scope.setLeftTip=function(choice,spellLevel){
-	$scope.setTip(choice,spellLevel);
+$scope.setLeftTip=function(choice,spellLevel,event){
+	$scope.setTip(choice,spellLevel,event);
 	$scope.tipRight=false;
 	$scope.tipLeft=true;
 }

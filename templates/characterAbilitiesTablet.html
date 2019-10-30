@@ -11,7 +11,7 @@
 					<div class="item" ng-repeat="item in char.abilities | orderBy:'name' track by $index"
 							ng-click="decrementCharges(item)"
 							ng-if="item.charges>0">
-						<span class="tooltipIcon" ng-click="setTip(item)">&nbsp;</span>
+						<span class="tooltipIcon" ng-click="setTip(item,null,$event)"></span>
 						<span style="font-weight:bold;">&emsp;{{item.name}}</span>
 						<span> ({{item.charges}})</span>
 					</div>
@@ -23,7 +23,7 @@
 					<div class="redback item" ng-repeat="item in char.abilities | orderBy:'name' track by $index"
 							ng-click="addCharge(item)" 
 							ng-if="item.maxCharges-item.charges>0">
-						<span class="tooltipIcon" ng-click="setTip(item)">&nbsp;</span>
+						<span class="tooltipIcon" ng-click="setTip(item,null,$event)"></span>
 						<span style="font-weight:bold;">{{item.name}}</span>
 						<span> ({{item.maxCharges-item.charges}})</span>
 					</span>
