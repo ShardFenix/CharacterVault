@@ -87,33 +87,38 @@
 <td width="30%" style="vertical-align:top;">
 	<div class="leftmenu scrollable">
 		<div class="label">Known Spells</div>
-		<input type="text" ng-model="combatSpellFilter" placeholder="Filter spells..."/>
-		<br><br>
-		<div style="display: flex;">
-			<span class="healthChangeButton" ng-repeat="i in [0,1,2,3,4,5,6,7,8,9]" style="padding:8px 10px;"
-				ng-class="{'plus':knownSpellLevelFilter[i],'minus':!knownSpellLevelFilter[i]}"
-				ng-click="knownSpellLevelFilter[i]=!knownSpellLevelFilter[i]">{{i}}</span>
+		
+		<div style="display:flex">
+			<div style="width:80%;">
+				<div class="label">Cantrips</div>
+				<div class="greenback prepared item" ng-repeat="spell in knownSpells | filter:combatSpellFilter | orderBy:'name' track by $index"
+						ng-click="selectSpell(spell)" ng-class="{'selected':chosenSpell==spell}" ng-if="spell.level==0"
+						ng-show="knownSpellLevelFilter[0]">
+					<span style="font-weight:bold;">{{spell.name}}</span>
+					<span class="deletebutton" ng-if="false" ng-click="delete(spell,char.spells,$event)">&times;</span>			
+				</div>
+				<br>
+				<div ng-repeat="lv in [1,2,3,4,5,6,7,8,9]" ng-show="knownSpellLevelFilter[lv]">
+					<div class="label">Level {{lv}}</div>
+					<div class="greenback item" ng-repeat="spell in knownSpells | filter:combatSpellFilter | orderBy:'name' track by $index" ng-click="selectSpell(spell)" ng-class="{'selected':chosenSpell==spell,'prepared':spell.prepared}" ng-if="spell.level==lv">
+						<span style="font-weight:bold;">{{spell.name}}</span>
+						<span ng-if="!spell.alwaysPrepared" ng-show="spell.prepared" class="preparedSpell" ng-click="prepSpell(spell,$event)">prepared</span>
+						<span ng-if="!spell.alwaysPrepared" ng-show="!spell.prepared" class="preparedSpell" ng-click="prepSpell(spell,$event)">unprepared</span>
+						<span class="deletebutton" ng-if="false" ng-click="delete(spell,char.spells,$event)">&times;</span>			
+					</div>
+					<br>
+				</div>
+			</div>
+		
+			<div style="display: flex;width: 20%;flex-wrap: wrap;height: 230px;">
+				<span class="healthChangeButton" ng-repeat="i in [0,1,2,3,4,5,6,7,8,9]" 	style="padding:8px 10px;"
+					ng-class="{'plus':knownSpellLevelFilter[i], 'minus':!knownSpellLevelFilter[i]}"
+					ng-click="knownSpellLevelFilter[i]=!knownSpellLevelFilter[i]">{{i}}
+				</span>
+			</div>		
 		</div>
 		
-		<br><br>
-		<div class="label">Cantrips</div>
-		<div class="greenback prepared item" ng-repeat="spell in knownSpells | filter:combatSpellFilter | orderBy:'name' track by $index"
-				ng-click="selectSpell(spell)" ng-class="{'selected':chosenSpell==spell}" ng-if="spell.level==0"
-				ng-show="knownSpellLevelFilter[0]">
-			<span style="font-weight:bold;">{{spell.name}}</span>
-			<span class="deletebutton" ng-if="false" ng-click="delete(spell,char.spells,$event)">&times;</span>			
-		</div>
-		<br>
-		<div ng-repeat="lv in [1,2,3,4,5,6,7,8,9]" ng-show="knownSpellLevelFilter[lv]">
-			<div class="label">Level {{lv}}</div>
-			<div class="greenback item" ng-repeat="spell in knownSpells | filter:combatSpellFilter | orderBy:'name' track by $index" ng-click="selectSpell(spell)" ng-class="{'selected':chosenSpell==spell,'prepared':spell.prepared}" ng-if="spell.level==lv">
-				<span style="font-weight:bold;">{{spell.name}}</span>
-				<span ng-if="!spell.alwaysPrepared" ng-show="spell.prepared" class="preparedSpell" ng-click="prepSpell(spell,$event)">prepared</span>
-				<span ng-if="!spell.alwaysPrepared" ng-show="!spell.prepared" class="preparedSpell" ng-click="prepSpell(spell,$event)">unprepared</span>
-				<span class="deletebutton" ng-if="false" ng-click="delete(spell,char.spells,$event)">&times;</span>			
-			</div>
-			<br>
-		</div>
+		
 	</div>
 </td>
 </tr>
@@ -283,10 +288,9 @@
 <!-- Levelup Modal -->
 <div class="leftModal" ng-class="{'show':currentChoices}">
 	<div class="prompt">{{prompt}}</div>
-	<br>
 	<hr>
-	<br>
-	<div class="choice" ng-repeat="choice in currentChoices track by $index" ng-click="toggleChoice(choice)" ng-mouseenter="setTip(choice)" ng-mouseleave="clearTip()" ng-class="{'selected':choice.selected}">
+	<div class="choice" ng-repeat="choice in currentChoices track by $index" ng-click="toggleChoice(choice)" ng-class="{'selected':choice.selected}">
+		<span class="tooltipIcon" ng-click="setTip(choice,null,$event)">&nbsp;</span>
 			{{choice.name || choice}}
 			<span ng-show="choice.level">({{choice.level}})</span>
 	</div>
@@ -295,7 +299,7 @@
 </div>
 
 <!-- Tooltip Modal-->
-<div class="rightTip" ng-class="{'show':(currentChoices || tip) && tipRight}" ng-mouseenter="renewTip()" ng-mouseleave="clearTip()">
+<div class="rightTip" ng-class="{'show':tip && tipRight}" ng-mouseenter="renewTip()" ng-mouseleave="clearTip()">
 	<div ng-if="tip.cr===undefined" style="padding:40px">
 		<div side-tip></div>
 	</div>
@@ -323,13 +327,13 @@
 	</span>
 
 	<div style="display:flex;">
-		<div class="half center">
+		<div class="flex1 center" style="padding:10px;">
 			<div class="label">Save</div>
 			<hr>
 			<input type='text' ng-model='char.name' placeholder='Character Name'/>
 			<span class="button large" ng-click="save()">Save</span>
 		</div>
-		<div class="half center">
+		<div class="flex2 center" style="padding:10px;">
 			<div class="label">Load</div>
 			<hr>
 			<div style="display:flex;flex-wrap:wrap;">
