@@ -119,7 +119,7 @@
 	<td colspan=2 class="top" style="min-width:160px;">
 	<br>
 	<div class='label' style='text-align:left;'>Skills</div>
-	<div ng-repeat="skill in derived.skills">
+	<div ng-repeat="skill in derived.skills" class="skillBonus">
 		<span ng-show="skill.mult===0" class='redx' ng-click="toggleSkillProf(skill.name);">&#x2716;</span>
 		<span ng-show="skill.mult===1" class='greenx' ng-click="toggleSkillProf(skill.name);">&#x2714;</span>
 		<span ng-show="skill.mult===2" class='greenx' ng-click="toggleSkillProf(skill.name);">&#x271A;</span>
@@ -220,21 +220,6 @@
 
 <td style="vertical-align:top;">
 <br>
-<!--
-	<div style="padding:10px;border:1px solid black;" class="desktop">
-		<span class="label bordertitle" style="margin-top:-24px;">Add Passive Ability</span>
-		<label>Name
-			<input type="text" ng-model="newpassive.name" ng-change="checkForPassives(newpassive.name)"/>
-		</label>
-		<br>
-		<label>Description
-		<textarea class="descriptionbox" ng-model="newpassive.description" style="width:100%;min-height:400px;max-height:400px;"></textarea>
-		</label>
-		<button ng-click="addPassive(newpassive)">Add to Passives</button>
-		<br>
-		<button style="display:none"></button>
-	</div>
--->
 
 	<div style="display:flex;">
 		<div style="vertical-align:top;text-align:center;flex:1;padding-right:10px;">
@@ -272,51 +257,6 @@
 				</div>
 			</div>
 		</div>
-	</div>
-	
-	<div class="tablet">
-		<table style="width:100%" class="tablet">
-			<tr>
-				<td style="width:150px;text-align:center;">
-					<div>
-						<label>
-							<span class='label'>Level</span><br>
-							<input type='text' class='statbox' ng-model='char.level' number />
-						</label>
-					</div>
-					<span class="button" ng-hide="char.level>=20" ng-click="levelUpStart()">Level Up</span>
-				</td></tr><tr>
-				<td style="width:100px;text-align:center;">
-					<div class="acbox">
-						<label>
-							<br>
-							<span class='label'>AC</span>
-							<br>
-							<input type='text' style="font-size:2.2em;background-color:rgba(0,0,0,0)" class='statmod' ng-model='char.ac'/>
-						</label>
-					</div>
-				</td></tr><tr>
-				<td style="width:150px;text-align:center;">
-					<label>
-						<span class='label'>Proficiency<br>Bonus</span><br>
-						<input type='text' class='statbox' disabled ng-model='derived.proficiency'/>
-					</label>
-				</td></tr><tr>
-				<td style="width:150px;text-align:center;">
-					<label>
-						<span class='label'>Initiative<br>Bonus</span><br>
-						<input type='text' class='statbox' ng-model='derived.initiative'/>
-					</label>
-				</td></tr><tr>
-				<td style="width:150px;text-align:center;">
-					<label>
-						<span class='label'>Move<br>Speed</span><br>
-						<input type='text' class='statbox' ng-model='char.speed'/>
-					</label>
-				</td>
-			</tr>
-		</table>
-
 	</div>
 </td>
 

@@ -1,5 +1,4 @@
 .item{
-	display:flex;
     margin-top: -1px;
     border-bottom: 1px solid black;
     border-top: 1px solid black;
@@ -848,4 +847,7 @@ datalist.level-slider option {
 
 .choice>.tooltipIcon{
 	float:left;
+}
+.skillBonus{
+	margin-top:-4px;
 }
