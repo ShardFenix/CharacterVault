@@ -17,16 +17,17 @@ Requires Node.js version 10.0.0 or higher (to run the included server for charac
 - A music player to make your environments more appealing
 
 ###Implemented Packages
+
 Barbarian | Supported
 ------------- | -------------
-Core | :heavy_check_mark:
-Ancestral Guardian | :heavy_check_mark:
-Battlerager | :x:
-Berserker | :heavy_check_mark:
-Storm Herald | :x:
-Totem Warrior | :x:
-Zealot | :heavy_check_mark:
-Whirlwind (homebrew) | :heavy_check_mark:
+Core | Yes
+Ancestral Guardian | Yes
+Battlerager | No
+Berserker | Yes
+Storm Herald | No
+Totem Warrior | No
+Zealot | Yes
+Whirlwind (homebrew) | Yes
 
 Bard | Supported
 ------------- | -------------
