@@ -19,11 +19,11 @@ Requires Node.js version 10.0.0 or higher (to run the included server for charac
 ###Implemented Packages
 Barbarian | Supported
 ------------- | -------------
-Core | Yes
+Core | [X]
 Ancestral Guardian | Yes
-Battlerager | No
+Battlerager | [ ]
 Berserker | Yes
-Storm Herald | No
+Storm Herald | []
 Totem Warrior | No
 Zealot | Yes
 Whirlwind (homebrew) | Yes
