@@ -838,16 +838,17 @@ datalist.level-slider option {
 .skillList{
 	
 }
+.skillBonus{
+	margin-top:-4px;
+}
 .tooltipIcon {
     background-image: url(/images/tooltip.png);
     width: 24px;
     height: 24px;
     background-size: cover;
+	display:inline-block;
 }
 
 .choice>.tooltipIcon{
 	float:left;
-}
-.skillBonus{
-	margin-top:-4px;
 }
