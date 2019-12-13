@@ -927,3 +927,30 @@ function randomSpell(level){
 	}
 	return candidates[Math.rand(0,candidates.length)];
 }
+
+/*
+ * Given a dice expression in the form (\d*)d(\d+)([+-]\d+)?, generate an object which contains:
+ * sum: total roll
+ * list: The individual die rolls.
+ */
+function roll(expression){
+	var numDice=1;
+	//remove whitespace
+	expression=expression.replace(/\s/g,'');
+	if (expression.indexOf('d')!=-1){
+		numDice = parseInt(expression.substring(0,expression.indexOf('d')));
+	}
+	var min=1;
+	var max=parseInt(expression.substring(expression.indexOf('d')+1));
+	var sum=0;
+	var list=[];
+	for (let i=0;i<numDice;i++){
+		let r = Math.floor(Math.random()*(max + 1 - min) + min);
+		list.push(r);
+		sum+=r;
+	}
+	return {
+		sum:sum,
+		list:list
+	};
+}
