@@ -274,50 +274,6 @@
 		</div>
 	</div>
 	
-	<div class="tablet">
-		<table style="width:100%" class="tablet">
-			<tr>
-				<td style="width:150px;text-align:center;">
-					<div>
-						<label>
-							<span class='label'>Level</span><br>
-							<input type='text' class='statbox' ng-model='char.level' number />
-						</label>
-					</div>
-					<span class="button" ng-hide="char.level>=20" ng-click="levelUpStart()">Level Up</span>
-				</td></tr><tr>
-				<td style="width:100px;text-align:center;">
-					<div class="acbox">
-						<label>
-							<br>
-							<span class='label'>AC</span>
-							<br>
-							<input type='text' style="font-size:2.2em;background-color:rgba(0,0,0,0)" class='statmod' ng-model='char.ac'/>
-						</label>
-					</div>
-				</td></tr><tr>
-				<td style="width:150px;text-align:center;">
-					<label>
-						<span class='label'>Proficiency<br>Bonus</span><br>
-						<input type='text' class='statbox' disabled ng-model='derived.proficiency'/>
-					</label>
-				</td></tr><tr>
-				<td style="width:150px;text-align:center;">
-					<label>
-						<span class='label'>Initiative<br>Bonus</span><br>
-						<input type='text' class='statbox' ng-model='derived.initiative'/>
-					</label>
-				</td></tr><tr>
-				<td style="width:150px;text-align:center;">
-					<label>
-						<span class='label'>Move<br>Speed</span><br>
-						<input type='text' class='statbox' ng-model='char.speed'/>
-					</label>
-				</td>
-			</tr>
-		</table>
-
-	</div>
 </td>
 
 </tr></tbody></table>

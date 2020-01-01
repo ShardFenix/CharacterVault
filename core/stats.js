@@ -191,6 +191,9 @@ $scope.levelUpStart=function(){
 	if ($scope.currentChoices && $scope.currentChoices.length>0){
 		return;
 	}
+	if ($scope.char.level>0){
+		$scope.history[$scope.char.level]=angular.copy($scope.char);
+	}
 	$scope.char.level++;
 	$scope.charBackup=angular.copy($scope.char);
 	//show class selection
@@ -254,13 +257,9 @@ function finishLevelUp(){
 	}
 	$scope.tip=null;
 	let tempChar = angular.copy($scope.char);
-	prepForSave(tempChar);
 	$scope.chosenLevel=null;
 	$scope.historyLevel=$scope.char.level;
-	prepForSave($scope.charBackup);
-	$scope.history[$scope.char.level-1]=$scope.charBackup;
-	$scope.history[$scope.char.level-1]=$scope.char.level-1;
-	$scope.history[$scope.char.level]=tempChar;
+
 }
 
 
@@ -421,7 +420,7 @@ $scope.selectChoice=function(choice){
 
 function nextStep(){
 	$scope.updateStep+=1;
-	if ($scope.currentPackage.length<=$scope.updateStep){
+	if ($scope.currentPackage && $scope.currentPackage.length<=$scope.updateStep){
 		//see if we need to start doing the subclass
 		if ($scope.inSubclass){
 			finishLevelUp();
@@ -1141,7 +1140,6 @@ $scope.saveToVault=function(){
 	$http.post('http://localhost:8080/characters/' + name, jsonChar)
 		.then(function(response){
 			console.log("Saved character "+name);
-			$scope.messages.push("Character saved!");
 			if ($scope.history){
 				let jsonHist = JSON.stringify($scope.history);
 				$http.post('http://localhost:8080/characters/'+name+'.history',jsonHist)
@@ -1244,7 +1242,7 @@ $scope.load=function(characterName){
 
 $scope.loadFromLevelHistory=function(level){
 	let currentLevel = $scope.char.level;
-	if ($scope.history.length>level){
+	if ($scope.history && $scope.history.length>level){
 		if ($scope.history[level].level===level){
 			//TODO: push current level into history if it's not there yet
 			$scope.char=angular.copy($scope.history[level]);
