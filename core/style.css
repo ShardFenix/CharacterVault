@@ -1,5 +1,4 @@
 .item{
-	display:flex;
     margin-top: -1px;
     border-bottom: 1px solid black;
     border-top: 1px solid black;
@@ -839,11 +838,15 @@ datalist.level-slider option {
 .skillList{
 	
 }
+.skillBonus{
+	margin-top:-4px;
+}
 .tooltipIcon {
     background-image: url(/images/tooltip.png);
     width: 24px;
     height: 24px;
     background-size: cover;
+	display:inline-block;
 }
 
 .choice>.tooltipIcon{

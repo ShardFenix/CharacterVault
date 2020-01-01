@@ -17,6 +17,7 @@ Requires Node.js version 10.0.0 or higher (to run the included server for charac
 - A music player to make your environments more appealing
 
 ###Implemented Packages
+
 Barbarian | Supported
 ------------- | -------------
 Core | Yes

@@ -119,7 +119,7 @@
 	<td colspan=2 class="top" style="min-width:160px;">
 	<br>
 	<div class='label' style='text-align:left;'>Skills</div>
-	<div ng-repeat="skill in derived.skills">
+	<div ng-repeat="skill in derived.skills" class="skillBonus">
 		<span ng-show="skill.mult===0" class='redx' ng-click="toggleSkillProf(skill.name);">&#x2716;</span>
 		<span ng-show="skill.mult===1" class='greenx' ng-click="toggleSkillProf(skill.name);">&#x2714;</span>
 		<span ng-show="skill.mult===2" class='greenx' ng-click="toggleSkillProf(skill.name);">&#x271A;</span>
@@ -220,21 +220,6 @@
 
 <td style="vertical-align:top;">
 <br>
-<!--
-	<div style="padding:10px;border:1px solid black;" class="desktop">
-		<span class="label bordertitle" style="margin-top:-24px;">Add Passive Ability</span>
-		<label>Name
-			<input type="text" ng-model="newpassive.name" ng-change="checkForPassives(newpassive.name)"/>
-		</label>
-		<br>
-		<label>Description
-		<textarea class="descriptionbox" ng-model="newpassive.description" style="width:100%;min-height:400px;max-height:400px;"></textarea>
-		</label>
-		<button ng-click="addPassive(newpassive)">Add to Passives</button>
-		<br>
-		<button style="display:none"></button>
-	</div>
--->
 
 	<div style="display:flex;">
 		<div style="vertical-align:top;text-align:center;flex:1;padding-right:10px;">
