@@ -624,11 +624,8 @@ window.subclasses.push(
 			{},{},{},
 			{ // 3
 				"updates":[
-					helper.learnSkillProficiency,
-					helper.learnSkillProficiency,
-					helper.learnSkillProficiency,
-					helper.chooseExpertise,
-					helper.chooseExpertise,
+					helper.learnSkillProficiency3,
+					helper.chooseExpertise2,
 					{
 						"choices":[],
 						"action":function(char){

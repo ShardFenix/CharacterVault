@@ -782,9 +782,10 @@ function addPassive(char,p){
 		passive = findPassive(p);
 	}
 	if (passive){
-		char.passives.push(passive);
-		if (typeof passive.onPickup === 'function'){
-			passive.onPickup(char);
+		let pcopy = angular.copy(passive);
+		char.passives.push(pcopy);
+		if (typeof pcopy.onPickup === 'function'){
+			pcopy.onPickup(char);
 		}
 	} else {
 		console.error("Passive not found: "+p);
