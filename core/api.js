@@ -2,6 +2,28 @@ Math.rand=function(min,max){
 	return min + Math.floor(Math.random()*(max-min));
 }
 
+Array.prototype.find=function(objectOrFunction){
+	if (typeof objectOrFunction === 'function'){
+		for (let element of this){
+			if (objectOrFunction(element)){
+				return element;
+			}
+		}
+	} else if (objectOrFunction.name) {
+		for (let element of this){
+			if (element.name===objectOrFunction.name){
+				return element;
+			}
+		}
+	} else {
+		for (let element of this){
+			if (element === objectOrFunction){
+				return element;
+			}
+		}
+	}
+}
+
 Array.prototype.has=function(string){
 	if (string.name){
 		for (let element of this){

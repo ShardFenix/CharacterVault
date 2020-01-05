@@ -803,6 +803,9 @@ $scope.decrementCharges=function(item){
 	} else {
 		item.charges-=1;
 	}
+	if (typeof item.onUse === 'function'){
+		item.onUse($scope.char,$scope);
+	}
 	$scope.calculateSharedResources();
 }
 
@@ -881,19 +884,36 @@ $scope.highestSlot=function(){
 
 $scope.delete=function(item,from,event){
 	for (var i=0;i<from.length;i++){
-		if (from[i].name==item.name){
-			if (from[i].count) {
-				from[i].count--;
-				if (from[i].count==0){
+		if (from[i].name && item.name){
+			if (from[i].name === item.name){
+				if (from[i].count) {
+					from[i].count--;
+					if (from[i].count==0){
+						from.splice(i,1);
+					}
+				}
+				else {
 					from.splice(i,1);
 				}
+				event.stopPropagation();
+				event.preventDefault();
+				return false;
 			}
-			else {
-				from.splice(i,1);
+		} else {
+			if (from[i]===item){
+				if (from[i].count) {
+					from[i].count--;
+					if (from[i].count==0){
+						from.splice(i,1);
+					}
+				}
+				else {
+					from.splice(i,1);
+				}
+				event.stopPropagation();
+				event.preventDefault();
+				return false;
 			}
-			event.stopPropagation();
-			event.preventDefault();
-			return false;
 		}
 	}
 	return true;
@@ -1165,6 +1185,7 @@ function prepForSave(char){
 		delete ability.onLongRest;
 		delete ability.apply;
 		delete ability.maxChargesFunction;
+		delete ability.onUse;
 	}
 	//spell descriptions take up a lot of space.
 	for (let clas of char.classes){
@@ -1280,6 +1301,7 @@ function initLoadedCharacter(char){
 			ability.onLongRest=a.onLongRest;
 			ability.apply=a.apply;
 			ability.maxChargesFunction=a.maxChargesFunction;
+			ability.onUse=a.onUse;
 		}
 	}
 	for (let clas of char.classes){
