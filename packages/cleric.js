@@ -10,25 +10,19 @@ window.abilities.append([
 			return 0;
 		},
 		charges:1,
-		onShortRest:function(char,scope){
-			this.charges=this.maxCharges;
-		}
+		onShortRest:helper.recharge
 	},{
 		name:"Divine Intervention",
 		description:"You can call on your deity to intervene on your behalf when your need is great.\nImploring your deity's aid requires you to use your action. Describe the assistance you seek, and roll percentile dice. If you roll a number equal to or lower than your cleric level, your deity intervenes. The DM chooses the nature of the intervention; the effect of any cleric spell or cleric domain spell would be appropriate. If your deity intervenes, you can't use this feature again for 7 days. Otherwise, you can use it again after you finish a long rest.",
 		maxCharges:1,
 		charges:1,
-		onLongRest:function(char,scope){
-			this.charges=this.maxCharges;
-		}
+		onLongRest:helper.recharge
 	},{
 		name:"Improved Divine Intervention",
 		description:"You can call on your deity to intervene on your behalf when your need is great.\nImploring your deity's aid requires you to use your action. Describe the assistance you seek. Your deity intervenes. The DM chooses the nature of the intervention; the effect of any cleric spell or cleric domain spell would be appropriate. You can't use this feature again for 7 days.",
 		maxCharges:1,
 		charges:1,
-		onLongRest:function(char,scope){
-			this.charges=this.maxCharges;
-		}
+		onLongRest:helper.recharge
 	},{
 		name:"Preserve Life",
 		description:"Using your Channel Divinity action, you present your holy symbol and evoke healing energy that can restore a number of hit points equal to five times your cleric level. Choose any creatures within 30 feet of you, and divide those hit points among them. This feature can restore a creature to no more than half of its hit point maximum. You can't use this feature on an undead or a construct.",
@@ -40,6 +34,11 @@ window.abilities.append([
 		resourceName:"Channel Divinity",
 		resourceCost:1
 	},{
+		name:"Path to the Grave",
+		description:"You can use your Channel Divinity to mark another creature's life force for termination.\nAs an action, you choose one creature you can see within 30 feet of you, cursing it until the end of your next turn. The next time you or an ally of yours hits the cursed creature with an attack, the creature has vulnerability to all of that attack's damage, and then the curse ends.",
+		resourceName:"Channel Divinity",
+		resourceCost:1
+	},{
 		name:"Turn Undead",
 		description:"Using your Channel Divinity action, you present your holy symbol and speak a prayer censuring the undead. Each undead that can see or hear you within 30 feet of you must make a Wisdom saving throw. If the creature fails its saving throw, it is turned for 1 minute or until it takes any damage.\nA turned creature must spend its turns trying to move as far away from you as it can, and it can't willingly move to a space within 30 feet of you. It also can't take reactions. For its action, it can use only the Dash action or try to escape from an effect that prevents it from moving. If there's nowhere to move, the creature can use the Dodge action.",
 		resourceName:"Channel Divinity",
@@ -47,18 +46,28 @@ window.abilities.append([
 	},{
 		name:"Wrath of the Storm",
 		description:"You can thunderously rebuke attackers. When a creature within 5 feet of you that you can see hits you with an attack, you can use your reaction to cause the creature to make a Dexterity saving throw. The creature takes 2d8 lightning or thunder damage (your choice) on a failed saving throw, and half as much damage on a successful one.\n\nYou can use this feature a number of times equal to your Wisdom modifier (a minimum of once). You regain all expended uses when you finish a long rest.",
-		onLongRest:function(char,scope){
-			this.charges=this.maxCharges;
-		},
+		onLongRest:helper.recharge,
+		maxChargesFunction:function(char,scope){
+			return scope.derived.modifiers.wis;
+		}
+	},{
+		name:"Eyes of the Grave",
+		description:"You gain the ability to occasionally sense the presence of the undead, whose existence is an insult to the natural cycle of life. As an action, you can open your awareness to magically detect undead. Until the end of your next turn, you know the location of any undead within 60 feet of you that isn't behind total cover and that isn't protected from divination magic. This sense doesn't tell you anything about a creature's capabilities or identity.\n\nYou can use this feature a number of times equal to your Wisdom modifier (minimum of once). You regain all expended uses when you finish a long rest.",
+		onLongRest:helper.recharge,
+		maxChargesFunction:function(char,scope){
+			return scope.derived.modifiers.wis;
+		}
+	},{
+		name:"Sentinel at Death's Door",
+		description:"You gain the ability to impede death's progress. As a reaction when you or a creature you can see within 30 feet of you suffers a critical hit, you can turn that hit into a normal hit. Any effects triggered by a critical hit are canceled.\n\nYou can use this feature a number of times equal to your Wisdom modifier (minimum of once). You regain all expended uses when you finish a long rest.",
+		onLongRest:helper.recharge,
 		maxChargesFunction:function(char,scope){
 			return scope.derived.modifiers.wis;
 		}
 	},{
 		name:"War Priest",
 		description:"Your god delivers bolts of inspiration to you while you are engaged in battle. When you use the Attack action, you can make one weapon attack as a bonus action. You can use this feature a number of times equal to your Wisdom modifier (a minimum of once). You regain all expended uses when you finish a long rest.",
-		onLongRest:function(char,scope){
-			this.charges=this.maxCharges;
-		},
+		onLongRest:helper.recharge,
 		maxChargesFunction:function(char,scope){
 			return scope.derived.modifiers.wis;
 		}
@@ -118,6 +127,15 @@ window.passives.append([
 	},{
 		name:"Avatar of Battle",
 		description:"You gain resistance to bludgeoning, piercing, and slashing damage from nonmagical weapons."
+	},{
+		name:"Circle of Mortality",
+		description:"You gain the ability to manipulate the line between life and death. When you would normally roll one or more dice to restore hit points with a spell to a creature at 0 hit points, you instead use the highest number possible for each die.\n\nIn addition, you learn the Spare the Dying cantrip, which doesn't count against the number of cleric cantrips you know. For you, it has a range of 30 feet, and you can cast it as a bonus action."
+	},{
+		name:"Potent Spellcasting",
+		description:"You add your Wisdom modifier to the damage you deal with any cleric cantrip."
+	},{
+		name:"Keeper of Souls",
+		description:"You can seize a trace of vitality from a parting soul and use it to heal the living. When an enemy you can see dies within 60 feet of you, you or one creature of your choice that is within 60 feet of you regains hit points equal to the enemy's number of Hit Dice. You can use this feature only if you aren't incapacitated. Once you use it, you can't do so again until the start of your next turn."
 	}
 ]);
 
@@ -280,8 +298,8 @@ window.classes.push(
 						choicePrompt:"You gain the following",
 						choices:[findPassive("Destroy Undead (CR 1)")],
 						action:function(char){
-							removePassive("Destroy Undead (CR 1/2)");
-							addPassive("Destroy Undead (CR 1)");
+							removePassive(char,"Destroy Undead (CR 1/2)");
+							addPassive(char,"Destroy Undead (CR 1)");
 						}
 					},
 					helper.attributeOrFeat,
@@ -755,6 +773,7 @@ window.subclasses.push(
 						choices:[],
 						action:function(char){
 							addSpell(char,"Destructive Wave","Cleric");
+							addSpell(char,"Insect Plague","Cleric");
 							getPlayerSpell(char,"Destructive Wave","Cleric").alwaysPrepared=true;
 							getPlayerSpell(char,"Insect Plague","Cleric").alwaysPrepared=true;
 							getPlayerSpell(char,"Destructive Wave","Cleric").prepared=true;
@@ -779,3 +798,140 @@ window.subclasses.push(
 	}
 );
 
+
+window.subclasses.push(
+	{
+		classname:"Cleric",
+		name:"Grave Domain",
+		subclass:"Grave Domain",
+		description:"Gods of the grave watch over the line between life and death. To these deities, death and the afterlife are a foundational part of the multiverse. To desecrate the peace of the dead is an abomination. Deities of the grave include Kelemvor, Wee Jas, the ancestral spirits of the Undying Court, Hades, Anubis, and Osiris. Followers of these deities seek to put wandering spirits to rest, destroy the undead, and ease the suffering of the dying. Their magic also allows them to stave off death for a time, particularly for a person who still has some great work to accomplish in the world. This is a delay of death, not a denial of it, for death will eventually get its due.",
+		levels:[{},
+			{//1
+				summary:[findAbility("Eyes of the Grave"),findPassive("Circle of Mortality")],
+				updates:[
+					{
+						choicePrompt:"You gain the following",
+						choices:[findAbility("Eyes of the Grave"),findPassive("Circle of Mortality")],
+						action:function(char,derived,choice,$scope){
+							addAbility(char,"Eyes of the Grave");
+							addPassive(char,"Circle of Mortality");
+							addSpell(char,"Bane","Cleric");
+							addSpell(char,"False Life","Cleric");
+							addSpell(char,"Spare the Dying","Cleric");
+							getPlayerSpell(char,"Bane","Cleric").alwaysPrepared=true;
+							getPlayerSpell(char,"False Life","Cleric").alwaysPrepared=true;
+							getPlayerSpell(char,"Bane","Cleric").prepared=true;
+							getPlayerSpell(char,"False Life","Cleric").prepared=true;
+							let spare = getPlayerSpell(char,"Spare the Dying","Cleric");
+							spare.edited=true;
+							spare.range="30 feet";
+							spare.castTime="1 bonus";
+						}
+					}
+				]
+			},{ //2
+				updates:[
+					{
+						summary:findAbility("Path to the Grave"),
+						choicePrompt:"You gain the following",
+						choices:[findAbility("Path to the Grave")],
+						action:function(char){
+							addAbility(char,"Path to the Grave");
+						}
+					}
+				]
+			},{ //3
+				updates:[
+					{
+						choices:[],
+						action:function(char){
+							addSpell(char,"Gentle Repose","Cleric");
+							addSpell(char,"Ray of Enfeeblement","Cleric");
+							getPlayerSpell(char,"Gentle Repose","Cleric").alwaysPrepared=true;
+							getPlayerSpell(char,"Ray of Enfeeblement","Cleric").alwaysPrepared=true;
+							getPlayerSpell(char,"Gentle Repose","Cleric").prepared=true;
+							getPlayerSpell(char,"Ray of Enfeeblement","Cleric").prepared=true;
+						}
+					}
+				]
+			},{},{ //5
+				updates:[
+					{
+						choices:[],
+						action:function(char){
+							addSpell(char,"Revivify","Cleric");
+							addSpell(char,"Vampiric Touch","Cleric");
+							getPlayerSpell(char,"Revivify","Cleric").alwaysPrepared=true;
+							getPlayerSpell(char,"Vampiric Touch","Cleric").alwaysPrepared=true;
+							getPlayerSpell(char,"Revivify","Cleric").prepared=true;
+							getPlayerSpell(char,"Vampiric Touch","Cleric").prepared=true;
+						}
+					}
+				]
+			},
+			{//6
+				updates:[
+					{
+						summary:findAbility("Sentinel at Death's Door"),
+						choicePrompt:"You gain the following",
+						choices:[findAbility("Sentinel at Death's Door")],
+						action:function(char,derived,choice){
+							addAbility(char,"Sentinel at Death's Door");
+						}
+					}				]
+			},{ //7
+				updates:[
+					{
+						choices:[],
+						action:function(char){
+							addSpell(char,"Blight","Cleric");
+							addSpell(char,"Death Ward","Cleric");
+							getPlayerSpell(char,"Blight","Cleric").alwaysPrepared=true;
+							getPlayerSpell(char,"Death Ward","Cleric").alwaysPrepared=true;
+							getPlayerSpell(char,"Blight","Cleric").prepared=true;
+							getPlayerSpell(char,"Death Ward","Cleric").prepared=true;
+						}
+					}
+				]
+			},
+			{//8
+				updates:[
+					{
+						summary:findPassive("Potent Spellcasting"),
+						choicePrompt:"You gain the following",
+						choices:[findPassive("Potent Spellcasting")],
+						action:function(char){
+							addPassive(char,"Potent Spellcasting");
+						}
+					}
+				]
+			},{ //9
+				updates:[
+					{
+						choices:[],
+						action:function(char){
+							addSpell(char,"Antilife Shell","Cleric");
+							addSpell(char,"Raise Dead","Cleric");
+							getPlayerSpell(char,"Antilife Shell","Cleric").alwaysPrepared=true;
+							getPlayerSpell(char,"Raise Dead","Cleric").alwaysPrepared=true;
+							getPlayerSpell(char,"Antilife Shell","Cleric").prepared=true;
+							getPlayerSpell(char,"Raise Dead","Cleric").prepared=true;
+						}
+					}
+				]
+			},{},{},{},{},{},{},{},
+			{//17
+				updates:[
+					{
+						summary:findPassive("Keeper of Souls"),
+						choicePrompt:"You gain the following",
+						choices:[findPassive("Keeper of Souls")],
+						action:function(char){
+							addPassive(char,"Keeper of Souls");
+						}
+					}
+				]
+			}
+		]
+	}
+);

@@ -412,6 +412,52 @@ window.feats=[
 				);
 			}
 	},{
+			name:"Squat Nimbleness (Str)",
+			identity:"Squat Nimbleness",
+			description:"You are uncommonly nimble for your race. You gain the following benefits:\n\u2022 Incrase your strength by 1, to a maximum of 20.\n\u2022 Increase your walking speed by 5 feet.\n\u2022 You gain proficiency in Acrobatics or Athletics (your choice)\n\u2022 You have advanatge on any Athletics or Acrobatics checks you make to escape from being grappled.",
+			onPickup:function(char,scope){
+				if (char.attributes.str<20){
+					char.attributes.str+=1;
+				}
+				char.speed+=5;
+				if (findSkill(char,"Acrobatics").mult>0){
+					addProficiency(char,"Athletics");
+				} else if (findSkill(char,"Athletics").mult>0){
+					addProficiency(char,"Acrobatics");
+				} else {
+					scope.choiceQueue.push({
+						"choicePrompt":"Choose a proficiency",
+						"choices":["Acrobatics","Athletics"],
+						"action":function(char,derived,choice){
+							addProficiency(char,choice);
+						}
+					});
+				}
+			}
+	},{
+			name:"Squat Nimbleness (Dex)",
+			identity:"Squat Nimbleness",
+			description:"You are uncommonly nimble for your race. You gain the following benefits:\n\u2022 Incrase your dexterity by 1, to a maximum of 20.\n\u2022 Increase your walking speed by 5 feet.\n\u2022 You gain proficiency in Acrobatics or Athletics (your choice)\n\u2022 You have advanatge on any Athletics or Acrobatics checks you make to escape from being grappled.",
+			onPickup:function(char,scope){
+				if (char.attributes.dex<20){
+					char.attributes.dex+=1;
+				}
+				char.speed+=5;
+				if (findSkill(char,"Acrobatics").mult>0){
+					addProficiency(char,"Athletics");
+				} else if (findSkill(char,"Athletics").mult>0){
+					addProficiency(char,"Acrobatics");
+				} else {
+					scope.choiceQueue.push({
+						"choicePrompt":"Choose a proficiency",
+						"choices":["Acrobatics","Athletics"],
+						"action":function(char,derived,choice){
+							addProficiency(char,choice);
+						}
+					});
+				}
+			}
+	},{
 			name:"Tavern Brawler (Str)",
 			identity:"Tavern Brawler",
 			description:"Accustomed to rough-and-tumble fighting using whatever weapons happen to be at hand, you gain the following benefits:\n\u2022 Increase your Strength or Constitution by 1, to a maximum of 20.\n\u2022 You are proficient with improvised weapons.\n\u2022 Your unarmed strike uses a d4 for damage.\n\u2022 When you hit a creature with an unarmed strike or an improvised weapon on your turn, you can use a bonus action to attempt to grapple the target.",

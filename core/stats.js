@@ -860,7 +860,7 @@ $scope.longRest=function(){
 			}
 		}
 	}
-	$scope.char.hp=$scope.char.maxHp;
+	$scope.char.hp=$scope.derived.maxHp;
 	$scope.char.tempHp=0;
 	$scope.char.polyHp=0;
 	$scope.char.polyHpMax=0;

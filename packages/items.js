@@ -1345,6 +1345,36 @@ window.items=[
 		tier:1,
 		categories:['Wondrous','Potion']
 	},{
+		name:'Magician\'s Judge +1',
+		description:'This weapon has a +1 bonus to attack and damage rolls.\n\nGrants Dispel Magic (level 3) once per day.',
+		categories:['Martial','Melee','Weapon'],
+		count:1,
+		damage2:'2d6',
+		damageType:"Slashing",
+		value:300000,
+		heavy:true,
+		proficiencies:['Martial Weapons','Greatswords']
+	},{
+		name:'Skingorger +1',
+		description:'This weapon has a +1 bonus to attack and damage rolls.\n\nOnce per day, you can use your bonus action to take a point of exhaustion and empower the blade. For one minute, all attacks deal an additional 1d8 acid damage, and this weapon crits on a 19 or 20.',
+		categories:['Martial','Melee','Weapon'],
+		count:1,
+		damage2:'2d6',
+		damageType:"Slashing",
+		value:300000,
+		heavy:true,
+		proficiencies:['Martial Weapons','Greatswords']
+	},{
+		name:'Tinkertop Boltblaster +1',
+		description:'This weapon has a +1 bonus to attack and damage rolls.\n\nWhenever you roll a natural 20 with this weapon, it fires an additional bolt at its target.\n\nWhenever you roll a natural 1 with this weapon, the weapon misfires and you roll the weapon\'s damage against yourself.',
+		categories:['Simple','Ranged','Weapon'],
+		count:1,
+		damage2:'1d8',
+		damageType:"Piercing",
+		value:200000,
+		attackRange:[80,320],
+		proficiencies:['Simple Weapons','Light Crossbows']
+	},{
 		name:"Scroll",
 		description:"If the spell written on this scroll is on your class's spell list, you can read the scroll and cast it without having to provide any of the spell's components. Once the spell is cast, the scroll is destroyed. If the casting is interrupted, the scroll is not lost.\n\nIf the spell is on your class's spell list but of a higher level than you can normally cast, you must make a DC 18 ability check using your spellcasting ability. On a failed check, the scroll is destroyed.\n\nA spell cast from this scroll has a save DC of 18 and an attack bonus of +10.",
 		count:1,

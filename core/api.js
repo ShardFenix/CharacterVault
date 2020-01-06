@@ -174,6 +174,14 @@ function getPlayerSpell(char, spellName, className){
 	return null;
 }
 
+function findSkill(char,skillName){
+	for (let skill of char.skills){
+		if (skill.name===skillName){
+			return skill;
+		}
+	}
+}
+
 function addProficiency(char,skillname){
 	for (var i=0;i<char.skills.length;i++){
 		if (char.skills[i].name===skillname){
@@ -294,6 +302,9 @@ function listSimpleWeapons(){
 	var result=[];
 	for (var i=0;i<window.items.length;i++){
 		let item=window.items[i];
+		if (item.value > 7500){
+			continue;
+		}
 		if (item.categories.indexOf('Simple')!=-1 && item.categories.indexOf('Weapon')!=-1){
 			result.push(item);
 		}
@@ -304,6 +315,9 @@ function listSimpleMeleeWeapons(){
 	var result=[];
 	for (var i=0;i<window.items.length;i++){
 		let item=window.items[i];
+		if (item.value > 7500){
+			continue;
+		}
 		if (item.categories.hasAll('Simple','Melee','Weapon')){
 			result.push(item);
 		}
@@ -315,6 +329,9 @@ function listMartialWeapons(){
 	var result=[];
 	for (var i=0;i<window.items.length;i++){
 		let item=window.items[i];
+		if (item.value > 7500){
+			continue;
+		}
 		if (item.categories.indexOf('Martial')!=-1 && item.categories.indexOf('Weapon')!=-1){
 			result.push(item);
 		}
