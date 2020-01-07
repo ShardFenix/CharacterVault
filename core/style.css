@@ -140,6 +140,14 @@ button {
 	width:auto;
 }
 
+button[disabled="disabled"]{
+	background-color:gray;
+}
+
+select{
+	font-size:20px;
+	padding:8px 10px;
+}
 
 .header{
 	font-size:1.6em;

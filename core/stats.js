@@ -937,6 +937,30 @@ $scope.checkForPassives=function(name){
 	}
 }
 
+$scope.autocompleteSpell=function(name){
+	let spell = findSpell(name);
+	if (spell){
+		$scope.newspell=angular.copy(spell);
+	}
+}
+
+$scope.learnSpell=function(char,spell,forClass){
+	addSpell(char,angular.copy(spell),forClass);
+	$scope.loadSpells();
+}
+
+$scope.getCasterClasses=function(char){
+	let result=[];
+	for (let c of char.classes){
+		if (c.spellcasting){
+			for (let s of c.spellcasting){
+				result.upush(s);
+			}
+		}
+	}
+	return result;
+}
+
 $scope.addAbility=function(newability){
 	var abil = findAbility(newability.name);
 	if (abil){

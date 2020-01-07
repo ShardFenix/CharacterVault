@@ -50,6 +50,12 @@ window.abilities.append([
 		onLongRest:function(char,scope){
 			this.charges=this.maxCharges;
 		}
+	},{
+		name:"Shapechanger",
+		description:"You can cast polymorph without expending a spell slot. When you do so, you can target only yourself and transform into a beast whose challenge rating is 1 or lower.\n\nOnce you cast polymorph in this way, you can't do so again until you finish a short or long rest, though you can still cast it normally using an available spell slot.\n\n.",
+		maxCharges:1,
+		charges:1,
+		onShortRest:helper.refresh
 	}
 ]);
 
@@ -129,6 +135,15 @@ window.passives.append([
 	},{
 		name:"Instinctive Charm",
 		description:"When a creature you can see within 30 feet of you makes an attack roll against you, you can use your reaction to divert the attack, provided that another creature is within the attack's range. The attacker must make a Wisdom saving throw against your wizard spell save DC. On a failed save, the attacker must target the creature that is closest to it, not including you or itself. If multiple creatures are closest, the attacker chooses which one to target. On a successful save, you can't use this feature on the attacker again until you finish a long rest.\n\nYou must choose to use this feature before knowing whether the attack hits or misses. Creatures that can't be charmed are immune to this effect.",
+	},{
+		name:"Minor Alchemy",
+		description:"You can temporarily alter the physical properties of one nonmagical object, changing it from one substance into another. You perform a special alchemical procedure on one object composed entirely of wood, stone (but not a gemstone), iron, copper, or silver, transforming it into a different one of those materials. For each 10 minutes you spend performing the procedure, you can transform up to 1 cubic foot of material. After 1 hour, or until you lose your concentration (as if you were concentrating on a spell), the material reverts to its original substance."
+	},{
+		name:"Transmuter's Stone",
+		description:"You can spend 8 hours creating a transmuter's stone that stores transmutation magic. You can benefit from the stone yourself or give it to another creature. A creature gains a benefit of your choice as long as the stone is in the creature's possession. When you create the stone, choose the benefit from the following options:\n\u2022 Darkvision out to a range of 60 feet, as described in chapter 8.\n\u2022 An increase to speed of 10 feet while the creature is unencumbered.\n\u2022 Proficiency in Constitution saving throws.\n\u2022 Resistance to acid, cold, fire, lightning, or thunder damage (your choice whenever you choose this benefit).\n\nEach time you cast a transmutation spell of 1st level or higher, you can change the effect of your stone if the stone is on your person.\n\nIf you create a new transmuter's stone, the previous one ceases to function."
+	},{
+		name:"Master Transmuter",
+		description:"You can use your action to consume the reserve of transmutation magic stored within your transmuter's stone in a single burst. When you do so, choose one of the following effects. Your transmuter's stone is destroyed and can't be remade until you finish a long rest.\n\u2022 Major Transformation. You can transmute one nonmagical object—no larger than a 5-foot cube—into another nonmagical object of similar size and mass and of equal or lesser value. You must spend 10 minutes handling the object to transform it.\n\u2022 Panacea. You remove all curses, diseases, and poisons affecting a creature that you touch with the transmuter's stone. The creature also regains all its hit points.\n\u2022 Restore Life. You cast the raise dead spell on a creature you touch with the transmuter's stone, without expending a spell slot or needing to have the spell in your spellbook.\n\u2022 Restore Youth. You touch the transmuter's stone to a willing creature, and that creature's apparent age is reduced by 3d10 years, to a minimum of 13 years. This effect doesn't extend the creature's lifespan."
 	}
 ]);
 
@@ -240,8 +255,7 @@ window.classes.push(
 			}, { // 2
 				"updates":[
 					helper.hitDice6,
-					helper.chooseSpell,
-					helper.chooseSpell,
+					helper.chooseSpell2,
 					{
 						summary:{name:"Arcane Tradition",description:"Choose your arcane tradition."},
 						"choicePrompt":"Choose an Arcane Tradition:",
@@ -254,31 +268,26 @@ window.classes.push(
 			}, { // 3
 				"updates":[
 					helper.hitDice6,
-					helper.chooseSpell,
-					helper.chooseSpell
+					helper.chooseSpell2
 				]
 			}, { // 4
 				"updates":[
 					helper.hitDice6,
 					helper.attributeOrFeat,
 					helper.chooseFeat,
-					helper.increaseAttribute,
-					helper.increaseAttribute,
+					helper.asi,
 					helper.chooseWizardCantrip,
-					helper.chooseSpell,
-					helper.chooseSpell
+					helper.chooseSpell2
 				]
 			},{//5
 				"updates":[
 					helper.hitDice6,
-					helper.chooseSpell,
-					helper.chooseSpell
+					helper.chooseSpell2
 				]
 			},{//6
 				"updates":[
 					helper.hitDice6,
-					helper.chooseSpell,
-					helper.chooseSpell
+					helper.chooseSpell2
 				]
 			},{//7
 				"updates":[
@@ -291,79 +300,65 @@ window.classes.push(
 					helper.hitDice6,
 					helper.attributeOrFeat,
 					helper.chooseFeat,
-					helper.increaseAttribute,
-					helper.increaseAttribute,
-					helper.chooseSpell,
-					helper.chooseSpell
+					helper.asi,
+					helper.chooseSpell2
 				]
 			},{//9
 				"updates":[
 					helper.hitDice6,
-					helper.chooseSpell,
-					helper.chooseSpell
+					helper.chooseSpell2
 				]
 			},{//10
 				"updates":[
 					helper.hitDice6,
 					helper.chooseWizardCantrip,
-					helper.chooseSpell,
-					helper.chooseSpell
+					helper.chooseSpell2
 				]
 			},{//11
 				"updates":[
 					helper.hitDice6,
-					helper.chooseSpell,
-					helper.chooseSpell
+					helper.chooseSpell2
 				]
 			},{//12
 				"updates":[
 					helper.hitDice6,
 					helper.attributeOrFeat,
 					helper.chooseFeat,
-					helper.increaseAttribute,
-					helper.increaseAttribute,
-					helper.chooseSpell,
-					helper.chooseSpell
+					helper.asi,
+					helper.chooseSpell2
 				]
 			},{//13
 				"updates":[
 					helper.hitDice6,
-					helper.chooseSpell,
-					helper.chooseSpell
+					helper.chooseSpell2
 				]
 			},{//14
 				"updates":[
 					helper.hitDice6,
-					helper.chooseSpell,
-					helper.chooseSpell
+					helper.chooseSpell2
 				]
 			},{//15
 				"updates":[
 					helper.hitDice6,
-					helper.chooseSpell,
-					helper.chooseSpell
+					helper.chooseSpell2
 				]
 			},{//16
 				"updates":[
 					helper.hitDice6,
 					helper.attributeOrFeat,
 					helper.chooseFeat,
-					helper.increaseAttribute,
-					helper.increaseAttribute,
-					helper.chooseSpell,
-					helper.chooseSpell
+					helper.asi,
+					helper.chooseSpell2
 				]
 			},{//17
 				"updates":[
 					helper.hitDice6,
-					helper.chooseSpell,
-					helper.chooseSpell
+					helper.chooseSpell2
 				]
 			},{//18
 				"updates":[
 					helper.hitDice6,
-					helper.chooseSpell,
-					helper.chooseSpell,
+					helper.chooseSpell2,
 					{
 						summary:findPassive("Spell Mastery"),
 						choicePrompt:"You gain the following",
@@ -378,16 +373,13 @@ window.classes.push(
 					helper.hitDice6,
 					helper.attributeOrFeat,
 					helper.chooseFeat,
-					helper.increaseAttribute,
-					helper.increaseAttribute,
-					helper.chooseSpell,
-					helper.chooseSpell
+					helper.asi,
+					helper.chooseSpell2
 				]
 			},{//20
 				"updates":[
 					helper.hitDice6,
-					helper.chooseSpell,
-					helper.chooseSpell,
+					helper.chooseSpell2,
 					{
 						summary:findPassive("Signature Spells"),
 						choicePrompt:"You gain the following",
@@ -703,6 +695,73 @@ window.subclasses.push(
 						choices:[findPassive("Alter Memories")],
 						action:function(char){
 							addPassive(char,"Alter Memories");
+						}
+					}
+				]
+			},{},{},{},{},{},{}
+		]
+	}
+);
+
+window.subclasses.push(
+	{
+		classname:"Wizard",
+		name:"Transmutation",
+		subclass:"Transmutation",
+		description:"You are a student of spells that modify energy and matter. To you, the world is not a fixed thing, but eminently mutable, and you delight in being an agent of change. You wield the raw stuff of creation and learn to alter both physical forms and mental qualities. Your magic gives you the tools to become a smith on reality's forge.\n\nSome transmuters are tinkerers and pranksters, turning people into toads and transforming copper into silver for fun and occasional profit. Others pursue their magical studies with deadly seriousness, seeking the power of the gods to make and destroy worlds.",
+		levels:[{},{},
+			{//2
+				summary:[
+					findPassive("Transmutation Savant"),
+					findPassive("Minor Alchemy")
+				],
+				updates:[
+					{
+						choicePrompt:"You gain the following",
+						choices:[findPassive("Transmutation Savant"),findPassive("Minor Alchemy")],
+						action:function(char,derived,choice,$scope){
+							addPassive(char,"Transmutation Savant");
+							addPassive(char,"Minor Alchemy");
+						}
+					}
+				]
+			},{},{},{},{ //6
+				updates:[
+					{
+						summary:findPassive("Transmuter's Stone"),
+						choicePrompt:"You gain the following",
+						choices:[findPassive("Transmuter's Stone")],
+						action:function(char){
+							addPassive(char,"Transmuter's Stone");
+						}
+					}
+				]
+			},{},{},{},
+			{//10
+				summary:[
+					findAbility("Shapechanger"),
+					findSpell("Polymorph")
+				],
+				updates:[
+					{
+						limit:2,
+						choicePrompt:"You gain the following",
+						choices:[findAbility("Shapechanger"),findSpell("Polymorph")],
+						action:function(char,derived,choice){
+							addSpell(char,"Polymorph","Wizard");
+							addAbility(char,"Shapechanger");
+						}
+					}
+				]
+			},{},{},{},
+			{//14
+				updates:[
+					{
+						summary:findPassive("Master Transmuter"),
+						choicePrompt:"You gain the following",
+						choices:[findPassive("Master Transmuter")],
+						action:function(char){
+							addPassive(char,"Master Transmuter");
 						}
 					}
 				]

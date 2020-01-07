@@ -145,7 +145,7 @@
 <td style="vertical-align:top;">
 	<span class="label">Spell Name</span>
 	<br>
-	<input type="text" placeholder="Spell Name" ng-model="newspell.name"/>
+	<input type="text" placeholder="Spell Name" ng-model="newspell.name" ng-change="autocompleteSpell(newspell.name)"/>
 	<br></br>
 	<span class="label">Spell Level</span>
 	</br>
@@ -153,7 +153,10 @@
 	<br>
 	<span class="label">Spell Description</span>
 	<textarea class="descriptionbox" ng-model="newspell.description" style="width:100%;min-height:400px;"></textarea>
-	<button ng-click="add(newspell,char.spells)">Add to Spells</button>
+	<button ng-click="learnSpell(char,newspell,newSpellClass)" ng-disabled="!newSpellClass">Add to Spells</button>
+	<select ng-model="newSpellClass">
+		<option ng-repeat="clas in getCasterClasses(char)" value="{{clas}}">{{clas}}</option>
+	</select>
 
 </td>
 </tr>
