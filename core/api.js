@@ -74,6 +74,16 @@ Array.prototype.upush=function(element){
 	}
 }
 
+Array.prototype.overlap=function(otherArray){
+	let result=[];
+	for (let elem of this){
+		if (otherArray.has(elem)){
+			result.push(elem);
+			continue;
+		}
+	}
+}
+
 Array.prototype.remove=function(element){
 	if (element && element.name) {
 		for (var i=0;i<this.length;i++){

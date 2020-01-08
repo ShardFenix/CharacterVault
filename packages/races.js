@@ -29,6 +29,9 @@ window.passives.append([
 	},{
 		name:"Speech of Beast and Leaf",
 		description:"You have the ability to communicate in a limited manner with beasts and plants. They can understand the meaning of your words, though you have no special ability to understand them in return. You have advantage on all Charisma checks you make to influence them."
+	},{
+		name:"Savage Attacks",
+		description:"When you score a critical hit with a melee weapon attack, you can roll one of the weapon's damage dice one additional time and add it to the extra damage of the critical hit."
 	}
 ]);
 
@@ -117,6 +120,12 @@ window.abilities.append([
 		onShortRest:function(){
 			this.charges=this.maxCharges;
 		}
+	},{
+		name:"Relentless Endurance",
+		description:"When you are reduced to 0 hit points but not killed outright, you can drop to 1 hit point instead. You can't use this feature again until you finish a long rest.",
+		charges:1,
+		maxCharges:1,
+		onLongRest:helper.refresh
 	}
 ]);
 
@@ -256,7 +265,7 @@ window.races=[
 			char.attributes.str+=2;
 			char.attributes.con+=1;
 			addPassive(char,"Darkvision");
-			addPassive(char,"Savage Attack");
+			addPassive(char,"Savage Attacks");
 			addAbility(char,"Relentless Endurance");
 			addProficiency(char,"Intimidation");
 		}

@@ -271,6 +271,15 @@ window.feats=[
 			name:"Polearm Master",
 			description:"You can keep your enemies at bay with reach weapons. You gain the following benefits:\n\u2022 When you take the Attack action and attack with only a glaive, halberd, quarterstaff, or spear, you can use a bonus action to make a melee attack with the opposite end of the weapon; this attack uses the same ability modifier as the primary attack. The weapon's damage die for this attack is a d4, and the attack deals bludgeoning damage.\n\u2022 While you are wielding a glaive, halberd, pike, quarterstaff, or spear, other creatures provoke an opportunity attack from you when they enter your reach."
 	},{
+			name:"Prodigy",
+			description:"You have a knack for learning new things. You gain the following benefits:\n\u2022 You gain one skill proficiency of your choice, one tool proficiency of your choice, and fluency in one language of your choice.\n\u2022 Choose one skill in which you have proficiency. You gain expertise with that skill, which means your proficiency bonus is doubled for any ability check you make with it. The skill you choose must be one that isn't already benefiting from a feature, such as Expertise, that doubles your proficiency bonus.",
+			onPickup:function(char,scope){
+				scope.choiceQueue.push(helper.learnLanguage);
+				scope.choiceQueue.push(helper.learnTool);
+				scope.choiceQueue.push(helper.learnSkillProficiency);
+				scope.choiceQueue.push(helper.chooseExpertise);
+			}
+	},{
 			name:"Resilient (Str)",
 			identity:"Resilient",
 			description:"Choose one ability score. You gain the following benefits:\n\u2022 Increase the chosen ability score by 1, to a maximum of 20.\n\u2022 You gain proficiency in saving throws using the chosen ability.",

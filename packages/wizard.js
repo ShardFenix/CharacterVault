@@ -744,7 +744,7 @@ window.subclasses.push(
 				],
 				updates:[
 					{
-						limit:2,
+						always:true,
 						choicePrompt:"You gain the following",
 						choices:[findAbility("Shapechanger"),findSpell("Polymorph")],
 						action:function(char,derived,choice){
