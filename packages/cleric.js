@@ -29,6 +29,16 @@ window.abilities.append([
 		resourceName:"Channel Divinity",
 		resourceCost:1
 	},{
+		name:"Invoke Duplicity",
+		description:"You can use your Channel Divinity to create an illusory duplicate of yourself.\n\nAs an action, you create a perfect illusion of yourself that lasts for 1 minute, or until you lose your concentration (as if you were concentrating on a spell). The illusion appears in an unoccupied space that you can see within 30 feet of you. As a bonus action on your turn, you can move the illusion up to 30 feet to a space you can see, but it must remain within 120 feet of you.\n\nFor the duration, you can cast spells as though you were in the illusion's space, but you must use your own senses. Additionally, when both you and your illusion are within 5 feet of a creature that can see the illusion, you have advantage on attack rolls against that creature, given how distracting the illusion is to the target.",
+		resourceName:"Channel Divinity",
+		resourceCost:1
+	},{
+		name:"Cloak of Shadows",
+		description:"You can use your Channel Divinity to vanish.\n\nAs an action, you become invisible until the end of your next turn. You become visible if you attack or cast a spell.",
+		resourceName:"Channel Divinity",
+		resourceCost:1
+	},{
 		name:"Destructive Wrath",
 		description:"You can use your Channel Divinity to wield the power of the storm with unchecked ferocity. When you roll lightning or thunder damage, you can use your Channel Divinity to deal maximum damage, instead of rolling.",
 		resourceName:"Channel Divinity",
@@ -136,6 +146,12 @@ window.passives.append([
 	},{
 		name:"Keeper of Souls",
 		description:"You can seize a trace of vitality from a parting soul and use it to heal the living. When an enemy you can see dies within 60 feet of you, you or one creature of your choice that is within 60 feet of you regains hit points equal to the enemy's number of Hit Dice. You can use this feature only if you aren't incapacitated. Once you use it, you can't do so again until the start of your next turn."
+	},{
+		name:"Blessing of the Trickster",
+		description:"You can use your action to touch a willing creature other than yourself to give it advantage on Dexterity (Stealth) checks. This blessing lasts for 1 hour or until you use this feature again."
+	},{
+		name:"Improved Duplicity",
+		description:"You can create up to four duplicates of yourself, instead of one, when you use Invoke Duplicity. As a bonus action on your turn, you can move any number of them up to 30 feet, to a maximum range of 120 feet."
 	}
 ]);
 
@@ -928,6 +944,139 @@ window.subclasses.push(
 						choices:[findPassive("Keeper of Souls")],
 						action:function(char){
 							addPassive(char,"Keeper of Souls");
+						}
+					}
+				]
+			}
+		]
+	}
+);
+
+
+window.subclasses.push(
+	{
+		classname:"Cleric",
+		name:"Trickery Domain",
+		subclass:"Trickery Domain",
+		description:"",
+		levels:[{},
+			{//1
+				summary:[findPassive("Blessing of the Trickster")],
+				updates:[
+					{
+						always:true,
+						choicePrompt:"You gain the following",
+						choices:[findPassive("Blessing of the Trickster")],
+						action:function(char,derived,choice,$scope){
+							addPassive(char,"Blessing of the Trickster");
+							addSpell(char,"Charm Person","Cleric");
+							addSpell(char,"Disguise Self","Cleric");
+							getPlayerSpell(char,"Charm Person","Cleric").alwaysPrepared=true;
+							getPlayerSpell(char,"Disguise Self","Cleric").alwaysPrepared=true;
+							getPlayerSpell(char,"Charm Person","Cleric").prepared=true;
+							getPlayerSpell(char,"Disguise Self","Cleric").prepared=true;
+						}
+					}
+				]
+			},{ //2
+				updates:[
+					{
+						summary:findAbility("Invoke Duplicity"),
+						choicePrompt:"You gain the following",
+						choices:[findAbility("Invoke Duplicity")],
+						action:function(char){
+							addAbility(char,"Invoke Duplicity");
+						}
+					}
+				]
+			},{ //3
+				updates:[
+					{
+						choices:[],
+						action:function(char){
+							addSpell(char,"Mirror Image","Cleric");
+							addSpell(char,"Pass without Trace","Cleric");
+							getPlayerSpell(char,"Mirror Image","Cleric").alwaysPrepared=true;
+							getPlayerSpell(char,"Pass without Trace","Cleric").alwaysPrepared=true;
+							getPlayerSpell(char,"Mirror Image","Cleric").prepared=true;
+							getPlayerSpell(char,"Pass without Trace","Cleric").prepared=true;
+						}
+					}
+				]
+			},{},{ //5
+				updates:[
+					{
+						choices:[],
+						action:function(char){
+							addSpell(char,"Blink","Cleric");
+							addSpell(char,"Dispel Magic","Cleric");
+							getPlayerSpell(char,"Blink","Cleric").alwaysPrepared=true;
+							getPlayerSpell(char,"Dispel Magic","Cleric").alwaysPrepared=true;
+							getPlayerSpell(char,"Blink","Cleric").prepared=true;
+							getPlayerSpell(char,"Dispel Magic","Cleric").prepared=true;
+						}
+					}
+				]
+			},
+			{//6
+				updates:[
+					{
+						summary:findAbility("Cloak of Shadows"),
+						choicePrompt:"You gain the following",
+						choices:[findAbility("Cloak of Shadows")],
+						action:function(char,derived,choice){
+							addAbility(char,"Cloak of Shadows");
+						}
+					}				]
+			},{ //7
+				updates:[
+					{
+						choices:[],
+						action:function(char){
+							addSpell(char,"Dimension Door","Cleric");
+							addSpell(char,"Polymorph","Cleric");
+							getPlayerSpell(char,"Dimension Door","Cleric").alwaysPrepared=true;
+							getPlayerSpell(char,"Polymorph","Cleric").alwaysPrepared=true;
+							getPlayerSpell(char,"Dimension Door","Cleric").prepared=true;
+							getPlayerSpell(char,"Polymorph","Cleric").prepared=true;
+						}
+					}
+				]
+			},
+			{//8
+				updates:[
+					{
+						summary:findPassive("Divine Strike"),
+						choicePrompt:"You gain the following",
+						choices:[findPassive("Divine Strike")],
+						action:function(char){
+							addPassive(char,"Divine Strike");
+						}
+					}
+				]
+			},{ //9
+				updates:[
+					{
+						choices:[],
+						action:function(char){
+							addSpell(char,"Dominate Person","Cleric");
+							addSpell(char,"Modify Memory","Cleric");
+							getPlayerSpell(char,"Dominate Person","Cleric").alwaysPrepared=true;
+							getPlayerSpell(char,"Modify Memory","Cleric").alwaysPrepared=true;
+							getPlayerSpell(char,"Dominate Person","Cleric").prepared=true;
+							getPlayerSpell(char,"Modify Memory","Cleric").prepared=true;
+						}
+					}
+				]
+			},{},{},{},{},{},{},{},
+			{//17
+				updates:[
+					{
+						summary:findPassive("Improved Duplicity"),
+						choicePrompt:"You gain the following",
+						choices:[findPassive("Improved Duplicity")],
+						action:function(char){
+							addPassive(char,"Improved Duplicity");
 						}
 					}
 				]

@@ -126,6 +126,24 @@ window.abilities.append([
 		charges:1,
 		maxCharges:1,
 		onLongRest:helper.refresh
+	},{
+		name:"Hellish Rebuke (Tiefling)",
+		description:"You can cast the Hellish Rebuke spell as a 2nd-level spell. You must finish a long rest in order to cast the spell again using this trait.",
+		maxChargesFunction:function(char){
+			if (char.level >= 3){
+				return 1;
+			}
+			return 0;
+		}
+	},{
+		name:"Darkness (Tiefling)",
+		description:"You can cast the Darkness spell. You must finish a long rest in order to cast the spell again using this trait.",
+		maxChargesFunction:function(char){
+			if (char.level >= 5){
+				return 1;
+			}
+			return 0;
+		}
 	}
 ]);
 
@@ -210,12 +228,13 @@ window.races=[
 			char.speed=30;
 			char.attributes.int+=1;
 			char.attributes.cha+=2;
-			addPassive(char,"Resistance to Fire");
+			addPassive(char,"Fire Resistance");
 			addPassive(char,"Darkvision");
 			//race abilities
-			addAbility(char,"Hellish Rebuke");
-			addAbility(char,"Thaumaturgy");
-			addAbility(char,"Darkness");
+			addAbility(char,"Hellish Rebuke (Tiefling)");
+			addAbility(char,"Darkness (Tiefling)");
+			addSpell(char,"Thaumaturgy","SpecialCha");
+			
 		}
 	},{
 		name:"Half-Elf",
