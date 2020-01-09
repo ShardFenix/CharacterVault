@@ -96,9 +96,15 @@ $scope.combatSpellLevelFilter=[true,true,true,true,true,true,true,true,true,true
 $scope.loadSpells=function(){
 	$scope.knownSpells=[];
 	for (let clas of $scope.char.classes){
-		clas.preparations=clas.level+$scope.derived.modifiers.wis;
+		switch (clas.name){
+			case "Cleric":
+			case "Druid": clas.preparations = clas.level+$scope.derived.modifiers.wis; break;
+			case "Paladin": clas.preparations = Math.floor(clas.level/2) + $scope.derived.modifiers.cha;break;
+			case "Wizard": clas.preparations = clas.level+$scope.derived.modifiers.int; break;
+		}
+		clas.preparedSpells=0;
 		for (let spell of clas.spells){
-			let s = spell;//angular.copy(spell);
+			let s = spell;
 			s.casterClass=clas.name;
 			switch (s.casterClass){
 				case "Wizard":
@@ -124,9 +130,47 @@ $scope.loadSpells=function(){
 					break;
 			}
 			s.saveDc = 8 + s.attackBonus;
+			if (s.prepared && !s.alwaysPrepared){
+				clas.preparedSpells++;
+			}
 			$scope.knownSpells.push(s);
 		}
 	}
+}
+
+$scope.clearPreparations=function(){
+	for (let clas of $scope.char.classes){
+		for (let spell of clas.spells){
+			if (!spell.alwaysPrepared){
+				spell.prepared=false;
+			}
+		}
+	}
+	$scope.loadSpells();
+}
+
+$scope.hoverSpellPrep=function(spell){
+	if (spell){
+		$scope.hoveredSpell=spell;
+	} else {
+		$scope.hoveredSpell=null;
+	}
+}
+
+$scope.hasPreparations=function(){
+	for (let clas of $scope.char.classes){
+		if (clas.preparations && clas.preparations > 0){
+			return true;
+		}
+	}
+	return false;
+}
+
+$scope.classHasPreparedSpells = function(clas){
+	if (clas.name.startsWith("Special")){
+		return false;
+	}
+	return clas.preparations && clas.preparations>0;
 }
 
 addAbility($scope.char,"Lv 1 Spell");
@@ -813,7 +857,16 @@ $scope.prepSpell=function(spell,event){
 	if (spell.alwaysPrepared){
 		return;
 	}
-	spell.prepared=!spell.prepared;
+	let clas = getCharacterClass($scope.char,spell.casterClass);
+	if (spell.prepared){
+		spell.prepared=false;
+		clas.preparedSpells--;
+	} else {
+		if (clas.preparations > clas.preparedSpells){
+			spell.prepared=true;
+			clas.preparedSpells++;
+		}
+	}
 	event.stopPropagation();
 	event.preventDefault();
 }
