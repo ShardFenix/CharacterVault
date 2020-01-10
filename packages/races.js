@@ -20,11 +20,41 @@ window.passives.append([
 	},{
 		name:"Necrotic Resistance",
 		description:"Necrotic damage dealt to you is halved, rounded down."
+	},{
+		name:"Nimble Escape",
+		description:"You can take the Disengage or Hide action as a bonus action on each of your turns."
+	},{
+		name:"Powerful Build",
+		description:"You count as one size larger when determining your carrying capacity and the weight you can push, drag, or lift."
+	},{
+		name:"Speech of Beast and Leaf",
+		description:"You have the ability to communicate in a limited manner with beasts and plants. They can understand the meaning of your words, though you have no special ability to understand them in return. You have advantage on all Charisma checks you make to influence them."
+	},{
+		name:"Savage Attacks",
+		description:"When you score a critical hit with a melee weapon attack, you can roll one of the weapon's damage dice one additional time and add it to the extra damage of the critical hit."
 	}
 ]);
 
 window.abilities.append([
 	{
+		name:"Hidden Step",
+		description:"As a bonus action, you can magically turn invisible until the start of your next turn or until you attack, make a damage roll, or force someone to make a saving throw. Once you use this trait, you can't use it again until you finish a short or long rest.",
+		charges:1,
+		maxCharges:1,
+		onShortRest:helper.recharge
+	},{
+		name:"Detect Magic (Firbolg)",
+		description:"You can cast Detect Magic using Wisdom as your spellcasting ability. You can't use this ability again until you finish a short or long rest.",
+		charges:1,
+		maxCharges:1,
+		onShortRest:helper.recharge
+	},{
+		name:"Disguise Self (Firbolg)",
+		description:"You can cast Disguise Self using Wisdom as your spellcasting ability. You can't use this ability again until you finish a short or long rest. When you use this version of Disguise Self, you can seem up to 3 feet shorter than normal, allowing you to more easily blend in with humans and elves.",
+		charges:1,
+		maxCharges:1,
+		onShortRest:helper.recharge
+	},{
 		name:"Acid Breath (Line)",
 		description:"You can use your action to exhale destructive energy. Each creature in a 30 foot line must make a DEX saving throw (DC <i>${8 + $scope.derived.modifiers.con + $scope.derived.proficiency}</i>). A creature takes <i>${ladder($scope.char.level,0,2,6,3,11,4,16,5)}</i>d6 acid damage on a failed save, or half as much on a successful save.\nYou can't use this again until you finish a short or long rest.",
 		maxCharges:1,
@@ -74,6 +104,46 @@ window.abilities.append([
 			return 1;
 		},
 		onLongRest:helper.recharge
+	},{
+		name:"Necrotic Shroud",
+		description:"You can use your action to unleash the divine energy within yourself, causing your eyes to turn into pools of darkness and two skeletal, ghostly, flightless wings to sprout from your back. The instant you transform, other creatures within 10 feet of you that can see you must succeed on a Charisma saving throw (DC 8 + your proficiency bonus + your Charisma modifier) or become frightened of you until the end of your next turn.\n\nYour transformation lasts for 1 minute or until you end it as a bonus action. During it, once on each of your turns, you can deal extra necrotic damage to one target when you deal damage to it with an attack or a spell. The extra necrotic damage equals your level.\n\nOnce you use this trait, you can't use it again until you finish a long rest.",
+		maxChargesFunction:function(char){
+			if (char.level<3)return 0;
+			return 1;
+		},
+		onLongRest:helper.recharge
+	},{
+		name:"Fury of the Small",
+		description:"When you damage a creature with an attack or a spell and the creature's size is larger than yours, you can cause the attack or spell to deal extra damage to the creature. The extra damage equals your level. Once you use this trait, you can't use it again until you finish a short or long rest.",
+		maxCharges:1,
+		charges:1,
+		onShortRest:function(){
+			this.charges=this.maxCharges;
+		}
+	},{
+		name:"Relentless Endurance",
+		description:"When you are reduced to 0 hit points but not killed outright, you can drop to 1 hit point instead. You can't use this feature again until you finish a long rest.",
+		charges:1,
+		maxCharges:1,
+		onLongRest:helper.refresh
+	},{
+		name:"Hellish Rebuke (Tiefling)",
+		description:"You can cast the Hellish Rebuke spell as a 2nd-level spell. You must finish a long rest in order to cast the spell again using this trait.",
+		maxChargesFunction:function(char){
+			if (char.level >= 3){
+				return 1;
+			}
+			return 0;
+		}
+	},{
+		name:"Darkness (Tiefling)",
+		description:"You can cast the Darkness spell. You must finish a long rest in order to cast the spell again using this trait.",
+		maxChargesFunction:function(char){
+			if (char.level >= 5){
+				return 1;
+			}
+			return 0;
+		}
 	}
 ]);
 
@@ -158,12 +228,13 @@ window.races=[
 			char.speed=30;
 			char.attributes.int+=1;
 			char.attributes.cha+=2;
-			addPassive(char,"Resistance to Fire");
+			addPassive(char,"Fire Resistance");
 			addPassive(char,"Darkvision");
 			//race abilities
-			addAbility(char,"Hellish Rebuke");
-			addAbility(char,"Thaumaturgy");
-			addAbility(char,"Darkness");
+			addAbility(char,"Hellish Rebuke (Tiefling)");
+			addAbility(char,"Darkness (Tiefling)");
+			addSpell(char,"Thaumaturgy","SpecialCha");
+			
 		}
 	},{
 		name:"Half-Elf",
@@ -213,7 +284,7 @@ window.races=[
 			char.attributes.str+=2;
 			char.attributes.con+=1;
 			addPassive(char,"Darkvision");
-			addPassive(char,"Savage Attack");
+			addPassive(char,"Savage Attacks");
 			addAbility(char,"Relentless Endurance");
 			addProficiency(char,"Intimidation");
 		}
@@ -350,5 +421,52 @@ window.races=[
 			spell=angular.copy(spell);
 			addSpell(char,spell,"SpecialCha");
 		}
-	}
+	},{
+		name:"Aasimar (Fallen)",
+		description:"",
+		onPickup:function(char,scope){
+			char.proficiencies.push("Language: Common");
+			char.proficiencies.push("Language: Celestial");
+			char.speed=30;
+			char.attributes.cha+=2;
+			char.attributes.wis+=1;
+			addPassive(char,"Darkvision");
+			addPassive(char,"Radiant Resistance");
+			addPassive(char,"Necrotic Resistance");
+			addAbility(char,"Healing Hands");
+			addAbility(char,"Necrotic Shroud");
+			let spell = findSpell("Light");
+			spell=angular.copy(spell);
+			addSpell(char,spell,"SpecialCha");
+		}
+	},{
+		name:"Goblin",
+		description:"",
+		onPickup:function(char,scope){
+			char.proficiencies.push("Language: Common");
+			char.proficiencies.push("Language: Goblin");
+			char.speed=30;
+			char.attributes.dex+=2;
+			char.attributes.con+=1;
+			addPassive(char,"Darkvision");
+			addPassive(char,"Nimble Escape");
+			addAbility(char,"Fury of the Small");
+		}
+	},{
+		name:"Firbolg",
+		description:"",
+		onPickup:function(char,scope){
+			char.proficiencies.push("Language: Common");
+			char.proficiencies.push("Language: Elvish");
+			char.proficiencies.push("Language: Giant");
+			char.speed=30;
+			char.attributes.wis+=2;
+			char.attributes.str+=1;
+			addPassive(char,"Powerful Build");
+			addPassive(char,"Speech of Beast and Leaf");
+			addAbility(char,"Hidden Step");
+			addAbility(char,"Detect Magic (Firbolg)");
+			addAbility(char,"Disguise Self (Firbolg)");
+		}
+	},
 ];

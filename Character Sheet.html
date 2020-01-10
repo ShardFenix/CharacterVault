@@ -125,8 +125,7 @@
 			<div class="greenback item" ng-repeat="spell in knownSpells | filter:combatSpellFilter | orderBy:'name' track by $index" ng-click="selectSpell(spell)" ng-class="{'selected':chosenSpell==spell,'prepared':spell.prepared}" ng-if="spell.level==lv">
 				<span style="font-weight:bold;">{{spell.name}}</span>
 				<span ng-if="!spell.alwaysPrepared" ng-show="spell.prepared" class="preparedSpell" ng-click="prepSpell(spell,$event)">prepared</span>
-				<span ng-if="!spell.alwaysPrepared" ng-show="!spell.prepared" class="preparedSpell" ng-click="prepSpell(spell,$event)">unprepared</span>
-				<span class="deletebutton" ng-if="false" ng-click="delete(spell,char.spells,$event)">&times;</span>			
+				<span ng-if="!spell.alwaysPrepared" ng-show="!spell.prepared" class="preparedSpell" ng-click="prepSpell(spell,$event)" ng-mouseenter="hoverSpellPrep(spell)" ng-mouseleave="hoverSpellPrep()">unprepared</span>
 			</div>
 			<br>
 		</div>
@@ -134,18 +133,33 @@
 </td>
 
 <td width="25%" style="vertical-align:top;">
-<div class="label">Spell Preview</div>
-<div class="greenback item" ng-repeat="lv in [0,1,2,3,4,5,6,7,8,9]"
-		ng-mouseenter="setTip(chosenSpell,lv)"
-		ng-class="{'grey':chosenSpell.level>lv}">Level {{lv}}</div>
+	<div class="label">Spell Preview</div>
+	<div class="greenback item" ng-repeat="lv in [0,1,2,3,4,5,6,7,8,9]"
+			ng-mouseenter="setTip(chosenSpell,lv)"
+			ng-class="{'grey':chosenSpell.level>lv}">Level {{lv}}</div>
+	<br>
+	<div class="redback item" ng-click='selectSpell(null);clearTip()'>Clear Selection</div>
+	<br><br>
+	
+	<div ng-if="hasPreparations()">
+		<div class="label">Preparations</div>
+		<table style="width:100%;border-collapse: collapse;"><tbody>
+			<tr ng-repeat="clas in char.classes" ng-if="classHasPreparedSpells(clas)"
+				class="greenback item prepared" ng-class="{'highlight':clas.name==hoveredSpell.casterClass}">
+				<td class="label center">{{clas.name}}</td>
+				<td class="label center">{{clas.preparedSpells}} / {{clas.preparations}}</td>
+			</tr>
+		</tbody></table>
+		
 		<br>
-<div class="redback item" ng-click='selectSpell(null);clearTip()'>Clear Selection</div>
+		<div class="redback item" ng-click='clearPreparations()'>Reset Preparations</div>
+	</div>
 </td>
 
 <td style="vertical-align:top;">
 	<span class="label">Spell Name</span>
 	<br>
-	<input type="text" placeholder="Spell Name" ng-model="newspell.name"/>
+	<input type="text" placeholder="Spell Name" ng-model="newspell.name" ng-change="autocompleteSpell(newspell.name)"/>
 	<br></br>
 	<span class="label">Spell Level</span>
 	</br>
@@ -153,7 +167,10 @@
 	<br>
 	<span class="label">Spell Description</span>
 	<textarea class="descriptionbox" ng-model="newspell.description" style="width:100%;min-height:400px;"></textarea>
-	<button ng-click="add(newspell,char.spells)">Add to Spells</button>
+	<button ng-click="learnSpell(char,newspell,newSpellClass)" ng-disabled="!newSpellClass">Add to Spells</button>
+	<select ng-model="newSpellClass">
+		<option ng-repeat="clas in getCasterClasses(char)" value="{{clas}}">{{clas}}</option>
+	</select>
 
 </td>
 </tr>

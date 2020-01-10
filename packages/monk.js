@@ -133,6 +133,21 @@ window.passives.append([
 	},{
 		name:"Touch of the Long Death",
 		description:"Your touch can channel the energy of death into a creature. As an action, you touch one creature within 5 feet of you, and you expend 1 to 10 ki points. The target must make a Constitution saving throw, and it takes 2d10 necrotic damage per ki point spent on a failed save, or half as much damage on a successful one."
+	},{
+		name:"Extract Aspects",
+		description:"You can strike pressure points to extract crucial information about your foe. Whenever you hit a creature with one of the attacks granted by your Flurry of Blows, you can learn the following attributes about the target: Damage Vulnerabilities, Damage Resistances, Damage Immunities, and Condition Immunities"
+	},{
+		name:"Extort Truth",
+		description:"You can hit a series of hidden nerves on a creature with precision, temporarily causing them to be unable to mask their true thoughts and intent. If you manage to hit a single creature with two or more attacks in one round, you can spend 1 ki point to force them to make a Charisma saving throw. You can choose to have these attacks deal no damage. On a failed save, the creature is unable to speak a deliberate lie for 1 minute and all Charisma checks directed at the creature are made with advantage for the duration. You know if they succeeded or failed on their saving throw.\n\nAn affected creature is aware of the effect and can thus avoid answering questions to which it would normally respond with a lie. Such a creature can be evasive in its answers as long as the effect lasts."
+	},{
+		name:"Preternatural Counter",
+		description:"Your quick mind and study of your foe allows you to use their failure to your advantage. If a creature misses you with an attack, you can immediately use your reaction to make an unarmed melee attack against that creature."
+	},{
+		name:"Mind of Mercury",
+		description:"You've honed your awareness and reflexes through mental aptitude and pattern recognition. Once per turn, if you've already taken your reaction, you may spend 1 ki point to take an additional reaction. You can only use one reaction per trigger."
+	},{
+		name:"Debilitating Barrage",
+		description:"You've gained the knowledge to temporarily lower a creature's fortitude by striking a series of pressure points. Whenever you hit a single creature with three or more attacks in one round, you can spend 3 ki points to cause the creature to suffer a vulnerability to a damage type of your choice for 1 minute, or until after they take any damage of that type.\n\nCreatures with resistance or immunity to the chosen damage type do not suffer vulnerability. Instead, their resistance to the chosen damage type is lost for the duration, or their immunity is reduced to resistance for the duration."
 	}
 ]);
 
@@ -152,6 +167,7 @@ window.classes.push(
 				],
 				"updates":[
 					{
+						always:true,
 						choicePrompt:"You gain the following proficiencies",
 						choices:["Swortswords","Simple Weapons","STR Saves","DEX Saves"],
 						action:function(char,derived,choice,$scope){
@@ -192,6 +208,7 @@ window.classes.push(
 							addProficiency(char,choice);
 						}
 					},{
+						always:true,
 						choicePrompt:"You gain the following",
 						choices:[findPassive("Martial Arts"),findPassive("Unarmored Defense")],
 						action:function(char){
@@ -208,6 +225,7 @@ window.classes.push(
 				"updates":[
 					helper.hitDice8,
 					{
+						always:true,
 						choicePrompt:"You gain the following",
 						choices:[findPassive("Martial Arts"),findPassive("Unarmored Defense")],
 						action:function(char,derived,choice){
@@ -223,6 +241,7 @@ window.classes.push(
 				"updates":[
 					helper.hitDice8,
 					{
+						always:true,
 						choicePrompt:"You gain the following",
 						choices:[findAbility("Flurry of Blows"),findAbility("Patient Defense"),findAbility("Step of the Wind"),findPassive("Unarmored Movement")],
 						action:function(char,derived,choice){
@@ -268,6 +287,8 @@ window.classes.push(
 				"updates":[
 					helper.hitDice8,
 					{
+						always:true,
+						choicePrompt:"You gain the following",
 						choices:[findPassive("Slow Fall"),findAbility("Stunning Strike")],
 						action:function(char,derived){
 							addPassive(char,"Slow Fall");
@@ -287,8 +308,9 @@ window.classes.push(
 				"updates":[
 					helper.hitDice8,
 					{
+						always:true,
 						choicePrompt:"You gain the following",
-						choices:[findPassive("Evasion"),findAbility("Stillness of Mind")],
+						choices:[findPassive("Evasion"),findPassive("Stillness of Mind")],
 						action:function(char,derived){
 							addPassive(char,"Evasion");
 							addPassive(char,"Stillness of Mind");
@@ -392,6 +414,7 @@ window.classes.push(
 				"updates":[
 					helper.hitDice8,
 					{
+						always:true,
 						choicePrompt:"You gain the following",
 						choices:[findAbility("Empty Body"),findAbility("Ki Astral Projection")],
 						action:function(char){
@@ -438,6 +461,7 @@ window.subclasses.push(
 				],
 				updates:[
 					{
+						always:true,
 						choicePrompt:"You gain the following",
 						choices:[findPassive("Way of the Mantis"),findPassive("Shadow Form")],
 						action:function(char,derived,choice,$scope){
@@ -500,6 +524,7 @@ window.subclasses.push(
 				],
 				updates:[
 					{
+						always:true,
 						choicePrompt:"You gain the following",
 						choices:[findPassive("Supernatural Awareness"),findPassive("Bonus Reaction")],
 						action:function(char,derived,choice,$scope){
@@ -600,6 +625,103 @@ window.subclasses.push(
 							addPassive(char,"Touch of the Long Death");
 						}
 					}
+				]
+			},{},{},{}
+		]
+	}
+);
+
+helper.learnCobaltSoulSkill={
+	summary:{name:"Skill Proficiency / Expertise",description:"Choose a skill from among Arcana, History, Nature, or Religion. You become proficient in the chosen skill, or if you are already proficient, you gain expertise (double proficiency) in that skill."},
+	choicePrompt:"Choose a skill proficiency or expertise",
+	choices:[
+		function(char){
+			var result=[];
+			for (var i=0;i<window.skills.length;i++){
+				if (['Arcana','History','Nature','Religion'].has(window.skills[i].name)) {
+					for (var j=0;j<char.skills.length;j++){
+						if (char.skills[j].name==window.skills[i].name){
+							if (char.skills[j].mult==0 || char.skills[j].mult==1) {
+								result.push({name:window.skills[i].name});
+							}
+							j=9999;
+						}
+					}
+				}
+			}
+			return result;
+		}
+	],
+	action:function(char,derived,choice,scope){
+		let skill = findSkill(char,choice);
+		if (skill.mult===1){
+			skill.mult=2;
+		} else if (skill.mult===0){
+			skill.mult=1;
+		}
+	}
+}
+
+window.subclasses.push(
+	{
+		classname:"Monk",
+		name:"Way of the Cobalt Soul",
+		subclass:"Way of the Cobalt Soul",
+		description:"Driven by the pursuit of knowledge and their worship of the Knowing Mistress, the archives of the Cobalt Soul stand as some of the most well-respected and most heavily guarded repositories of tomes, history, and information across Exandria. Here, young people seeking the clarity of truth and the strength of knowledge pledge to learn the arts of seeking enlightenment by understanding the world around them, and mastering the techniques to defend it. To become a Cobalt Soul is to give one's self to the quest for unveiling life's mysteries, bringing light to the secrets of the dark, and guarding the most powerful and dangerous of truths from those who would seek to perverse the sanctity of civilization.\n\nThe monks of the Cobalt Soul are the embodiment of the phrase \"know your enemy\". Through research, they prepare themselves against the ever-coming tides of evil. Through careful training, they have learned to puncture and manipulate the spiritual flow of an opponent's body. Through understanding the secrets of their foe, they can adapt and surmount them. Then, once the fight is done, they return to record their findings for future generations of monks to study from.",
+		levels:[{},{},{},
+			{//3
+				updates:[
+					{
+						summary:findPassive("Extract Aspects"),
+						choicePrompt:"You gain the following",
+						choices:[findPassive("Extract Aspects")],
+						action:function(char,derived,choice,$scope){
+							addPassive(char,"Extract Aspects");
+						}
+					},
+					helper.learnLanguage,
+					helper.learnCobaltSoulSkill
+				]
+			},{},{},{ //6
+				summary:[findPassive("Extort Truth"),findPassive("Preternatural Counter")],
+				updates:[	
+					{
+						always:true,
+						choicePrompt:"You gain the following",
+						choices:[findPassive("Extort Truth"),findPassive("Preternatural Counter")],
+						action:function(char){
+							addPassive(char,"Extort Truth");
+							addPassive(char,"Preternatural Counter");
+						}
+					}
+				]
+			},{},{},{},{},
+			{//11
+				updates:[
+					{
+						summary:findPassive("Mind of Mercury"),
+						choicePrompt:"You gain the following",
+						choices:[findPassive("Mind of Mercury")],
+						action:function(char,derived,choice){
+							addPassive(char,"Mind of Mercury");
+						}
+					},
+					helper.learnLanguage,
+					helper.learnCobaltSoulSkill
+				]
+			},{},{},{},{},{},
+			{//17
+				updates:[
+					{
+						summary:findPassive("Debilitating Barrage"),
+						choicePrompt:"You gain the following",
+						choices:[findPassive("Debilitating Barrage")],
+						action:function(char){
+							addPassive(char,"Debilitating Barrage");
+						}
+					},
+					helper.learnLanguage,
+					helper.learnCobaltSoulSkill
 				]
 			},{},{},{}
 		]

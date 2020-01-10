@@ -4,14 +4,19 @@ window.abilities.append([
 		description:"If your attack misses a target within range, you can turn the miss into a hit. Alternatively, if you fail an ability check, you can treat the d20 roll as a 20.\n\nOnce you use this feature, you can't use it again until you finish a short or long rest.",
 		maxCharges:1,
 		charges:1,
-		onShortRest:function(){this.charges=1;}
+		onShortRest:helper.recharge
 	},{
 		name:"Master Duelist",
 		description:"Your mastery of the blade lets you turn failure into success in combat. If you miss with an attack roll, you can roll it again with advantage. Once you do so, you can't use this feature again until you finish a short or long rest.",
 		maxCharges:1,
-		onShortRest:function(){
-			this.charges=this.maxCharges;
-		}
+		charges:1,
+		onShortRest:helper.recharge
+	},{
+		name:"Spell Thief",
+		description:"You gain the ability to magically steal the knowledge of how to cast a spell from another spellcaster.\n\nImmediately after a creature casts a spell that targets you or includes you in its area of effect, you can use your reaction to force the creature to make a saving throw with its spellcasting ability modifier. The DC equals your spell save DC. On a failed save, you negate the spell's effect against you, and you steal the knowledge of the spell if it is at least 1st level and of a level you can cast (it doesn't need to be a wizard spell). For the next 8 hours, you know the spell and can cast it using your spell slots. The creature can't cast that spell until the 8 hours have passed.\n\nOnce you use this feature, you can't use it again until you finish a long rest.",
+		maxCharges:1,
+		charges:1,
+		onLongRest:helper.recharge
 	}
 ]);
 
@@ -64,6 +69,15 @@ window.passives.append([
 	},{
 		name:"Elegant Maneuver",
 		description:"You can use a bonus action on your turn to gain advantage on the next Dexterity (Acrobatics) or Strength (Athletics) check you make during the same turn."
+	},{
+		name:"Mage Hand Legerdemain",
+		description:"When you cast Mage Hand, you can make the spectral hand invisible, and you can perform the following additional tasks with it:\n\u2022 You can stow one object the hand is holding in a container worn or carried by another creature.\n\u2022 You can retrieve an object in a container worn or carried by another creature.\n\u2022 You can use thieves' tools to pick lock and disarm traps at range.\n\nYou can perform one of these tasks without being noticed by a creature if you succeed on a Dexterity (Sleight of Hand) check contested by the creature's Wisdom (Perception) check.\n\nIn addition, you can use the bonus action granted by your Cunning Action to control the hand."
+	},{
+		name:"Magical Ambush",
+		description:"If you are hidden from a creature when you cast a spell on it, the creature has disadvantage on any saving throw it makes against the spell this turn."
+	},{
+		name:"Versatile Trickster",
+		description:"You gain the ability to distract targets with your mage hand. As a bonus action on your turn, you can designate a creature within 5 feet of the spectral hand created by the spell. Doing so gives you advantage on attack rolls against that creature until the end of the turn."
 	}
 ]);
 
@@ -86,14 +100,14 @@ window.classes.push(
 						choices:[],
 						action:function(char,derived,choice,$scope){
 							char.maxHp=8;
-							char.proficiencies.push("Light Armor");
-							char.proficiencies.push("Simple Weapons");
-							char.proficiencies.push("Hand Crossbows");
-							char.proficiencies.push("Longswords");
-							char.proficiencies.push("Rapiers");
-							char.proficiencies.push("Shortswords");
-							char.proficiencies.push("Thieves' Tools");
-							char.proficiencies.push("Language: Thieves' Cant");
+							char.proficiencies.upush("Light Armor");
+							char.proficiencies.upush("Simple Weapons");
+							char.proficiencies.upush("Hand Crossbows");
+							char.proficiencies.upush("Longswords");
+							char.proficiencies.upush("Rapiers");
+							char.proficiencies.upush("Shortswords");
+							char.proficiencies.upush("Thieves' Tools");
+							char.proficiencies.upush("Language: Thieves' Cant");
 							char.saves.int=1;
 							char.saves.dex=1;
 							addToInventory(findItem("Dagger",2));
@@ -459,6 +473,184 @@ window.subclasses.push(
 					}
 				]
 			},{},{},{}
+		]
+	}
+);
+
+function listLearnableSpellsForArcaneTrickster(char,$scope){
+	let result=listLearnableSpells(char,$scope,"Rogue");
+	for (let i=result.length-1;i>=0;i--){
+		let spell=result[i];
+		if (!['Illusion','Enchantment'].has(spell.school)){
+			result.splice(i,1);
+		}
+	}
+	return result;
+}
+
+
+window.subclasses.push(
+	{
+		classname:"Rogue",
+		name:"Arcane Trickster",
+		subclass:"Arcane Trickster",
+		description:"Some rogues enhance their fine-honed skills of stealth and agility with magic, learning tricks of enchantment and illusion. These rogues include pickpockets and burglars, but also pranksters, mischief-makers, and a significant number of adventurers.",
+		levels:[{},{},{},
+			{//3
+				updates:[
+					{
+						summary:findPassive("Mage Hand Legerdemain"),
+						choicePrompt:"You gain the following",
+						choices:[findPassive("Mage Hand Legerdemain")],
+						action:function(char,derived,choice,scope){
+							getCharacterClass(char,"Rogue").spellcasting.push('Wizard');
+							addPassive(char,"Mage Hand Legerdemain");
+							addSpell(char,"Mage Hand",scope.chosenClassName);
+						}
+					},{
+						limit:2,
+						choicePrompt:"Choose two cantrips",
+						choices:[listUnknownWizardCantrips],
+						action:function(char,derived,choice,scope){
+							addSpell(char,choice,scope.chosenClassName);
+						}
+					},{
+						limit:2,
+						choicePrompt:"Choose two Enchantment or Illusion spells",
+						choices:[listLearnableSpellsForArcaneTrickster],
+						action:function(char,derived,choice,scope){
+							addSpell(char,choice,scope.chosenClassName);
+						}
+					},
+					helper.chooseSpell
+					
+				]
+			},{ //4
+				updates:[
+					{
+						choicePrompt:"Choose a spell",
+						choices:[listLearnableSpellsForArcaneTrickster],
+						action:function(char,derived,choice,scope){
+							addSpell(char,choice,scope.chosenClassName);
+						}
+					}
+				]
+			},{},{},{//7
+				updates:[
+					{
+						choicePrompt:"Choose a spell",
+						choices:[listLearnableSpellsForArcaneTrickster],
+						action:function(char,derived,choice,scope){
+							addSpell(char,choice,scope.chosenClassName);
+						}
+					}
+				]
+			},{//8
+				updates:[
+					{
+						choicePrompt:"Choose a spell",
+						choices:[listLearnableSpells],
+						action:function(char,derived,choice,scope){
+							addSpell(char,choice,scope.chosenClassName);
+						}
+					}
+				]
+			},{ //9
+				updates:[
+					{
+						summary:findPassive("Magical Ambush"),
+						choicePrompt:"You gain the following",
+						choices:[findPassive("Magical Ambush")],
+						action:function(char){
+							addPassive(char,"Magical Ambush");
+						}
+					}
+				]
+			},{//10
+				updates:[
+					{
+						choicePrompt:"Choose a spell",
+						choices:[listLearnableSpellsForArcaneTrickster],
+						action:function(char,derived,choice,scope){
+							addSpell(char,choice,scope.chosenClassName);
+						}
+					}
+				]
+			},{//11
+				updates:[
+					{
+						choicePrompt:"Choose a spell",
+						choices:[listLearnableSpellsForArcaneTrickster],
+						action:function(char,derived,choice,scope){
+							addSpell(char,choice,scope.chosenClassName);
+						}
+					}
+				]
+			},{},
+			{//13
+				updates:[
+					{
+						summary:findPassive("Versatile Trickster"),
+						choicePrompt:"You gain the following",
+						choices:[findPassive("Versatile Trickster")],
+						action:function(char,derived,choice){
+							addPassive(char,"Versatile Trickster");
+						}
+					}
+				]
+			},{//14
+				updates:[
+					{
+						choicePrompt:"Choose a spell",
+						choices:[listLearnableSpells],
+						action:function(char,derived,choice,scope){
+							addSpell(char,choice,scope.chosenClassName);
+						}
+					}
+				]
+			},{},{//16
+				updates:[
+					{
+						choicePrompt:"Choose a spell",
+						choices:[listLearnableSpellsForArcaneTrickster],
+						action:function(char,derived,choice,scope){
+							addSpell(char,choice,scope.chosenClassName);
+						}
+					}
+				]
+			},
+			{//17
+				updates:[
+					{
+						summary:findAbility("Spell Thief"),
+						choicePrompt:"You gain the following",
+						choices:[findAbility("Spell Thief")],
+						action:function(char){
+							addAbility(char,"Spell Thief");
+						}
+					}
+				]
+			},{},{//19
+				updates:[
+					{
+						choicePrompt:"Choose a spell",
+						choices:[listLearnableSpellsForArcaneTrickster],
+						action:function(char,derived,choice,scope){
+							addSpell(char,choice,scope.chosenClassName);
+						}
+					}
+				]
+			},{//20
+				updates:[
+					{
+						choicePrompt:"Choose a spell",
+						choices:[listLearnableSpells],
+						action:function(char,derived,choice,scope){
+							addSpell(char,choice,scope.chosenClassName);
+						}
+					}
+				]
+			}
 		]
 	}
 );

@@ -51,21 +51,6 @@ window.backgrounds=[
 			char.money+=1500;
 		}
 	},{
-		name:"Spy",
-		description:"Skill Proficiencies: Deception, Stealth\nTool Proficiencies: Thieves' Tools\nEquipment: A crowbar, a set of dark common clothes including a hood, and a belt pouch containing 15 gp",
-		featureName:"Spy Contact",
-		featureDescription:"You have a reliable and trustworthy contact who acts as your liaison to a network of other spies. You know how to get messages to and from your contact, even over great distances; specifically, you know the local messengers, corrupt caravan masters, and seedy sailors who can deliver messages for you.",
-		onPickup:function(char,scope){
-			addProficiency(char,'Deception');
-			addProficiency(char,'Stealth');
-			char.proficiencies.upush("Thieves' Tools");
-			addToInventory(char,findItem('Dark Hooded Clothes'));
-			addToInventory(char,findItem('Crowbar'));
-			addToInventory(char,findItem('Belt Pouch'));
-			addPassive(char,{name:this.featureName,description:this.featureDescription});
-			char.money+=1500;
-		}
-	},{
 		name:"Entertainer",
 		description:"Skill Proficiencies: Acrobatics, Performance\nTool Proficiencies: Disguise Kit, a musical instrument\nEquipment: A musical instrument, a favor from an admirer, costume, and a belt pouch containing 15 gp",
 		featureName:"By Popular Demand",
@@ -159,6 +144,36 @@ window.backgrounds=[
 				}
 			)
 			char.money+=1500;
+		}
+	},{
+		name:"Haunted One",
+		description:"Skill Proficiencies: Choose two of Arcana, Investigation, Religion, or Survival\nLanguages: One exotic language of your choice\nEquipment: Monster Hunter's Pack, common clothes, and a trinket of special significance.",
+		featureName:"Heart of Darkness",
+		featureDescription:"Those who look into your eyes can see that you have faced unimaginable horror and that you are no stranger to darkness. Though they might fear you, commoners will extend you every courtesy and do their utmost to help you. Unless you have shown yourself to be a danger to them, they will even take up arms to fight alongside you, should you find yourself facing an enemy alone.",
+		onPickup:function(char,scope){
+			addToInventory(char,findItem('Monster Hunter\'s Pack'));
+			addToInventory(char,findItem("Common Clothes"));
+			addToInventory(char,findItem('Trinket'));
+			addPassive(char,{name:this.featureName,description:this.featureDescription});
+			scope.choiceQueue.push(
+				{
+					choicePrompt:"Choose an exotic language",
+					choices:["Abyssal","Celestial","Deep Speech","Draconic","Infernal","Primordial","Sylvan","Undercommon"],
+					action:function(char,derived,choice){
+						char.proficiencies.upush("Language: "+choice);
+					}
+				}
+			);
+			scope.choiceQueue.push(
+				{
+					limit:2,
+					choicePrompt:"Choose two proficiencies",
+					choices:["Arcana","Investigation","Religion","Survival"],
+					action:function(char,derived,choice){
+						addProficiency(char,choice);
+					}
+				}
+			);
 		}
 	},{
 		name:"Hermit",
@@ -289,6 +304,21 @@ window.backgrounds=[
 				}
 			});
 			char.money+=1000;
+		}
+	},{
+		name:"Spy",
+		description:"Skill Proficiencies: Deception, Stealth\nTool Proficiencies: Thieves' Tools\nEquipment: A crowbar, a set of dark common clothes including a hood, and a belt pouch containing 15 gp",
+		featureName:"Spy Contact",
+		featureDescription:"You have a reliable and trustworthy contact who acts as your liaison to a network of other spies. You know how to get messages to and from your contact, even over great distances; specifically, you know the local messengers, corrupt caravan masters, and seedy sailors who can deliver messages for you.",
+		onPickup:function(char,scope){
+			addProficiency(char,'Deception');
+			addProficiency(char,'Stealth');
+			char.proficiencies.upush("Thieves' Tools");
+			addToInventory(char,findItem('Dark Hooded Clothes'));
+			addToInventory(char,findItem('Crowbar'));
+			addToInventory(char,findItem('Belt Pouch'));
+			addPassive(char,{name:this.featureName,description:this.featureDescription});
+			char.money+=1500;
 		}
 	},{
 		name:"Urchin",

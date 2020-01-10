@@ -2,6 +2,28 @@ Math.rand=function(min,max){
 	return min + Math.floor(Math.random()*(max-min));
 }
 
+Array.prototype.find=function(objectOrFunction){
+	if (typeof objectOrFunction === 'function'){
+		for (let element of this){
+			if (objectOrFunction(element)){
+				return element;
+			}
+		}
+	} else if (objectOrFunction.name) {
+		for (let element of this){
+			if (element.name===objectOrFunction.name){
+				return element;
+			}
+		}
+	} else {
+		for (let element of this){
+			if (element === objectOrFunction){
+				return element;
+			}
+		}
+	}
+}
+
 Array.prototype.has=function(string){
 	if (string.name){
 		for (let element of this){
@@ -48,6 +70,16 @@ Array.prototype.upush=function(element){
 	} else {
 		if (this.indexOf(element)==-1){
 			this.push(element);
+		}
+	}
+}
+
+Array.prototype.overlap=function(otherArray){
+	let result=[];
+	for (let elem of this){
+		if (otherArray.has(elem)){
+			result.push(elem);
+			continue;
 		}
 	}
 }
@@ -150,6 +182,14 @@ function getPlayerSpell(char, spellName, className){
 		}
 	}
 	return null;
+}
+
+function findSkill(char,skillName){
+	for (let skill of char.skills){
+		if (skill.name===skillName){
+			return skill;
+		}
+	}
 }
 
 function addProficiency(char,skillname){
@@ -272,6 +312,9 @@ function listSimpleWeapons(){
 	var result=[];
 	for (var i=0;i<window.items.length;i++){
 		let item=window.items[i];
+		if (item.value > 7500){
+			continue;
+		}
 		if (item.categories.indexOf('Simple')!=-1 && item.categories.indexOf('Weapon')!=-1){
 			result.push(item);
 		}
@@ -282,6 +325,9 @@ function listSimpleMeleeWeapons(){
 	var result=[];
 	for (var i=0;i<window.items.length;i++){
 		let item=window.items[i];
+		if (item.value > 7500){
+			continue;
+		}
 		if (item.categories.hasAll('Simple','Melee','Weapon')){
 			result.push(item);
 		}
@@ -293,6 +339,9 @@ function listMartialWeapons(){
 	var result=[];
 	for (var i=0;i<window.items.length;i++){
 		let item=window.items[i];
+		if (item.value > 7500){
+			continue;
+		}
 		if (item.categories.indexOf('Martial')!=-1 && item.categories.indexOf('Weapon')!=-1){
 			result.push(item);
 		}

@@ -271,6 +271,15 @@ window.feats=[
 			name:"Polearm Master",
 			description:"You can keep your enemies at bay with reach weapons. You gain the following benefits:\n\u2022 When you take the Attack action and attack with only a glaive, halberd, quarterstaff, or spear, you can use a bonus action to make a melee attack with the opposite end of the weapon; this attack uses the same ability modifier as the primary attack. The weapon's damage die for this attack is a d4, and the attack deals bludgeoning damage.\n\u2022 While you are wielding a glaive, halberd, pike, quarterstaff, or spear, other creatures provoke an opportunity attack from you when they enter your reach."
 	},{
+			name:"Prodigy",
+			description:"You have a knack for learning new things. You gain the following benefits:\n\u2022 You gain one skill proficiency of your choice, one tool proficiency of your choice, and fluency in one language of your choice.\n\u2022 Choose one skill in which you have proficiency. You gain expertise with that skill, which means your proficiency bonus is doubled for any ability check you make with it. The skill you choose must be one that isn't already benefiting from a feature, such as Expertise, that doubles your proficiency bonus.",
+			onPickup:function(char,scope){
+				scope.choiceQueue.push(helper.learnLanguage);
+				scope.choiceQueue.push(helper.learnTool);
+				scope.choiceQueue.push(helper.learnSkillProficiency);
+				scope.choiceQueue.push(helper.chooseExpertise);
+			}
+	},{
 			name:"Resilient (Str)",
 			identity:"Resilient",
 			description:"Choose one ability score. You gain the following benefits:\n\u2022 Increase the chosen ability score by 1, to a maximum of 20.\n\u2022 You gain proficiency in saving throws using the chosen ability.",
@@ -410,6 +419,52 @@ window.feats=[
 						}
 					}
 				);
+			}
+	},{
+			name:"Squat Nimbleness (Str)",
+			identity:"Squat Nimbleness",
+			description:"You are uncommonly nimble for your race. You gain the following benefits:\n\u2022 Incrase your strength by 1, to a maximum of 20.\n\u2022 Increase your walking speed by 5 feet.\n\u2022 You gain proficiency in Acrobatics or Athletics (your choice)\n\u2022 You have advanatge on any Athletics or Acrobatics checks you make to escape from being grappled.",
+			onPickup:function(char,scope){
+				if (char.attributes.str<20){
+					char.attributes.str+=1;
+				}
+				char.speed+=5;
+				if (findSkill(char,"Acrobatics").mult>0){
+					addProficiency(char,"Athletics");
+				} else if (findSkill(char,"Athletics").mult>0){
+					addProficiency(char,"Acrobatics");
+				} else {
+					scope.choiceQueue.push({
+						"choicePrompt":"Choose a proficiency",
+						"choices":["Acrobatics","Athletics"],
+						"action":function(char,derived,choice){
+							addProficiency(char,choice);
+						}
+					});
+				}
+			}
+	},{
+			name:"Squat Nimbleness (Dex)",
+			identity:"Squat Nimbleness",
+			description:"You are uncommonly nimble for your race. You gain the following benefits:\n\u2022 Incrase your dexterity by 1, to a maximum of 20.\n\u2022 Increase your walking speed by 5 feet.\n\u2022 You gain proficiency in Acrobatics or Athletics (your choice)\n\u2022 You have advanatge on any Athletics or Acrobatics checks you make to escape from being grappled.",
+			onPickup:function(char,scope){
+				if (char.attributes.dex<20){
+					char.attributes.dex+=1;
+				}
+				char.speed+=5;
+				if (findSkill(char,"Acrobatics").mult>0){
+					addProficiency(char,"Athletics");
+				} else if (findSkill(char,"Athletics").mult>0){
+					addProficiency(char,"Acrobatics");
+				} else {
+					scope.choiceQueue.push({
+						"choicePrompt":"Choose a proficiency",
+						"choices":["Acrobatics","Athletics"],
+						"action":function(char,derived,choice){
+							addProficiency(char,choice);
+						}
+					});
+				}
 			}
 	},{
 			name:"Tavern Brawler (Str)",

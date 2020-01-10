@@ -10,7 +10,7 @@ window.classes.push(
 						choices:[],
 						action:function(char,derived,choice,$scope){
 							char.maxHp=6;
-							char.proficiencies.push("Saggers");
+							char.proficiencies.push("Daggers");
 							char.proficiencies.push("Darts");
 							char.proficiencies.push("Slings");
 							char.proficiencies.push("Quarterstaffs");
@@ -519,27 +519,42 @@ window.abilities.append([
 		name:"Create Lv 1 Slot",
 		description:"You spend 2 Sorcery Points as a bonus action to create a level 1 spell slot. This slot lasts until you take a long rest.",
 		resourceName:"Sorcery Point",
-		resourceCost:2
+		resourceCost:2,
+		onUse:function(char){
+			char.abilities.find({name:"Lv 1 Spell"}).charges++;
+		}
 	},{
 		name:"Create Lv 2 Slot",
 		description:"You spend 3 Sorcery Points as a bonus action to create a level 2 spell slot. This slot lasts until you take a long rest.",
 		resourceName:"Sorcery Point",
-		resourceCost:3
+		resourceCost:3,
+		onUse:function(char){
+			char.abilities.find({name:"Lv 2 Spell"}).charges++;
+		}
 	},{
 		name:"Create Lv 3 Slot",
 		description:"You spend 5 Sorcery Points as a bonus action to create a level 3 spell slot. This slot lasts until you take a long rest.",
 		resourceName:"Sorcery Point",
-		resourceCost:5
+		resourceCost:5,
+		onUse:function(char){
+			char.abilities.find({name:"Lv 3 Spell"}).charges++;
+		}
 	},{
 		name:"Create Lv 4 Slot",
 		description:"You spend 6 Sorcery Points as a bonus action to create a level 4 spell slot. This slot lasts until you take a long rest.",
 		resourceName:"Sorcery Point",
-		resourceCost:6
+		resourceCost:6,
+		onUse:function(char){
+			char.abilities.find({name:"Lv 4 Spell"}).charges++;
+		}
 	},{
 		name:"Create Lv 5 Slot",
 		description:"You spend 7 Sorcery Points as a bonus action to create a level 5 spell slot. This slot lasts until you take a long rest.",
 		resourceName:"Sorcery Point",
-		resourceCost:5
+		resourceCost:5,
+		onUse:function(char){
+			char.abilities.find({name:"Lv 5 Spell"}).charges++;
+		}
 	},{
 		name:"Careful Spell",
 		description:"When you cast a spell that forces other creatures to make a saving throw, you can protect some of those creatures from the spell's full force. To do so, you spend 1 sorcery point and choose a number of those creatures up to your Charisma modifier (minimum of one creature). A chosen creature automatically succeeds on its saving throw against the spell.",

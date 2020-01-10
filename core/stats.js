@@ -96,9 +96,15 @@ $scope.combatSpellLevelFilter=[true,true,true,true,true,true,true,true,true,true
 $scope.loadSpells=function(){
 	$scope.knownSpells=[];
 	for (let clas of $scope.char.classes){
-		clas.preparations=clas.level+$scope.derived.modifiers.wis;
+		switch (clas.name){
+			case "Cleric":
+			case "Druid": clas.preparations = clas.level+$scope.derived.modifiers.wis; break;
+			case "Paladin": clas.preparations = Math.floor(clas.level/2) + $scope.derived.modifiers.cha;break;
+			case "Wizard": clas.preparations = clas.level+$scope.derived.modifiers.int; break;
+		}
+		clas.preparedSpells=0;
 		for (let spell of clas.spells){
-			let s = spell;//angular.copy(spell);
+			let s = spell;
 			s.casterClass=clas.name;
 			switch (s.casterClass){
 				case "Wizard":
@@ -124,9 +130,47 @@ $scope.loadSpells=function(){
 					break;
 			}
 			s.saveDc = 8 + s.attackBonus;
+			if (s.prepared && !s.alwaysPrepared){
+				clas.preparedSpells++;
+			}
 			$scope.knownSpells.push(s);
 		}
 	}
+}
+
+$scope.clearPreparations=function(){
+	for (let clas of $scope.char.classes){
+		for (let spell of clas.spells){
+			if (!spell.alwaysPrepared){
+				spell.prepared=false;
+			}
+		}
+	}
+	$scope.loadSpells();
+}
+
+$scope.hoverSpellPrep=function(spell){
+	if (spell){
+		$scope.hoveredSpell=spell;
+	} else {
+		$scope.hoveredSpell=null;
+	}
+}
+
+$scope.hasPreparations=function(){
+	for (let clas of $scope.char.classes){
+		if (clas.preparations && clas.preparations > 0){
+			return true;
+		}
+	}
+	return false;
+}
+
+$scope.classHasPreparedSpells = function(clas){
+	if (clas.name.startsWith("Special")){
+		return false;
+	}
+	return clas.preparations && clas.preparations>0;
 }
 
 addAbility($scope.char,"Lv 1 Spell");
@@ -803,6 +847,9 @@ $scope.decrementCharges=function(item){
 	} else {
 		item.charges-=1;
 	}
+	if (typeof item.onUse === 'function'){
+		item.onUse($scope.char,$scope);
+	}
 	$scope.calculateSharedResources();
 }
 
@@ -810,7 +857,16 @@ $scope.prepSpell=function(spell,event){
 	if (spell.alwaysPrepared){
 		return;
 	}
-	spell.prepared=!spell.prepared;
+	let clas = getCharacterClass($scope.char,spell.casterClass);
+	if (spell.prepared){
+		spell.prepared=false;
+		clas.preparedSpells--;
+	} else {
+		if (clas.preparations > clas.preparedSpells){
+			spell.prepared=true;
+			clas.preparedSpells++;
+		}
+	}
 	event.stopPropagation();
 	event.preventDefault();
 }
@@ -857,7 +913,7 @@ $scope.longRest=function(){
 			}
 		}
 	}
-	$scope.char.hp=$scope.char.maxHp;
+	$scope.char.hp=$scope.derived.maxHp;
 	$scope.char.tempHp=0;
 	$scope.char.polyHp=0;
 	$scope.char.polyHpMax=0;
@@ -881,19 +937,36 @@ $scope.highestSlot=function(){
 
 $scope.delete=function(item,from,event){
 	for (var i=0;i<from.length;i++){
-		if (from[i].name==item.name){
-			if (from[i].count) {
-				from[i].count--;
-				if (from[i].count==0){
+		if (from[i].name && item.name){
+			if (from[i].name === item.name){
+				if (from[i].count) {
+					from[i].count--;
+					if (from[i].count==0){
+						from.splice(i,1);
+					}
+				}
+				else {
 					from.splice(i,1);
 				}
+				event.stopPropagation();
+				event.preventDefault();
+				return false;
 			}
-			else {
-				from.splice(i,1);
+		} else {
+			if (from[i]===item){
+				if (from[i].count) {
+					from[i].count--;
+					if (from[i].count==0){
+						from.splice(i,1);
+					}
+				}
+				else {
+					from.splice(i,1);
+				}
+				event.stopPropagation();
+				event.preventDefault();
+				return false;
 			}
-			event.stopPropagation();
-			event.preventDefault();
-			return false;
 		}
 	}
 	return true;
@@ -915,6 +988,30 @@ $scope.checkForPassives=function(name){
 			return;
 		}
 	}
+}
+
+$scope.autocompleteSpell=function(name){
+	let spell = findSpell(name);
+	if (spell){
+		$scope.newspell=angular.copy(spell);
+	}
+}
+
+$scope.learnSpell=function(char,spell,forClass){
+	addSpell(char,angular.copy(spell),forClass);
+	$scope.loadSpells();
+}
+
+$scope.getCasterClasses=function(char){
+	let result=[];
+	for (let c of char.classes){
+		if (c.spellcasting){
+			for (let s of c.spellcasting){
+				result.upush(s);
+			}
+		}
+	}
+	return result;
 }
 
 $scope.addAbility=function(newability){
@@ -1165,6 +1262,7 @@ function prepForSave(char){
 		delete ability.onLongRest;
 		delete ability.apply;
 		delete ability.maxChargesFunction;
+		delete ability.onUse;
 	}
 	//spell descriptions take up a lot of space.
 	for (let clas of char.classes){
@@ -1280,6 +1378,7 @@ function initLoadedCharacter(char){
 			ability.onLongRest=a.onLongRest;
 			ability.apply=a.apply;
 			ability.maxChargesFunction=a.maxChargesFunction;
+			ability.onUse=a.onUse;
 		}
 	}
 	for (let clas of char.classes){
