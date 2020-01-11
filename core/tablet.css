@@ -138,3 +138,15 @@
 .healthChangeButton.plus{
 	background:green;
 }
+.spellFilterButton {
+    border: 1px solid black;
+    padding: 2px 15px;
+    font-size: 28px;
+    line-height: 37px;
+    background-color: green;
+    color: white;
+    display: inline-block;
+}
+.spellFilterButton.minus {
+    background-color: #8c8c8c;
+}
