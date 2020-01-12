@@ -65,7 +65,7 @@
 	<div class="character-header">
 		<div class="levelwrapper flex1" style="cursor:pointer;" ng-click="levelUpStart()">
 			<input type='text' class='statbox' ng-model='char.level' disabled='disabled' number />
-			<div style="position:absolute;margin-top:-40px;">
+			<div ng-if="char.level<20" style="position:absolute;margin-top:-40px;">
 				<div class="levelhover">Level<br>Up</div>
 			</div>
 		</div>

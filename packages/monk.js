@@ -96,10 +96,10 @@ window.passives.append([
 		description:"When you melee attack a target who isn't aware of you, if the attack hits, you can take the Disengage action for free immediately after the attack."
 	},{
 		name:"Shadow Form",
-		description:"Whenever you end a turn in which you didn't move, if no enemies are within melee range of you, you may use your bonus action to become invisible until your next turn ends."
+		description:"Whenever you end a turn in which you didn't move, if no enemies are within melee range of you, you may use your bonus action to become invisible until your next turn ends, or until you attack or cast a spell."
 	},{
 		name:"Shadow Strike",
-		description:"When you're invisible, you can spend 1 Ki point to teleport up to your movement speed to melee attack an enemy. That attack has advantage. If your target dies because of this attack, you become invisible until the start of your next turn."
+		description:"When you're invisible, you can spend 1 Ki point to teleport up to your movement speed to melee attack an enemy. That attack has advantage. If your target dies because of this attack, you become invisible until the end of your next turn, or until you attack or cast a spell."
 	},{
 		name:"Master of Infiltration",
 		description:"You gain advantage on stealth checks. You have a +5 bonus to Stealth checks you make in dark places or at night."
