@@ -232,7 +232,7 @@ $scope.revert=function(){
 }
 
 $scope.levelUpStart=function(){
-	if ($cope.char.level>=20){
+	if ($scope.char.level>=20){
 		return;
 	}
 	if ($scope.currentChoices && $scope.currentChoices.length>0){
