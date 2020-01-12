@@ -267,6 +267,7 @@ window.classes.push(
 				"updates":[
 					helper.hitDice8,
 					{
+						always:true,
 						choicePrompt:"You gain the following",
 						choices:[findAbility("Channel Divinity"),findAbility("Turn Undead")],
 						action:function(char,derived,choice){
@@ -826,6 +827,7 @@ window.subclasses.push(
 				summary:[findAbility("Eyes of the Grave"),findPassive("Circle of Mortality")],
 				updates:[
 					{
+						always:true,
 						choicePrompt:"You gain the following",
 						choices:[findAbility("Eyes of the Grave"),findPassive("Circle of Mortality")],
 						action:function(char,derived,choice,$scope){

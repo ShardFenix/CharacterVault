@@ -46,13 +46,13 @@ window.abilities.append([
 window.passives.append([
 	{
 		name:"Martial Arts",
-		description:"Your practice of martial arts gives you mastery of combat styles that use unarmed strikes and monk weapons, which are shortswords and any simple melee weapons that don't have the two-handed or heavy property.\nYou gain the following benefits while you are unarmed or wielding only monk weapons and you aren't wearing armor or wielding a shield.\n\u2022You can use Dexterity instead of Strength for the attack and damage rolls of your unarmed strikes and monk weapons.\n\u2022You can roll a d4 in place of the normal damage of your unarmed strike or monk weapon. This die changes as you gain monk levels, as shown in the Martial Arts column of the Monk table.\n\u2022When you use the Attack action with an unarmed strike or a monk weapon on your turn, you can make one unarmed strike as a bonus action. For example, if you take the Attack action and attack with a quarterstaff, you can also make an unarmed strike as a bonus action, assuming you haven't already taken a bonus action this turn."
+		description:"Your practice of martial arts gives you mastery of combat styles that use unarmed strikes and monk weapons, which are shortswords and any simple melee weapons that don't have the two-handed or heavy property.\nYou gain the following benefits while you are unarmed or wielding only monk weapons and you aren't wearing armor or wielding a shield.\n\u2022You can use Dexterity instead of Strength for the attack and damage rolls of your unarmed strikes and monk weapons.\n\u2022You can roll a d${ladder(classLevel($scope.char,'Monk'),0,4,5,6,11,8,17,10)} in place of the normal damage of your unarmed strike or monk weapon. This die changes as you gain monk levels, as shown in the Martial Arts column of the Monk table.\n\u2022When you use the Attack action with an unarmed strike or a monk weapon on your turn, you can make one unarmed strike as a bonus action. For example, if you take the Attack action and attack with a quarterstaff, you can also make an unarmed strike as a bonus action, assuming you haven't already taken a bonus action this turn."
 	},{
 		name:"Unarmored Defense",
 		description:"While you are wearing no armor and not wielding a shield, your AC equals 10 + your Dexterity modifier + your Wisdom modifier."
 	},{
 		name:"Unarmored Movement",
-		description:"Your speed increases by ${ladder(classLevel($scope.char,'Monk'),2,10,6,15,10,20,14,25,18,30)} feet while you are not wearing armor or wielding a shield."
+		description:"Your speed increases by ${ladder(classLevel($scope.char,'Monk'),0,10,6,15,10,20,14,25,18,30)} feet while you are not wearing armor or wielding a shield."
 	},{
 		name:"Deflect Missiles",
 		description:"You can use your reaction to deflect or catch the missile when you are hit by a ranged weapon attack. When you do so, the damage you take from the attack is reduced by 1d10 + your Dexterity modifier + your monk level.\nIf you reduce the damage to 0, you can catch the missile if it is small enough for you to hold in one hand and you have at least one hand free. If you catch a missile in this way, you can spend 1 ki point to make a ranged attack (range 20/60 feet) with the weapon or piece of ammunition you just caught, as part of the same reaction. You make this attack with proficiency, regardless of your weapon proficiencies, and the missile counts as a monk weapon for the attack."
@@ -159,11 +159,10 @@ window.classes.push(
 		levels:[
 			{ //1, first player level
 				summary:[
+					findPassive("Martial Arts"),
 					{name:"Proficiencies",description:"Swortswords, Simple Weapons STR Saves DEX Saves"},
 					{name:"Starting Equipment",description:""},
-					{name:"Skill Proficiencies",description:""},
-					findPassive("Martial Arta"),
-					findPassive("Unarmored Movement"),
+					{name:"Skill Proficiencies",description:""}
 				],
 				"updates":[
 					{

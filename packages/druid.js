@@ -106,8 +106,13 @@ window.classes.push(
 						"choicePrompt":"Choose a Druid Circle:",
 						"choices":[listSpecializations],
 						"action":function(char,derived,choice){
-							addAbility(char,"Wild Shape");
 							addSubclass(char,"Druid",choice);
+						}
+					},{
+						choicePrompt:"You gain the following",
+						choices:[findAbility("Wild Shape")],
+						action:function(char){
+							addAbility(char,"Wild Shape");
 						}
 					}
 				]
@@ -189,8 +194,10 @@ window.classes.push(
 				"updates":[
 					helper.hitDice8,
 					{
-						"choices":[],
-						"action":function(char){
+						always:true,
+						choicePrompt:"You gain the following",
+						choices:[findPassive("Timeless Body (Druid)"),findPassive("Beast Spells")],
+						action:function(char){
 							addPassive(char,"Timeless Body (Druid)");
 							addPassive(char,"Beast Spells");
 						}
@@ -207,7 +214,8 @@ window.classes.push(
 				"updates":[
 					helper.hitDice8,
 					{
-						"choices":[],
+						choicePrompt:"You gain the following",
+						"choices":[findPassive("Archdruid")],
 						"action":function(char){
 							addPassive(char,"Archdruid");
 						}
@@ -228,7 +236,9 @@ window.subclasses.push(
 			{//2
 				updates:[
 					{
-						choices:[],
+						always:true,
+						choicePrompt:"You gain the following",
+						choices:[findPassive("Combat Wild Shape"),findPassive("Circle Forms")],
 						action:function(char,derived,choice,$scope){
 							addPassive(char,"Combat Wild Shape");
 							addPassive(char,"Circle Forms");
@@ -238,7 +248,8 @@ window.subclasses.push(
 			},{},{},{},{ //6
 				updates:[
 					{
-						choices:[],
+						choicePrompt:"You gain the following",
+						choices:[findPassive("Primal Strike")],
 						action:function(char){
 							addPassive(char,"Primal Strike");
 						}
@@ -248,7 +259,8 @@ window.subclasses.push(
 			{//10
 				updates:[
 					{
-						choices:[],
+						choicePrompt:"You gain the following",
+						choices:[findPassive("Elemental Wild Shape")],
 						action:function(char,derived,choice){
 							addPassive(char,"Elemental Wild Shape");
 						}
@@ -258,7 +270,8 @@ window.subclasses.push(
 			{//14
 				updates:[
 					{
-						choices:[],
+						choicePrompt:"You gain the following",
+						choices:[findPassive("Thousand Forms")],
 						action:function(char,derived,choice){
 							addPassive(char,"Thousand Forms");
 						}
@@ -275,7 +288,9 @@ window.subclasses.push(
 			{//2
 				updates:[
 					{
-						choices:[],
+						always:true,
+						choicePrompt:"You gain the following",
+						choices:[findPassive("Speech of the Woods"),findAbility("Spirit Totem")],
 						action:function(char,derived,choice,$scope){
 							addPassive(char,"Speech of the Woods");
 							addAbility(char,"Spirit Totem");
@@ -285,7 +300,8 @@ window.subclasses.push(
 			},{},{},{},{ //6
 				updates:[
 					{
-						choices:[],
+						choicePrompt:"You gain the following",
+						choices:[findPassive("Mighty Summoner")],
 						action:function(char){
 							addPassive(char,"Mighty Summoner");
 						}
@@ -295,7 +311,8 @@ window.subclasses.push(
 			{//10
 				updates:[
 					{
-						choices:[],
+						choicePrompt:"You gain the following",
+						choices:[findPassive("Guardian SPirit")],
 						action:function(char,derived,choice){
 							addPassive(char,"Guardian Spirit");
 						}
@@ -305,7 +322,8 @@ window.subclasses.push(
 			{//14
 				updates:[
 					{
-						choices:[],
+						choicePrompt:"You gain the following",
+						choices:[findAbility("Faithful Summons")],
 						action:function(char,derived,choice){
 							addAbility(char,"Faithful Summons");
 						}
@@ -320,6 +338,7 @@ window.subclasses.push(
 		description:"The Circle of the Land is made up of mystics and sages who safeguard ancient knowledge and rites through a vast oral tradition. These druids meet within sacred circles of trees or standing stones to whisper primal secrets in Druidic. The circle's wisest members preside as the chief priests of communities that hold to the Old Faith and serve as advisors to the rulers of those folk. As a member of this circle, your magic is influenced by the land where you were initiated into the circle's mysterious rites.",
 		levels:[{},{},
 			{//2
+			//TODO: Put spell lists on the terrain options?
 				updates:[
 					{
 						choices:['Arctic','Coast','Desert','Forest','Grassland','Mountain','Swamp','Underdark'],
@@ -530,7 +549,8 @@ window.subclasses.push(
 					},
 					helper.chooseDruidCantrip,
 					{
-						choices:[],
+						choicePrompt:"You gain the following",
+						choices:[findPassive("Natural Recovery")],
 						action:function(char,derived,choice,$scope){
 							addPassive(char,"Natural Recovery");
 						}
@@ -539,7 +559,8 @@ window.subclasses.push(
 			},{},{},{},{ //6
 				updates:[
 					{
-						choices:[],
+						choicePrompt:"You gain the following",
+						choices:[findPassive("Land's Stride")],
 						action:function(char){
 							addPassive(char,"Land's Stride");
 						}
@@ -549,7 +570,8 @@ window.subclasses.push(
 			{//10
 				updates:[
 					{
-						choices:[],
+						choicePrompt:"You gain the following",
+						choices:[findPassive("Nature's Ward")],
 						action:function(char,derived,choice){
 							addPassive(char,"Nature's Ward");
 						}
@@ -559,7 +581,8 @@ window.subclasses.push(
 			{//14
 				updates:[
 					{
-						choices:[],
+						choicePrompt:"You gain the following",
+						choices:[findPassive("Nature's Sanctuary")],
 						action:function(char,derived,choice){
 							addPassive(char,"Nature's Sanctuary");
 						}

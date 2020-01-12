@@ -132,6 +132,7 @@ window.classes.push(
 				],
 				"updates":[
 					{
+						always:true,
 						choicePrompt:"You gain the following proficiencies",
 						choices:["Light Armor","Medium Armor","Simple Weapons","Martial Weapons","Shields","STR saves","CON saves"],
 						action:function(char,derived,choice,$scope){
@@ -187,8 +188,10 @@ window.classes.push(
 				"updates":[
 					helper.hitDice12,
 					{
-						"choices":[],
-						"action":function(char,derived,choice){
+						always:true,
+						choicePrompt:"You gain the following",
+						choices:[findPassive("Unarmored Defense"),findAbility("Rage")],
+						action:function(char,derived,choice){
 							addAbility(char,"Rage");
 							addPassive(char,"Unarmored Defense");
 						}
@@ -202,8 +205,10 @@ window.classes.push(
 				"updates":[
 					helper.hitDice12,
 					{
-						"choices":[],
-						"action":function(char,derived,choice){
+						always:true,
+						choicePrompt:"You gain the following",
+						choices:[findPassive("Danger Sense"),findPassive("Reckless Attack")],
+						action:function(char,derived,choice){
 							addPassive(char,"Danger Sense");
 							addPassive(char,"Reckless Attack");
 						}
@@ -230,15 +235,17 @@ window.classes.push(
 				]
 			},{//5
 				summary:[
-					findPassive("Extra Attacks (x1)"),
+					findPassive("Extra Attacks x1"),
 					findPassive("Fast Movement")
 				],
 				"updates":[
 					helper.hitDice12,
 					{
-						"choices":[],
-						"action":function(char,derived){
-							addPassive(char,"Extra Attacks (x1)");
+						always:true,
+						choicePrompt:"You gain the following",
+						choices:[findPassive("Extra Attacks x1"),findPassive("Fast Movement")],
+						action:function(char,derived){
+							addPassive(char,"Extra Attacks x1");
 							addPassive(char,"Fast Movement");
 						}
 					}
@@ -254,8 +261,9 @@ window.classes.push(
 				"updates":[
 					helper.hitDice12,
 					{
-						"choices":[],
-						"action":function(char,derived){
+						choicePrompt:"You gain the following",
+						choices:[findPassive("Feral Instinct")],
+						action:function(char,derived){
 							addPassive(char,"Feral Instinct");
 						}
 					}
@@ -274,8 +282,9 @@ window.classes.push(
 				"updates":[
 					helper.hitDice12,
 					{
-						"choices":[],
-						"action":function(char,derived){
+						choicePrompt:"You gain the following",
+						choices:[findPassive("Brutal Critical")],
+						action:function(char,derived){
 							addPassive(char,"Brutal Critical");
 						}
 					}
@@ -291,7 +300,8 @@ window.classes.push(
 				"updates":[
 					helper.hitDice12,
 					{
-						choices:[],
+						choicePrompt:"You gain the following",
+						choices:[findPassive("Relentless Rage")],
 						action:function(char,derived){
 							addPassive(char,"Relentless Rage");
 						}
@@ -343,7 +353,8 @@ window.classes.push(
 				"updates":[
 					helper.hitDice12,
 					{
-						"choices":[],
+						choicePrompt:"You gain the following",
+						"choices":[findPassive("Indomitable Might")],
 						"action":function(char){
 							addPassive(char,"Indomitable Might");
 						}
@@ -363,7 +374,8 @@ window.classes.push(
 				"updates":[
 					helper.hitDice12,
 					{
-						"choices":[],
+						choicePrompt:"You gain the following",
+						"choices":[findPassive("Primal Champion")],
 						"action":function(char){
 							addPassive(char,"Primal Champion");
 							char.attributes.str=Math.min(char.attributes.str+4,24);
