@@ -162,7 +162,8 @@ window.classes.push(
 				],
 				"updates":[
 					{
-						choices:[],
+						choicePrompt:"You gain the following",
+						choices:[findAbility("Arcane Recovery")],
 						action:function(char,derived,choice,$scope){
 							char.maxHp=6;
 							char.proficiencies.push("Daggers");
@@ -408,6 +409,7 @@ window.subclasses.push(
 				],
 				updates:[
 					{
+						always:true,
 						choicePrompt:"You gain the following",
 						choices:[findPassive("Divination Savant"),findPassive("Portent")],
 						action:function(char,derived,choice,$scope){
@@ -469,6 +471,7 @@ window.subclasses.push(
 				],
 				updates:[
 					{
+						always:true,
 						choicePrompt:"You gain the following",
 						choices:[findPassive("Evocation Savant"),findPassive("Sculpt Spells")],
 						action:function(char,derived,choice,$scope){
@@ -531,6 +534,7 @@ window.subclasses.push(
 				],
 				updates:[
 					{
+						always:true,
 						choicePrompt:"You gain the following",
 						choices:[findPassive("Abjuration Savant"),findAbility("Arcane Ward")],
 						action:function(char,derived,choice,$scope){
@@ -593,6 +597,7 @@ window.subclasses.push(
 				],
 				updates:[
 					{
+						always:true,
 						choicePrompt:"You gain the following",
 						choices:[findPassive("Conjuration Savant"),findPassive("Minor Conjuration")],
 						action:function(char,derived,choice,$scope){
@@ -655,6 +660,7 @@ window.subclasses.push(
 				],
 				updates:[
 					{
+						always:true,
 						choicePrompt:"You gain the following",
 						choices:[findPassive("Enchantment Savant"),findAbility("Hypnotic Gaze")],
 						action:function(char,derived,choice,$scope){
@@ -717,6 +723,7 @@ window.subclasses.push(
 				],
 				updates:[
 					{
+						always:true,
 						choicePrompt:"You gain the following",
 						choices:[findPassive("Transmutation Savant"),findPassive("Minor Alchemy")],
 						action:function(char,derived,choice,$scope){
