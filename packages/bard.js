@@ -91,6 +91,7 @@ window.classes.push(
 				],
 				updates:[
 					{
+						always:true,
 						choicePrompt:"You gain the following proficiencies:",
 						choices:["Light Armor","Simple Weapons","Rapiers","Longswords","Shortswords","Hand Crossbows","DEX saves","CHA saves"],
 						action:function(char,derived,choice){
@@ -169,8 +170,10 @@ window.classes.push(
 				updates:[
 					helper.hitDice8,
 					{
-						"choices":[],
-						"action":function(char,derived,choice){
+						always:true,
+						choicePrompt:"You gain the following",
+						choices:[findPassive("Jack of All Trades"),findPassive("Song of Rest")],
+						action:function(char,derived,choice){
 							addPassive(char,"Jack of All Trades");
 							addPassive(char,"Song of Rest");
 						}
@@ -275,8 +278,9 @@ window.classes.push(
 				"updates":[
 					helper.hitDice8,
 					{
-						"choices":[],
-						"action":function(char,derived){
+						choicePrompt:"You gain the following",
+						choices:[findPassive("Countercharm")],
+						action:function(char,derived){
 							addPassive(char,"Countercharm");
 						}
 					},
@@ -584,7 +588,8 @@ window.classes.push(
 				"updates":[
 					helper.hitDice8,
 					{
-						choices:[],
+						choicePrompt:"You gain the following",
+						choices:[findPassive("Superior Inspiration")],
 						action:function(char){
 							addPassive(char,"Superior Inspiration");
 						}
@@ -619,8 +624,9 @@ window.subclasses.push(
 					helper.learnSkillProficiency3,
 					helper.chooseExpertise2,
 					{
-						"choices":[],
-						"action":function(char){
+						choicePrompt:"You gain the following",
+						choices:[findAbility("Cutting Words")],
+						action:function(char){
 							addAbility(char,"Cutting Words");
 						}
 					}
@@ -671,7 +677,8 @@ window.subclasses.push(
 			{//14
 				updates:[
 					{
-						choices:[],
+						choicePrompt:"You gain the following",
+						choices:[findPassive("Peerless Skill")],
 						action:function(char){
 							addPassive("Peerless Skill");
 						}

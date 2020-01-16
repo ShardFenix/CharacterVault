@@ -43,7 +43,7 @@ Cleric | Supported
 Core | Yes
 Arcana | No
 Forge | No
-Grave | No
+Grave | Yes
 Knowledge | No
 Life | Yes
 Light | No
@@ -78,12 +78,13 @@ Core | Yes
 Drunken Master | No
 Four Elements | No
 Kensei | No
-Long Death | No
+Long Death | Yes
 Open Hand | No
 Shadow | No
 Sun Soul | No
 Enlightenment (homebrew) | Yes
 Ninjutsu (homebrew) | Yes
+Cobalt Soul (homebrew) | Yes
 
 Paladin | Supported
 ------------- | -------------
@@ -107,7 +108,7 @@ Monster Slayer | No
 Rogue | Supported
 ------------- | -------------
 Core | Yes
-Arcane Trickster | No
+Arcane Trickster | Yes
 Assassin | Yes
 Inquisitive | No
 Mastermind | No
@@ -130,7 +131,7 @@ Archfey | No
 Celestial | No
 Field | Yes
 Great Old One | No
-Hexblade | No
+Hexblade | Yes
 Undying | No
 
 Wizard | Supported
@@ -144,5 +145,5 @@ Enchantment | Yes
 Evocation | Yes
 Illusion | No
 Necromancy | No
-Transmutation | No
+Transmutation | Yes
 War Magic | No

@@ -232,6 +232,9 @@ $scope.revert=function(){
 }
 
 $scope.levelUpStart=function(){
+	if ($scope.char.level>=20){
+		return;
+	}
 	if ($scope.currentChoices && $scope.currentChoices.length>0){
 		return;
 	}
@@ -494,6 +497,10 @@ function nextStep(){
 			finishLevelUp();
 			return;
 		}
+	} else if (!$scope.currentPackage) {
+		//finished new character creation
+		$scope.levelUpStart();
+		return;
 	} else {
 		$scope.currentStep=$scope.currentPackage[$scope.updateStep];
 		setupForCurrentStep();
@@ -527,7 +534,7 @@ $scope.newChar=function(){
 	
 	resetChar();
 	$scope.history=[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null];
-
+	
 	$scope.derived={
 		modifiers:{
 			str:0,dex:0,con:0,int:0,wis:0,cha:0
@@ -1489,6 +1496,14 @@ $scope.creatureFilter=function(value,index,array){
 $scope.historyStyle=function(){
 	let perc=100*($scope.historyLevel-1)/19;
 	return {"background": "linear-gradient(90deg, #bb0000, #bb0000 "+perc+"%, #e0e0e0 "+perc+"%, #e0e0e0)"};
+}
+
+//used when I need to retro give abilities/passives/equipment to a character
+$scope.fixHistory=function(){
+	for (let i=5;i<=11;i++){
+		addPassive($scope.history[i],"Extra Attacks x1");
+	}
+	addPassive($scope.char,"Extra Attacks x1");
 }
 
 }]);

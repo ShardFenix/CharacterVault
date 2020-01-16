@@ -12,7 +12,7 @@ window.abilities.append([
 		}
 	},{
 		name:"Whirlwind",
-		description:"When you enter a rage, you may make it a Whirlwind. While whirlwinding, you continuously spin your weapons around you, striking any objects and creatures that may be nearby. You gain the following while spinning, in lieu of your rage bonuses:\n\n\u2022 You cannot take the Attack action on your turn, you can't cast spells, and you can't make opportunity attacks.\n\u2022 Other creatures can't make opportunity attacks against you.\n\u2022 Melee attacks against you have disadvantage.\n\u2022 At the end of every 15 feet of continuous movement, you may immediately make a free melee attack on a target in your melee range. The attack does half damage.\n\u2022 At the end of each of your turns, if you moved less than 15 feet since your last turn, the whirlwind ends.",
+		description:"When you enter a rage, you may make it a Whirlwind. While whirlwinding, you continuously spin your weapons around you, striking any objects and creatures that may be nearby. You gain the following while spinning, in lieu of your rage bonuses:\n\n\u2022 You can't take any action or bonus action on your turn other than the Attack or Dash actions.\n\u2022 Other creatures can't make opportunity attacks against you.\n\u2022 Melee attacks against you have disadvantage.\n\u2022 Whenever you make a melee attack, you make it against each creature within range. The attack does half damage unless only one creature is within range. \n\u2022 You may end Whirlwind voluntarily at the start of your turn.",
 		resourceName:"Rage",
 		resourceCost:1
 	},{
@@ -51,13 +51,13 @@ window.passives.append([
 		name:"Feral Instinct",
 		description:"Your instincts are so honed that you have advantage on initiative rolls.\n\nAdditionally, if you are surprised at the beginning of combat and aren't incapacitated, you can act normally on your first turn, but only if you enter your rage before doing anything else on that turn."
 	},{
-		name:"Brutal Critical (x1)",
+		name:"Brutal Critical x1",
 		description:"You can roll one additional weapon damage die when determining the extra damage for a critical hit with a melee attack."
 	},{
-		name:"Brutal Critical (x2)",
+		name:"Brutal Critical x2",
 		description:"You can roll two additional weapon damage die when determining the extra damage for a critical hit with a melee attack."
 	},{
-		name:"Brutal Critical (x3)",
+		name:"Brutal Critical x3",
 		description:"You can roll three additional weapon damage die when determining the extra damage for a critical hit with a melee attack."
 	},{
 		name:"Relentless Rage",
@@ -79,7 +79,7 @@ window.passives.append([
 		description:"You spin so rapidly that your weapons create a swirling shield as they move. While whirlwinding, you have +2 to AC, and the damage dealt by Slice and Dice is increased by your strength modifier."
 	},{
 		name:"Spin to Win",
-		description:"Whenever you bring a creature to 0 hit points during your turn, you can move up to 30 additional feet this turn."
+		description:"Whenever you begin your turn while already whirlwinding, each attack you make while whirlwinding does an additional 1d12 damage and crits on a 19 or 20."
 	},{
 		name:"Ancestral Protectors",
 		description:"Spectral warriors appear when you enter your rage. While you're raging, the first creature you hit with an attack on your turn becomes the target of the warriors, which hinder its attacks. Until the start of your next turn, that target has disadvantage on any attack roll that isn't against you, and when the target hits a creature other than you with an attack, that creature has resistance to the damage dealt by the attack. The effect on the target ends early if your rage ends."
@@ -132,6 +132,7 @@ window.classes.push(
 				],
 				"updates":[
 					{
+						always:true,
 						choicePrompt:"You gain the following proficiencies",
 						choices:["Light Armor","Medium Armor","Simple Weapons","Martial Weapons","Shields","STR saves","CON saves"],
 						action:function(char,derived,choice,$scope){
@@ -187,8 +188,10 @@ window.classes.push(
 				"updates":[
 					helper.hitDice12,
 					{
-						"choices":[],
-						"action":function(char,derived,choice){
+						always:true,
+						choicePrompt:"You gain the following",
+						choices:[findPassive("Unarmored Defense"),findAbility("Rage")],
+						action:function(char,derived,choice){
 							addAbility(char,"Rage");
 							addPassive(char,"Unarmored Defense");
 						}
@@ -202,8 +205,10 @@ window.classes.push(
 				"updates":[
 					helper.hitDice12,
 					{
-						"choices":[],
-						"action":function(char,derived,choice){
+						always:true,
+						choicePrompt:"You gain the following",
+						choices:[findPassive("Danger Sense"),findPassive("Reckless Attack")],
+						action:function(char,derived,choice){
 							addPassive(char,"Danger Sense");
 							addPassive(char,"Reckless Attack");
 						}
@@ -230,15 +235,17 @@ window.classes.push(
 				]
 			},{//5
 				summary:[
-					findPassive("Extra Attacks (x1)"),
+					findPassive("Extra Attacks x1"),
 					findPassive("Fast Movement")
 				],
 				"updates":[
 					helper.hitDice12,
 					{
-						"choices":[],
-						"action":function(char,derived){
-							addPassive(char,"Extra Attacks (x1)");
+						always:true,
+						choicePrompt:"You gain the following",
+						choices:[findPassive("Extra Attacks x1"),findPassive("Fast Movement")],
+						action:function(char,derived){
+							addPassive(char,"Extra Attacks x1");
 							addPassive(char,"Fast Movement");
 						}
 					}
@@ -254,8 +261,9 @@ window.classes.push(
 				"updates":[
 					helper.hitDice12,
 					{
-						"choices":[],
-						"action":function(char,derived){
+						choicePrompt:"You gain the following",
+						choices:[findPassive("Feral Instinct")],
+						action:function(char,derived){
 							addPassive(char,"Feral Instinct");
 						}
 					}
@@ -269,14 +277,15 @@ window.classes.push(
 				]
 			},{//9
 				summary:[
-					findPassive("Brutal Critical")
+					findPassive("Brutal Critical x1")
 				],
 				"updates":[
 					helper.hitDice12,
 					{
-						"choices":[],
-						"action":function(char,derived){
-							addPassive(char,"Brutal Critical");
+						choicePrompt:"You gain the following",
+						choices:[findPassive("Brutal Critical x1")],
+						action:function(char,derived){
+							addPassive(char,"Brutal Critical x1");
 						}
 					}
 				]
@@ -291,7 +300,8 @@ window.classes.push(
 				"updates":[
 					helper.hitDice12,
 					{
-						choices:[],
+						choicePrompt:"You gain the following",
+						choices:[findPassive("Relentless Rage")],
 						action:function(char,derived){
 							addPassive(char,"Relentless Rage");
 						}
@@ -306,7 +316,15 @@ window.classes.push(
 				]
 			},{//13
 				"updates":[
-					helper.hitDice12
+					helper.hitDice12,
+					{
+						choicePrompt:"You gain the following",
+						choices:[findPassive("Brutal Critical x2")],
+						action:function(char,derived){
+							removePassive(char,"Brutal Critical x1");
+							addPassive(char,"Brutal Critical x2");
+						}
+					}
 				]
 			},{//14
 				"updates":[
@@ -319,7 +337,8 @@ window.classes.push(
 				"updates":[
 					helper.hitDice12,
 					{
-						"choices":[],
+						choicePrompt:"You gain the following",
+						"choices":[findPassive("Persistent Rage")],
 						"action":function(char){
 							addPassive(char,"Persistent Rage");
 						}
@@ -334,7 +353,15 @@ window.classes.push(
 				]
 			},{//17
 				"updates":[
-					helper.hitDice12
+					helper.hitDice12,
+					{
+						choicePrompt:"You gain the following",
+						choices:[findPassive("Brutal Critical x3")],
+						action:function(char,derived){
+							removePassive(char,"Brutal Critical x2");
+							addPassive(char,"Brutal Critical x3");
+						}
+					}
 				]
 			},{//18
 				summary:[
@@ -343,7 +370,8 @@ window.classes.push(
 				"updates":[
 					helper.hitDice12,
 					{
-						"choices":[],
+						choicePrompt:"You gain the following",
+						"choices":[findPassive("Indomitable Might")],
 						"action":function(char){
 							addPassive(char,"Indomitable Might");
 						}
@@ -363,7 +391,8 @@ window.classes.push(
 				"updates":[
 					helper.hitDice12,
 					{
-						"choices":[],
+						choicePrompt:"You gain the following",
+						"choices":[findPassive("Primal Champion")],
 						"action":function(char){
 							addPassive(char,"Primal Champion");
 							char.attributes.str=Math.min(char.attributes.str+4,24);
