@@ -217,7 +217,7 @@ $scope.applyCondition=function(option){
 	if ($scope.contextTarget.conditions.has(option)){
 		$scope.contextTarget.conditions.remove(option);
 	} else {
-		$scope.contextTarget.conditions.upush(option);
+		$scope.contextTarget.conditions.upush(angular.copy(option));
 	}
 	$scope.dismissContextMenu();
 }

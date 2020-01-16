@@ -817,12 +817,13 @@ datalist.level-slider option {
     z-index: 1;
     text-align: center;
 }
-.conditionList{
-	display: flex;
+.conditionList {
+    display: inline-flex;
     flex-direction: column;
     font-size: 13px;
     flex: 1;
-    min-width: 130px;
+    padding-right: 50px;
+    text-align: right;
 }
 .nextInitiative{
     background-image: url(/images/refresh.png);

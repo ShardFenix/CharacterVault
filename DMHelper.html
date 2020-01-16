@@ -251,16 +251,18 @@
 				<div class="nextInitiative" ng-click="initUp(initiativeOrder[0])"></div>
 			</form>
 			<div ng-repeat="item in initiativeOrder track by $index" ng-click="initUp(item)"
-				 class="yellowback item"
+				 class="yellowback item" style="display:flex;"
 				 ng-mouseenter="chooseMonster(item)"
 				 ng-mouseleave="chooseMonster()"
 				 ng-mousedown="rightClickInitiative(item,$event)"
 				 oncontextmenu="return false">
-				 <span style="flex: 3">{{item.name || item}}</span>
+				<span style="flex: 3">{{item.name || item}}</span>
 				<div class="conditionList">
 					<span ng-repeat-start="condition in item.conditions track by $index"
 						ng-mouseenter="focusConditionDuration($parent.$index, $index)"
-						ng-mouseleave="unfocusConditionDuration($parent.$index, $index)">{{condition.name}} {{condition.duration}}</span>
+						ng-mouseleave="unfocusConditionDuration($parent.$index, $index)">
+						{{condition.name}} {{condition.duration}}
+					</span>
 					<input type="text" style="position:absolute;left:-300px;" ng-repeat-end
 						ng-keydown="incrDuration(item, condition, $event)" />
 				</div>
