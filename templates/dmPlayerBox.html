@@ -1,0 +1,57 @@
+<div class="playerHeader" ng-class="{'selected':player===chosenMonster}">
+	<div class="headerBg"></div>
+	<input type="text" class="white label" ng-model="player.name"/>
+	<span class="deletebutton" ng-click="removePlayer(player)">&times;</span>
+</div>
+<div style="position:relative;">
+	<span>&emsp;HP: </span>
+	<input type="text" class="hidden right" ng-model="player.hp"/> / 
+	<input type="text" class="hidden right" ng-model="player.hpMax"/>
+	<form ng-submit="damage(this)" style="display:initial;">
+		<input type="text" number ng-model="damageAmount" 
+				placeholder="Deal damage" class="med"/>
+	</form>
+	<div style="position:absolute;right:4px;top:8px;font-weight:bold;">{{player.type}}</div>
+</div>
+<div>
+	<table class="borders full"><thead><tr>
+		<th>AC</th>
+		<th>STR</th>
+		<th>DEX</th>
+		<th>CON</th>
+		<th>INT</th>
+		<th>WIS</th>
+		<th>CHA</th>
+	</tr></thead>
+	<tr>
+		<td><input class="tiny" ng-model="player.ac" number/></td>
+		<td><input class="tiny" ng-model="player.attributes.str" number/></td>
+		<td><input class="tiny" ng-model="player.attributes.dex" number/></td>
+		<td><input class="tiny" ng-model="player.attributes.con" number/></td>
+		<td><input class="tiny" ng-model="player.attributes.int" number/></td>
+		<td><input class="tiny" ng-model="player.attributes.wis" number/></td>
+		<td><input class="tiny" ng-model="player.attributes.cha" number/></td>
+	</tr>
+	<tr>
+		<td>Modifiers:</td>
+		<td>{{getModifier(player.attributes.str)}}</td>
+		<td>{{getModifier(player.attributes.dex)}}</td>
+		<td>{{getModifier(player.attributes.con)}}</td>
+		<td>{{getModifier(player.attributes.int)}}</td>
+		<td>{{getModifier(player.attributes.wis)}}</td>
+		<td>{{getModifier(player.attributes.cha)}}</td>
+	</tr>
+	<tr>
+		<td>Saves:</td>
+		<td><input class="tiny" ng-model="player.saves.str" number/></td>
+		<td><input class="tiny" ng-model="player.saves.dex" number/></td>
+		<td><input class="tiny" ng-model="player.saves.con" number/></td>
+		<td><input class="tiny" ng-model="player.saves.int" number/></td>
+		<td><input class="tiny" ng-model="player.saves.wis" number/></td>
+		<td><input class="tiny" ng-model="player.saves.cha" number/></td>
+	</tr><tr>
+		<td>Languages:</td>
+		<td colspan='6'><span ng-repeat="language in player.languages">{{language}}, </span></td>
+	</tr>
+	</table>
+</div>

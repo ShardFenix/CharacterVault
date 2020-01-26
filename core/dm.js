@@ -25,6 +25,9 @@ app.directive('sideTip',function(){
 app.directive('creatureTip',function(){
 	return {templateUrl:'templates/creaturetip.html'};
 });
+app.directive('playerbox',function(){
+	return {templateUrl:'templates/dmPlayerBox.html'};
+});
 
 
 app.controller('MyController',['$scope','$timeout','$http','$interval',function($scope,$timeout,$http,$interval){
@@ -387,6 +390,10 @@ function loadPlayerList(){
 	});
 }
 
+$scope.getModifier=function(value){
+	return Math.floor((value+20)/2)-15;
+}
+
 function prepCharacter(char){
 	let strBonus = Math.floor((char.attributes.str+20)/2)-15;
 	let dexBonus = Math.floor((char.attributes.dex+20)/2)-15;
@@ -404,11 +411,15 @@ function prepCharacter(char){
 	char.saves.wis = wisBonus + p*char.saves.wis;
 	char.saves.cha = chaBonus + p*char.saves.cha;
 	
-	//delete char.passives;
 	char.actions=char.abilities;
 	for (let i=char.actions.length-1;i>=0;i--){
 		if (/(Lv|Level) \d Spell/.test(char.actions[i].name)){
 			char.actions.splice(i,1);
+		}
+	}
+	for (let i=char.passives.length-1;i>=0;i--){
+		if (char.passives.hide){
+			char.passives.splice(i,1);
 		}
 	}
 	//setup spells
@@ -442,6 +453,13 @@ function prepCharacter(char){
 	}
 	char.isPlayer=true;
 	delete char.abilities;
+	//extract languages
+	char.languages=[];
+	for (let i=char.proficiencies.length-1;i>=0;i--){
+		if (char.proficiencies[i].indexOf("Language:")==0){
+			char.languages.push(char.proficiencies[i].substring(10));
+		}
+	}
 	delete char.proficiencies;
 }
 

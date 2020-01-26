@@ -109,6 +109,8 @@ Array.prototype.append=function(otherArray){
 	}
 }
 
+String.prototype.contains=String.prototype.includes;
+
 //this is used for classes who know every spell but must prepare them instead
 function learnAllClassSpells(char,$scope){
 	for (let spell of window.spells){

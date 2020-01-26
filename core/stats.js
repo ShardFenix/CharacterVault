@@ -1367,6 +1367,7 @@ function initLoadedCharacter(char){
 			passive.onShortRest=p.onShortRest;
 			passive.onLongRest=p.onLongRest;
 			passive.apply=p.apply;
+			$scope.patch();
 			continue;
 		}
 		for (let p of packages.feats){
@@ -1499,11 +1500,23 @@ $scope.historyStyle=function(){
 }
 
 //used when I need to retro give abilities/passives/equipment to a character
-$scope.fixHistory=function(){
-	for (let i=5;i<=11;i++){
-		addPassive($scope.history[i],"Extra Attacks x1");
+$scope.patch=function(){
+	for (let i=1;i<=20;i++){
+		if ($scope.history[i]){
+			for (let passive of $scope.history[i].passives){
+				let p = findPassive(passive.name);
+				if (p.hide){
+					passive.hide=true;
+				}
+			}
+		}
 	}
-	addPassive($scope.char,"Extra Attacks x1");
+	for (let passive of $scope.history[i].passives){
+		let p = findPassive(passive.name);
+		if (p.hide){
+			passive.hide=true;
+		}
+	}
 }
 
 }]);

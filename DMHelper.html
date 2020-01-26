@@ -29,7 +29,7 @@
 </div>
 
 <div ng-show="tab=='general'">
-	<table style="width:99%"><tr>
+	<table class="rulesTables"><tr>
 		<td width="40%">
 			<div class="box">
 				<div class="rulesHeader">Conditions</div>
@@ -116,6 +116,141 @@
 				</div>
 			</div>
 			<div class="box">
+				<div class="rulesHeader">Improvised Damage</div>
+				<div class="boxContent">
+					<table style="width:100%" class="borders">
+						<thead><tr><th>CR</th><th>Minor</th><th>Dangerous</th><th>Deadly</th></tr></thead>
+						<tbody>
+							<tr>
+								<td>1-4</td>
+								<td>1d10</td>
+								<td>2d10</td>
+								<td>4d10</td>
+							</tr>
+							<tr>
+								<td>5-10</td>
+								<td>2d10</td>
+								<td>4d10</td>
+								<td>8d10</td>
+							</tr>
+							<tr>
+								<td>11-16</td>
+								<td>4d10</td>
+								<td>10d10</td>
+								<td>18d10</td>
+							</tr>
+							<tr>
+								<td>17-20</td>
+								<td>10d10</td>
+								<td>18d10</td>
+								<td>40d10</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+				<div class="boxContent">
+					<table style="width:100%" class="borders">
+						<thead><tr><th>Hazard</th><th>Effect</th></tr></thead>
+						<tbody>
+							<tr>
+								<td>Fall Damage</td>
+								<td>1d6 Bludgeoning per 10 feet</td>
+							</tr>
+							<tr>
+								<td>Consumed by fire</td>
+								<td>2d10 Fire / round</td>
+							</tr>
+							<tr>
+								<td>Falling rubble</td>
+								<td>4d10 Bludgeoning</td>
+							</tr>
+							<tr>
+								<td>Walking through lava</td>
+								<td>10d10 Fire</td>
+							</tr>
+							<tr>
+								<td>Submerged in lava</td>
+								<td>18d10 Fire</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+			<div class="box">
+				<div class="rulesHeader">Damaging Objects</div>
+				<div class="boxContent">
+					<table style="width:100%" class="borders">
+						<thead><tr><th>Material</th><th>AC</th></tr></thead>
+						<tbody>
+							<tr>
+								<td>Cloth, Paper, Rope</td>
+								<td>11</td>
+							</tr>
+							<tr>
+								<td>Crystal, Glass, Ice</td>
+								<td>13</td>
+							</tr>
+							<tr>
+								<td>Wood, Bone</td>
+								<td>15</td>
+							</tr>
+							<tr>
+								<td>Stone</td>
+								<td>17</td>
+							</tr>
+							<tr>
+								<td>Iron, Steel</td>
+								<td>19</td>
+							</tr>
+							<tr>
+								<td>Mithril</td>
+								<td>21</td>
+							</tr>
+							<tr>
+								<td>Adamantine</td>
+								<td>21</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+				<div class="boxContent">
+					<table style="width:100%" class="borders">
+						<thead><tr><th>Object Size</th><th>Weak</th><th>Tough</th></tr></thead>
+						<tbody>
+							<tr>
+								<td style="text-align:left;">Tiny
+								<br>&emsp;Bottle, Lock</td>
+								<td>1d4</td>
+								<td>2d4</td>
+							</tr>
+							<tr>
+								<td style="text-align:left;">Small
+								<br>&emsp;Chest, Chain</td>
+								<td>1d6</td>
+								<td>3d6</td>
+							</tr>
+							<tr>
+								<td style="text-align:left;">Medium
+								<br>&emsp;Barrel, Wooden Door</td>
+								<td>1d8</td>
+								<td>4d8</td>
+							</tr>
+							<tr>
+								<td style="text-align:left;">Large
+								<br>&emsp;Cart, Heavy Door</td>
+								<td>1d10</td>
+								<td>5d10</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</td>
+		<td width="20%">
+			
+		</td>
+		<td width="20%">
+			<div class="box">
 				<div class="rulesHeader">Exhaustion</div>
 				<div class="boxContent">
 					<table style="width:100%" class="borders">
@@ -149,44 +284,6 @@
 					</table>
 				</div>
 			</div>
-			<div class="box">
-				<div class="rulesHeader">Improvised Damage</div>
-				<div class="boxContent">
-					<table style="width:100%" class="borders">
-						<thead><tr><th>CR</th><th>Minor</th><th>Dangerous</th><th>Deadly</th></tr></thead>
-						<tbody>
-							<tr>
-								<td>1-4</td>
-								<td>1d10</td>
-								<td>2d10</td>
-								<td>4d10</td>
-							</tr>
-							<tr>
-								<td>5-10</td>
-								<td>2d10</td>
-								<td>4d10</td>
-								<td>8d10</td>
-							</tr>
-							<tr>
-								<td>11-16</td>
-								<td>4d10</td>
-								<td>10d10</td>
-								<td>18d10</td>
-							</tr>
-							<tr>
-								<td>17-20</td>
-								<td>10d10</td>
-								<td>18d10</td>
-								<td>40d10</td>
-							</tr>
-						</tbody>
-					</table>
-				</div>
-			</div>
-		</td>
-		<td width="20%">
-		</td>
-		<td width="20%">
 			<div class="box">
 				<div class="rulesHeader">Common Expenditures</div>
 				<div class="boxContent">
@@ -413,68 +510,24 @@
 <div ng-show="tab=='players'">
 	<div style="display:flex;flex-wrap:wrap;">
 		<div ng-repeat="player in players" class="playerCard box">
-			<div class="playerHeader" ng-class="{'selected':player===chosenMonster}">
-				<div class="headerBg"></div>
-				<input type="text" class="white label" ng-model="player.name"/>
-				<span class="deletebutton" ng-click="removePlayer(player)">&times;</span>
-			</div>
-			<div style="position:relative;">
-				<span>&emsp;HP: </span>
-				<input type="text" class="hidden right" ng-model="player.hp"/> / 
-				<input type="text" class="hidden right" ng-model="player.hpMax"/>
-				<form ng-submit="damage(this)" style="display:initial;">
-					<input type="text" number ng-model="damageAmount" 
-							placeholder="Deal damage" class="med"/>
-				</form>
-				<div style="position:absolute;right:4px;top:8px;font-weight:bold;">{{player.type}}</div>
-			</div>
-			<div>
-				<table class="borders full"><thead><tr>
-					<th>AC</th>
-					<th>STR</th>
-					<th>DEX</th>
-					<th>CON</th>
-					<th>INT</th>
-					<th>WIS</th>
-					<th>CHA</th>
-				</tr></thead>
-				<tr>
-					<td><input class="tiny" ng-model="player.ac" number/></td>
-					<td><input class="tiny" ng-model="player.attributes.str" number/></td>
-					<td><input class="tiny" ng-model="player.attributes.dex" number/></td>
-					<td><input class="tiny" ng-model="player.attributes.con" number/></td>
-					<td><input class="tiny" ng-model="player.attributes.int" number/></td>
-					<td><input class="tiny" ng-model="player.attributes.wis" number/></td>
-					<td><input class="tiny" ng-model="player.attributes.cha" number/></td>
-				</tr>
-				<tr>
-					<td>Saves:</td>
-					<td><input class="tiny" ng-model="player.saves.str" number/></td>
-					<td><input class="tiny" ng-model="player.saves.dex" number/></td>
-					<td><input class="tiny" ng-model="player.saves.con" number/></td>
-					<td><input class="tiny" ng-model="player.saves.int" number/></td>
-					<td><input class="tiny" ng-model="player.saves.wis" number/></td>
-					<td><input class="tiny" ng-model="player.saves.cha" number/></td>
-				</tr>
-				</table>
-			</div>
+			<playerbox></playerbox>
 		</div>
 	</div>
 	
 	<input type="text" ng-model="playerFilter" placeholder="Filter..."/>
-	<div style="overflow-y:scroll;max-height:calc(100vh - 450px)">
+	<div style="overflow-y:scroll;max-height:calc(100vh - 450px);width:max-content;">
 		<table class="borders">
 			<thead><tr>
 				<th>Name</th>
-				<th>CR</th>
-				<th>Type</th>
+				<th>Level</th>
+				<th>Class</th>
 				<th></th>
 			</tr></thead>
 			<tbody>
 				<tr ng-repeat="creature in creatures | filter:playerFilter" ng-if="creature.isPlayer">
 					<td style="width:30%">{{creature.name}}</td>
-					<td style="width:10%">{{creature.cr}}</td>
-					<td style="width:20%">{{creature.type}}</td>
+					<td style="width:10%">{{creature.level}}</td>
+					<td style="width:20%">{{getClassDescription(creature)}}</td>
 					<td style="width:10%"><span class="button" ng-click="addPlayer(creature)">^</span></td>
 				</tr>
 			</tbody>

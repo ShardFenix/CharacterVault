@@ -37,7 +37,8 @@ window.abilities.append([
 window.passives.append([
 	{
 		name:"Unarmored Defense",
-		description:"While you are not wearing any armor, your Armor Class equals 10 + your Dexterity modifier + your Constitution modifier."
+		description:"While you are not wearing any armor, your Armor Class equals 10 + your Dexterity modifier + your Constitution modifier.",
+		hide:true
 	},{
 		name:"Danger Sense",
 		description:"You gain an uncanny sense of when things nearby aren't as they should be, giving you an edge when you dodge away from danger. You have advantage on Dexterity saving throws against effects that you can see, such as traps and spells. To gain this benefit, you can't be blinded, deafened, or incapacitated."
@@ -46,10 +47,12 @@ window.passives.append([
 		description:"You can throw aside all concern for defense to attack with fierce desperation. When you make your first attack on your turn, you can decide to attack recklessly. Doing so gives you advantage on melee weapon attack rolls using Strength during this turn, but attack rolls against you have advantage until your next turn."
 	},{
 		name:"Fast Movement",
-		description:"Your speed increases by 10 feet while you aren't wearing heavy armor."
+		description:"Your speed increases by 10 feet while you aren't wearing heavy armor.",
+		hide:true
 	},{
 		name:"Feral Instinct",
-		description:"Your instincts are so honed that you have advantage on initiative rolls.\n\nAdditionally, if you are surprised at the beginning of combat and aren't incapacitated, you can act normally on your first turn, but only if you enter your rage before doing anything else on that turn."
+		description:"Your instincts are so honed that you have advantage on initiative rolls.\n\nAdditionally, if you are surprised at the beginning of combat and aren't incapacitated, you can act normally on your first turn, but only if you enter your rage before doing anything else on that turn.",
+		hide:true
 	},{
 		name:"Brutal Critical x1",
 		description:"You can roll one additional weapon damage die when determining the extra damage for a critical hit with a melee attack."
@@ -70,7 +73,8 @@ window.passives.append([
 		description:"If your total for a Strength check is less than your Strength score, you can use that score in place of the total."
 	},{
 		name:"Primal Champion",
-		description:"Your Strength and Constitution scores increase by 4. Your maximum for those scores is now 24."
+		description:"Your Strength and Constitution scores increase by 4. Your maximum for those scores is now 24.",
+		hide:true
 	},{
 		name:"Slice and Dice",
 		description:"While whirlwinding, whenever you move into melee range of a creature, or a creature moves within melee range of you, you may have that creature take damage equal to your weapon damage. A creature damaged this way can't be damaged by it again this turn."
@@ -106,7 +110,8 @@ window.passives.append([
 		description:"You can channel divine fury into your weapon strikes. While you're raging, the first creature you hit on each of your turns with a weapon attack takes extra damage equal to 1d6 + half your barbarian level. The extra damage is necrotic or radiant; you choose the type of damage when you gain this feature."
 	},{
 		name:"Warrior of the Gods",
-		description:"Your soul is marked for endless battle. If a spell, such as raise dead, has the sole effect of restoring you to life (but not undeath), the caster doesn't need material components to cast the spell on you."
+		description:"Your soul is marked for endless battle. If a spell, such as raise dead, has the sole effect of restoring you to life (but not undeath), the caster doesn't need material components to cast the spell on you.",
+		hide:true
 	},{
 		name:"Fanatical Focus",
 		description:"The divine power that fuels your rage can protect you. If you fail a saving throw while you're raging, you can reroll it, and you must use the new roll. You can use this ability only once per rage."

@@ -361,11 +361,16 @@ table.full{
 .playerCard .label.subheader{
 	background: linear-gradient(90deg, #00000000, #fffad6 20%,#fffad6 80%, #00000000);
 }
-
+.playerHeader{
+	position:relative;
+}
 .playerCard{
 	width:400px;
 	margin:10px 15px;
 	background:url('../images/parchment2.jpg');
+}
+.playerCard input.tiny {
+    text-align: center;
 }
 
 input.tiny{
@@ -647,6 +652,7 @@ i{
 .box{
 	box-shadow: 0 0 1px 1px black;
 	border-radius: 3px 3px 0px 0px;
+	margin-bottom:6px;
 }
 .boxContent{
 	padding:8px;
@@ -864,4 +870,10 @@ datalist.level-slider option {
 
 .choice>.tooltipIcon{
 	float:left;
+}
+.rulesTables{
+	width:99%;
+}
+.rulesTables>tbody>tr>td{
+	vertical-align:top;
 }
