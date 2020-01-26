@@ -376,6 +376,9 @@ $http.get('http://localhost:8080/').then(function(resp){
 function loadPlayerList(){
 	$http.get('http://localhost:8080/characters').then(function(response){
 		for (let filename of response.data){
+			if (filename.endsWith('.history')){
+				continue;
+			}
 			$http.get('http://localhost:8080/characters/'+filename).then(function(response){
 				let char=response.data;
 				prepCharacter(char);
@@ -418,12 +421,15 @@ function prepCharacter(char){
 		}
 	}
 	for (let i=char.passives.length-1;i>=0;i--){
-		if (char.passives.hide){
+		if (char.passives[i].dmHide){
 			char.passives.splice(i,1);
+		} else {
+			//collapse passives by default
+			char.passives[i].hidden=true;
 		}
 	}
 	//setup spells
-	char.spellcasting={spells:[{spells:[]}]};
+	char.spellcasting={spells:[{slots:999,spells:[]}]};
 	let slots = spellSlots1(char);
 	if (slots){char.spellcasting.spells.push({slots:slots,spells:[]});}
 	slots = spellSlots2(char);

@@ -50,18 +50,18 @@ window.passives.append([
 	},{
 		name:"Unarmored Defense",
 		description:"While you are wearing no armor and not wielding a shield, your AC equals 10 + your Dexterity modifier + your Wisdom modifier.",
-		hide:true
+		dmHide:true
 	},{
 		name:"Unarmored Movement",
 		description:"Your speed increases by ${ladder(classLevel($scope.char,'Monk'),0,10,6,15,10,20,14,25,18,30)} feet while you are not wearing armor or wielding a shield.",
-		hide:true
+		dmHide:true
 	},{
 		name:"Deflect Missiles",
 		description:"You can use your reaction to deflect or catch the missile when you are hit by a ranged weapon attack. When you do so, the damage you take from the attack is reduced by 1d10 + your Dexterity modifier + your monk level.\nIf you reduce the damage to 0, you can catch the missile if it is small enough for you to hold in one hand and you have at least one hand free. If you catch a missile in this way, you can spend 1 ki point to make a ranged attack (range 20/60 feet) with the weapon or piece of ammunition you just caught, as part of the same reaction. You make this attack with proficiency, regardless of your weapon proficiencies, and the missile counts as a monk weapon for the attack."
 	},{
 		name:"Slow Fall",
 		description:"You can use your reaction when you fall to reduce any falling damage you take by an amount equal to five times your monk level.",
-		hide:true
+		dmHide:true
 	},{
 		name:"Ki-Empowered Strikes",
 		description:"Your unarmed strikes count as magical for the purpose of overcoming resistance and immunity to nonmagical attacks and damage."
@@ -71,14 +71,14 @@ window.passives.append([
 	},{
 		name:"Parkour",
 		description:"You gain the ability to move along vertical surfaces and across liquids on your turn without falling during the move.",
-		hide:true
+		dmHide:true
 	},{
 		name:"Purity of Body",
 		description:"Your mastery of the ki flowing through you makes you immune to disease and poison."
 	},{
 		name:"Tongue of the Sun and Moon",
 		description:"You learn to touch the ki of other minds so that you understand all spoken languages. Moreover, any creature that can understand a language can understand what you say.",
-		hide:true
+		dmHide:true
 	},{
 		name:"Diamond Soul",
 		description:"You have proficiency in all saving throws.\nAdditionally, whenever you make a saving throw and fail, you can spend 1 ki point to reroll it and take the second result.",
@@ -93,11 +93,11 @@ window.passives.append([
 	},{
 		name:"Timeless Body",
 		description:"Your ki sustains you so that you suffer none of the frailty of old age, and you can't be aged magically. You can still die of old age, however. In addition, you no longer need food or water.",
-		hide:true
+		dmHide:true
 	},{
 		name:"Perfect Soul",
 		description:"When you roll for initiative and have no ki points remaining, you regain 4 ki points.",
-		hide:true
+		dmHide:true
 	},{
 		name:"Way of the Mantis",
 		description:"When you melee attack a target who isn't aware of you, if the attack hits, you can take the Disengage action for free immediately after the attack."
@@ -146,7 +146,7 @@ window.passives.append([
 	},{
 		name:"Extort Truth",
 		description:"You can hit a series of hidden nerves on a creature with precision, temporarily causing them to be unable to mask their true thoughts and intent. If you manage to hit a single creature with two or more attacks in one round, you can spend 1 ki point to force them to make a Charisma saving throw. You can choose to have these attacks deal no damage. On a failed save, the creature is unable to speak a deliberate lie for 1 minute and all Charisma checks directed at the creature are made with advantage for the duration. You know if they succeeded or failed on their saving throw.\n\nAn affected creature is aware of the effect and can thus avoid answering questions to which it would normally respond with a lie. Such a creature can be evasive in its answers as long as the effect lasts.",
-		hide:true
+		dmHide:true
 	},{
 		name:"Preternatural Counter",
 		description:"Your quick mind and study of your foe allows you to use their failure to your advantage. If a creature misses you with an attack, you can immediately use your reaction to make an unarmed melee attack against that creature."

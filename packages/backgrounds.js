@@ -17,8 +17,7 @@ window.backgrounds=[
 			char.money+=1500;
 			scope.choiceQueue.push(helper.learnLanguage);
 			scope.choiceQueue.push(helper.learnLanguage);
-		},
-		hide:true
+		}
 	},{
 		name:"Charlatan",
 		description:"Skill Proficiencies: Deception, Sleight of Hand\nTool Proficiencies: Disguise kit, Forgery kit\nEquipment: A set of fine clothes, a disguise kit, tools of the con of your choice (ten stoppered bottles filled with colored liquid, a set of weighted dice, a deck of marked cards, or a signet ring of an imaginary duke), and a belt pouch containing 15 gp",
@@ -35,8 +34,7 @@ window.backgrounds=[
 			addToInventory(char,findItem('Belt Pouch'));
 			addPassive(char,{name:this.featureName,description:this.featureDescription});
 			char.money+=1500;
-		},
-		hide:true
+		}
 	},{
 		name:"Criminal",
 		description:"Skill Proficiencies: Deception, Stealth\nTool Proficiencies: Thieves' Tools\nEquipment: A crowbar, a set of dark common clothes including a hood, and a belt pouch containing 15 gp",
@@ -51,8 +49,7 @@ window.backgrounds=[
 			addToInventory(char,findItem('Belt Pouch'));
 			addPassive(char,{name:this.featureName,description:this.featureDescription});
 			char.money+=1500;
-		},
-		hide:true
+		}
 	},{
 		name:"Entertainer",
 		description:"Skill Proficiencies: Acrobatics, Performance\nTool Proficiencies: Disguise Kit, a musical instrument\nEquipment: A musical instrument, a favor from an admirer, costume, and a belt pouch containing 15 gp",
@@ -77,8 +74,7 @@ window.backgrounds=[
 				}
 			);
 			char.money+=1500;
-		},
-		hide:true
+		}
 	},{
 		name:"Ex-Scholar",
 		description:"Skill Proficiencies: Sleight of Hand, Stealth\nTool Proficiencies: Disguise kit, Thieves' tools\nEquipment: A small knife, a map of the city you grew up in, a pet mouse, a token to remember your parents by, a set of common clothes, and a belt pouch containing 10 gp",
@@ -97,8 +93,7 @@ window.backgrounds=[
 			char.proficiencies.upush("Disguise Kit");
 			char.proficiencies.upush("Thieves' Tools");
 			char.money+=1000;
-		},
-		hide:true
+		}
 	},{
 		name:"Folk Hero",
 		description:"Skill Proficiencies: Animal Handling, Survival\nTool Proficiencies: One type of artisan's tools, Land Vehicles\nEquipment: A set of artisan's tools (one of your choice), a shovel, an iron pot, a set of common clothes, and a belt pouch containing 10 gp",
@@ -124,8 +119,7 @@ window.backgrounds=[
 				}
 			);
 			char.money+=1000;
-		},
-		hide:true
+		}
 	},{
 		name:"Guild Artisan",
 		description:"Skill Proficiencies: Insight, Persuasion\nTool Proficiencies: One type of artisan's tools\nLanguages: One of your choice\nEquipment: A set of artisan's tools (one of your choice), a letter of introduction from your guild, a set of traveler's clothes, and a belt pouch containing 15 gp",
@@ -150,8 +144,7 @@ window.backgrounds=[
 				}
 			)
 			char.money+=1500;
-		},
-		hide:true
+		}
 	},{
 		name:"Haunted One",
 		description:"Skill Proficiencies: Choose two of Arcana, Investigation, Religion, or Survival\nLanguages: One exotic language of your choice\nEquipment: Monster Hunter's Pack, common clothes, and a trinket of special significance.",
@@ -181,8 +174,7 @@ window.backgrounds=[
 					}
 				}
 			);
-		},
-		hide:true
+		}
 	},{
 		name:"Hermit",
 		description:"Skill Proficiencies: Medicine, Religion\nTool Proficiencies: Herbalism Kit\nLanguages: One of your choice\nEquipment: Scroll case stuffed full of notes from your studies or prayers, a winter blanket, a set of common clothes, an herbalism kit, and 5 gp",
@@ -198,8 +190,7 @@ window.backgrounds=[
 			char.proficiencies.upush('Herbalism Kit');
 			scope.choiceQueue.push(helper.learnLanguage);
 			char.money+=500;
-		},
-		hide:true
+		}
 	},{
 		name:"Noble",
 		description:"Skill Proficiencies: History, Persuasion\nTool Proficiencies: One type of gaming set\nLanguages: One of your choice\nEquipment: A set of fine clothes, a signet ring, a scroll of pedigree, and a purse containing 25 gp",
@@ -216,8 +207,7 @@ window.backgrounds=[
 			char.proficiencies.upush('Gaming Sets');
 			scope.choiceQueue.push(helper.learnLanguage);
 			char.money+=2500;
-		},
-		hide:true
+		}
 	},{
 		name:"Outlander",
 		description:"Skill Proficiencies: Athletics, Survival\nLanguages: One of your choice\nInstrument Proficiencies: One of your choice\nEquipment: Staff, Hunting Trap, Traveler's Clothes, Animal Trophy, Belt Pouch containing 10gp",
@@ -235,8 +225,7 @@ window.backgrounds=[
 			scope.choiceQueue.push(helper.learnInstrument);
 			scope.choiceQueue.push(helper.learnLanguage);
 			char.money+=1000;
-		},
-		hide:true
+		}
 	},{
 		name:"Sage",
 		description:"Skill Proficiencies: Arcana, History\nLanguages: Two of your choice\nEquipment: Bottle of Ink, Quill, Small Knife, Common Clothes, Belt Pouch containing 10 gp",
@@ -255,8 +244,7 @@ window.backgrounds=[
 			scope.choiceQueue.push(helper.learnLanguage);
 			scope.choiceQueue.push(helper.learnLanguage);
 			char.money+=1000;
-		},
-		hide:true
+		}
 	},{
 		name:"Sailor",
 		description:"",
@@ -274,8 +262,7 @@ window.backgrounds=[
 			char.proficiencies.upush("Navigator's Tools");
 			char.proficiencies.upush("Water Vehicles");
 			char.money+=1000;
-		},
-		hide:true
+		}
 	},{
 		name:"Sailor (Pirate)",
 		description:"",
@@ -293,8 +280,7 @@ window.backgrounds=[
 			char.proficiencies.upush("Navigator's Tools");
 			char.proficiencies.upush("Water Vehicles");
 			char.money+=1000;
-		},
-		hide:true
+		}
 	},{
 		name:"Soldier",
 		description:"",
@@ -318,8 +304,7 @@ window.backgrounds=[
 				}
 			});
 			char.money+=1000;
-		},
-		hide:true
+		}
 	},{
 		name:"Spy",
 		description:"Skill Proficiencies: Deception, Stealth\nTool Proficiencies: Thieves' Tools\nEquipment: A crowbar, a set of dark common clothes including a hood, and a belt pouch containing 15 gp",
@@ -334,8 +319,7 @@ window.backgrounds=[
 			addToInventory(char,findItem('Belt Pouch'));
 			addPassive(char,{name:this.featureName,description:this.featureDescription});
 			char.money+=1500;
-		},
-		hide:true
+		}
 	},{
 		name:"Urchin",
 		description:"Skill Proficiencies: Sleight of Hand, Stealth\nTool Proficiencies: Disguise kit, Thieves' tools\nEquipment: A small knife, a map of the city you grew up in, a pet mouse, a token to remember your parents by, a set of common clothes, and a belt pouch containing 10 gp",
@@ -354,7 +338,6 @@ window.backgrounds=[
 			char.proficiencies.upush("Disguise Kit");
 			char.proficiencies.upush("Thieves' Tools");
 			char.money+=1000;
-		},
-		hide:true
+		}
 	}
 ]

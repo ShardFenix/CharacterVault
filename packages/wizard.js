@@ -62,31 +62,40 @@ window.abilities.append([
 window.passives.append([
 	{
 		name:"Abjuration Savant",
-		description:"The gold and time you must spend to copy an abjuration spell into your spellbook is halved."
+		description:"The gold and time you must spend to copy an abjuration spell into your spellbook is halved.",
+		dmHide:true
 	},{
 		name:"Conjuration Savant",
-		description:"The gold and time you must spend to copy a conjuration spell into your spellbook is halved."
+		description:"The gold and time you must spend to copy a conjuration spell into your spellbook is halved.",
+		dmHide:true
 	},{
 		name:"Divination Savant",
-		description:"The gold and time you must spend to copy a divination spell into your spellbook is halved."
+		description:"The gold and time you must spend to copy a divination spell into your spellbook is halved.",
+		dmHide:true
 	},{
 		name:"Enchantment Savant",
-		description:"The gold and time you must spend to copy an enchantment spell into your spellbook is halved."
+		description:"The gold and time you must spend to copy an enchantment spell into your spellbook is halved.",
+		dmHide:true
 	},{
 		name:"Evocation Savant",
-		description:"The gold and time you must spend to copy an evocation spell into your spellbook is halved."
+		description:"The gold and time you must spend to copy an evocation spell into your spellbook is halved.",
+		dmHide:true
 	},{
 		name:"Illusion Savant",
-		description:"The gold and time you must spend to copy an illusion spell into your spellbook is halved."
+		description:"The gold and time you must spend to copy an illusion spell into your spellbook is halved.",
+		dmHide:true
 	},{
 		name:"Necromancy Savant",
-		description:"The gold and time you must spend to copy a necromancy spell into your spellbook is halved."
+		description:"The gold and time you must spend to copy a necromancy spell into your spellbook is halved.",
+		dmHide:true
 	},{
 		name:"Transmutation Savant",
-		description:"The gold and time you must spend to copy a transmutation spell into your spellbook is halved."
+		description:"The gold and time you must spend to copy a transmutation spell into your spellbook is halved.",
+		dmHide:true
 	},{
 		name:"Portent",
-		description:"Glimpses of the future begin to press in on your awareness. When you finish a long rest, roll ${getClassLevel($scope.char,'Wizard')>=14?'three':'two'} d20s and record the numbers rolled. You can replace any attack roll, saving throw, or ability check made by you or a creature that you can see with one of these foretelling rolls. You must choose to do so before the roll, and you can replace a roll in this way only once per turn.\nEach foretelling roll can be used only once. When you finish a long rest, you lose any unused foretelling rolls."
+		description:"Glimpses of the future begin to press in on your awareness. When you finish a long rest, roll ${getClassLevel($scope.char,'Wizard')>=14?'three':'two'} d20s and record the numbers rolled. You can replace any attack roll, saving throw, or ability check made by you or a creature that you can see with one of these foretelling rolls. You must choose to do so before the roll, and you can replace a roll in this way only once per turn.\nEach foretelling roll can be used only once. When you finish a long rest, you lose any unused foretelling rolls.",
+		dmHide:true
 	},{
 		name:"Expert Divination",
 		description:"When you cast a divination spell of 2nd level or higher using a spell slot, you regain one expended spell slot. The slot you regain must be of a level lower than the spell you cast and can't be higher than 5th level."

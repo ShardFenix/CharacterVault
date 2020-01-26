@@ -156,11 +156,11 @@ window.passives=[
 	{
 		name:"Stonecunning",
 		description:"Whenever you make an Intelligence (History) check related to the origin of stonework, you are considered proficient in the History skill and add double your proficiency bonus to the check, instead of your normal proficiency bonus.",
-		hide:true
+		dmHide:true
 	},{
 		name:"Trance",
 		description:"You do not need to sleep. You instead meditate for 4 hours, resulting in the equivalent of a long rest.",
-		hide:true
+		dmHide:true
 	},{
 		name:"Dwarven Resilience",
 		description:"You have advantage on saving throws against poison, and you have resistance against poison damage."
@@ -200,7 +200,7 @@ window.passives=[
 	},{
 		name:"Hide in Plain Sight",
 		description:"Starting at 10th level, you can spend 1 minute creating camouflage for yourself. You must have access to fresh mud, dirt, plants, soot, and other naturally occurring materials with which to create your camouflage.\n\nOnce you are camouflaged in this way, you can try to hide by pressing yourself up against a solid surface, such as a tree or wall, that is at least as tall and wide as you are. You gain a +10 bonus to Dexterity (Stealth) checks as long as you remain there without moving or taking actions. Once you move or take an action or a reaction, you must camouflage yourself again to gain this benefit.",
-		hide:true
+		dmHide:true
 	},{
 		name:"Maneuver: Commander's Strike",
 		description:"When you take the Attack action on your turn, you can forgo one of your attacks and use a bonus action to direct one of your companions to strike. When you do so, choose a friendly creature who can see or hear you and expend one superiority die. That creature can immediately use its reaction to make one weapon attack, adding the superiority die to the attack's damage roll."
@@ -252,7 +252,7 @@ window.passives=[
 	},{
 		name:"Mask of the Wild",
 		description:"You can attempt to hide even when you are only lightly obscured by foliage, heavy rain, falling snow, mist, and other natural phenomena.",
-		hide:true
+		dmHide:true
 	},{
 		name:"Fey Ancestry",
 		description:"You have advantage on saving throws against being charmed, and magic can't put you to sleep."

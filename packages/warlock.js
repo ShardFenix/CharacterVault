@@ -100,25 +100,30 @@ window.abilities.append([
 window.passives.append([
 	{
 		name:"Pact of the Chain",
-		description:"You learn the find familiar spell and can cast it as a ritual. The spell doesn't count against your number of spells known.\n\nWhen you cast the spell, you can choose one of the normal forms for your familiar or one of the following special forms: imp, pseudodragon, quasit, or sprite.\n\nAdditionally, when you take the Attack action, you can forgo one of your own attacks to allow your familiar to use its reaction to make one attack of its own."
+		description:"You learn the find familiar spell and can cast it as a ritual. The spell doesn't count against your number of spells known.\n\nWhen you cast the spell, you can choose one of the normal forms for your familiar or one of the following special forms: imp, pseudodragon, quasit, or sprite.\n\nAdditionally, when you take the Attack action, you can forgo one of your own attacks to allow your familiar to use its reaction to make one attack of its own.",
+		dmHide:true
 	},{
 		name:"Pact of the Blade",
-		description:"You can use your action to create a pact weapon in your empty hand. You can choose the form that this melee weapon takes each time you create it (see chapter 5 for weapon options). You are proficient with it while you wield it. This weapon counts as magical for the purpose of overcoming resistance and immunity to nonmagical attacks and damage.\n\nYour pact weapon disappears if it is more than 5 feet away from you for 1 minute or more. It also disappears if you use this feature again, if you dismiss the weapon (no action required), or if you die.\n\nYou can transform one magic weapon into your pact weapon by performing a special ritual while you hold the weapon. You perform the ritual over the course of 1 hour, which can be done during a short rest. You can then dismiss the weapon, shunting it into an extradimensional space, and it appears whenever you create your pact weapon thereafter. You can't affect an artifact or a sentient weapon in this way. The weapon ceases being your pact weapon if you die, if you perform the 1-hour ritual on a different weapon, or if you use a 1-hour ritual to break your bond to it. The weapon appears at your feet if it is in the extradimensional space when the bond breaks."
+		description:"You can use your action to create a pact weapon in your empty hand. You can choose the form that this melee weapon takes each time you create it (see chapter 5 for weapon options). You are proficient with it while you wield it. This weapon counts as magical for the purpose of overcoming resistance and immunity to nonmagical attacks and damage.\n\nYour pact weapon disappears if it is more than 5 feet away from you for 1 minute or more. It also disappears if you use this feature again, if you dismiss the weapon (no action required), or if you die.\n\nYou can transform one magic weapon into your pact weapon by performing a special ritual while you hold the weapon. You perform the ritual over the course of 1 hour, which can be done during a short rest. You can then dismiss the weapon, shunting it into an extradimensional space, and it appears whenever you create your pact weapon thereafter. You can't affect an artifact or a sentient weapon in this way. The weapon ceases being your pact weapon if you die, if you perform the 1-hour ritual on a different weapon, or if you use a 1-hour ritual to break your bond to it. The weapon appears at your feet if it is in the extradimensional space when the bond breaks.",
+		dmHide:true
 	},{
 		name:"Pact of the Tome",
-		description:"Your patron gives you a grimoire called a Book of Shadows. When you gain this feature, choose three cantrips from any class's spell list. The cantrips do not need to be from the same spell list. While the book is on your person, you can cast those cantrips at will. They don't count against your number of cantrips known. Any cantrip you cast with this feature is considered a warlock cantrip for you. If you lose your Book of Shadows, you can perform a 1-hour ceremony to receive a replacement from your patron. This ceremony can be performed during a short or long rest, and it destroys the previous book. The book turns to ash when you die."
+		description:"Your patron gives you a grimoire called a Book of Shadows. When you gain this feature, choose three cantrips from any class's spell list. The cantrips do not need to be from the same spell list. While the book is on your person, you can cast those cantrips at will. They don't count against your number of cantrips known. Any cantrip you cast with this feature is considered a warlock cantrip for you. If you lose your Book of Shadows, you can perform a 1-hour ceremony to receive a replacement from your patron. This ceremony can be performed during a short or long rest, and it destroys the previous book. The book turns to ash when you die.",
+		dmHide:true
 	},{
 		name:"Dark One's Blessing",
 		description:"When you reduce a hostile creature to 0 hit points, you gain temporary hit points equal to your Charisma modifier + your warlock level (minimum of 1)."
 	},{
 		name:"Fiendish Resilience",
-		description:"You can choose one damage type when you finish a short or long rest. You gain resistance to that damage type until you choose a different one with this feature. Damage from magical weapons or silver weapons ignores this resistance."
+		description:"You can choose one damage type when you finish a short or long rest. You gain resistance to that damage type until you choose a different one with this feature. Damage from magical weapons or silver weapons ignores this resistance.",
+		dmHide:true
 	},{
 		name:"Armor of Hexes",
 		description:"If the target cursed by your Hexblade's Curse hits you with an attack roll, you can use your reaction to roll a d6. On a 4 or higher, the attack instead misses you, regardless of its roll."
 	},{
 		name:"Hex Warrior",
-		description:"The influence of your patron allows you to mystically channel your will through a particular weapon. Whenever you finish a long rest, you can touch one weapon that you are proficient with and that lacks the two-handed property. When you attack with that weapon, you can use your Charisma modifier, instead of Strength or Dexterity, for the attack and damage rolls. This benefit lasts until you finish a long rest. If you later gain the Pact of the Blade feature, this benefit extends to every pact weapon you conjure with that feature, no matter the weapon's type."
+		description:"The influence of your patron allows you to mystically channel your will through a particular weapon. Whenever you finish a long rest, you can touch one weapon that you are proficient with and that lacks the two-handed property. When you attack with that weapon, you can use your Charisma modifier, instead of Strength or Dexterity, for the attack and damage rolls. This benefit lasts until you finish a long rest. If you later gain the Pact of the Blade feature, this benefit extends to every pact weapon you conjure with that feature, no matter the weapon's type.",
+		dmHide:true
 	},{
 		name:"Master of Hexes",
 		description:"You can spread your Hexblade's Curse from a slain creature to another creature. When the creature cursed by your Hexblade's Curse dies, you can apply the curse to a different creature you can see within 30 feet of you, provided you aren't incapacitated. When you apply the curse in this way, you don't regain hit points from the death of the previously cursed creature."
@@ -139,7 +144,8 @@ window.passives.append([
 					}
 				}
 			}
-		}
+		},
+		dmHide:true
 	},{
 		name:"Armor of Shadows",
 		tags:['Eldritch Invocation'],
@@ -156,12 +162,14 @@ window.passives.append([
 		tags:['Eldritch Invocation'],
 		description:"You no longer need to sleep and can't be forced to sleep by any means. To gain the benefits of a long rest, you can spend all 8 hours doing light activity, such as reading your Book of Shadows and keeping watch.",
 		requirement:function(char){
-			return !hasPassive(char,"Pact of the Tome");
-		}
+			return hasPassive(char,"Pact of the Tome");
+		},
+		dmHide:true
 	},{
 		name:"Beast Speech",
 		tags:['Eldritch Invocation'],
-		description:"You can cast speak with animals at will, without expending a spell slot."
+		description:"You can cast speak with animals at will, without expending a spell slot.",
+		dmHide:true
 	},{
 		name:"Beguiling Influence",
 		tags:['Eldritch Invocation'],
@@ -169,7 +177,8 @@ window.passives.append([
 		onPickup:function(char){
 			addProficiency(char,"Deception");
 			addProficiency(char,"Persuasion");
-		}
+		},
+		dmHide:true
 	},{
 		name:"Bewitching Whispers",
 		tags:['Eldritch Invocation'],
@@ -183,11 +192,12 @@ window.passives.append([
 		description:"You can now inscribe magical rituals in your Book of Shadows. Choose two 1st-level spells that have the ritual tag from any class's spell list. The spells needn't be from the same spell list. The spells appear in the book and don't count against the number of spells you know. With your Book of Shadows in hand, you can cast the chosen spells as rituals. You can't cast the spells except as rituals, unless you've learned them by some other means. You can also cast a warlock spell you know as a ritual if it has the ritual tag.\n\nOn your adventures, you can add other ritual spells to your Book of Shadows. When you find such a spell, you can add it to the book if the spell's level is equal to or less than half your warlock level (rounded up) and if you can spare the time to transcribe the spell. For each level of the spell, the transcription process takes 2 hours and costs 50 gp for the rare inks needed to inscribe it.",
 		requirement:function(char){
 			return hasPassive(char,"Pact of the Tome");
-		}
+		},
+		dmHide:true
 	},{
 		name:"Chains of Carceri",
 		tags:['Eldritch Invocation'],
-		description:"You can cast hold monster at will—targeting a celestial, fiend, or elemental—without expending a spell slot or material components. You must finish a long rest before you can use this invocation on the same creature again.",
+		description:"You can cast hold monster at will — targeting a celestial, fiend, or elemental — without expending a spell slot or material components. You must finish a long rest before you can use this invocation on the same creature again.",
 		requirement:function(char){
 			return char.level>=15 && hasPassive(char,"Pact of the Chain");
 		}
@@ -240,11 +250,13 @@ window.passives.append([
 					}
 				}
 			}
-		}
+		},
+		dmHide:true
 	},{
 		name:"Eyes of the Rune Keeper",
 		tags:['Eldritch Invocation'],
-		description:"You can read all writing."
+		description:"You can read all writing.",
+		dmHide:true
 	},{
 		name:"Fiendish Vigor",
 		tags:['Eldritch Invocation'],
@@ -252,7 +264,8 @@ window.passives.append([
 	},{
 		name:"Gaze of Two Minds",
 		tags:['Eldritch Invocation'],
-		description:"You can use your action to touch a willing humanoid and perceive through its senses until the end of your next turn. As long as the creature is on the same plane of existence as you, you can use your action on subsequent turns to maintain this connection, extending the duration until the end of your next turn. While perceiving through the other creature's senses, you benefit from any special senses possessed by that creature, and you are blinded and deafened to your own surroundings."
+		description:"You can use your action to touch a willing humanoid and perceive through its senses until the end of your next turn. As long as the creature is on the same plane of existence as you, you can use your action on subsequent turns to maintain this connection, extending the duration until the end of your next turn. While perceiving through the other creature's senses, you benefit from any special senses possessed by that creature, and you are blinded and deafened to your own surroundings.",
+		dmHide:true
 	},{
 		name:"Ghostly Gaze",
 		tags:['Eldritch Invocation'],
@@ -262,7 +275,8 @@ window.passives.append([
 		},
 		onPickup:function(char){
 			addAbility(char,"Ghostly Gaze");
-		}
+		},
+		dmHide:true
 	},{
 		name:"Gift of the Depths",
 		tags:['Eldritch Invocation'],
@@ -272,7 +286,8 @@ window.passives.append([
 		},
 		onPickup:function(char){
 			addAbility(char,"Gift of the Depths");
-		}
+		},
+		dmHide:true
 	},{
 		name:"Gift of the Ever-Living Ones",
 		tags:['Eldritch Invocation'],
@@ -366,7 +381,7 @@ window.passives.append([
 			return char.level>=7;
 		}
 	},{
-		name:"Relepping Blast",
+		name:"Repelling Blast",
 		tags:['Eldritch Invocation'],
 		description:"When you hit a creature with eldritch blast, you can push the creature up to 10 feet away from you in a straight line.",
 		requirement:function(char){
@@ -398,7 +413,7 @@ window.passives.append([
 		tags:['Eldritch Invocation'],
 		description:"You can cast bane once using a warlock spell slot. You can't do so again until you finish a long rest."
 	},{
-		name:"Thirting Blade",
+		name:"Thirsting Blade",
 		tags:['Eldritch Invocation'],
 		description:"You can attack with your pact weapon twice, instead of once, whenever you take the Attack action on your turn.",
 		requirement:function(char){
@@ -437,7 +452,8 @@ window.passives.append([
 		description:"You can communicate telepathically with your familiar and perceive through your familiar's senses as long as you are on the same plane of existence. Additionally, while perceiving through your familiar's senses, you can also speak through your familiar in your own voice, even if your familiar is normally incapable of speech.",
 		requirement:function(char){
 			return hasPassive(char,"Pact of the Chain");
-		}
+		},
+		dmHide:true
 	},{
 		name:"Whispers of the Grave",
 		tags:['Eldritch Invocation'],

@@ -6,7 +6,8 @@ window.feats=[
 				if (char.attributes.cha<20){
 					char.attributes.cha+=1;
 				}
-			}
+			},
+			dmHide:true
 	},{
 			name:"Alert",
 			description:"Always on the lookout for danger, you gain the following benefits:\n\u2022 You get a +5 bonus to initiative.\n\u2022 You can't be surprised while you're conscious.\n\u2022 Other creatures don't gain advantage on attacks against you as a result of being unseen by you.",
@@ -21,7 +22,8 @@ window.feats=[
 				if (char.attributes.str<20){
 					char.attributes.str+=1;
 				}
-			}
+			},
+			dmHide:true
 	},{
 			name:"Athlete (Dex)",
 			identity:"Athlete",
@@ -30,7 +32,8 @@ window.feats=[
 				if (char.attributes.dex<20){
 					char.attributes.dex+=1;
 				}
-			}
+			},
+			dmHide:true
 	},{
 			name:"Charger",
 			description:"When you use your action to Dash, you can use a bonus action to make one melee weapon attack or to shove a creature. If you move at least 10 feet in a straight line immediately before taking this bonus action, you either gain a +5 bonus to the attack's damage roll (if you chose to make a melee attack and hit) or push the target up to 10 feet away from you (if you chose to shove and you succeed)."
@@ -48,7 +51,8 @@ window.feats=[
 			description:"You master fighting with two weapons, gaining the following benefits:\n\u2022 You gain a +1 bonus to AC while you are wielding a separate melee weapon in each hand.\n\u2022 You can use two-weapon fighting even when the one-handed melee weapons you are wielding aren't light.\n\u2022 You can draw or stow two one-handed weapons when you would normally be able to draw or stow only one."
 	},{
 			name:"Dungeon Delver",
-			description:"Alert to the hidden traps and secret doors found in many dungeons, you gain the following benefits:\n\u2022 You have advantage on Wisdom (Perception) and Intelligence (Investigation) checks made to detect the presence of secret doors.\n\u2022 You have advantage on saving throws made to avoid or resist traps.\n\u2022 You have resistance to the damage dealt by traps.\n\u2022 Traveling at a fast pace doesn't impose the normal -5 penalty on your passive Wisdom (Perception) score."
+			description:"Alert to the hidden traps and secret doors found in many dungeons, you gain the following benefits:\n\u2022 You have advantage on Wisdom (Perception) and Intelligence (Investigation) checks made to detect the presence of secret doors.\n\u2022 You have advantage on saving throws made to avoid or resist traps.\n\u2022 You have resistance to the damage dealt by traps.\n\u2022 Traveling at a fast pace doesn't impose the normal -5 penalty on your passive Wisdom (Perception) score.",
+			dmHide:true
 	},{
 			name:"Durable",
 			description:"Hardy and resilient, you gain the following benefits:\n\u2022 Increase your Constitution score by 1, to a maximum of 20.\n\u2022 When you roll a Hit Die to regain hit points, the minimum number of hit points you regain from the roll equals twice your Constitution modifier (minimum of 2).",
@@ -56,7 +60,8 @@ window.feats=[
 				if (char.attributes.con<20){
 					char.attributes.con+=1;
 				}
-			}
+			},
+			dmHide:true
 	},{
 			name:"Elemental Adept (Fire)",
 			description:"When you gain this feat, choose one of the following damage types: acid, cold, fire, lightning, or thunder.\nSpells you cast ignore resistance to damage of the chosen type. In addition, when you roll damage for a spell you cast that deals damage of that type, you can treat any 1 on a damage die as a 2.\nYou can select this feat multiple times. Each time you do so, you must choose a different damage type."
@@ -83,7 +88,8 @@ window.feats=[
 			description:"You've learned to put the weight of a weapon to your advantage, letting its momentum empower your strikes. You gain the following benefits:\n\u2022 On your turn, when you score a critical hit with a melee weapon or reduce a creature to 0 hit points with one, you can make one melee weapon attack as a bonus action.\n\u2022 Before you make a melee attack with a heavy weapon that you are proficient with, you can choose to take a -5 penalty to the attack roll. If the attack hits, you add +10 to the attack's damage."
 	},{
 			name:"Healer",
-			description:"You are an able physician, allowing you to mend wounds quickly and get your allies back in the fight. You gain the following benefits:\n\u2022 When you use a healer's kit to stabilize a dying creature, that creature also regains 1 hit point.\n\u2022 As an action, you can spend one use of a healer's kit to tend to a creature and restore 1d6+4 hit points to it, plus additional hit points equal to the creature's maximum number of Hit Dice. The creature can't regain hit points from this feat again until it finishes a short or long rest."
+			description:"You are an able physician, allowing you to mend wounds quickly and get your allies back in the fight. You gain the following benefits:\n\u2022 When you use a healer's kit to stabilize a dying creature, that creature also regains 1 hit point.\n\u2022 As an action, you can spend one use of a healer's kit to tend to a creature and restore 1d6+4 hit points to it, plus additional hit points equal to the creature's maximum number of Hit Dice. The creature can't regain hit points from this feat again until it finishes a short or long rest.",
+			dmHide:true
 	},{
 			name:"Heavily Armored",
 			description:"You have trained to master the use of heavy armor, gaining the following benefits:\n\u2022 Increase your Strength score by 1, to a maximum of 20.\n\u2022 You gain proficiency with heavy armor.",
@@ -95,7 +101,8 @@ window.feats=[
 				if (char.attributes.str<20){
 					char.attributes.str+=1;
 				}
-			}
+			},
+			dmHide:true
 	},{
 			name:"Heavy Armor Master",
 			description:"You can use your armor to deflect strikes that would kill others. You gain the following benefits:\n\u2022 Increase your Strength score by 1, to a maximum of 20.\n\u2022 While you are wearing heavy armor, bludgeoning, piercing, and slashing damage that you take from nonmagical weapons is reduced by 3.",
@@ -112,7 +119,8 @@ window.feats=[
 			description:"You can spend 10 minutes inspiring your companions, shoring up their resolve to fight. When you do so, choose up to six friendly creatures (which can include yourself) within 30 feet of you who can see or hear you and who can understand you. Each creature can gain temporary hit points equal to your level + your Charisma modifier. A creature can't gain temporary hit points from this feat again until it has finished a short or long rest.",
 			requirement:function(char,scope){
 				return char.attributes.cha>=13;
-			}
+			},
+			dmHide:true
 	},{
 			name:"Keen Mind",
 			description:"You have a mind that can track time, direction, and detail with uncanny precision. You gain the following benefits:\n\u2022 Increase your Intelligence score by 1, to a maximum of 20.\n\u2022 You always know which way is north.\n\u2022 You always know the number of hours left before the next sunrise or sunset.\n\u2022 You can accurately recall anything you have seen or heard within the past month.",
@@ -120,7 +128,8 @@ window.feats=[
 				if (char.attributes.int<20){
 					char.attributes.int+=1;
 				}
-			}
+			},
+			dmHide:true
 	},{
 			name:"Lightly Armored (Str)",
 			identity:"Lightly Armored",
@@ -130,7 +139,8 @@ window.feats=[
 				if (char.attributes.str<20){
 					char.attributes.str+=1;
 				}
-			}
+			},
+			dmHide:true
 	},{
 			name:"Lightly Armored (Dex)",
 			identity:"Lightly Armored",
@@ -140,7 +150,8 @@ window.feats=[
 				if (char.attributes.dex<20){
 					char.attributes.dex+=1;
 				}
-			}
+			},
+			dmHide:true
 	},{
 			name:"Linguist",
 			description:"You have studied languages and codes, gaining the following benefits:\n\u2022 Increase your Intelligence score by 1, to a maximum of 20.\n\u2022 You learn three languages of your choice.\n\u2022 You can ably create written ciphers. Others can't decipher a code you create unless you teach them, they succeed on an Intelligence check (DC equal to your Intelligence score + your proficiency bonus), or they use magic to decipher it.",
@@ -151,7 +162,8 @@ window.feats=[
 				scope.choiceQueue.push(helper.learnLanguage);
 				scope.choiceQueue.push(helper.learnLanguage);
 				scope.choiceQueue.push(helper.learnLanguage);
-			}
+			},
+			dmHide:true
 	},{
 			name:"Lucky",
 			description:"You have inexplicable luck that seems to kick in at just the right moment.\nYou have 3 luck points. Whenever you make an attack roll, an ability check, or a saving throw, you can spend one luck point to roll an additional d20. You can choose to spend one of your luck points after you roll the die, but before the outcome is determined. You choose which of the d20s is used for the attack roll, ability check, or saving throw.\nYou can also spend one luck point when an attack roll is made against you. Roll a d20, and then choose whether the attack uses the attacker's roll or yours. If more than one creature spends a luck point to influence the outcome of a roll, the points cancel each other out; no additional dice are rolled.\nYou regain your expended luck points when you finish a long rest.",
@@ -162,7 +174,7 @@ window.feats=[
 			name:"Mage Slayer",
 			description:"You have practiced techniques useful in melee combat against spellcasters, gaining the following benefits:\n\u2022 When a creature within 5 feet of you casts a spell, you can use your reaction to make a melee weapon attack against that creature.\n\u2022 When you damage a creature that is concentrating on a spell, that creature has disadvantage on the saving throw it makes to maintain its concentration.\n\u2022 You have advantage on saving throws against spells cast by creatures within 5 feet of you."
 	},{
-			name:"Magic Initiate (doesnt work)",
+			name:"Magic Initiate",
 			description:"Choose a class: bard, cleric, druid, sorcerer, warlock, or wizard. You learn two cantrips of your choice from that class's spell list.\nIn addition, choose one 1st-level spell from that same list. You learn that spell and can cast it at its lowest level. Once you cast it, you must finish a long rest before you can cast it again using this feat.\nYour spellcasting ability for these spells depends on the class you chose: Charisma for bard, sorcerer, or warlock; Wisdom for cleric or druid: or Intelligence for wizard.",
 			requirement:function(){return false;},
 			onPickup:function(char,scope){
@@ -201,7 +213,8 @@ window.feats=[
 						});
 					}
 				});
-			}
+			},
+			dmHide:true
 	},{
 			name:"Martial Adept",
 			identity:"Martial Adept",
@@ -210,13 +223,15 @@ window.feats=[
 				scope.choiceQueue.push(helper.chooseManeuver);
 				scope.choiceQueue.push(helper.chooseManeuver);
 				addAbility(char,"Superiority d6 (Martial Adept)");
-			}
+			},
+			dmHide:true
 	},{
 			name:"Medium Armor Master",
 			description:"You have practiced moving in medium armor to gain the following benefits:\n\u2022 Wearing medium armor doesn't impose disadvantage on your Dexterity (Stealth) checks.\n\u2022 When you wear medium armor, you can add 3, rather than 2, to your AC if you have a Dexterity of 16 or higher.",
 			requirement:function(char,scope){
 				return hasProficiency(char,"Medium Armor");
-			}
+			},
+			dmHide:true
 	},{
 			name:"Mobile",
 			description:"You are exceptionally speedy and agile. You gain the following benefits:\n\u2022 Your speed increases by 10 feet.\n\u2022 When you use the Dash action, difficult terrain doesn't cost you extra movement on that turn.\n\u2022 When you make a melee attack against a creature, you don't provoke opportunity attacks from that creature for the rest of the turn, whether you hit or not.",
@@ -236,7 +251,8 @@ window.feats=[
 				if (char.attributes.str<20){
 					char.attributes.str+=1;
 				}
-			}
+			},
+			dmHide:true
 	},{
 			name:"Moderately Armored (Dex)",
 			identity:"Moderately Armored",
@@ -250,7 +266,8 @@ window.feats=[
 				if (char.attributes.dex<20){
 					char.attributes.dex+=1;
 				}
-			}
+			},
+			dmHide:true
 	},{
 			name:"Observant (Int)",
 			description:"Quick to notice details of your environment, you gain the following benefits:\n\u2022 Increase your Intelligence or Wisdom by 1, to a maximum of 20.\n\u2022 If you can see a creature's mouth while it is speaking a language you understand, you can interpret what it's saying by reading its lips.\n\u2022 You have a +5 bonus to your passive Wisdom (Perception) and passive Intelligence (Investigation) scores.",
@@ -258,7 +275,8 @@ window.feats=[
 				if (char.attributes.int<20){
 					char.attributes.int+=1;
 				}
-			}
+			},
+			dmHide:true
 	},{
 			name:"Observant (Wis)",
 			description:"Quick to notice details of your environment, you gain the following benefits:\n\u2022 Increase your Intelligence or Wisdom by 1, to a maximum of 20.\n\u2022 If you can see a creature's mouth while it is speaking a language you understand, you can interpret what it's saying by reading its lips.\n\u2022 You have a +5 bonus to your passive Wisdom (Perception) and passive Intelligence (Investigation) scores.",
@@ -266,7 +284,8 @@ window.feats=[
 				if (char.attributes.wis<20){
 					char.attributes.wis+=1;
 				}
-			}
+			},
+			dmHide:true
 	},{
 			name:"Polearm Master",
 			description:"You can keep your enemies at bay with reach weapons. You gain the following benefits:\n\u2022 When you take the Attack action and attack with only a glaive, halberd, quarterstaff, or spear, you can use a bonus action to make a melee attack with the opposite end of the weapon; this attack uses the same ability modifier as the primary attack. The weapon's damage die for this attack is a d4, and the attack deals bludgeoning damage.\n\u2022 While you are wielding a glaive, halberd, pike, quarterstaff, or spear, other creatures provoke an opportunity attack from you when they enter your reach."
@@ -278,7 +297,8 @@ window.feats=[
 				scope.choiceQueue.push(helper.learnTool);
 				scope.choiceQueue.push(helper.learnSkillProficiency);
 				scope.choiceQueue.push(helper.chooseExpertise);
-			}
+			},
+			dmHide:true
 	},{
 			name:"Resilient (Str)",
 			identity:"Resilient",
@@ -288,7 +308,8 @@ window.feats=[
 					char.attributes.str+=1;
 				}
 				char.saves.str=1;
-			}
+			},
+			dmHide:true
 	},{
 			name:"Resilient (Dex)",
 			identity:"Resilient",
@@ -298,7 +319,8 @@ window.feats=[
 					char.attributes.dex+=1;
 				}
 				char.saves.dex=1;
-			}
+			},
+			dmHide:true
 	},{
 			name:"Resilient (Con)",
 			identity:"Resilient",
@@ -308,7 +330,8 @@ window.feats=[
 					char.attributes.con+=1;
 				}
 				char.saves.con=1;
-			}
+			},
+			dmHide:true
 	},{
 			name:"Resilient (Int)",
 			identity:"Resilient",
@@ -318,7 +341,8 @@ window.feats=[
 					char.attributes.int+=1;
 				}
 				char.saves.int=1;
-			}
+			},
+			dmHide:true
 	},{
 			name:"Resilient (Wis)",
 			identity:"Resilient",
@@ -328,7 +352,8 @@ window.feats=[
 					char.attributes.wis+=1;
 				}
 				char.saves.wis=1;
-			}
+			},
+			dmHide:true
 	},{
 			name:"Resilient (Cha)",
 			identity:"Resilient",
@@ -338,11 +363,13 @@ window.feats=[
 					char.attributes.cha+=1;
 				}
 				char.saves.cha=1;
-			}
+			},
+			dmHide:true
 	},{
 			name:"Ritual Caster (doesnt work)",
 			description:"",
-			requirement:function(){return false;}
+			requirement:function(){return false;},
+			dmHide:true
 	},{
 			name:"Savage Attacker",
 			description:"Once per turn when you roll damage for a melee weapon attack, you can reroll the weapon's damage and use either total."
@@ -398,7 +425,8 @@ window.feats=[
 							addProficiency(char,choice);
 						}
 					});
-			}
+			},
+			dmHide:true
 	},{
 			name:"Skulker",
 			description:"You are expert at slinking through shadows. You gain the following benefits:\n\u2022 You can try to hide when you are lightly obscured from the creature from which you are hiding.\n\u2022 When you are hidden from a creature and miss it with a ranged weapon attack, making the attack doesn't reveal your position.\n\u2022 Dim light doesn't impose disadvantage on your Wisdom (Perception) checks relying on sight.",
@@ -487,12 +515,13 @@ window.feats=[
 				}
 			}
 	},{
-		//TODO: Add logic in stats.js to look for this during a levelup.
+			//TODO: Add logic in stats.js to look for this during a levelup.
 			name:"Tough",
 			description:"Your hit point maximum increases by an amount equal to twice your level when you gain this feat. Whenever you gain a level thereafter, your hit point maximum increases by an additional 2 hit points.",
 			apply:function(char,$scope){
 				$scope.derived.maxHp+=char.level*2;
-			}
+			},
+			dmHide:true
 	},{
 			name:"War Caster",
 			description:"You have practiced casting spells in the midst of combat, learning techniques that grant you the following benefits:\n\u2022 You have advantage on Constitution saving throws that you make to maintain your concentration on a spell when you take damage.\n\u2022 You can perform the somatic components of spells even when you have weapons or a shield in one or both hands.\n\u2022 When a hostile creature's movement provokes an opportunity attack from you, you can use your reaction to cast a spell at the creature, rather than making an opportunity attack. The spell must have a casting time of 1 action and must target only that creature."
@@ -508,7 +537,8 @@ window.feats=[
 				scope.choiceQueue.push(chooseWeaponProficiency);
 				scope.choiceQueue.push(chooseWeaponProficiency);
 				scope.choiceQueue.push(chooseWeaponProficiency);
-			}
+			},
+			dmHide:true
 	},{
 			name:"Weapon Master (Dex)",
 			identity:"Weapon Master",
@@ -521,6 +551,7 @@ window.feats=[
 				scope.choiceQueue.push(chooseWeaponProficiency);
 				scope.choiceQueue.push(chooseWeaponProficiency);
 				scope.choiceQueue.push(chooseWeaponProficiency);
-			}
+			},
+			dmHide:true
 	}
 ];

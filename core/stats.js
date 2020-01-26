@@ -1334,6 +1334,8 @@ $scope.load=function(characterName){
 			//load history
 			$http.get('http://localhost:8080/characters/'+characterName+".history").then(function(response2){
 				$scope.history=response2.data;
+							$scope.patch();
+
 			},function(error){
 				console.warn("Error loading history for "+characterName,error);
 				$scope.history=[{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{}];
@@ -1367,7 +1369,6 @@ function initLoadedCharacter(char){
 			passive.onShortRest=p.onShortRest;
 			passive.onLongRest=p.onLongRest;
 			passive.apply=p.apply;
-			$scope.patch();
 			continue;
 		}
 		for (let p of packages.feats){
@@ -1499,22 +1500,57 @@ $scope.historyStyle=function(){
 	return {"background": "linear-gradient(90deg, #bb0000, #bb0000 "+perc+"%, #e0e0e0 "+perc+"%, #e0e0e0)"};
 }
 
+function findBackgroundFeature(name){
+	for (let b of window.backgrounds){
+		if (b.featureName === name){
+			return {name:b.featureName,description:b.featureDescription};
+		}
+	}
+	return undefined;
+}
+
 //used when I need to retro give abilities/passives/equipment to a character
 $scope.patch=function(){
 	for (let i=1;i<=20;i++){
 		if ($scope.history[i]){
 			for (let passive of $scope.history[i].passives){
 				let p = findPassive(passive.name);
-				if (p.hide){
-					passive.hide=true;
+				if (!p){
+					//all backgrounds should be hidden on the dm screen
+					p = findBackgroundFeature(passive.name);
+					if (!p){
+						p = window.feats.find({name:passive.name});
+					} else {
+						p.dmHide=true;
+					}
+					if (!p){
+						console.error("Couldn't find passive "+passive.name);
+					}
+				}
+				if (p && p.dmHide){
+					passive.dmHide=p.dmHide;
+					console.log("Added dmHide to history["+i+"]"+passive.name);
 				}
 			}
 		}
 	}
-	for (let passive of $scope.history[i].passives){
+	for (let passive of $scope.char.passives){
 		let p = findPassive(passive.name);
-		if (p.hide){
-			passive.hide=true;
+		if (!p){
+			//all backgrounds should be hidden on the dm screen
+			p = findBackgroundFeature(passive.name);
+			if (!p){
+				p = window.feats.find({name:passive.name});
+			} else {
+				p.dmHide=true;
+			}
+			if (!p){
+				console.error("Couldn't find passive "+passive.name);
+			}
+		}
+		if (p && p.dmHide){
+			passive.dmHide=p.dmHide;
+			console.log("Added dmHide to char."+passive.name);
 		}
 	}
 }
