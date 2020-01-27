@@ -68,19 +68,23 @@ window.passives.append([
 					skill.bonus+=scope.derived.modifiers.wis;
 				}
 			}
-		}
+		},
+		dmHide:true
 	},{
 		name:"Tireless Spirit",
-		description:"When you roll initiative and have no uses of Fighting Spirit remaining, you regain one use."
+		description:"When you roll initiative and have no uses of Fighting Spirit remaining, you regain one use.",
+		dmHide:true
 	},{
 		name:"Rapid Strike",
 		description:"You learn to trade accuracy for swift strikes. If you take the Attack action on your turn and have advantage on an attack roll against one of the targets, you can forgo the advantage for that roll to make an additional weapon attack against that target, as part of the same action. You can do so no more than once per turn."
 	},{
 		name:"Know your Enemy",
-		description:"If you spend at least 1 minute observing or interacting with another creature outside combat, you can learn certain information about its capabilities compared to your own. The DM tells you if the creature is your equal, superior, or inferior in regard to two of the following characteristics of your choice:\n\u2022 Strength score\n\u2022 Dexterity score\n\u2022 Constitution score\n\u2022 Armor Class\n\u2022 Current hit points\n\u2022 Total class levels (if any)\n\u2022 Fighter class levels (if any)"
+		description:"If you spend at least 1 minute observing or interacting with another creature outside combat, you can learn certain information about its capabilities compared to your own. The DM tells you if the creature is your equal, superior, or inferior in regard to two of the following characteristics of your choice:\n\u2022 Strength score\n\u2022 Dexterity score\n\u2022 Constitution score\n\u2022 Armor Class\n\u2022 Current hit points\n\u2022 Total class levels (if any)\n\u2022 Fighter class levels (if any)",
+		dmHide:true
 	},{
 		name:"Relentless",
-		description:"When you roll initiative and have no superiority dice remaining, you regain 1 superiority die."
+		description:"When you roll initiative and have no superiority dice remaining, you regain 1 superiority die.",
+		dmHide:true
 	}
 ]);
 

@@ -632,7 +632,8 @@ window.abilities.append([
 window.passives.append([
 	{
 		name:"Timeless Body (Druid)",
-		description:"The primal magic that you wield causes you to age more slowly. For every 10 years that pass, your body ages only 1 year."
+		description:"The primal magic that you wield causes you to age more slowly. For every 10 years that pass, your body ages only 1 year.",
+		dmHide:true
 	},{
 		name:"Archdruid",
 		description:"You can use your Wild Shape an unlimited number of times.\nAdditionally, you can ignore the verbal and somatic components of your druid spells, as well as any material components that lack a cost and aren't consumed by a spell. You gain this benefit in both your normal shape and your beast shape from Wild Shape."
@@ -641,7 +642,8 @@ window.passives.append([
 		description:"You gain the ability to use Wild Shape on your turn as a bonus action, rather than as an action.\nAdditionally, while you are transformed by Wild Shape, you can use a bonus action to expend one spell slot to regain 1d8 hit points per level of the spell slot expended."
 	},{
 		name:"Circle Forms",
-		description:"The rites of your circle grant you the ability to transform into more dangerous animal forms. You can use your Wild Shape to transform into a beast with a challenge rating as high as ${ladder(classLevel($scope.char,'Druid'),1,1,6,2,9,3,12,4,15,5,18,6)} (you ignore the Max. CR column of the Beast Shapes table, but must abide by the other limitations there).\n\nStarting at 6th level, you can transform into a beast with a challenge rating as high as your druid level divided by 3, rounded down."
+		description:"The rites of your circle grant you the ability to transform into more dangerous animal forms. You can use your Wild Shape to transform into a beast with a challenge rating as high as ${ladder(classLevel($scope.char,'Druid'),1,1,6,2,9,3,12,4,15,5,18,6)} (you ignore the Max. CR column of the Beast Shapes table, but must abide by the other limitations there).\n\nStarting at 6th level, you can transform into a beast with a challenge rating as high as your druid level divided by 3, rounded down.",
+		dmHide:true
 	},{
 		name:"Primal Strike",
 		description:"Your attacks in beast form count as magical for the purpose of overcoming resistance and immunity to nonmagical attacks and damage."
@@ -659,7 +661,8 @@ window.passives.append([
 		description:"Creatures of the natural world sense your connection to nature and become hesitant to attack you. When a beast or plant creature attacks you, that creature must make a Wisdom saving throw against your druid spell save DC. On a failed save, the creature must choose a different target, or the attack automatically misses. On a successful save, the creature is immune to this effect for 24 hours.\n\nThe creature is aware of this effect before it makes its attack against you."
 	},{
 		name:"Speech of the Woods",
-		description:"You gain the ability to converse with beasts and many fey.\n\nYou learn to speak, read, and write Sylvan. In addition, beasts can understand your speech, and you gain the ability to decipher their noises and motions. Most beasts lack the intelligence to convey or understand sophisticated concepts, but a friendly beast could relay what it has seen or heard in the recent past. This ability doesn't grant you friendship with beasts, though you can combine this ability with gifts to curry favor with them as you would with any nonplayer character."
+		description:"You gain the ability to converse with beasts and many fey.\n\nYou learn to speak, read, and write Sylvan. In addition, beasts can understand your speech, and you gain the ability to decipher their noises and motions. Most beasts lack the intelligence to convey or understand sophisticated concepts, but a friendly beast could relay what it has seen or heard in the recent past. This ability doesn't grant you friendship with beasts, though you can combine this ability with gifts to curry favor with them as you would with any nonplayer character.",
+		dmHide:true
 	},{
 		name:"Mighty Summoner",
 		description:"Beasts and fey that you conjure are more resilient than normal. Any beast or fey summoned or created by a spell that you cast gains the following benefits:\n\u2022 The creature appears with more hit points than normal: 2 extra hit points per Hit Die it has.\n\u2022 The damage from its natural weapons is considered magical for the purpose of overcoming immunity and resistance to nonmagical attacks and damage."

@@ -25,10 +25,12 @@ window.passives.append([
 		description:"You can take the Disengage or Hide action as a bonus action on each of your turns."
 	},{
 		name:"Powerful Build",
-		description:"You count as one size larger when determining your carrying capacity and the weight you can push, drag, or lift."
+		description:"You count as one size larger when determining your carrying capacity and the weight you can push, drag, or lift.",
+		dmHide:true
 	},{
 		name:"Speech of Beast and Leaf",
-		description:"You have the ability to communicate in a limited manner with beasts and plants. They can understand the meaning of your words, though you have no special ability to understand them in return. You have advantage on all Charisma checks you make to influence them."
+		description:"You have the ability to communicate in a limited manner with beasts and plants. They can understand the meaning of your words, though you have no special ability to understand them in return. You have advantage on all Charisma checks you make to influence them.",
+		dmHide:true
 	},{
 		name:"Savage Attacks",
 		description:"When you score a critical hit with a melee weapon attack, you can roll one of the weapon's damage dice one additional time and add it to the extra damage of the critical hit."
