@@ -56,6 +56,12 @@ window.abilities.append([
 		maxCharges:1,
 		charges:1,
 		onShortRest:helper.refresh
+	},{
+		name:"Sadism",
+		description:"Your attunement to pain allows you to share your wounds with another creature. Whenever you lose hit points, you can use your reaction to deal half that amount as necrotic damage to a creature within 10 feet of you.\n\nYou can use this feature once. You regain use of this feature when you finish a short or long rest.",
+		maxCharges:1,
+		charges:1,
+		onShortRest:helper.refresh
 	}
 ]);
 
@@ -92,6 +98,18 @@ window.passives.append([
 		name:"Transmutation Savant",
 		description:"The gold and time you must spend to copy a transmutation spell into your spellbook is halved.",
 		dmHide:true
+	},{
+		name:"Arcane Blood",
+		description:"You are able to sacrifice a portion of your life force to gain additional spell slots. As a bonus action, you may gain a spell slot of a level you can cast. To do this, roll 1d8 per level of the spell slot. Your hit point maximum is reduced by the amount rolled. This reduction cannot be recovered except with your Sanguine Recovery and Phlebotomy features.\nThis feature can't be used if you are in a temporary form, such as one caused by the Polymorph spell."
+	},{
+		name:"Sanguine Recovery",
+		description:"Whenever you spend hit dice to heal during a short rest, the amount you heal is also applied to restoring your hit point maximum."
+	},{
+		name:"Blood is Power",
+		description:"You can use your life essence to empower your spells, casting them at a higher level. To do so, roll a number of 1d6 equal to the number of levels you wish to increase the spell by. You lose hit points equal to the roll. This life loss isn't damage and can't be prevented.\n\nYou can't increase a spell's level by more than 3 levels this way, and you can't increase its level beyond the maximum spell level you can cast.\n\nThis feature can't be used if you are in a temporary form, such as one caused by the Polymorph spell."
+	},{
+		name:"Phlebotomy",
+		description:"You have learned to absorb the life force of other creatures. You learn the Vampiric Touch spell, if you didn't know it already.\nWhenever you gain hit points with a spell or effect that deals necrotic damage to another creature (such as Vampiric Touch), the amount of hit points gained is doubled, and you may apply any amount of it to restore your hit point maximum instead of your current hit points.\nThis feature can't be used if you are in a temporary form, such as one caused by the Polymorph spell."
 	},{
 		name:"Portent",
 		description:"Glimpses of the future begin to press in on your awareness. When you finish a long rest, roll ${getClassLevel($scope.char,'Wizard')>=14?'three':'two'} d20s and record the numbers rolled. You can replace any attack roll, saving throw, or ability check made by you or a creature that you can see with one of these foretelling rolls. You must choose to do so before the roll, and you can replace a roll in this way only once per turn.\nEach foretelling roll can be used only once. When you finish a long rest, you lose any unused foretelling rolls.",
@@ -778,6 +796,72 @@ window.subclasses.push(
 						choices:[findPassive("Master Transmuter")],
 						action:function(char){
 							addPassive(char,"Master Transmuter");
+						}
+					}
+				]
+			},{},{},{},{},{},{}
+		]
+	}
+);
+
+window.subclasses.push(
+	{
+		classname:"Wizard",
+		name:"Sangromancy",
+		subclass:"Sangromancy",
+		description:"Blood is widely seen as a substance of power. The sangromancer embodies this tenet, believing that no cost is too great to achieve their goals. As a sangromancer, you gain power through the offering of your own life essense, spending hit points to use special abilities and empower your spells.",
+		levels:[{},{},
+			{//2
+				summary:[
+					findPassive("Arcane Blood"),
+					findPassive("Sanguine Recovery")
+				],
+				updates:[
+					{
+						always:true,
+						choicePrompt:"You gain the following",
+						choices:[findPassive("Arcane Blood"),findPassive("Sanguine Recovery")],
+						action:function(char,derived,choice,$scope){
+							addPassive(char,"Arcane Blood");
+							addPassive(char,"Sanguine Recovery");
+						}
+					}
+				]
+			},{},{},{},{ //6
+				updates:[
+					{
+						summary:findPassive("Phlebotomy"),
+						choicePrompt:"You gain the following",
+						choices:[findPassive("Phlebotomy")],
+						action:function(char){
+							addPassive(char,"Phlebotomy");
+						}
+					}
+				]
+			},{},{},{},
+			{//10
+				summary:[
+					findPassive("Blood is Power")
+				],
+				updates:[
+					{
+						always:true,
+						choicePrompt:"You gain the following",
+						choices:[findPassive("Blood is Power")],
+						action:function(char,derived,choice){
+							addPassive(char,"Blood is Power");
+						}
+					}
+				]
+			},{},{},{},
+			{//14
+				updates:[
+					{
+						summary:findAbility("Sadism"),
+						choicePrompt:"You gain the following",
+						choices:[findAbility("Sadism")],
+						action:function(char){
+							addAbility(char,"Sadism");
 						}
 					}
 				]

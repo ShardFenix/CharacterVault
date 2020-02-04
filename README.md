@@ -147,3 +147,4 @@ Illusion | No
 Necromancy | No
 Transmutation | Yes
 War Magic | No
+Sangromancy (homebrew)| Yes
