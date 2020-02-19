@@ -6,7 +6,7 @@ Requires Node.js version 10.0.0 or higher (to run the included server for charac
 # Features
 - Guided levelups
 - Comes with all core packages (still adding subclasses - see below)
-- Skill bonuses, saving throws, save DCs, and weapon attack bonuses automatically calculated from ability scores
+- Skill bonuses, saving throws, save DCs, and weapon/spell attack bonuses automatically calculated from ability scores
 - Passive abilities can update your stats (eg the Alert feat adds +5 to initiative automatically)
 - Track ability uses per rest. Short/Long rest button refresh abilities appropriately
 - Basically everything has a tooltip
@@ -148,3 +148,19 @@ Necromancy | No
 Transmutation | Yes
 War Magic | No
 Sangromancy (homebrew)| Yes
+
+# Music Player
+The provided music app (music.html) lets you configure and play environment sets, with music and both looping and non-looping sounds. To use it, you need to create a /resources folder in the root of this project with the following structure:
+/resources/Environments
+/resources/Music
+/resources/SFX/Loops
+/resources/SFX/OneShots
+
+The music player can play just music if you want, but you can also create background ambiances by combining loops with periodic one-shot sounds.
+
+# DM Helper
+The DM Helper is a DM screen you can use to look up common rules, keep track of basic player stats, and manage combat encounters. Some features of it are unavailable on tablets.
+
+The combat tab is the most powerful part of the DM helper. You can add player characters that have been saved via the CharacterSheet app, as well as monsters, to the initiative tracker. The stat blocks for both players and monsters will appear on the screen, giving you quick access to their stats and abilities. Health and spell slot usage can be tracked on the stat blocks. Clicking on an item in the initiative order moves that item up. Clicking on the top item, or clicking the round arrow, will move the top entry to the bottom of the list, as if that creature finished its turn.
+
+Right-clicking on one of the entries on the initiative tracker brings up a dropdown menu with a list of conditions you can apply. Most of them default to 10 rounds, and will be decremented automatically as the initiative rolls by. You can also change the durations manually by hovering the number with the mouse and hitting + or - on the numpad. These features are not available for tablet views yet.
