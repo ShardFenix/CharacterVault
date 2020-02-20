@@ -92,8 +92,8 @@ Core | Yes
 Ancients | No
 Conquest | No
 Crown | No
-Devotion | No
-Redemption | No
+Devotion | Yes
+Redemption | Yes
 Vengeance | No
 
 Ranger | Supported
