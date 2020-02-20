@@ -33,6 +33,11 @@ window.abilities.append([
 		description:"You learn how to use your wit to distract, confuse, and otherwise sap the confidence and competence of others. When a creature that you can see within 60 feet of you makes an attack roll, an ability check, or a damage roll, you can use your reaction to expend one of your uses of Bardic Inspiration, rolling a Bardic Inspiration die and subtracting the number rolled from the creature's roll. You can choose to use this feature after the creature makes its roll, but before the DM determines whether the attack roll or ability check succeeds or fails, or before the creature deals its damage. The creature is immune if it can't hear you or if it's immune to being charmed.",
 		resourceName:"Bardic Inspiration (d6)",
 		resourceCost:1
+	},{
+		name:"Awestrike",
+		description:"You use your artistic talent to cause a creature to feel an overwhelming version of reality. As an action, you can expend a use of Bardic Inspiration, rolling a Bardic Inspiration die. Choose a creature within 30 feet that can see or hear you. That creature makes a Wisdom saving throw against your spell save DC plus the bardic inspiration roll. If the creature fails the save, they are stunned for one round. If they succeed, they are either blinded or deafened (your choice) for one round.",
+		resourceName:"Bardic Inspiration (d6)",
+		resourceCost:1
 	}
 ]);
 
@@ -63,6 +68,12 @@ window.passives.append([
 	},{
 		name:"Superior Inspiration",
 		description:"When you roll initiative and have no uses of Bardic Inspiration left, you regain one use."
+	},{
+		name:"Works of Wonder",
+		description:"When you succeed on a performance check, your performance leaves a lasting mark on those who witnessed it. You have advantage on all charisma checks against those creatures, and they have disadvantage on all charisma checks against you. This effect lasts until you take a long rest.\nIf you rolled a natural 20 on the performance check and succeeded the check, this effect instead lasts one week."
+	},{
+		name:"Mass Delusion",
+		description:"Your prowess in artistic expression allows you to touch the masses. When you cast an Illusion spell that can only target one creature at the level you cast it, and doesn't have a range of self, you may instead have it affect any number of creatures."
 	}
 ]);
 
@@ -620,8 +631,7 @@ window.subclasses.push(
 		subclass:"College of Lore",
 		description:"Bards of the College of Lore know something about most things, collecting bits of knowledge from sources as diverse as scholarly tomes and peasant tales. Whether singing folk ballads in taverns or elaborate compositions in royal courts, these bards use their gifts to hold audiences spellbound. When the applause dies down, the audience members might find themselves questioning everything they held to be true, from their faith in the priesthood of the local temple to their loyalty to the king.\nThe loyalty of these bards lies in the pursuit of beauty and truth, not in fealty to a monarch or following the tenets of a deity. A noble who keeps such a bard as a herald or advisor knows that the bard would rather be honest than politic.\nThe college's members gather in libraries and sometimes in actual colleges, complete with classrooms and dormitories, to share their lore with one another. They also meet at festivals or affairs of state, where they can expose corruption, unravel lies, and poke fun at self-important figures of authority.",
 		levels:[
-			{},{},{},
-			{ // 3
+			{},{},{},{ // 3
 				"updates":[
 					helper.learnSkillProficiency3,
 					helper.chooseExpertise2,
@@ -633,8 +643,7 @@ window.subclasses.push(
 						}
 					}
 				]
-			},{},
-			{//5
+			},{},{//5
 				updates:[
 					{
 						"choices":[],
@@ -648,8 +657,7 @@ window.subclasses.push(
 						}
 					}
 				]
-			},
-			{//6
+			},{//6
 				updates:[
 					{
 						limit:2,
@@ -660,8 +668,7 @@ window.subclasses.push(
 						}
 					}
 				]
-			},{},{},{},
-			{//10
+			},{},{},{},{//10
 				updates:[
 					{
 						"choices":[],
@@ -675,8 +682,7 @@ window.subclasses.push(
 						}
 					}
 				]
-			},{},{},{},
-			{//14
+			},{},{},{},{//14
 				updates:[
 					{
 						choicePrompt:"You gain the following",
@@ -693,6 +699,94 @@ window.subclasses.push(
 						action:function(char){
 							for (let abil of char.abilities){
 								if (abil.name==='Cutting Words'){
+									abil.resourceName="Bardic Inspiration (d12)";
+									return;
+								}
+							}
+						}
+					}
+				]
+			},{},{},{},{},{}
+		]
+	}
+);
+
+window.subclasses.push(
+	{
+		classname:"Bard",
+		name:"College of Impressionism",
+		subclass:"College of Impressionism",
+		description:"Bards of the College of Impressionism have learned to experience the world through emption and passion. They need not rely solely on their senses, but can understand reality by feeling it in their soul. Impressionist bards are capable of projecting these feelings onto others, giving them total control of how other creatures perceive their surroundings.",
+		levels:[
+			{},{},{},
+			{ // 3
+				"updates":[
+					helper.learnSkillProficiency3,
+					helper.chooseExpertise2,
+					{
+						choicePrompt:"You gain the following",
+						choices:[findAbility("Awestrike")],
+						action:function(char){
+							addAbility(char,"Awestrike");
+						}
+					}
+				]
+			},{},{ //5
+				updates:[
+					{
+						choices:[],
+						action:function(char){
+							for (let abil of char.abilities){
+								if (abil.name==='Awestrike'){
+									abil.resourceName="Bardic Inspiration (d8)";
+									return;
+								}
+							}
+						}
+					}
+				]
+			},{//6
+				updates:[
+					{
+						choicePrompt:"You gain the following:",
+						choices:[findPassive("Works of Wonder")],
+						action:function(char,derived,choice){
+							addPassive(char,"Works of Wonder");
+						}
+					}
+				]
+			},{},{},{},{//10
+				updates:[
+					{
+						choices:[],
+						action:function(char){
+							for (let abil of char.abilities){
+								if (abil.name==='Awestrike'){
+									abil.resourceName="Bardic Inspiration (d10)";
+									return;
+								}
+							}
+						}
+					}
+				]
+			},{},{},{},
+			{//14
+				updates:[
+					{
+						choicePrompt:"You gain the following",
+						choices:[findPassive("Mass Delusion")],
+						action:function(char){
+							addPassive(char,"Mass Delusion");
+						}
+					}
+				]
+			},{//15
+				updates:[
+					{
+						choices:[],
+						action:function(char){
+							for (let abil of char.abilities){
+								if (abil.name==='Awestrike'){
 									abil.resourceName="Bardic Inspiration (d12)";
 									return;
 								}

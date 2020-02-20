@@ -37,6 +37,7 @@ Lore | Yes
 Swords | No
 Valor | No
 Whispers | No
+Impressionism (homebrew) | Yes
 
 Cleric | Supported
 ------------- | -------------
