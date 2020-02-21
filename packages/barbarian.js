@@ -118,6 +118,45 @@ window.passives.append([
 	},{
 		name:"Rage Beyond Death",
 		description:"While you're raging, having 0 hit points doesn't knock you unconscious. You still must make death saving throws, and you suffer the normal effects of taking damage while at 0 hit points. However, if you would die due to failing death saving throws, you don't die until your rage ends, and you die then only if you still have 0 hit points."
+	},{
+		name:"Desert Aura",
+		description:"When this effect is activated, all other creatures in your aura take ${ladder(classlevel($scope.char,'Barbarian'),0,2,5,3,10,4,15,5,20,6)} fire damage each. The damage increases when you reach certain levels in this class, increasing to 3 at 5th level, 4 at 10th level, 5 at 15th level, and 6 at 20th level."
+	},{
+		name:"Sea Aura",
+		description:"When this effect is activated, you can choose one other creature you can see in your aura. The target must make a Dexterity saving throw (DC ${8 + $scope.derived.proficiency + $scope.derived.modifiers.con}). The target takes ${ladder(classlevel($scope.char.'Barbarian'),0,1,10,2,15,3,20,4)}d6 lightning damage on a failed save, or half as much damage on a successful one. The damage increases when you reach certain levels in this class, increasing to 2d6 at 10th level, 3d6 at 15th level, and 4d6 at 20th level."
+	},{
+		name:"Tundra Aura",
+		description:"When this effect is activated, each creature of your choice in your aura gains ${ladder(classlevel($scope.char,'Barbarian'),0,2,5,3,10,4,15,5,20,6)} temporary hit points, as icy spirits inure it to suffering. The temporary hit points increase when you reach certain levels in this class, increasing to 3 at 5th level, 4 at 10th level, 5 at 15th level, and 6 at 20th level."
+	},{
+		name:"Desert Soul",
+		description:"You gain resistance to fire damage, and you don't suffer the effects of extreme heat, as described in the Dungeon Master's Guide. Moreover, as an action, you can touch a flammable object that isn't being worn or carried by anyone else and set it on fire."
+	},{
+		name:"Sea Soul",
+		description:"You gain resistance to lightning damage, and you can breathe underwater. You also gain a swimming speed of 30 feet."
+	},{
+		name:"Tundra Soul",
+		description:"You gain resistance to cold damage, and you don't suffer the effects of extreme cold, as described in the Dungeon Master's Guide. Moreover, as an action, you can touch water and turn a 5-foot cube of it into ice, which melts after 1 minute. This action fails if a creature is in the cube."
+	},{
+		name:"Desert Storm",
+		description:"Immediately after a creature in your aura hits you with an attack, you can use your reaction to force that creature to make a Dexterity saving throw (DC ${8 + $scope.derived.proficiency + $scope.derived.modifiers.con}). On a failed save, the creature takes fire damage equal to half your barbarian level."
+	},{
+		name:"Sea Storm",
+		description:"When you hit a creature in your aura with an attack, you can use your reaction to force that creature to make a Strength saving throw (DC ${8 + $scope.derived.proficiency + $scope.derived.modifiers.con}). On a failed save, the creature is knocked prone, as if struck by a wave."
+	},{
+		name:"Tundra Storm",
+		description:"Whenever the effect of your Storm Aura is activated, you can choose one creature you can see in the aura. That creature must succeed on a Strength saving throw (DC ${8 + $scope.derived.proficiency + $scope.derived.modifiers.con}), or its speed is reduced to 0 until the start of your next turn, as magical frost covers it."
+	},{
+		name:"Shielding Storm",
+		description:"You learn to use your mastery of the storm to protect others. Each creature of your choice has the damage resistance you gained from the Storm Soul feature while the creature is in your Storm Aura."
+	},{//DISPLAY ONLY
+		name:"Storm Aura",
+		description:"You emanate a stormy, magical aura while you rage. The aura extends 10 feet from you in every direction, but not through total cover.\n\nYour aura has an effect that activates when you enter your rage, and you can activate the effect again on each of your turns as a bonus action. Choose desert, sea, or tundra. Your aura's effect depends on that chosen environment. You can change your environment choice whenever you gain a level in this class.\n\nIf your aura's effects require a saving throw, the DC equals 8 + your proficiency bonus + your Constitution modifier."
+	},{//DISPLAY ONLY
+		name:"Storm Soul",
+		description:"The storm grants you benefits even when your aura isn't active. The benefits are based on the environment you chose for your Storm Aura."
+	},{//DISPLAY ONLY
+		name:"Raging Storm",
+		description:"The power of the storm you channel grows mightier, lashing out at your foes. The effect is based on the environment you chose for your Storm Aura."
 	}
 ]);
 
@@ -647,6 +686,110 @@ window.subclasses.push(
 				]
 
 			},{},{},{},{},{},{}
+		]
+	}
+);
+
+
+
+helper.chooseStormAura={
+	choicePrompt:"Choose your storm environment",
+	choices:[findPassive("Desert"),findPassive("Sea"),findPassive("Tundra")],
+	action:function(char,choice){
+		var auraAbil = angular.copy(findPassive(choice+" Aura"));
+		auraAbil.description = "You emanate a stormy, magical aura while you rage. The aura extends 10 feet from you in every direction, but not through total cover.\n\nYour aura has an effect that activates when you enter your rage, and you can activate the effect again on each of your turns as a bonus action.\n\u2022 " + auraAbil.description;
+		removePassive(char,"Desert Aura");
+		removePassive(char,"Sea Aura");
+		removePassive(char,"Tundra Aura");
+		if (classlevel(char,'Barbarian' >= 6)){
+			var soulAbil = angular.copy(findPassive(choice+" Soul"));
+			auraAbil.description += "\n\u2022 " + soulAbil.description;
+		}
+		if (classlevel(char,'Barbarian') >= 14){
+			var stormAbil = angular.copy(findPassive(choice+" Storm"));
+			auraAbil.description += "\n\u2022 " + stormAbil.description;
+		}
+		addPassive(auraAbil);
+	}
+};
+
+window.subclasses.push(
+	{
+		classname:"Barbarian",
+		name:"Storm Herald",
+		subclass:"Storm Herald",
+		description:"All barbarians harbor a fury within. Their rage grants them superior strength, durability, and speed. Barbarians who follow the Path of the Storm Herald learn to transform that rage into a mantle of primal magic, which swirls around them. When in a fury, a barbarian of this path taps into the forces of nature to create powerful magical effects.\n\nStorm heralds are typically elite champions who train alongside druids, rangers, and others sworn to protect nature. Other storm heralds hone their craft in lodges in regions wracked by storms, in the frozen reaches at the world's end, or deep in the hottest deserts.",
+		levels:[{},{},{},
+			{//3
+				updates:[
+					{
+						choicePrompt:"You gain the following",
+						summary:findPassive("Storm Aura"),
+						choices:[findPassive("Storm Aura")],
+						action:function(char){}
+					},helper.chooseStormAura
+				]
+			},{
+				updates:[helper.chooseStormAura]
+			},{
+				updates:[helper.chooseStormAura]
+			},{ //6
+				updates:[
+					{
+						choicePrompt:"You gain the following",
+						summary:findPassive("Storm Soul"),
+						choices:[findPassive("Storm Soul")],
+						action:function(char){}
+					},helper.chooseStormAura
+				]
+			},{
+				updates:[helper.chooseStormAura]
+			},{
+				updates:[helper.chooseStormAura]
+			},{
+				updates:[helper.chooseStormAura]
+			},
+			{//10
+				updates:[
+					{
+						choicePrompt:"You gain the following",
+						summary:findAbility("Shielding Storm"),
+						choices:[findAbility("Shielding Storm")],
+						action:function(char,derived,choice){
+							addAbility(char,"Shielding Storm");
+						}
+					},helper.chooseStormAura
+				]
+			},{
+				updates:[helper.chooseStormAura]
+			},{
+				updates:[helper.chooseStormAura]
+			},{
+				updates:[helper.chooseStormAura]
+			},
+			{//14
+				updates:[
+					{
+						choicePrompt:"You gain the following",
+						summary:findPassive("Raging Storm"),
+						choices:[findPassive("Raging Storm")],
+						action:function(char){}
+					},helper.chooseStormAura
+				]
+
+			},{
+				updates:[helper.chooseStormAura]
+			},{
+				updates:[helper.chooseStormAura]
+			},{
+				updates:[helper.chooseStormAura]
+			},{
+				updates:[helper.chooseStormAura]
+			},{
+				updates:[helper.chooseStormAura]
+			},{
+				updates:[helper.chooseStormAura]
+			}
 		]
 	}
 );

@@ -35,7 +35,7 @@ window.abilities.append([
 		resourceCost:1
 	},{
 		name:"Awestrike",
-		description:"You use your artistic talent to cause a creature to feel an overwhelming version of reality. As an action, you can expend a use of Bardic Inspiration, rolling a Bardic Inspiration die. Choose a creature within 30 feet that can see or hear you. That creature makes a Wisdom saving throw against your spell save DC plus the bardic inspiration roll. If the creature fails the save, they are stunned for one round. If they succeed, they are either blinded or deafened (your choice) for one round.",
+		description:"Your artistic talent can flood a creature's senses with an overwhelming version of reality. As an action, you can expend a use of Bardic Inspiration, rolling a Bardic Inspiration die. Choose a creature within 30 feet that can see or hear you. That creature makes a Wisdom saving throw against your spell save DC plus the bardic inspiration roll. If the creature fails the save, they are stunned for one round. If they succeed, they are either blinded or deafened (your choice) for one round.",
 		resourceName:"Bardic Inspiration (d6)",
 		resourceCost:1
 	}
