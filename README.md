@@ -20,135 +20,135 @@ Requires Node.js version 10.0.0 or higher (to run the included server for charac
 
 Barbarian | Supported
 ------------- | -------------
-Core | Yes
-Ancestral Guardian | Yes
-Battlerager | No
-Berserker | Yes
-Storm Herald | Yes
-Totem Warrior | Yes
-Zealot | Yes
-Whirlwind (homebrew) | Yes
+Core | ![#00cc00](https://placehold.it/15/00cc00/000000?text=+)
+Ancestral Guardian | ![#00cc00](https://placehold.it/15/00cc00/000000?text=+)
+Battlerager | ![#cc0000](https://placehold.it/15/cc0000/000000?text=+)
+Berserker | ![#00cc00](https://placehold.it/15/00cc00/000000?text=+)
+Storm Herald | ![#00cc00](https://placehold.it/15/00cc00/000000?text=+)
+Totem Warrior | ![#00cc00](https://placehold.it/15/00cc00/000000?text=+)
+Zealot | ![#00cc00](https://placehold.it/15/00cc00/000000?text=+)
+Whirlwind (homebrew) | ![#00cc00](https://placehold.it/15/00cc00/000000?text=+)
 
 Bard | Supported
 ------------- | -------------
-Core | Yes
-Glamour | Yes
-Lore | Yes
-Swords | No
-Valor | No
-Whispers | No
-Impressionism (homebrew) | Yes
+Core | ![#00cc00](https://placehold.it/15/00cc00/000000?text=+)
+Glamour | ![#00cc00](https://placehold.it/15/00cc00/000000?text=+)
+Lore | ![#00cc00](https://placehold.it/15/00cc00/000000?text=+)
+Swords | ![#cc0000](https://placehold.it/15/cc0000/000000?text=+)
+Valor | ![#cc0000](https://placehold.it/15/cc0000/000000?text=+)
+Whispers | ![#cc0000](https://placehold.it/15/cc0000/000000?text=+)
+Impressionism (homebrew) | ![#00cc00](https://placehold.it/15/00cc00/000000?text=+)
 
 Cleric | Supported
 ------------- | -------------
 Core | ![#00cc00](https://placehold.it/15/00cc00/000000?text=+)
 Arcana | ![#cc0000](https://placehold.it/15/cc0000/000000?text=+)
-Forge | No
-Grave | Yes
-Knowledge | No
-Life | Yes
-Light | No
-Nature | No
-Order | No
-Tempest | Yes
-Trickery | No
-War | Yes
+Forge | ![#cc0000](https://placehold.it/15/cc0000/000000?text=+)
+Grave | ![#00cc00](https://placehold.it/15/00cc00/000000?text=+)
+Knowledge | ![#cc0000](https://placehold.it/15/cc0000/000000?text=+)
+Life | ![#00cc00](https://placehold.it/15/00cc00/000000?text=+)
+Light | ![#cc0000](https://placehold.it/15/cc0000/000000?text=+)
+Nature | ![#cc0000](https://placehold.it/15/cc0000/000000?text=+)
+Order | ![#cc0000](https://placehold.it/15/cc0000/000000?text=+)
+Tempest | ![#00cc00](https://placehold.it/15/00cc00/000000?text=+)
+Trickery | ![#cc0000](https://placehold.it/15/cc0000/000000?text=+)
+War | ![#00cc00](https://placehold.it/15/00cc00/000000?text=+)
 
 Druid | Supported
 ------------- | -------------
-Core | Yes
-Dreams | No
-Land | Yes
-Moon | Yes
-Shepherd | No
-Spores | No
+Core | ![#00cc00](https://placehold.it/15/00cc00/000000?text=+)
+Dreams | ![#cc0000](https://placehold.it/15/cc0000/000000?text=+)
+Land | ![#00cc00](https://placehold.it/15/00cc00/000000?text=+)
+Moon | ![#00cc00](https://placehold.it/15/00cc00/000000?text=+)
+Shepherd | ![#cc0000](https://placehold.it/15/cc0000/000000?text=+)
+Spores | ![#cc0000](https://placehold.it/15/cc0000/000000?text=+)
 
 Fighter | Supported
 ------------- | -------------
-Core | Yes
-Arcane Archer | Yes
-Battle Master | Yes
-Cavalier | No
-Eldritch Knight | No
-Banneret | Yes
-Samurai | Yes
+Core | ![#00cc00](https://placehold.it/15/00cc00/000000?text=+)
+Arcane Archer | ![#00cc00](https://placehold.it/15/00cc00/000000?text=+)
+Battle Master | ![#00cc00](https://placehold.it/15/00cc00/000000?text=+)
+Cavalier | ![#cc0000](https://placehold.it/15/cc0000/000000?text=+)
+Eldritch Knight | ![#cc0000](https://placehold.it/15/cc0000/000000?text=+)
+Banneret | ![#00cc00](https://placehold.it/15/00cc00/000000?text=+)
+Samurai | ![#00cc00](https://placehold.it/15/00cc00/000000?text=+)
 
 Monk | Supported
 ------------- | -------------
-Core | Yes
-Drunken Master | No
-Four Elements | No
-Kensei | No
-Long Death | Yes
-Open Hand | No
-Shadow | No
-Sun Soul | No
-Enlightenment (homebrew) | Yes
-Ninjutsu (homebrew) | Yes
-Cobalt Soul (homebrew) | Yes
+Core | ![#00cc00](https://placehold.it/15/00cc00/000000?text=+)
+Drunken Master | ![#cc0000](https://placehold.it/15/cc0000/000000?text=+)
+Four Elements | ![#cc0000](https://placehold.it/15/cc0000/000000?text=+)
+Kensei | ![#cc0000](https://placehold.it/15/cc0000/000000?text=+)
+Long Death | ![#00cc00](https://placehold.it/15/00cc00/000000?text=+)
+Open Hand | ![#cc0000](https://placehold.it/15/cc0000/000000?text=+)
+Shadow | ![#cc0000](https://placehold.it/15/cc0000/000000?text=+)
+Sun Soul | ![#cc0000](https://placehold.it/15/cc0000/000000?text=+)
+Enlightenment (homebrew) | ![#00cc00](https://placehold.it/15/00cc00/000000?text=+)
+Ninjutsu (homebrew) | ![#00cc00](https://placehold.it/15/00cc00/000000?text=+)
+Cobalt Soul (homebrew) | ![#00cc00](https://placehold.it/15/00cc00/000000?text=+)
 
 Paladin | Supported
 ------------- | -------------
-Core | Yes
-Ancients | No
-Conquest | No
-Crown | No
-Devotion | Yes
-Redemption | Yes
-Vengeance | No
+Core | ![#00cc00](https://placehold.it/15/00cc00/000000?text=+)
+Ancients | ![#cc0000](https://placehold.it/15/cc0000/000000?text=+)
+Conquest | ![#cc0000](https://placehold.it/15/cc0000/000000?text=+)
+Crown | ![#cc0000](https://placehold.it/15/cc0000/000000?text=+)
+Devotion | ![#00cc00](https://placehold.it/15/00cc00/000000?text=+)
+Redemption | ![#00cc00](https://placehold.it/15/00cc00/000000?text=+)
+Vengeance | ![#cc0000](https://placehold.it/15/cc0000/000000?text=+)
 
 Ranger | Supported
 ------------- | -------------
-Core | Yes
-Beast Master | Yes
-Gloom Stalker | No
-Horizon Walker | No
-Hunter | No
-Monster Slayer | No
+Core | ![#00cc00](https://placehold.it/15/00cc00/000000?text=+)
+Beast Master | ![#00cc00](https://placehold.it/15/00cc00/000000?text=+)
+Gloom Stalker | ![#cc0000](https://placehold.it/15/cc0000/000000?text=+)
+Horizon Walker | ![#cc0000](https://placehold.it/15/cc0000/000000?text=+)
+Hunter | ![#cc0000](https://placehold.it/15/cc0000/000000?text=+)
+Monster Slayer | ![#cc0000](https://placehold.it/15/cc0000/000000?text=+)
 
 Rogue | Supported
 ------------- | -------------
-Core | Yes
-Arcane Trickster | Yes
-Assassin | Yes
-Inquisitive | No
-Mastermind | No
-Scout | No
-Swashbuckler | Yes
+Core | ![#00cc00](https://placehold.it/15/00cc00/000000?text=+)
+Arcane Trickster | ![#00cc00](https://placehold.it/15/00cc00/000000?text=+)
+Assassin | ![#00cc00](https://placehold.it/15/00cc00/000000?text=+)
+Inquisitive | ![#cc0000](https://placehold.it/15/cc0000/000000?text=+)
+Mastermind | ![#cc0000](https://placehold.it/15/cc0000/000000?text=+)
+Scout | ![#cc0000](https://placehold.it/15/cc0000/000000?text=+)
+Swashbuckler | ![#00cc00](https://placehold.it/15/00cc00/000000?text=+)
 
 Sorcerer | Supported
 ------------- | -------------
-Core | Yes
-Divine Soul | Yes
-Draconic | No
-Shadow | No
-Storm | No
-Wild | No
+Core | ![#00cc00](https://placehold.it/15/00cc00/000000?text=+)
+Divine Soul | ![#00cc00](https://placehold.it/15/00cc00/000000?text=+)
+Draconic | ![#cc0000](https://placehold.it/15/cc0000/000000?text=+)
+Shadow | ![#cc0000](https://placehold.it/15/cc0000/000000?text=+)
+Storm | ![#cc0000](https://placehold.it/15/cc0000/000000?text=+)
+Wild | ![#cc0000](https://placehold.it/15/cc0000/000000?text=+)
 
 Warlock | Supported
 ------------- | -------------
-Core | Yes
-Archfey | No
-Celestial | No
-Field | Yes
-Great Old One | No
-Hexblade | Yes
-Undying | No
+Core | ![#00cc00](https://placehold.it/15/00cc00/000000?text=+)
+Archfey | ![#cc0000](https://placehold.it/15/cc0000/000000?text=+)
+Celestial | ![#cc0000](https://placehold.it/15/cc0000/000000?text=+)
+Field | ![#00cc00](https://placehold.it/15/00cc00/000000?text=+)
+Great Old One | ![#cc0000](https://placehold.it/15/cc0000/000000?text=+)
+Hexblade | ![#00cc00](https://placehold.it/15/00cc00/000000?text=+)
+Undying | ![#cc0000](https://placehold.it/15/cc0000/000000?text=+)
 
 Wizard | Supported
 ------------- | -------------
-Core | Yes
-Abjuration | Yes
-Bladesinging | No
-Conjuration | Yes
-Divination | Yes
-Enchantment | Yes
-Evocation | Yes
-Illusion | No
-Necromancy | No
-Transmutation | Yes
-War Magic | No
-Sangromancy (homebrew)| Yes
+Core | ![#00cc00](https://placehold.it/15/00cc00/000000?text=+)
+Abjuration | ![#00cc00](https://placehold.it/15/00cc00/000000?text=+)
+Bladesinging | ![#cc0000](https://placehold.it/15/cc0000/000000?text=+)
+Conjuration | ![#00cc00](https://placehold.it/15/00cc00/000000?text=+)
+Divination | ![#00cc00](https://placehold.it/15/00cc00/000000?text=+)
+Enchantment | ![#00cc00](https://placehold.it/15/00cc00/000000?text=+)
+Evocation | ![#00cc00](https://placehold.it/15/00cc00/000000?text=+)
+Illusion | ![#cc0000](https://placehold.it/15/cc0000/000000?text=+)
+Necromancy | ![#cc0000](https://placehold.it/15/cc0000/000000?text=+)
+Transmutation | ![#00cc00](https://placehold.it/15/00cc00/000000?text=+)
+War Magic | ![#cc0000](https://placehold.it/15/cc0000/000000?text=+)
+Sangromancy (homebrew)| ![#00cc00](https://placehold.it/15/00cc00/000000?text=+)
 
 # Music Player
 The provided music app (music.html) lets you configure and play environment sets, with music and both looping and non-looping sounds. To use it, you need to create a /resources folder in the root of this project with the following structure:
