@@ -41,8 +41,8 @@ Impressionism (homebrew) | Yes
 
 Cleric | Supported
 ------------- | -------------
-Core | ![#c5f015](https://placehold.it/15/c5f015/000000?text=+) Yes
-Arcana | No
+Core | ![#00cc00](https://placehold.it/15/00cc00/000000?text=+)
+Arcana | ![#cc0000](https://placehold.it/15/cc0000/000000?text=+)
 Forge | No
 Grave | Yes
 Knowledge | No
