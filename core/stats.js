@@ -1107,9 +1107,26 @@ $scope.selectSpell=function(spell){
 	$scope.setTip(spell);
 }
 
+$scope.getDescription=function(desc){
+	if (typeof desc === 'string'){
+		return desc;
+	} else if (Array.isArray(desc)){
+		var temp = '';
+		for (let d of desc){
+			temp += $scope.getDescription(d);
+		}
+		return temp;
+	} else if (typeof desc === 'object'){
+		if (typeof desc.showWhen === 'function' && desc.showWhen($scope.char,$scope.derived,$scope)){
+			return desc.value;
+		}
+	}
+	return '';
+}
+
 $scope.evalTooltip=function(tip){
 	if (tip && tip.description){
-		let desc=tip.description;
+		let desc=getDescription(tip.description);
 		if (tip.level && $scope.chosenSpell && tip.level<$scope.chosenSpell.level){
 			return $scope.chosenSpell.name+' can only be cast at level '+$scope.chosenSpell.level+' or higher.';
 		}

@@ -66,11 +66,11 @@ Spores | No
 Fighter | Supported
 ------------- | -------------
 Core | Yes
-Arcane Archer | No
+Arcane Archer | Yes
 Battle Master | Yes
 Cavalier | No
 Eldritch Knight | No
-Purple Dragon Knight | No
+Banneret | Yes
 Samurai | Yes
 
 Monk | Supported
