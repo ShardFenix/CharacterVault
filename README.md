@@ -24,8 +24,8 @@ Core | Yes
 Ancestral Guardian | Yes
 Battlerager | No
 Berserker | Yes
-Storm Herald | No
-Totem Warrior | No
+Storm Herald | Yes
+Totem Warrior | Yes
 Zealot | Yes
 Whirlwind (homebrew) | Yes
 
