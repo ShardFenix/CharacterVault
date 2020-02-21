@@ -222,6 +222,26 @@ window.passives.append([
 	},{
 		name:"Bulwark",
 		description:"You can extend the benefit of your Indomitable feature to an ally. When you decide to use Indomitable to reroll an Intelligence, a Wisdom, or a Charisma saving throw and you aren't incapacitated, you can choose one ally within 60 feet of you that also failed its saving throw against the same effect. If that creature can see or hear you, it can reroll its saving throw and must use the new roll."
+	},{
+		name:"Weapon Bond",
+		description:"You learn a ritual that creates a magical bond between yourself and one weapon. You perform the ritual over the course of 1 hour, which can be done during a short rest. The weapon must be within your reach throughout the ritual, at the conclusion of which you touch the weapon and forge the bond.\n\nOnce you have bonded a weapon to yourself, you can't be disarmed of that weapon unless you are incapacitated. If it is on the same plane of existence, you can summon that weapon as a bonus action on your turn, causing it to teleport instantly to your hand.\n\nYou can have up to two bonded weapons, but can summon only one at a time with your bonus action. If you attempt to bond with a third weapon, you must break the bond with one of the other two."
+	},{
+		name:"War Magic",
+		description:[
+			{
+				showWhen:function(char){return classlevel(char,"Fighter") < 18;},
+				value:"When you use your action to cast a cantrip, you can make one weapon attack as a bonus action."
+			},{
+				showWhen:function(char){return classlevel(char,"Fighter") >= 18;},
+				value:"When you use your action to cast a spell, you can make one weapon attack as a bonus action."
+			}
+		]
+	},{
+		name:"Eldritch Strike",
+		description:"When you hit a creature with a weapon attack, that creature has disadvantage on the next saving throw it makes against a spell you cast before the end of your next turn."
+	},{
+		name:"Arcane Charge",
+		description:"You gain the ability to teleport up to 30 feet to an unoccupied space you can see when you use your Action Surge. You can teleport before or after the additional action."
 	}
 ]);
 
@@ -938,6 +958,76 @@ window.subclasses.push(
 						summary:{name:"Inspiring Surge",description:"You can choose two allies within 60 feet of you for your Inspiring Surge feature."},
 						choicePrompt:"You gain the following",
 						choices:[{name:"Inspiring Surge",description:"You can choose two allies within 60 feet of you for your Inspiring Surge feature."}],
+						action:function(char){
+						}
+					}
+				]
+			},{},{}
+		]
+	}
+);
+
+window.subclasses.push(
+	{
+		classname:"Fighter",
+		name:"Eldritch Knight",
+		subclass:"Eldritch Knight",
+		description:"The archetypal Eldritch Knight combines the martial mastery common to all fighters with a careful study of magic. Eldritch Knights use magical techniques similar to those practiced by wizards. They focus their study on two of the eight schools of magic—abjuration and evocation. Abjuration spells grant an Eldritch Knight additional protection in battle, and evocation spells deal damage to many foes at once, extending the fighter's reach in combat. These knights learn a comparatively small number of spells, committing them to memory instead of keeping them in a spellbook.",
+		levels:[{},{},{},
+			{//3
+				updates:[
+					{
+						summary:findPassive("Weapon Bond"),
+						choicePrompt:"You gain the following:",
+						choices:[findPassive("Weapon Bond")],
+						action:function(char,derived,choice,$scope){
+							addPassive(char,"Weapon Bond");
+						}
+					}
+				]
+			},{},{},{},
+			{ //7
+				updates:[
+					{
+						summary:findPassive("War Magic"),
+						choicePrompt:"You gain the following:",
+						choices:[findPassive("War Magic")],
+						action:function(char,derived,choice,$scope){
+							addPassive(char,"War Magic");
+						}
+					}
+				]
+			},{},{},
+			{//10
+				updates:[
+					{
+						summary:findPassive("Eldritch Strike"),
+						choicePrompt:"You gain the following:",
+						choices:[findPassive("Eldritch Strike")],
+						action:function(char,derived,choice){
+							addPassive(char,"Eldritch Strike");
+						}
+					}
+				]
+			},{},{},{},{},
+			{//15
+				updates:[
+					{
+						summary:findPassive("Arcane Charge"),
+						choicePrompt:"You gain the following:",
+						choices:[findPassive("Arcane Charge")],
+						action:function(char,derived,choice){
+							addPassive(char,"Arcane Charge");
+						}
+					}
+				]
+			},{},{},
+			{//18
+				updates:[
+					{
+						summary:{name:"Improved War Magic",description:"You can use your War Magic feature after casting any spell."},
+						choicePrompt:"You gain the following",
+						choices:[{name:"Improved War Magic",description:"You can use your War Magic feature after casting any spell."}],
 						action:function(char){
 						}
 					}

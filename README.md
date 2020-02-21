@@ -69,7 +69,7 @@ Core | ![#00cc00](https://placehold.it/15/00cc00/000000?text=+)
 Arcane Archer | ![#00cc00](https://placehold.it/15/00cc00/000000?text=+)
 Battle Master | ![#00cc00](https://placehold.it/15/00cc00/000000?text=+)
 Cavalier | ![#cc0000](https://placehold.it/15/cc0000/000000?text=+)
-Eldritch Knight | ![#cc0000](https://placehold.it/15/cc0000/000000?text=+)
+Eldritch Knight | ![#00cc00](https://placehold.it/15/00cc00/000000?text=+)
 Banneret | ![#00cc00](https://placehold.it/15/00cc00/000000?text=+)
 Samurai | ![#00cc00](https://placehold.it/15/00cc00/000000?text=+)
 
