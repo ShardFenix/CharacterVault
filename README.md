@@ -32,7 +32,7 @@ Whirlwind (homebrew) | Yes
 Bard | Supported
 ------------- | -------------
 Core | Yes
-Glamour | No
+Glamour | Yes
 Lore | Yes
 Swords | No
 Valor | No

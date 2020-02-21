@@ -38,6 +38,29 @@ window.abilities.append([
 		description:"Your artistic talent can flood a creature's senses with an overwhelming version of reality. As an action, you can expend a use of Bardic Inspiration, rolling a Bardic Inspiration die. Choose a creature within 30 feet that can see or hear you. That creature makes a Wisdom saving throw against your spell save DC plus the bardic inspiration roll. If the creature fails the save, they are stunned for one round. If they succeed, they are either blinded or deafened (your choice) for one round.",
 		resourceName:"Bardic Inspiration (d6)",
 		resourceCost:1
+	},{
+		name:"Mantle of Inspiration",
+		description:"As a bonus action, you can expend one use of your Bardic Inspiration to grant yourself a wondrous appearance. When you do so, choose a number of creatures you can see and that can see you within 60 feet of you, up to a number equal to your Charisma modifier (minimum of one). Each of them gains ${ladder(classlevel($scope.char,'Bard'),0,5,5,8,10,11,15,14)} temporary hit points. When a creature gains these temporary hit points, it can immediately use its reaction to move up to its speed, without provoking opportunity attacks.\n\nThe number of temporary hit points increases when you reach certain levels in this class, increasing to 8 at 5th level, 11 at 10th level, and 14 at 15th level.",
+		resourceName:"Bardic Inspiration (d6)",
+		resourceCost:1
+	},{
+		name:"Enthralling Performance",
+		description:"You can charge your performance with seductive, fey magic.\n\nIf you perform for at least 1 minute, you can attempt to inspire wonder in your audience by singing, reciting a poem, or dancing. At the end of the performance, choose a number of humanoids within 60 feet of you who watched and listened to all of it, up to a number equal to your Charisma modifier (minimum of one). Each target must succeed on a Wisdom saving throw against your spell save DC or be charmed by you. While charmed in this way, the target idolizes you, it speaks glowingly of you to anyone who talks to it, and it hinders anyone who opposes you, although it avoids violence unless it was already inclined to fight on your behalf. This effect ends on a target after 1 hour, if it takes any damage, if you attack it, or if it witnesses you attacking or damaging any of its allies.\n\nIf a target succeeds on its saving throw, the target has no hint that you tried to charm it.\n\nOnce you use this feature, you can't use it again until you finish a short or long rest.",
+		charges:1,
+		maxCharges:1,
+		onShortRest:helper.recharge
+	},{
+		name:"Mantle of Majesty",
+		description:"You gain the ability to cloak yourself in a fey magic that makes others want to serve you. As a bonus action, you cast command, without expending a spell slot, and you take on an appearance of unearthly beauty for 1 minute or until your concentration ends (as if you were concentrating on a spell). During this time, you can cast command as a bonus action on each of your turns, without expending a spell slot.\n\nAny creature charmed by you automatically fails its saving throw against the command you cast with this feature.\n\nOnce you use this feature, you can't use it again until you finish a long rest.",
+		charges:1,
+		maxCharges:1,
+		onLongRest:helper.recharge
+	},{
+		name:"Unbreakable Majesty",
+		description:"As a bonus action, you can assume a magically majestic presence for 1 minute or until you are incapacitated. For the duration, whenever any creature tries to attack you for the first time on a turn, the attacker must make a Charisma saving throw against your spell save DC. On a failed save, it can't attack you on this turn, and it must choose a new target for its attack or the attack is wasted. On a successful save, it can attack you on this turn, but it has disadvantage on any saving throw it makes against your spells on your next turn.\n\nOnce you assume this majestic presence, you can't do so again until you finish a short or long rest.",
+		charges:1,
+		maxCharges:1,
+		onShortRest:helper.recharge
 	}
 ]);
 
@@ -787,6 +810,94 @@ window.subclasses.push(
 						action:function(char){
 							for (let abil of char.abilities){
 								if (abil.name==='Awestrike'){
+									abil.resourceName="Bardic Inspiration (d12)";
+									return;
+								}
+							}
+						}
+					}
+				]
+			},{},{},{},{},{}
+		]
+	}
+);
+
+window.subclasses.push(
+	{
+		classname:"Bard",
+		name:"College of Glamour",
+		subclass:"College of Glamour",
+		description:"The College of Glamour is the home of bards who mastered their craft in the vibrant realm of the Feywild or under the tutelage of someone who dwelled there. Tutored by satyrs, eladrin, and other fey, these bards learn to use their magic to delight and captivate others.\n\nThe bards of this college are regarded with a mixture of awe and fear. Their performances are the stuff of legend. These bards are so eloquent that a speech or song that one of them performs can cause captors to release the bard unharmed and can lull a furious dragon into complacency. The same magic that allows them to quell beasts can also bend minds. Villainous bards of this college can leech off a community for weeks, misusing their magic to turn their hosts into thralls. Heroic bards of this college instead use this power to gladden the downtrodden and undermine oppressors.",
+		levels:[
+			{},{},{},
+			{ // 3
+				"updates":[
+					helper.learnSkillProficiency3,
+					helper.chooseExpertise2,
+					{
+						choicePrompt:"You gain the following",
+						choices:[findAbility("Mantle of Inspiration")],
+						action:function(char){
+							addAbility(char,"Mantle of Inspiration");
+						}
+					}
+				]
+			},{},{ //5
+				updates:[
+					{
+						choices:[],
+						action:function(char){
+							for (let abil of char.abilities){
+								if (abil.name==='Mantle of Inspiration'){
+									abil.resourceName="Bardic Inspiration (d8)";
+									return;
+								}
+							}
+						}
+					}
+				]
+			},{//6
+				updates:[
+					{
+						choicePrompt:"You gain the following:",
+						choices:[findAbility("Mantle of Majesty")],
+						action:function(char,derived,choice){
+							addAbility(char,"Mantle of Majesty");
+						}
+					}
+				]
+			},{},{},{},{//10
+				updates:[
+					{
+						choices:[],
+						action:function(char){
+							for (let abil of char.abilities){
+								if (abil.name==='Mantle of Inspiration'){
+									abil.resourceName="Bardic Inspiration (d10)";
+									return;
+								}
+							}
+						}
+					}
+				]
+			},{},{},{},
+			{//14
+				updates:[
+					{
+						choicePrompt:"You gain the following",
+						choices:[findAbility("Unbreakable Majesty")],
+						action:function(char){
+							addAbility(char,"Unbreakable Majesty");
+						}
+					}
+				]
+			},{//15
+				updates:[
+					{
+						choices:[],
+						action:function(char){
+							for (let abil of char.abilities){
+								if (abil.name==='Mantle of Inspiration'){
 									abil.resourceName="Bardic Inspiration (d12)";
 									return;
 								}
