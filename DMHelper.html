@@ -472,7 +472,7 @@
 				<span class="label subheader">Actions</span>
 				<table class="full" ng-repeat="a in creature.actions">
 					<thead><tr><th ng-click="a.hidden=!a.hidden">{{a.name}}</th></tr></thead>
-					<tbody ng-hide="a.hidden"><tr><td style="white-space: pre-wrap;">{{a.description}}</td></tr></tbody>
+					<tbody ng-hide="a.hidden"><tr><td style="white-space: pre-wrap;">{{evalTooltip(a,creature)}}</td></tr></tbody>
 				</table>
 			</div>
 			<div ng-if="creature.spellcasting">

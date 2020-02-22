@@ -289,30 +289,43 @@ $scope.checkForPassives=function(name){
 	}
 }
 
-$scope.evalTooltip=function(tip){
-	if (tip && tip.description){
-		let desc=tip.description;
-		if (tip.level && $scope.chosenSpell && tip.level<$scope.chosenSpell.level){
-			return $scope.chosenSpell.name+' can only be cast at level '+$scope.chosenSpell.level+' or higher.';
+function getDescription(desc){
+	if (typeof desc === 'string'){
+		return desc;
+	} else if (Array.isArray(desc)){
+		var temp = '';
+		for (let d of desc){
+			temp += getDescription(d);
 		}
+		return temp;
+	} else if (typeof desc === 'object'){
+		if (typeof desc.showWhen === 'function' && desc.showWhen($scope.char,$scope.derived,$scope)){
+			return desc.value;
+		}
+	}
+	return '';
+}
+
+$scope.evalTooltip=function(tip,owner){
+	if (tip && tip.description){
+		$scope.char=owner;
+		let desc=getDescription(tip.description);
 		let token=desc.indexOf('${');
 		while (token!=-1){
 			let endtoken=desc.indexOf("}");
 			let expression = desc.substring(token+2,endtoken);
-			expression=expression.replace(/clevel/mg,1);
-			if ($scope.spellLevel){
-				expression=expression.replace(/slevel/mg,$scope.spellLevel);
-			} else {
-				expression=expression.replace(/slevel/mg,tip.level?tip.level:0);
-			}
+			expression=expression.replace(/clevel/mg,owner.level);
+			expression=expression.replace(/slevel/mg,tip.level?tip.level:0);
 			expression=eval(expression);
 			desc=desc.substring(0,token)+expression+desc.substring(endtoken+1);
 			token=desc.indexOf('${');
 		}
+		$scope.char=undefined;
 		return desc;
 	}
 	return '';
 }
+
 
 var tipPromise=null;
 
