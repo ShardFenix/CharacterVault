@@ -118,6 +118,102 @@ window.passives.append([
 	},{
 		name:"Rage Beyond Death",
 		description:"While you're raging, having 0 hit points doesn't knock you unconscious. You still must make death saving throws, and you suffer the normal effects of taking damage while at 0 hit points. However, if you would die due to failing death saving throws, you don't die until your rage ends, and you die then only if you still have 0 hit points."
+	},{
+		name:"Desert Aura",
+		description:"When this effect is activated, all other creatures in your aura take ${ladder(classlevel($scope.char,'Barbarian'),0,2,5,3,10,4,15,5,20,6)} fire damage each. The damage increases when you reach certain levels in this class, increasing to 3 at 5th level, 4 at 10th level, 5 at 15th level, and 6 at 20th level."
+	},{
+		name:"Sea Aura",
+		description:"When this effect is activated, you can choose one other creature you can see in your aura. The target must make a Dexterity saving throw (DC ${8 + $scope.derived.proficiency + $scope.derived.modifiers.con}). The target takes ${ladder(classlevel($scope.char.'Barbarian'),0,1,10,2,15,3,20,4)}d6 lightning damage on a failed save, or half as much damage on a successful one. The damage increases when you reach certain levels in this class, increasing to 2d6 at 10th level, 3d6 at 15th level, and 4d6 at 20th level."
+	},{
+		name:"Tundra Aura",
+		description:"When this effect is activated, each creature of your choice in your aura gains ${ladder(classlevel($scope.char,'Barbarian'),0,2,5,3,10,4,15,5,20,6)} temporary hit points, as icy spirits inure it to suffering. The temporary hit points increase when you reach certain levels in this class, increasing to 3 at 5th level, 4 at 10th level, 5 at 15th level, and 6 at 20th level."
+	},{
+		name:"Desert Soul",
+		description:"You gain resistance to fire damage, and you don't suffer the effects of extreme heat, as described in the Dungeon Master's Guide. Moreover, as an action, you can touch a flammable object that isn't being worn or carried by anyone else and set it on fire."
+	},{
+		name:"Sea Soul",
+		description:"You gain resistance to lightning damage, and you can breathe underwater. You also gain a swimming speed of 30 feet."
+	},{
+		name:"Tundra Soul",
+		description:"You gain resistance to cold damage, and you don't suffer the effects of extreme cold, as described in the Dungeon Master's Guide. Moreover, as an action, you can touch water and turn a 5-foot cube of it into ice, which melts after 1 minute. This action fails if a creature is in the cube."
+	},{
+		name:"Desert Storm",
+		description:"Immediately after a creature in your aura hits you with an attack, you can use your reaction to force that creature to make a Dexterity saving throw (DC ${8 + $scope.derived.proficiency + $scope.derived.modifiers.con}). On a failed save, the creature takes fire damage equal to half your barbarian level."
+	},{
+		name:"Sea Storm",
+		description:"When you hit a creature in your aura with an attack, you can use your reaction to force that creature to make a Strength saving throw (DC ${8 + $scope.derived.proficiency + $scope.derived.modifiers.con}). On a failed save, the creature is knocked prone, as if struck by a wave."
+	},{
+		name:"Tundra Storm",
+		description:"Whenever the effect of your Storm Aura is activated, you can choose one creature you can see in the aura. That creature must succeed on a Strength saving throw (DC ${8 + $scope.derived.proficiency + $scope.derived.modifiers.con}), or its speed is reduced to 0 until the start of your next turn, as magical frost covers it."
+	},{
+		name:"Shielding Storm",
+		description:"You learn to use your mastery of the storm to protect others. Each creature of your choice has the damage resistance you gained from the Storm Soul feature while the creature is in your Storm Aura."
+	},{//DISPLAY ONLY
+		name:"Storm Aura",
+		description:"You emanate a stormy, magical aura while you rage. The aura extends 10 feet from you in every direction, but not through total cover.\n\nYour aura has an effect that activates when you enter your rage, and you can activate the effect again on each of your turns as a bonus action. Choose desert, sea, or tundra. Your aura's effect depends on that chosen environment. You can change your environment choice whenever you gain a level in this class.\n\nIf your aura's effects require a saving throw, the DC equals 8 + your proficiency bonus + your Constitution modifier."
+	},{//DISPLAY ONLY
+		name:"Storm Soul",
+		description:"The storm grants you benefits even when your aura isn't active. The benefits are based on the environment you chose for your Storm Aura."
+	},{//DISPLAY ONLY
+		name:"Raging Storm",
+		description:"The power of the storm you channel grows mightier, lashing out at your foes. The effect is based on the environment you chose for your Storm Aura."
+	},{//DISPLAY ONLY
+		name:"Totem Spirit",
+		description:"choose a totem spirit and gain its feature. You must make or acquire a physical totem object—an amulet or similar adornment—that incorporates fur or feathers, claws, teeth, or bones of the totem animal. At your option, you also gain minor physical attributes that are reminiscent of your totem spirit. For example, if you have a bear totem spirit, you might be unusually hairy and thick-skinned, or if your totem is the eagle, your eyes turn bright yellow.\n\nYour totem animal might be an animal related to those listed here but more appropriate to your homeland. For example, you could choose a hawk or vulture in place of an eagle.\n\u2022 Bear. While raging, you have resistance to all damage except psychic damage. The spirit of the bear makes you tough enough to stand up to any punishment.\n\u2022 Eagle. While you're raging and aren't wearing heavy armor, other creatures have disadvantage on opportunity attack rolls against you, and you can use the Dash action as a bonus action on your turn. The spirit of the eagle makes you into a predator who can weave through the fray with ease.\n\u2022 Elk. While you're raging and aren't wearing heavy armor, your walking speed increases by 15 feet. The spirit of the elk makes you extraordinarily swift.\n\u2022 Tiger. While raging, you can add 10 feet to your long jump distance and 3 feet to your high jump distance. The spirit of the tiger empowers your leaps.\n\u2022 Wolf. While you're raging, your friends have advantage on melee attack rolls against any creature within 5 feet of you that is hostile to you. The spirit of the wolf makes you a leader of hunters."
+	},{
+		name:"Bear Spirit",
+		description:"While raging, you have resistance to all damage except psychic damage. The spirit of the bear makes you tough enough to stand up to any punishment."
+	},{
+		name:"Eagle Spirit",
+		description:"While you're raging and aren't wearing heavy armor, other creatures have disadvantage on opportunity attack rolls against you, and you can use the Dash action as a bonus action on your turn. The spirit of the eagle makes you into a predator who can weave through the fray with ease."
+	},{
+		name:"Elk Spirit",
+		description:"While you're raging and aren't wearing heavy armor, your walking speed increases by 15 feet. The spirit of the elk makes you extraordinarily swift."
+	},{
+		name:"Tiger Spirit",
+		description:"While raging, you can add 10 feet to your long jump distance and 3 feet to your high jump distance. The spirit of the tiger empowers your leaps."
+	},{
+		name:"Wolf Spirit",
+		description:"While you're raging, your friends have advantage on melee attack rolls against any creature within 5 feet of you that is hostile to you. The spirit of the wolf makes you a leader of hunters."
+	},{//DISPLAY ONLY
+		name:"Aspect of the Beast",
+		description:"You gain a magical benefit based on the totem animal of your choice. You can choose the same animal you selected at 3rd level or a different one.\n\u2022 Bear. You gain the might of a bear. Your carrying capacity (including maximum load and maximum lift) is doubled, and you have advantage on Strength checks made to push, pull, lift, or break objects.\n\u2022 Eagle. You gain the eyesight of an eagle. You can see up to 1 mile away with no difficulty, able to discern even fine details as though looking at something no more than 100 feet away from you. Additionally, dim light doesn't impose disadvantage on your Wisdom (Perception) checks.\n\u2022 Elk. Whether mounted or on foot, your travel pace is doubled, as is the travel pace of up to ten companions while they're within 60 feet of you and you're not incapacitated. The elk spirit helps you roam far and fast.\n\u2022 Tiger. You gain proficiency in two skills from the following list: Athletics, Acrobatics, Stealth, and Survival. The cat spirit hones your survival instincts.\n\u2022 Wolf. You gain the hunting sensibilities of a wolf. You can track other creatures while traveling at a fast pace, and you can move stealthily while traveling at a normal pace."
+	},{
+		name:"Bear Aspect",
+		description:"You gain the might of a bear. Your carrying capacity (including maximum load and maximum lift) is doubled, and you have advantage on Strength checks made to push, pull, lift, or break objects."
+	},{
+		name:"Eagle Aspect",
+		description:"You gain the eyesight of an eagle. You can see up to 1 mile away with no difficulty, able to discern even fine details as though looking at something no more than 100 feet away from you. Additionally, dim light doesn't impose disadvantage on your Wisdom (Perception) checks."
+	},{
+		name:"Elk Aspect",
+		description:"Whether mounted or on foot, your travel pace is doubled, as is the travel pace of up to ten companions while they're within 60 feet of you and you're not incapacitated. The elk spirit helps you roam far and fast."
+	},{
+		name:"Tiger Aspect",
+		description:"You gain proficiency in two skills from the following list: Athletics, Acrobatics, Stealth, and Survival. The cat spirit hones your survival instincts."
+	},{
+		name:"Wolf Aspect",
+		description:"You gain the hunting sensibilities of a wolf. You can track other creatures while traveling at a fast pace, and you can move stealthily while traveling at a normal pace."
+	},{
+		name:"Spirit Walker",
+		description:"You can cast the Commune with Nature spell, but only as a ritual. When you do so, a spiritual version of one of the animals you chose for Totem Spirit or Aspect of the Beast appears to you to convey the information you seek."
+	},{//DISPLAY ONLY
+		name:"Totemic Attunement",
+		description:"you gain a magical benefit based on a totem animal of your choice. You can choose the same animal you selected previously or a different one.\n\u2022 Bear. While you're raging, any creature within 5 feet of you that's hostile to you has disadvantage on attack rolls against targets other than you or another character with this feature. An enemy is immune to this effect if it can't see or hear you or if it can't be frightened.\n\u2022 Eagle. While raging, you have a flying speed equal to your current walking speed. This benefit works only in short bursts; you fall if you end your turn in the air and nothing else is holding you aloft.\n\u2022 Elk. While raging, you can use a bonus action during your move to pass through the space of a Large or smaller creature. That creature must succeed on a Strength saving throw (DC 8 + your Strength bonus + your proficiency bonus) or be knocked prone and take bludgeoning damage equal to 1d12 + your Strength modifier.\n\u2022 Tiger. While you're raging, if you move at least 20 feet in a straight line toward a Large or smaller target right before making a melee weapon attack against it, you can use a bonus action to make an additional melee weapon attack against it.\n\u2022 Wolf. While you're raging, you can use a bonus action on your turn to knock a Large or smaller creature prone when you hit it with melee weapon attack."
+	},{
+		name:"Bear Attunement",
+		description:"While you're raging, any creature within 5 feet of you that's hostile to you has disadvantage on attack rolls against targets other than you or another character with this feature. An enemy is immune to this effect if it can't see or hear you or if it can't be frightened."
+	},{
+		name:"Eagle Attunement",
+		description:"While raging, you have a flying speed equal to your current walking speed. This benefit works only in short bursts; you fall if you end your turn in the air and nothing else is holding you aloft."
+	},{
+		name:"Elk Attunement",
+		description:"While raging, you can use a bonus action during your move to pass through the space of a Large or smaller creature. That creature must succeed on a Strength saving throw (DC 8 + your Strength bonus + your proficiency bonus) or be knocked prone and take bludgeoning damage equal to 1d12 + your Strength modifier."
+	},{
+		name:"Tiger Attunement",
+		description:"While you're raging, if you move at least 20 feet in a straight line toward a Large or smaller target right before making a melee weapon attack against it, you can use a bonus action to make an additional melee weapon attack against it."
+	},{
+		name:"Wolf Attunement",
+		description:"While you're raging, you can use a bonus action on your turn to knock a Large or smaller creature prone when you hit it with melee weapon attack."
 	}
 ]);
 
@@ -542,7 +638,7 @@ window.subclasses.push(
 						summary:findPassive("Frenzy"),
 						choicePrompt:"You gain the following",
 						choices:[findPassive("Frenzy")],
-						action:function(char,derived,choice,$scope){
+						action:function(char){
 							addPassive(char,"Frenzy");
 						}
 					}
@@ -565,7 +661,7 @@ window.subclasses.push(
 						choicePrompt:"You gain the following",
 						summary:findPassive("Intimidating Presence"),
 						choices:[findPassive("Intimidating Presence")],
-						action:function(char,derived,choice){
+						action:function(char){
 							addPassive(char,"Intimidating Presence");
 						}
 					}
@@ -604,7 +700,7 @@ window.subclasses.push(
 					{
 						choicePrompt:"You gain the following",
 						choices:[findPassive("Divine Fury"),findPassive("Warrior of the Gods")],
-						action:function(char,derived,choice,$scope){
+						action:function(char){
 							addPassive(char,"Divine Fury");
 							addPassive(char,"Warrior of the Gods");
 						}
@@ -628,7 +724,7 @@ window.subclasses.push(
 						choicePrompt:"You gain the following",
 						summary:findAbility("Zealous Presence"),
 						choices:[findAbility("Zealous Presence")],
-						action:function(char,derived,choice){
+						action:function(char){
 							addAbility(char,"Zealous Presence");
 						}
 					}
@@ -642,6 +738,175 @@ window.subclasses.push(
 						choices:[findPassive("Rage Beyond Death")],
 						action:function(char){
 							addPassive(char,"Rage Beyond Death");
+						}
+					}
+				]
+
+			},{},{},{},{},{},{}
+		]
+	}
+);
+
+helper.chooseStormAura={
+	choicePrompt:"Choose your storm environment",
+	choices:[findPassive("Desert"),findPassive("Sea"),findPassive("Tundra")],
+	action:function(char,derived,choice){
+		var auraAbil = angular.copy(findPassive(choice+" Aura"));
+		auraAbil.description = "You emanate a stormy, magical aura while you rage. The aura extends 10 feet from you in every direction, but not through total cover.\n\nYour aura has an effect that activates when you enter your rage, and you can activate the effect again on each of your turns as a bonus action.\n\u2022 " + auraAbil.description;
+		removePassive(char,"Desert Aura");
+		removePassive(char,"Sea Aura");
+		removePassive(char,"Tundra Aura");
+		if (classlevel(char,'Barbarian' >= 6)){
+			var soulAbil = angular.copy(findPassive(choice+" Soul"));
+			auraAbil.description += "\n\u2022 " + soulAbil.description;
+		}
+		if (classlevel(char,'Barbarian') >= 14){
+			var stormAbil = angular.copy(findPassive(choice+" Storm"));
+			auraAbil.description += "\n\u2022 " + stormAbil.description;
+		}
+		addPassive(auraAbil);
+	}
+};
+
+window.subclasses.push(
+	{
+		classname:"Barbarian",
+		name:"Storm Herald",
+		subclass:"Storm Herald",
+		description:"All barbarians harbor a fury within. Their rage grants them superior strength, durability, and speed. Barbarians who follow the Path of the Storm Herald learn to transform that rage into a mantle of primal magic, which swirls around them. When in a fury, a barbarian of this path taps into the forces of nature to create powerful magical effects.\n\nStorm heralds are typically elite champions who train alongside druids, rangers, and others sworn to protect nature. Other storm heralds hone their craft in lodges in regions wracked by storms, in the frozen reaches at the world's end, or deep in the hottest deserts.",
+		levels:[{},{},{},
+			{//3
+				updates:[
+					{
+						choicePrompt:"You gain the following",
+						summary:findPassive("Storm Aura"),
+						choices:[findPassive("Storm Aura")],
+						action:function(char){}
+					},helper.chooseStormAura
+				]
+			},{
+				updates:[helper.chooseStormAura]
+			},{
+				updates:[helper.chooseStormAura]
+			},{ //6
+				updates:[
+					{
+						choicePrompt:"You gain the following",
+						summary:findPassive("Storm Soul"),
+						choices:[findPassive("Storm Soul")],
+						action:function(char){}
+					},helper.chooseStormAura
+				]
+			},{
+				updates:[helper.chooseStormAura]
+			},{
+				updates:[helper.chooseStormAura]
+			},{
+				updates:[helper.chooseStormAura]
+			},
+			{//10
+				updates:[
+					{
+						choicePrompt:"You gain the following",
+						summary:findAbility("Shielding Storm"),
+						choices:[findAbility("Shielding Storm")],
+						action:function(char){
+							addAbility(char,"Shielding Storm");
+						}
+					},helper.chooseStormAura
+				]
+			},{
+				updates:[helper.chooseStormAura]
+			},{
+				updates:[helper.chooseStormAura]
+			},{
+				updates:[helper.chooseStormAura]
+			},
+			{//14
+				updates:[
+					{
+						choicePrompt:"You gain the following",
+						summary:findPassive("Raging Storm"),
+						choices:[findPassive("Raging Storm")],
+						action:function(char){}
+					},helper.chooseStormAura
+				]
+
+			},{
+				updates:[helper.chooseStormAura]
+			},{
+				updates:[helper.chooseStormAura]
+			},{
+				updates:[helper.chooseStormAura]
+			},{
+				updates:[helper.chooseStormAura]
+			},{
+				updates:[helper.chooseStormAura]
+			},{
+				updates:[helper.chooseStormAura]
+			}
+		]
+	}
+);
+
+
+window.subclasses.push(
+	{
+		classname:"Barbarian",
+		name:"Totem Warrior",
+		subclass:"Totem Warrior",
+		description:"The Path of the Totem Warrior is a spiritual journey, as the barbarian accepts a spirit animal as guide, protector, and inspiration. In battle, your totem spirit fills you with supernatural might, adding magical fuel to your barbarian rage.\n\nMost barbarian tribes consider a totem animal to be kin to a particular clan. In such cases, it is unusual for an individual to have more than one totem animal spirit, though exceptions exist.",
+		levels:[{},{},{},
+			{//3
+				summary:[
+					findPassive("Spirit Seeker"),
+					findPassive("Totem Spirit")
+				],
+				updates:[
+					{
+						choicePrompt:"You gain the following",
+						choices:[findPassive("Spirit Seeker")],
+						action:function(char){
+							addPassive(char,"Spirit Seeker");
+						}
+					},{
+						choicePrompt:"Choose a totem spirit",
+						choices:[findPassive("Bear Spirit"),findPassive("Eagle Spirit"),findPassive("Elk Spirit"),findPassive("Tiger Spirit"),findPassive("Wolf Spirit")],
+						action:function(char,derived,choice){
+							addPassive(char,choice);
+						}
+					}
+				]
+			},{},{},{ //6
+				updates:[
+					{
+						choicePrompt:"Choose a totem aspect",
+						choices:[findPassive("Bear Aspect"),findPassive("Eagle Aspect"),findPassive("Elk Aspect"),findPassive("Tiger Aspect"),findPassive("Wolf Aspect")],
+						action:function(char,derived,choice){
+							addPassive(char,choice);
+						}
+					}
+				]
+			},{},{},{},
+			{//10
+				updates:[
+					{
+						choicePrompt:"You gain the following",
+						summary:findAbility("Spirit Walker"),
+						choices:[findAbility("Spirit Walker")],
+						action:function(char){
+							addAbility(char,"Spirit Walker");
+						}
+					}
+				]
+			},{},{},{},
+			{//14
+				updates:[
+					{
+						choicePrompt:"Choose a totem attunement",
+						choices:[findPassive("Bear Attunement"),findPassive("Eagle Attunement"),findPassive("Elk Attunement"),findPassive("Tiger Attunement"),findPassive("Wolf Attunement")],
+						action:function(char,derived,choice){
+							addPassive(char,choice);
 						}
 					}
 				]
