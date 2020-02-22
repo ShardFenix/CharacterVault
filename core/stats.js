@@ -1107,13 +1107,13 @@ $scope.selectSpell=function(spell){
 	$scope.setTip(spell);
 }
 
-$scope.getDescription=function(desc){
+function getDescription(desc){
 	if (typeof desc === 'string'){
 		return desc;
 	} else if (Array.isArray(desc)){
 		var temp = '';
 		for (let d of desc){
-			temp += $scope.getDescription(d);
+			temp += getDescription(d);
 		}
 		return temp;
 	} else if (typeof desc === 'object'){
@@ -1237,6 +1237,7 @@ $scope.setTip=function(choice,spellLevel,event){
 		$timeout.cancel(tipPromise);
 	}
 	$scope.tip=choice;
+	//$scope.tip.description = getDescription(choice);
 	if (spellLevel){
 		$scope.spellLevel=spellLevel;
 	} else {
@@ -1386,6 +1387,9 @@ function initLoadedCharacter(char){
 			passive.onShortRest=p.onShortRest;
 			passive.onLongRest=p.onLongRest;
 			passive.apply=p.apply;
+			if (!passive.edited){
+				passive.description = p.description;
+			}
 			continue;
 		}
 		for (let p of packages.feats){
@@ -1393,6 +1397,9 @@ function initLoadedCharacter(char){
 				passive.onShortRest=p.onShortRest;
 				passive.onLongRest=p.onLongRest;
 				passive.apply=p.apply;
+				if (!passive.edited){
+					passive.description = p.description;
+				}
 				break;
 			}
 		}
@@ -1405,10 +1412,16 @@ function initLoadedCharacter(char){
 			ability.apply=a.apply;
 			ability.maxChargesFunction=a.maxChargesFunction;
 			ability.onUse=a.onUse;
+			if (!ability.edited){
+				ability.description = a.description;
+			}
 		}
 	}
 	for (let clas of char.classes){
 		for (let spell of clas.spells){
+			if (spell.edited){
+				continue;
+			}
 			let pSpell = findSpell(spell.name);
 			if (pSpell){
 				spell.description=pSpell.description;

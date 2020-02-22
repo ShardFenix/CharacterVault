@@ -36,7 +36,7 @@ window.abilities.append([
 		name:"Holy Nimbus",
 		description:"As an action, you can emanate an aura of sunlight. For 1 minute, bright light shines from you in a 30-foot radius, and dim light shines 30 feet beyond that.\n\nWhenever an enemy creature starts its turn in the bright light, the creature takes 10 radiant damage.\n\nIn addition, for the duration, you have advantage on saving throws against spells cast by fiends or undead.\n\nOnce you use this feature, you can't use it again until you finish a long rest.",
 		maxCharges:1,
-		charges:1
+		charges:1,
 		onLongRest:helper.recharge
 	}
 ]);
