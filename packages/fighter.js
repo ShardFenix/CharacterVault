@@ -409,9 +409,9 @@ window.classes.push(
 					helper.hitDice10,
 					{
 						choicePrompt:"You gain the following:",
-						choices:[findPassive("Indomitable")],
+						choices:[findAbility("Indomitable")],
 						action:function(char,derived){
-							addPassive(char,"Indomitable");
+							addAbility(char,"Indomitable");
 						}
 					}
 				]
