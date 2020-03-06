@@ -254,6 +254,7 @@ window.classes.push(
 			{ //1, first player level
 				"updates":[
 					{
+						always:true,
 						choicePrompt:"You gain the following proficiencies:",
 						choices:["Strength saves","Constitution saves","Light Armor","Medium Armor","Heavy Armor","Simple Weapons","Martial Weapons","Shields"],
 						action:function(char,derived,choice,$scope){
