@@ -2,8 +2,7 @@ var context;
 try {
 	window.AudioContext = window.AudioContext || window.webkitAudioContext;
 	context = new AudioContext();
-}
-catch(e) {
+} catch(e) {
 	alert('Web Audio API is not supported in this browser');
 }
 
@@ -45,7 +44,7 @@ $scope.getFolders=function(rootPath, arrayStore){
 $scope.getFiles=function(rootPath, arrayStore){
 	$http.get('http://localhost:8080/'+root+rootPath).then(function(response){
 		for (let filename of response.data){
-			if (filename.endsWith('.ogg')){
+			if (filename.endsWith('.ogg') && !filename.endsWith('$.ogg')){
 				arrayStore.push(
 					{
 					filename:rootPath+filename,
@@ -82,24 +81,44 @@ $scope.stopMusic=function(){
 	}
 };
 
+function buildLoopPoints(stingerString){
+	$scope.loopPoints=null;
+	if (stingerString){
+		$scope.loopPoints=[];
+		if (stingerString.indexOf(',')!=-1){
+			//list of sample points to sting from
+			let points = stingerString.split(',');
+			for (let p of points){
+				$scope.loopPoints.push(parseInt(p)/sampleRate);
+			}
+		} else {
+			//looping section has a stable beat
+			let interval = parseInt(stingerString);
+			for (let i=loopStart+interval; i<loopEnd; i+=interval){
+				$scope.loopPoints.push(i);
+			}
+		}
+	}
+}
+
 $scope.loadMusic=function(filename) {
 	if (!filename){
 		return;
 	}
-//	if (stopMusicPromise){
-//		$timeout.cancel(stopMusicPromise);
-//	}
 	if ($scope.musicNode){
 		$scope.musicNode.stop();
 	}
 	$http.get('http://localhost:8080/'+root+filename,{responseType:'arraybuffer'}).then(function(response){
 		var metadata = AudioMetadata.ogg(response.data);
 		var loopStart = metadata.loopstart;
+		var loopEnd = metadata.loopend;
 		var bufferPart = response.data.slice(40, 48);
 		var bufferView = new Uint32Array(bufferPart);
-		var samplerate = bufferView[0];
-		var loopStartNum=parseFloat(loopStart)/samplerate;
+		var sampleRate = bufferView[0];
+		var loopStartNum=parseFloat(loopStart)/sampleRate;
 		if (!loopStartNum){loopStartNum=0;}
+		
+		buildLoopPoints(metadata.stinger);
 		
 		$scope.musicNode = context.createBufferSource();
 		context.decodeAudioData(response.data,function(buffer){
@@ -112,7 +131,11 @@ $scope.loadMusic=function(filename) {
 			$scope.musicNode.start(0);
 			$scope.musicNode.loopStart=loopStartNum;
 			//loopEnd is required for loopStart to work properly in chrome
-			$scope.musicNode.loopEnd=buffer.duration+4;
+			if (loopend) {
+				$scope.musicNode.loopEnd=loopEnd/sampleRate;
+			} else {
+				$scope.musicNode.loopEnd=buffer.duration+4;
+			}
 		},function(error){
 			console.error(error);
 		});
