@@ -69,19 +69,43 @@ $scope.musicGain;
 
 var stopMusicPromise;
 
+$interval(function(){
+	$scope.test=context.currentTime;
+},16);
+
 $scope.stopMusic=function(){
 	if ($scope.musicGain){
-		$scope.musicGain.gain.linearRampToValueAtTime(0,context.currentTime+2.0);
-		stopMusicPromise = $timeout(function(){
-			$scope.musicNode.stop();
-		},2000);
-		return stopMusicPromise;
-	} else {
-		return Promise.resolve();
+		if ($scope.loopPoints){
+			var currentPointInLoop = (context.currentTime - $scope.musicNode.startedAt);
+			if (currentPointInLoop>0){
+				var loopLength = $scope.musicNode.loopEnd - $scope.musicNode.loopStart;
+				currentPointInLoop = currentPointInLoop % loopLength;
+				console.log(currentPointInLoop);
+				//find the upcoming stinger insertion point
+				var nextPoint=$scope.musicNode.loopEnd;
+				for (let p of $scope.loopPoints){
+					if (p > currentPointInLoop){
+						nextPoint=p;
+						break;
+					}
+				}
+				var startStingerAt = context.currentTime + (nextPoint - currentPointInLoop);
+				console.log(startStingerAt);
+				var stingerOffset = $scope.musicNode.loopEnd;
+				console.log(stingerOffset);
+				$scope.stingerNode.start(startStingerAt, stingerOffset);
+				$scope.musicNode.loopEnd=nextPoint;
+				$scope.musicNode.stop(startStingerAt);
+				
+			}
+		} else {
+			$scope.musicGain.gain.linearRampToValueAtTime(0,context.currentTime+2.0);
+			$scope.musicNode.stop(context.currentTime+2.0);
+		}
 	}
 };
 
-function buildLoopPoints(stingerString){
+function buildLoopPoints(stingerString, sampleRate){
 	$scope.loopPoints=null;
 	if (stingerString){
 		$scope.loopPoints=[];
@@ -106,7 +130,7 @@ $scope.loadMusic=function(filename) {
 		return;
 	}
 	if ($scope.musicNode){
-		$scope.musicNode.stop();
+		$scope.musicNode.stop(context.currentTime+0.5);
 	}
 	$http.get('http://localhost:8080/'+root+filename,{responseType:'arraybuffer'}).then(function(response){
 		var metadata = AudioMetadata.ogg(response.data);
@@ -118,7 +142,7 @@ $scope.loadMusic=function(filename) {
 		var loopStartNum=parseFloat(loopStart)/sampleRate;
 		if (!loopStartNum){loopStartNum=0;}
 		
-		buildLoopPoints(metadata.stinger);
+		buildLoopPoints(metadata.stinger,sampleRate);
 		
 		$scope.musicNode = context.createBufferSource();
 		context.decodeAudioData(response.data,function(buffer){
@@ -129,12 +153,19 @@ $scope.loadMusic=function(filename) {
 			$scope.musicNode.connect($scope.musicGain);
 			$scope.musicGain.connect(context.destination);
 			$scope.musicNode.start(0);
+			$scope.musicNode.startedAt=context.currentTime;
 			$scope.musicNode.loopStart=loopStartNum;
 			//loopEnd is required for loopStart to work properly in chrome
-			if (loopend) {
+			if (loopEnd) {
 				$scope.musicNode.loopEnd=loopEnd/sampleRate;
 			} else {
 				$scope.musicNode.loopEnd=buffer.duration+4;
+			}
+			if (metadata.stinger){
+				$scope.stingerNode = context.createBufferSource();
+				$scope.stingerNode.buffer=buffer;
+				$scope.stingerNode.loop=false;
+				$scope.stingerNode.connect($scope.musicGain);
 			}
 		},function(error){
 			console.error(error);
@@ -186,14 +217,13 @@ $scope.loadEnvironment=function(schema){
 	//fade out existing
 	for (let sound of oldEnvironmentAudioList.loops){
 		sound.gain.gain.linearRampToValueAtTime(0.0,context.currentTime+2);
+		sound.source.stop(context.currentTime+2); //this will clean it up from the graph according to SO
 	}
 	for (let sound of oldEnvironmentAudioList.oneShots){
 		sound.gain.gain.linearRampToValueAtTime(0.0,context.currentTime+2);
+		sound.source.stop(context.currentTime+2); //this will clean it up from the graph according to SO
 	}
 	$timeout(function(){
-		for (let sound of oldEnvironmentAudioList.loops){
-			sound.source.stop(); //this will clean it up from the graph according to SO
-		}
 		for (let sound of oldEnvironmentAudioList.oneShots){
 			sound.buffers=[];//this stops sounds from queueing
 		}
