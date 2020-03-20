@@ -95,6 +95,32 @@ window.backgrounds=[
 			char.money+=1000;
 		}
 	},{
+		name:"Far Traveler",
+		description:"Skill Proficiencies: Insight, Perception\nLanguages: One of your choice\nEquipment: Traveler's Clothes, any music instrument or gaming set, poorly wrought maps from your homeland, jewelry worth 10gp, Belt Pouch containing 5 gp",
+		featureName:"All Eyes on You",
+		featureDescription:"Your accent, mannerisms, figures of speech, and perhaps even your appearance all mark you as foreign. Curious glances are directed your way wherever you go, which can be a nuisance, but you also gain the friendly interest of scholars and others intrigued by far-off lands, to say nothing of everyday folk who are eager to hear stories of your homeland.\n\nYou can parley this attention into access to people and places you might not otherwise have, for you and your traveling companions. Noble lords, scholars, and merchant princes, to name a few, might be interested in hearing about your distant homeland and people.",
+		onPickup:function(char,scope){
+			addProficiency(char,'Insight');
+			addProficiency(char,'Perception');
+			addToInventory(char,'Jewelry worth 10g');
+			addToInventory(char,findItem('Common Clothes'));
+			addToInventory(char,findItem('Belt Pouch'));
+			addToInventory(char,'Map of Homeland');
+			addPassive(char,{name:this.featureName,description:this.featureDescription});
+			char.money+=500;
+			scope.choiceQueue.push(helper.learnInstrument);
+			scope.choiceQueue.push(helper.learnLanguage);
+			scope.choiceQueue.push(
+				{
+					choicePrompt:"Choose a starting instrument",
+					choices:[listInstruments],
+					action:function(char,derived,choice){
+						addToInventory(char,findItem(choice));
+					}
+				}
+			);
+		}
+	},{
 		name:"Folk Hero",
 		description:"Skill Proficiencies: Animal Handling, Survival\nTool Proficiencies: One type of artisan's tools, Land Vehicles\nEquipment: A set of artisan's tools (one of your choice), a shovel, an iron pot, a set of common clothes, and a belt pouch containing 10 gp",
 		featureName:"Rustic Hospitality",
