@@ -28,14 +28,19 @@
 	background-color:#bb0000;
 }
 
-
-.leftitem{
-	text-align: center;
-    background-color: #ffdb77;
+.leftitem {
+    text-align: center;
+    background-color: #f3c953;
     border: 1px groove black;
     margin: 2px;
     padding: 4px;
     font-size: 20px;
+    cursor: pointer;
+    transition: 0.15s ease all;
+}
+
+.leftitem:hover {
+    background-color: #ffdc7b;
 }
 
 .slidecontainer {
@@ -94,16 +99,18 @@
     padding: 10px;
     border: 1px solid black;
     vertical-align: top;
-    margin-top: 15px;
+    margin-top: 20px;
     min-height: 30px;
+    background: linear-gradient(180deg, #ddd, #bbb);
 }
 
-.borderheader{
+.borderheader {
     margin-top: -24px;
     display: block;
     font-size: 24px;
-    background-color: #707070;
+    background: linear-gradient(180deg, #d8d8d8 45%, #d6d6d6 70%);
     width: fit-content;
+    padding: 0px 10px;
 }
 
 .soundGroup {
@@ -340,6 +347,7 @@ div.column{
 		<input type="range" min="0" max="1" step="0.01" ng-model="musicVolume" class="slider" ng-change="updateMusicVolume(musicVolume)">
 		<br>
 		<div class="leftitem" ng-click="stopMusic()">Stop</div>
+		{{test}}
 		<br>
 		<br>		
 		<table style="width:100%;"><tr>

@@ -390,7 +390,7 @@
 	</td>
 	<td style="vertical-align: top;display: flex;flex-wrap: wrap;">
 		<div ng-repeat="creature in initiativeOrder track by $index"
-			 class="creatureCard box" ng-if="creature.hp">
+			 class="creatureCard box" ng-if="creature.hpMax">
 			<div class="monsterHeader" ng-class="{'selected':creature===chosenMonster}">
 				<div class="headerBg"></div>
 				<span class="white label">{{creature.name}}</span><span class="white"> (CR {{creature.cr}})</span>

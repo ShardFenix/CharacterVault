@@ -536,11 +536,14 @@ function listUnknownCantripsForClass(char,classname){
 	return result;
 }
 
-function highestSpellLevel(char){
+function highestSpellLevel(char, className){
 	//find their highest caster level
 	let highest=0;
 	let value=0;
 	for (let clas of char.classes){
+		if (className && clas.name!==className){
+			continue;
+		}
 		switch (clas.name){
 			case "Wizard":
 			case "Bard":
@@ -605,7 +608,7 @@ function listLearnableSpellsForClass(char,$scope,className){
 		}
 	}
 	//find the highest level they can cast on this class
-	let highest=highestSpellLevel(char);
+	let highest=highestSpellLevel(char,className);
 	nextSpell:
 	for (var spell of window.spells){
 		//check if they can learn a spell of this level (and exclude cantrips)

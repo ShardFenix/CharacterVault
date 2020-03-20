@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular-animate.js"></script>
+
+</head>
+<body style="background-color:#ffffff;">
+<script type="text/javascript">
+
+var app=angular.module('myApp',[]);
+app.controller('MyController',['$scope',function($scope){
+
+$scope.calculate=function(){
+	var start = parseInt($scope.start);
+	var end = parseInt($scope.end);
+	var length = parseInt($scope.end)-parseInt($scope.start);
+	var samplesPerBeat = length/parseInt($scope.beats);
+	var rex = /(\d+)[Nn] ?([-+])? ?([0-9.]+)?/;
+	var match = $scope.formula.match(rex);
+	var coefficient = parseInt(match[1]);
+	var offset = 0;
+	if (match.length>2 && match[2]){
+		offset = parseFloat(match[3]);
+		if (match[2]==-'-'){
+			offset*=-1;
+		}
+	}
+	if (offset<0){
+		start = start + (-offset*samplesPerBeat);
+	}
+	$scope.answer="";
+	for (var s = start + (offset*samplesPerBeat); s <= end ; s+= (coefficient * samplesPerBeat)){
+		$scope.answer = $scope.answer + Math.round(s) + ",";
+	}
+}
+
+}]);
+
+
+</script>
+
+<div ng-app="myApp">
+<div ng-controller="MyController">
+
+	<div>Loopstart
+		<input type="text" ng-model="start" />
+	</div>
+	<div>Loopend
+		<input type="text" ng-model="end" />
+	</div>
+	<div>Beats total
+		<input type="text" ng-model="beats" />
+	</div>
+	<div>Formula
+		<input type="text" ng-model="formula" />
+	</div>
+	<button ng-click="calculate()">Calculate</button>
+	
+	<br>
+	<textarea style="white-space:pre-wrap;">
+	{{answer}}
+	</textarea>
+
+</div>
+</div>
+
+</body>
+</html>
