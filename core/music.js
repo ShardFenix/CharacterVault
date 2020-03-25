@@ -105,7 +105,7 @@ $scope.stopMusic=function(){
 	}
 };
 
-function buildLoopPoints(stingerString, sampleRate){
+function buildLoopPoints(stingerString, sampleRate, loopStart, loopEnd){
 	$scope.loopPoints=null;
 	if (stingerString){
 		$scope.loopPoints=[];
@@ -117,9 +117,9 @@ function buildLoopPoints(stingerString, sampleRate){
 			}
 		} else {
 			//looping section has a stable beat
-			let interval = parseInt(stingerString);
+			let interval = parseFloat(stingerString);
 			for (let i=loopStart+interval; i<loopEnd; i+=interval){
-				$scope.loopPoints.push(i);
+				$scope.loopPoints.push(Math.round(i)/sampleRate);
 			}
 		}
 	}
@@ -142,7 +142,7 @@ $scope.loadMusic=function(filename) {
 		var loopStartNum=parseFloat(loopStart)/sampleRate;
 		if (!loopStartNum){loopStartNum=0;}
 		
-		buildLoopPoints(metadata.stinger,sampleRate);
+		buildLoopPoints(metadata.stinger,sampleRate, parseInt(loopStart), parseInt(loopEnd));
 		
 		$scope.musicNode = context.createBufferSource();
 		context.decodeAudioData(response.data,function(buffer){
