@@ -13,10 +13,20 @@ var app=angular.module('myApp',[]);
 app.controller('MyController',['$scope',function($scope){
 
 $scope.calculate=function(){
+	$scope.answer="";
 	var start = parseInt($scope.start);
 	var end = parseInt($scope.end);
 	var length = parseInt($scope.end)-parseInt($scope.start);
 	var samplesPerBeat = length/parseInt($scope.beats);
+	if ($scope.formula.indexOf('N')==-1 && $scope.formula.indexOf('n')==-1){
+		//each item in STINGER is a beat number
+		var beats = $scope.formula.split(',');
+		for (let beat of beats){
+			let sample = start + parseInt(beat) * samplesPerBeat;
+			$scope.answer = $scope.answer + Math.round(sample) + ",";
+		}
+		return;
+	}
 	var rex = /(\d+)[Nn] ?([-+])? ?([0-9.]+)?/;
 	var match = $scope.formula.match(rex);
 	var coefficient = parseInt(match[1]);
@@ -30,7 +40,6 @@ $scope.calculate=function(){
 	if (offset<0){
 		start = start + (-offset*samplesPerBeat);
 	}
-	$scope.answer="";
 	for (var s = start + (offset*samplesPerBeat); s <= end ; s+= (coefficient * samplesPerBeat)){
 		$scope.answer = $scope.answer + Math.round(s) + ",";
 	}
