@@ -34,6 +34,9 @@ window.passives.append([
 	},{
 		name:"Savage Attacks",
 		description:"When you score a critical hit with a melee weapon attack, you can roll one of the weapon's damage dice one additional time and add it to the extra damage of the critical hit."
+	},{
+		name:"Shapechanger",
+		description:"As an action, you can change your appearance and your voice. You determine the specifics of the changes, including your coloration, hair length, and sex. You can also adjust your height and weight, but not so much that your size changes. You can make yourself appear as a member of another race, though none of your game statistics change. You can't duplicate the appearance of a creature you've never seen, and you must adopt a form that has the same basic arrangement of limbs that you have. Your clothing and equipment aren't changed by this trait.\n\nYou stay in the new form until you use an action to revert to your true form or until you die."
 	}
 ]);
 
@@ -469,6 +472,47 @@ window.races=[
 			addAbility(char,"Hidden Step");
 			addAbility(char,"Detect Magic (Firbolg)");
 			addAbility(char,"Disguise Self (Firbolg)");
+		}
+	},{
+		name:"Changeling",
+		description:"",
+		onPickup:function(char,scope){
+			char.proficiencies.push("Language: Common");
+			char.speed=30;
+			char.attributes.cha+=2;
+			addPassive(char,"Shapechanger");
+			scope.choiceQueue.push(
+				{
+					choicePrompt:"Choose one:",
+					choices:[getAttributesBelow20],
+					action:function(char,derived,choice,scope){
+						switch (choice){
+							case "+1 Strength":char.attributes.str+=1;break;
+							case "+1 Dexterity":char.attributes.dex+=1;break;
+							case "+1 Constitution":char.attributes.con+=1;break;
+							case "+1 Intelligence":char.attributes.int+=1;break;
+							case "+1 Wisdom":char.attributes.wis+=1;break;
+							case "+1 Charisma":char.attributes.cha+=1;break;
+						}
+					}
+				});
+			scope.choiceQueue.push({
+				limit:2,
+				choicePrompt:"Choose two languages:",
+				choices:[listUnknownLanguages],
+				action:function(char,derived,choice){
+					char.proficiencies.upush(choice);
+				}
+			});
+			scope.choiceQueue.push({
+					limit:2,
+					choicePrompt:"Choose two proficiencies",
+					choices:['Deception','Insight','Intimidation','Persuasion'],
+					action:function(char,derived,choice){
+						addProficiency(char,choice);
+					}
+				}
+			);
 		}
 	},
 ];

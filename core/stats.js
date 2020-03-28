@@ -1539,6 +1539,16 @@ function findBackgroundFeature(name){
 	return undefined;
 }
 
+$scope.directEval=function(string){
+	var char = $scope.char;
+	try{
+		eval(string);
+		$scope.runscript="Success.";
+	}catch (error){
+		$scope.runscript=error;
+	}
+}
+
 //used when I need to retro give abilities/passives/equipment to a character
 $scope.patch=function(){
 	for (let i=1;i<=20;i++){
