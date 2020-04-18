@@ -269,6 +269,25 @@ div.column{
 	max-height: calc(100% - 31px);
 }
 
+.playerContainer {
+    background: white;
+    width: 100%;
+    height: 6px;
+    margin: 10px 0px 20px 0px;
+	position:relative;
+}
+.playerProgressBar {
+    height: 6px;
+    background: #00bf00;
+    position: absolute;
+}
+.playerLoopTicks{
+	width: 2px;
+	height: 6px;
+	margin-top: 6px;
+	margin-left: -1px;
+	position: absolute;
+}
 </style>
 <!--
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
@@ -346,8 +365,13 @@ div.column{
 	<div class="column" style="flex: 5;">
 		<input type="range" min="0" max="1" step="0.01" ng-model="musicVolume" class="slider" ng-change="updateMusicVolume(musicVolume)">
 		<br>
-		<div class="leftitem" ng-click="stopMusic()">Stop</div>
-		{{test}}
+		<div class="playerContainer">
+			<div class="playerLoopTicks" ng-repeat="tick in loopPoints" ng-style="position(tick)"></div>
+			<div class="playerLoopTicks" ng-style="position(musicNode.loopStart)"></div>
+			<div class="playerLoopTicks" ng-style="position(musicNode.loopEnd)"></div>
+			<div class="playerProgressBar"></div>
+		</div>
+		<div class="leftitem" ng-click="stopMusic()">Stop Music</div>
 		<br>
 		<br>		
 		<table style="width:100%;"><tr>

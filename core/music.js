@@ -69,10 +69,6 @@ $scope.musicGain;
 
 var stopMusicPromise;
 
-$interval(function(){
-	$scope.test=context.currentTime;
-},16);
-
 $scope.stopMusic=function(){
 	if ($scope.musicGain){
 		if ($scope.loopPoints){
@@ -96,6 +92,7 @@ $scope.stopMusic=function(){
 				$scope.stingerNode.start(startStingerAt, stingerOffset);
 				$scope.musicNode.loopEnd=nextPoint;
 				$scope.musicNode.stop(startStingerAt);
+				$scope.musicNode.startStingerAt = startStingerAt;
 				
 			}
 		} else {
@@ -105,6 +102,7 @@ $scope.stopMusic=function(){
 	}
 };
 
+//loop points are in seconds
 function buildLoopPoints(stingerString, sampleRate, loopStart, loopEnd){
 	$scope.loopPoints=null;
 	if (stingerString){
@@ -124,6 +122,38 @@ function buildLoopPoints(stingerString, sampleRate, loopStart, loopEnd){
 		}
 	}
 }
+
+//all ticks should be in seconds
+$scope.position=function(tick){
+	let start = $scope.musicNode.startedAt;
+	let length = $scope.musicNode.buffer.length / $scope.musicNode.sampleRate;
+	let x = (tick/length) * 100;
+	let color="#aaaaaa";
+	if (tick === $scope.musicNode.startStingerAt){
+		color="#55ff55";
+	}
+	return {
+		left: x+"%",
+		background: color
+	};
+}
+
+//TODO: Cache the initial calculations
+$interval(function(){
+	if ($scope.musicNode){
+		var start = $scope.musicNode.startedAt;
+		var length = $scope.musicNode.buffer.length / $scope.musicNode.sampleRate;
+		var currentPointInSong = (context.currentTime - $scope.musicNode.startedAt);
+		if (currentPointInSong > $scope.musicNode.loopEnd){
+			var loopLength = $scope.musicNode.loopEnd - $scope.musicNode.loopStart;
+			currentPointInSong -= $scope.musicNode.loopStart;
+			currentPointInSong = currentPointInSong % loopLength + $scope.musicNode.loopStart;
+			
+		}
+		var pct = 100 * currentPointInSong / length;
+		$('.playerProgressBar').css('width',pct+'%');
+	}
+},16);
 
 $scope.loadMusic=function(filename) {
 	if (!filename){
@@ -149,6 +179,7 @@ $scope.loadMusic=function(filename) {
 			$scope.musicGain = context.createGain();
 			$scope.musicGain.gain.linearRampToValueAtTime($scope.musicVolume,context.currentTime);
 			$scope.musicNode.buffer=buffer;
+			$scope.musicNode.sampleRate=sampleRate;
 			$scope.musicNode.loop=true;
 			$scope.musicNode.connect($scope.musicGain);
 			$scope.musicGain.connect(context.destination);
@@ -159,7 +190,7 @@ $scope.loadMusic=function(filename) {
 			if (loopEnd) {
 				$scope.musicNode.loopEnd=loopEnd/sampleRate;
 			} else {
-				$scope.musicNode.loopEnd=buffer.duration+4;
+				$scope.musicNode.loopEnd=buffer.duration;
 			}
 			if (metadata.stinger){
 				$scope.stingerNode = context.createBufferSource();
