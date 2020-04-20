@@ -80,7 +80,7 @@ $scope.stopMusic=function(){
 				//find the upcoming stinger insertion point
 				var nextPoint=$scope.musicNode.loopEnd;
 				for (let p of $scope.loopPoints){
-					if (p > currentPointInLoop){
+					if (p > currentPointInLoop + $scope.musicNode.loopStart){
 						nextPoint=p;
 						break;
 					}
@@ -93,7 +93,6 @@ $scope.stopMusic=function(){
 				$scope.musicNode.loopEnd=nextPoint;
 				$scope.musicNode.stop(startStingerAt);
 				$scope.musicNode.startStingerAt = startStingerAt;
-//				$scope.loopIndicators=[nextPoint,stingerOffset];
 			}
 		} else {
 			$scope.musicGain.gain.linearRampToValueAtTime(0,context.currentTime+2.0);
