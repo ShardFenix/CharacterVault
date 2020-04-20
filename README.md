@@ -16,6 +16,10 @@ Requires Node.js version 10.0.0 or higher (to run the included server for charac
 - DM Helper contains useful things that a DM screen might contain, including DMG tables, a loot generator, a combat tracker that can load characters from the character sheet, and more.
 - A music player to make your environments more appealing
 
+## Recommended resolutions:
+- Laptop: 1920 x 1080
+- Tablet: 731 x 411
+
 ###Implemented Packages
 
 Barbarian | Supported

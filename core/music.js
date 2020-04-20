@@ -72,11 +72,11 @@ var stopMusicPromise;
 $scope.stopMusic=function(){
 	if ($scope.musicGain){
 		if ($scope.loopPoints){
-			var currentPointInLoop = (context.currentTime - $scope.musicNode.startedAt);
+			var now = context.currentTime;
+			var currentPointInLoop = (now - $scope.musicNode.startedAt - $scope.musicNode.loopStart);
 			if (currentPointInLoop>0){
 				var loopLength = $scope.musicNode.loopEnd - $scope.musicNode.loopStart;
 				currentPointInLoop = currentPointInLoop % loopLength;
-				console.log(currentPointInLoop);
 				//find the upcoming stinger insertion point
 				var nextPoint=$scope.musicNode.loopEnd;
 				for (let p of $scope.loopPoints){
@@ -85,15 +85,15 @@ $scope.stopMusic=function(){
 						break;
 					}
 				}
-				var startStingerAt = context.currentTime + (nextPoint - currentPointInLoop);
-				console.log(startStingerAt);
+				var startStingerAt = now + (nextPoint - currentPointInLoop - $scope.musicNode.loopStart);
 				var stingerOffset = $scope.musicNode.loopEnd;
-				console.log(stingerOffset);
 				$scope.stingerNode.start(startStingerAt, stingerOffset);
+				$scope.stingerNode.startedAt = startStingerAt;
+				$scope.stingerNode.startOffset = stingerOffset;
 				$scope.musicNode.loopEnd=nextPoint;
 				$scope.musicNode.stop(startStingerAt);
 				$scope.musicNode.startStingerAt = startStingerAt;
-				
+//				$scope.loopIndicators=[nextPoint,stingerOffset];
 			}
 		} else {
 			$scope.musicGain.gain.linearRampToValueAtTime(0,context.currentTime+2.0);
@@ -125,24 +125,37 @@ function buildLoopPoints(stingerString, sampleRate, loopStart, loopEnd){
 
 //all ticks should be in seconds
 $scope.position=function(tick){
-	let start = $scope.musicNode.startedAt;
-	let length = $scope.musicNode.buffer.length / $scope.musicNode.sampleRate;
-	let x = (tick/length) * 100;
-	let color="#aaaaaa";
-	if (tick === $scope.musicNode.startStingerAt){
-		color="#55ff55";
-	}
-	return {
-		left: x+"%",
-		background: color
-	};
+	if ($scope.musicNode && $scope.musicNode.buffer){
+		let start = $scope.musicNode.startedAt;
+		let length = $scope.musicNode.buffer.length / $scope.musicNode.sampleRate;
+		let x = (tick/length) * 100;
+		let color="#aaaaaa";
+		if (tick === $scope.musicNode.startStingerAt){
+			color="#ff0000";
+		}
+		if ($scope.stingerNode && $scope.stingerNode.startOffset == tick){
+			color="#ff0000";
+		}
+		return {
+			left: x+"%",
+			background: color
+		};
+	} else return {};
 }
 
-//TODO: Cache the initial calculations
-$interval(function(){
-	if ($scope.musicNode){
-		var start = $scope.musicNode.startedAt;
+window.setInterval(function(){
+	if ($scope.musicNode && $scope.musicNode.buffer){
 		var length = $scope.musicNode.buffer.length / $scope.musicNode.sampleRate;
+		//special case - the stinger has started playing
+		if ($scope.stingerNode && context.currentTime >= $scope.stingerNode.startedAt){
+			var loopEnd = $scope.stingerNode.startOffset;
+			var timeThroughStinger = (context.currentTime - $scope.stingerNode.startedAt);
+			var percentThroughSong = (loopEnd + timeThroughStinger) / length;
+			if (percentThroughSong > 1){percentThroughSong=1;}
+			$('.playerProgressBar').css('width',(100*percentThroughSong)+'%');
+			return;
+		}
+		var start = $scope.musicNode.startedAt;
 		var currentPointInSong = (context.currentTime - $scope.musicNode.startedAt);
 		if (currentPointInSong > $scope.musicNode.loopEnd){
 			var loopLength = $scope.musicNode.loopEnd - $scope.musicNode.loopStart;
@@ -198,6 +211,7 @@ $scope.loadMusic=function(filename) {
 				$scope.stingerNode.loop=false;
 				$scope.stingerNode.connect($scope.musicGain);
 			}
+			$scope.$apply();
 		},function(error){
 			console.error(error);
 		});
