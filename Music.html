@@ -295,6 +295,14 @@ div.column{
 	margin-left: -1px;
 	position: absolute;
 }
+.music-subtitle {
+    text-align: left;
+    border-top: 1px solid black;
+    font-size: 0.8em;
+}
+.music-title{
+	text-align:left;
+}
 </style>
 <!--
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
@@ -306,7 +314,7 @@ div.column{
 <script src="libs/angular-animate.js"></script>
 <script src="core/dragndrop.js"></script>
 
-<script src="libs/audiometadata.js"></script>
+<script src="node_modules/audio-metadata/audio-metadata.min.js"></script>
 </head>
 <body style="background-color:#707070;">
 <div ng-app="myApp">
@@ -392,7 +400,8 @@ div.column{
 			<td style="vertical-align:top;">
 				<div class="secondmenu">
 					<div class="leftitem" ng-repeat="music in musicFiles" ng-click="loadMusic(music.filename)" ng-draggable>
-						{{music.name}}
+						<div class="music-title">{{music.name}}</div>
+						<div ng-if="music.album" class="music-subtitle">{{music.album}}</div>
 					</div>
 				</div>
 			</td>

@@ -5,6 +5,7 @@ var http = require('http');
 var url = require('url');
 var path = require('path');
 var fs = require('fs');
+var am = require('audio-metadata')
 // Port number to use
 var port = 8080;
 var root = process.cwd();
@@ -59,7 +60,16 @@ function handleGet(request, response){
 					if (file.isDirectory()){
 						files.push(decodeURI(file.name)+"/");
 					} else {
-						files.push(decodeURI(file.name));
+						var oggData = fs.readFileSync(filename+file.name);
+						var metadata = am.ogg(oggData);
+						var obj = {name:decodeURI(file.name)};
+						if (metadata.title){
+							obj.title=metadata.title;
+						}
+						if (metadata.album){
+							obj.album=metadata.album;
+						}
+						files.push(obj);
 					}
 				} else {
 					//older versions of node will use this

@@ -43,14 +43,19 @@ $scope.getFolders=function(rootPath, arrayStore){
 
 $scope.getFiles=function(rootPath, arrayStore){
 	$http.get('http://localhost:8080/'+root+rootPath).then(function(response){
-		for (let filename of response.data){
-			if (filename.endsWith('.ogg') && !filename.endsWith('$.ogg')){
-				arrayStore.push(
-					{
-					filename:rootPath+filename,
-					name:filename.substring(0,filename.indexOf('.ogg'))
-					}
-				);
+		for (let file of response.data){
+			if (file.name.endsWith('.ogg')){
+				var item = {
+					filename:rootPath+file.name,
+					name:file.name.substring(0,file.name.indexOf('.ogg'))
+				}
+				if (file.title){
+					item.name=file.title;
+				}
+				if (file.album){
+					item.album=file.album;
+				}
+				arrayStore.push(item);
 			}
 		}
 	});
