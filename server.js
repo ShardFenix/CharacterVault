@@ -60,14 +60,16 @@ function handleGet(request, response){
 					if (file.isDirectory()){
 						files.push(decodeURI(file.name)+"/");
 					} else {
-						var oggData = fs.readFileSync(filename+file.name);
-						var metadata = am.ogg(oggData);
 						var obj = {name:decodeURI(file.name)};
-						if (metadata.title){
-							obj.title=metadata.title;
-						}
-						if (metadata.album){
-							obj.album=metadata.album;
+						if (file.name.endsWith('.ogg')){
+							var oggData = fs.readFileSync(filename+file.name);
+							var metadata = am.ogg(oggData);
+							if (metadata && metadata.title){
+								obj.title=metadata.title;
+							}
+							if (metadata && metadata.album){
+								obj.album=metadata.album;
+							}
 						}
 						files.push(obj);
 					}
