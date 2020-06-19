@@ -34,7 +34,7 @@ if (window.location.protocol==='file:'){
 $scope.getFolders=function(rootPath, arrayStore){
 	$http.get('http://localhost:8080/'+root+rootPath).then(function(response){
 		for (let filename of response.data){
-			if (filename.endsWith('/')){
+			if (typeof filename == 'string' && filename.endsWith('/')){
 				arrayStore.push(filename);
 			}
 		}
@@ -227,11 +227,11 @@ $scope.loadMusic=function(filename) {
 $http.get('http://localhost:8080/'+root+"SFX/Loops/").then(function(response){
 	$scope.loops=[];
 	for (let filename of response.data){
-		if (filename.endsWith(".ogg") || filename.endsWith(".wav")){
-			let name = filename.substring(0,filename.lastIndexOf('.'));
+		if (filename.name.endsWith(".ogg") || filename.name.endsWith(".wav")){
+			let name = filename.name.substring(0,filename.name.lastIndexOf('.'));
 			let item = {
 				name:name,
-				filename:filename
+				filename:filename.name
 			}
 			$scope.loops.push(item);
 		}
@@ -241,11 +241,11 @@ $http.get('http://localhost:8080/'+root+"SFX/Loops/").then(function(response){
 $http.get('http://localhost:8080/'+root+"SFX/OneShots/").then(function(response){
 	$scope.oneShots=[];
 	for (let filename of response.data){
-		if (filename.endsWith(".ogg") || filename.endsWith(".wav")){
-			let name = filename.substring(0,filename.lastIndexOf('.'));
+		if (filename.name.endsWith(".ogg") || filename.name.endsWith(".wav")){
+			let name = filename.name.substring(0,filename.name.lastIndexOf('.'));
 			let item = {
 				name:name,
-				filename:filename
+				filename:filename.name
 			}
 			$scope.oneShots.push(item);
 		}
@@ -266,11 +266,15 @@ $scope.loadEnvironment=function(schema){
 	//fade out existing
 	for (let sound of oldEnvironmentAudioList.loops){
 		sound.gain.gain.linearRampToValueAtTime(0.0,context.currentTime+2);
-		sound.source.stop(context.currentTime+2); //this will clean it up from the graph according to SO
+		if (sound.source){
+			sound.source.stop(context.currentTime+2); //this will clean it up from the graph according to SO
+		}
 	}
 	for (let sound of oldEnvironmentAudioList.oneShots){
 		sound.gain.gain.linearRampToValueAtTime(0.0,context.currentTime+2);
-		sound.source.stop(context.currentTime+2); //this will clean it up from the graph according to SO
+		if (sound.source){
+			sound.source.stop(context.currentTime+2); //this will clean it up from the graph according to SO
+		}
 	}
 	$timeout(function(){
 		for (let sound of oldEnvironmentAudioList.oneShots){
@@ -339,10 +343,11 @@ $scope.loadEnvironment=function(schema){
 		}
 	}
 	$scope.selectedEnvironment=schema;
-	$scope.stopMusic().then(function(){
+	$scope.stopMusic();
+	$timeout(function(){
 		$scope.loadMusic(schema.music.filename);
 		$scope.updateMusicVolume(schema.music.volume);
-	});
+	},2100);
 }
 
 $scope.environments=[];
@@ -360,8 +365,8 @@ function loadEnvironmentFile(filename){
 //load saved environments
 $http.get('http://localhost:8080/resources/Environments').then(function(response){
 	for (let filename of response.data){
-		if (filename.endsWith('.json')){
-			loadEnvironmentFile(filename);
+		if (filename.name.endsWith('.json')){
+			loadEnvironmentFile(filename.name);
 		}
 	}
 },function(error){
