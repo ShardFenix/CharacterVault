@@ -556,4 +556,28 @@ $scope.updateSpellFilter=function(){
 }
 $scope.updateSpellFilter();
 
+$scope.debugCoords=function(e){
+	var svgElem = $("#mapsvg");
+	$scope.coords="" + e.originalEvent.offsetX + " " + e.originalEvent.offsetY;
+}
+
+$scope.drawMap=function(path){
+	var svgElem = $("#mapsvg");
+	svgElem.css("background-image",`url('/resources/Adventures/${path}')`);
+	
+	var imageSrc = svgElem.css("background-image")
+		.replace(/url\((['"])?(.*?)\1\)/gi, '$2')
+		.split(',')[0];
+						
+	var image = new Image();
+	image.onload=function(){
+	    var width = this.width;
+		var height = this.height;
+		svgElem.css('width',''+width+'px');
+		svgElem.css('height',''+height+'px');
+	}
+    image.src = imageSrc;
+
+}
+
 }]);

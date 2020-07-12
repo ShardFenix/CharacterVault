@@ -877,3 +877,15 @@ datalist.level-slider option {
 .rulesTables>tbody>tr>td{
 	vertical-align:top;
 }
+#mapsvg{
+	border: 1px solid black;
+    position: absolute;
+}
+.debug-coords {
+    z-index: 1000;
+    position: fixed;
+    background: linen;
+    padding: 6px 10px;
+    top: 50px;
+    left: 10px;
+}

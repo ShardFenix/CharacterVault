@@ -3,19 +3,14 @@
 <head>
 <link rel="stylesheet" href="./core/style.css">
 <link href="https://fonts.googleapis.com/css?family=Cinzel+Decorative:700" rel="stylesheet">
-<!--
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
-<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular-animate.js"></script>
-<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular-sanitize.js"></script>
--->
+
 <script src="libs/jquery.min.js"></script>
 <script src="libs/angular.min.js"></script>
 <script src="libs/angular-animate.js"></script>
 <script src="libs/angular-sanitize.js"></script>
 
 </head>
-<body style="background-color:#ffffff;width:100vw;overflow-x:hidden;margin:0px;">
+<body style="background-color:#ffffff;width:100vw;margin:0px;">
 <div ng-app="myApp">
 <div ng-controller="MyController" ng-cloak>
 
@@ -23,6 +18,7 @@
 <span class="tab" ng-click="tab='general'" ng-class="{'activetab':tab=='general'}">General</span>
 <span class="tab" ng-click="tab='players'" ng-class="{'activetab':tab=='players'}">Players</span>
 <span class="tab" ng-click="tab='combat'" ng-class="{'activetab':tab=='combat'}">Combat</span>
+<span class="tab" ng-click="tab='adventure'" ng-class="{'activetab':tab=='adventure'}">Adventure</span>
 <span class="tab" ng-click="tab='spells'" ng-class="{'activetab':tab=='spells'}">Spells</span>
 <span class="tab" ng-click="tab='loot'" ng-class="{'activetab':tab=='loot'}">LOOt</span>
 <span class="tab" ng-click="tab='notes'" ng-class="{'activetab':tab=='notes'}">Notes</span>
@@ -335,177 +331,177 @@
 
 <div ng-show="tab=='combat'" ng-click="dismissContextMenu()">
 
-<div class="contextMenu" id='contextMenu' style="display:none;">
-	<div class="greenback item" ng-repeat="option in conditions | orderBy:'name'" ng-click="applyCondition(option)"
-		ng-disabled="chosenMonster.conditionImmunities.has(option.name.toLowerCase())">{{option.name}}</div>
-</div>
+	<div class="contextMenu" id='contextMenu' style="display:none;">
+		<div class="greenback item" ng-repeat="option in conditions | orderBy:'name'" ng-click="applyCondition(option)"
+			ng-disabled="chosenMonster.conditionImmunities.has(option.name.toLowerCase())">{{option.name}}</div>
+	</div>
 
-<table style="width:100%"><tbody><tr>
-	<td style="width:400px;vertical-align: top;">
-		<div id='initiativeDiv'>
-			<form ng-submit="addInitiative()">
-				<input type='text' placeholder="Enter Name" ng-model="newInitiative"/>
-				<div class="nextInitiative" ng-click="initUp(initiativeOrder[0])"></div>
-			</form>
-			<div ng-repeat="item in initiativeOrder track by $index" ng-click="initUp(item)"
-				 class="yellowback item" style="display:flex;"
-				 ng-mouseenter="chooseMonster(item)"
-				 ng-mouseleave="chooseMonster()"
-				 ng-mousedown="rightClickInitiative(item,$event)"
-				 oncontextmenu="return false">
-				<span style="flex: 3">{{item.name || item}}</span>
-				<div class="conditionList">
-					<span ng-repeat-start="condition in item.conditions track by $index"
-						ng-mouseenter="focusConditionDuration($parent.$index, $index)"
-						ng-mouseleave="unfocusConditionDuration($parent.$index, $index)">
-						{{condition.name}} {{condition.duration}}
-					</span>
-					<input type="text" style="position:absolute;left:-300px;" ng-repeat-end
-						ng-keydown="incrDuration(item, condition, $event)" />
-				</div>
-				<span class="deletebutton" ng-click="deleteInit(item,$event)">&times;</span>
-			</div>
-			<button class="redback item" ng-click="initiativeOrder=[]">Clear Initiative</button>
-		</div>
-		<hr>
-		<input type="text" ng-model="creatureFilter" placeholder="Filter..."/>
-		<div style="overflow-y:scroll;max-height:calc(100vh - 450px)">
-			<table class="borders">
-				<thead><tr>
-					<th>Name</th>
-					<th>CR</th>
-					<th>Type</th>
-					<th></th>
-				</tr></thead>
-				<tbody>
-					<tr ng-repeat="creature in creatures | filter:creatureFilter" >
-						<td style="width:30%">{{creature.name}}</td>
-						<td style="width:10%">{{creature.cr}}</td>
-						<td style="width:20%">{{creature.type}}</td>
-						<td style="width:10%"><span class="button" ng-click="addToEncounter(creature)">^</span></td>
-					</tr>
-				</tbody>
-			</table>
-		</div>
-	</td>
-	<td style="vertical-align: top;display: flex;flex-wrap: wrap;">
-		<div ng-repeat="creature in initiativeOrder track by $index"
-			 class="creatureCard box" ng-if="creature.hpMax">
-			<div class="monsterHeader" ng-class="{'selected':creature===chosenMonster}">
-				<div class="headerBg"></div>
-				<span class="white label">{{creature.name}}</span><span class="white"> (CR {{creature.cr}})</span>
-				<span class="deletebutton" ng-click="deleteInit(creature,$event)">&times;</span>
-			</div>
-			<div style="position:relative;">
-				<span>&emsp;HP: </span>
-				<input type="text" class="hidden right" ng-model="creature.hp"/>
-				<span ng-click="rerollHp(creature)"> / {{creature.hpMax}}</span>
-				<form ng-submit="damage(this)" style="display:initial;">
-					<input type="text" number ng-model="damageAmount" 
-							placeholder="Deal damage" class="med"/>
+	<table style="width:100%"><tbody><tr>
+		<td style="width:400px;vertical-align: top;">
+			<div id='initiativeDiv'>
+				<form ng-submit="addInitiative()">
+					<input type='text' placeholder="Enter Name" ng-model="newInitiative"/>
+					<div class="nextInitiative" ng-click="initUp(initiativeOrder[0])"></div>
 				</form>
-				<table class="borders" style="display:inline-table; width:30%;"><thead><tr><th>Walk</th><th>Fly</th><th>Swim</th></tr>
-				<tbody><tr>
-					<td>{{creature.speed.walk || 0}}</td>
-					<td>{{creature.speed.fly || 0}}</td>
-					<td>{{creature.speed.swim || 0}}</td>
-				</tr></tbody></table>
-				<div style="position:absolute;right:4px;top:8px;font-weight:bold;">{{creature.type}}</div>
+				<div ng-repeat="item in initiativeOrder track by $index" ng-click="initUp(item)"
+					 class="yellowback item" style="display:flex;"
+					 ng-mouseenter="chooseMonster(item)"
+					 ng-mouseleave="chooseMonster()"
+					 ng-mousedown="rightClickInitiative(item,$event)"
+					 oncontextmenu="return false">
+					<span style="flex: 3">{{item.name || item}}</span>
+					<div class="conditionList">
+						<span ng-repeat-start="condition in item.conditions track by $index"
+							ng-mouseenter="focusConditionDuration($parent.$index, $index)"
+							ng-mouseleave="unfocusConditionDuration($parent.$index, $index)">
+							{{condition.name}} {{condition.duration}}
+						</span>
+						<input type="text" style="position:absolute;left:-300px;" ng-repeat-end
+							ng-keydown="incrDuration(item, condition, $event)" />
+					</div>
+					<span class="deletebutton" ng-click="deleteInit(item,$event)">&times;</span>
+				</div>
+				<button class="redback item" ng-click="initiativeOrder=[]">Clear Initiative</button>
 			</div>
-			<div>
-				<table class="borders full"><thead><tr>
-					<th></th>
-					<th>STR</th>
-					<th>DEX</th>
-					<th>CON</th>
-					<th>INT</th>
-					<th>WIS</th>
-					<th>CHA</th>
-				</tr></thead>
-				<tr>
-					<td>AC {{creature.ac}}</td>
-					<td>{{att(creature,'str')}}</td>
-					<td>{{att(creature,'dex')}}</td>
-					<td>{{att(creature,'con')}}</td>
-					<td>{{att(creature,'int')}}</td>
-					<td>{{att(creature,'wis')}}</td>
-					<td>{{att(creature,'cha')}}</td>
-				</tr>
-				<tr>
-					<td>Saves:</td>
-					<td>{{saveBonus(creature,'str')}}</td>
-					<td>{{saveBonus(creature,'dex')}}</td>
-					<td>{{saveBonus(creature,'con')}}</td>
-					<td>{{saveBonus(creature,'int')}}</td>
-					<td>{{saveBonus(creature,'wis')}}</td>
-					<td>{{saveBonus(creature,'cha')}}</td>
-				</tr>
+			<hr>
+			<input type="text" ng-model="creatureFilter" placeholder="Filter..."/>
+			<div style="overflow-y:scroll;max-height:calc(100vh - 450px)">
+				<table class="borders">
+					<thead><tr>
+						<th>Name</th>
+						<th>CR</th>
+						<th>Type</th>
+						<th></th>
+					</tr></thead>
+					<tbody>
+						<tr ng-repeat="creature in creatures | filter:creatureFilter" >
+							<td style="width:30%">{{creature.name}}</td>
+							<td style="width:10%">{{creature.cr}}</td>
+							<td style="width:20%">{{creature.type}}</td>
+							<td style="width:10%"><span class="button" ng-click="addToEncounter(creature)">^</span></td>
+						</tr>
+					</tbody>
 				</table>
 			</div>
-			<div ng-if="creature.immunities.length>0
-			|| creature.conditionImmunities.length>0
-			|| creature.resistances.length>0
-			|| creature.vulnerabilities.length>0">
-				<span class="label subheader">Resistances and Vulnerabilities</span>
-				<div ng-if="creature.immunities" style="margin-bottom:6px;">
-					<span style="font-weight:bold;">Immune to &horbar; </span>{{creature.immunities.join(', ')}}
+		</td>
+		<td style="vertical-align: top;display: flex;flex-wrap: wrap;">
+			<div ng-repeat="creature in initiativeOrder track by $index"
+				 class="creatureCard box" ng-if="creature.hpMax">
+				<div class="monsterHeader" ng-class="{'selected':creature===chosenMonster}">
+					<div class="headerBg"></div>
+					<span class="white label">{{creature.name}}</span><span class="white"> (CR {{creature.cr}})</span>
+					<span class="deletebutton" ng-click="deleteInit(creature,$event)">&times;</span>
 				</div>
-				<div ng-if="creature.conditionImmunities" style="margin-bottom:6px;">
-					<span style="font-weight:bold;">Immune to &horbar; </span>{{creature.conditionImmunities.join(', ')}}
+				<div style="position:relative;">
+					<span>&emsp;HP: </span>
+					<input type="text" class="hidden right" ng-model="creature.hp"/>
+					<span ng-click="rerollHp(creature)"> / {{creature.hpMax}}</span>
+					<form ng-submit="damage(this)" style="display:initial;">
+						<input type="text" number ng-model="damageAmount" 
+								placeholder="Deal damage" class="med"/>
+					</form>
+					<table class="borders" style="display:inline-table; width:30%;"><thead><tr><th>Walk</th><th>Fly</th><th>Swim</th></tr>
+					<tbody><tr>
+						<td>{{creature.speed.walk || 0}}</td>
+						<td>{{creature.speed.fly || 0}}</td>
+						<td>{{creature.speed.swim || 0}}</td>
+					</tr></tbody></table>
+					<div style="position:absolute;right:4px;top:8px;font-weight:bold;">{{creature.type}}</div>
 				</div>
-				<div ng-if="creature.resistances" style="margin-bottom:6px;">
-					<span style="font-weight:bold;">Resistant to &horbar; </span>{{creature.resistances.join(', ')}}
+				<div>
+					<table class="borders full"><thead><tr>
+						<th></th>
+						<th>STR</th>
+						<th>DEX</th>
+						<th>CON</th>
+						<th>INT</th>
+						<th>WIS</th>
+						<th>CHA</th>
+					</tr></thead>
+					<tr>
+						<td>AC {{creature.ac}}</td>
+						<td>{{att(creature,'str')}}</td>
+						<td>{{att(creature,'dex')}}</td>
+						<td>{{att(creature,'con')}}</td>
+						<td>{{att(creature,'int')}}</td>
+						<td>{{att(creature,'wis')}}</td>
+						<td>{{att(creature,'cha')}}</td>
+					</tr>
+					<tr>
+						<td>Saves:</td>
+						<td>{{saveBonus(creature,'str')}}</td>
+						<td>{{saveBonus(creature,'dex')}}</td>
+						<td>{{saveBonus(creature,'con')}}</td>
+						<td>{{saveBonus(creature,'int')}}</td>
+						<td>{{saveBonus(creature,'wis')}}</td>
+						<td>{{saveBonus(creature,'cha')}}</td>
+					</tr>
+					</table>
 				</div>
-				<div ng-if="creature.vulnerabilities" style="margin-bottom:6px;">
-					<span style="font-weight:bold;">Vulnerable to &horbar; </span>{{creature.vulnerabilities.join(', ')}}
-				</div>
-			</div>
-			<div ng-if="creature.passives.length>0">
-				<span class="label subheader">Passives</span>
-				<table class="full" ng-repeat="p in creature.passives"
-					ng-if="!p.dmHide">
-					<thead><tr><th ng-click="p.hidden=!p.hidden">{{p.name}}</th></tr></thead>
-					<tbody ng-hide="p.hidden"><tr><td style="white-space: pre-wrap;">{{p.dmDescription || p.description}}</td></tr></tbody>
-				</table>
-			</div>
-			<div ng-if="creature.actions">
-				<span class="label subheader">Actions</span>
-				<table class="full" ng-repeat="a in creature.actions">
-					<thead><tr><th ng-click="a.hidden=!a.hidden">{{a.name}}</th></tr></thead>
-					<tbody ng-hide="a.hidden"><tr><td style="white-space: pre-wrap;">{{evalTooltip(a,creature)}}</td></tr></tbody>
-				</table>
-			</div>
-			<div ng-if="creature.spellcasting">
-				<span class="label subheader">Spellcasting</span>
-				<div>{{creature.spellcasting.description}}</div>
-				<div ng-if="creature.spellcasting.will">
-					<span>At will: {{creature.spellcasting.will.join(', ')}}</span>
-				</div>
-				<div ng-if="creature.spellcasting.individual">
-					<span>Individual uses: </span>
-					<span ng-repeat="spell in creature.spellcasting.individual" class="spellButton"
-							ng-click="spell.charges=spell.charges-1" ng-if="spell.charges"
-							ng-mouseenter="spellTipRight(spell)"
-							ng-mouseleave="clearTip()">{{spell.name}} ({{spell.charges}})</span>
-				</div>
-				<div ng-if="creature.spellcasting.spells"> 
-					<div ng-repeat="level in creature.spellcasting.spells"
-						 ng-click="level.slots=level.slots-1"
-						 ng-if="level.slots>0">
-						<span style="font-weight:bold;"> Level {{$index}} ({{level.slots}}): </span>
-						<span ng-repeat="spell in level.spells" class="spellButton"
-							  ng-mouseenter="spellTipRight(spell,$index)"
-							  ng-mouseleave="clearTip()">{{spell}}</span>
+				<div ng-if="creature.immunities.length>0
+				|| creature.conditionImmunities.length>0
+				|| creature.resistances.length>0
+				|| creature.vulnerabilities.length>0">
+					<span class="label subheader">Resistances and Vulnerabilities</span>
+					<div ng-if="creature.immunities" style="margin-bottom:6px;">
+						<span style="font-weight:bold;">Immune to &horbar; </span>{{creature.immunities.join(', ')}}
+					</div>
+					<div ng-if="creature.conditionImmunities" style="margin-bottom:6px;">
+						<span style="font-weight:bold;">Immune to &horbar; </span>{{creature.conditionImmunities.join(', ')}}
+					</div>
+					<div ng-if="creature.resistances" style="margin-bottom:6px;">
+						<span style="font-weight:bold;">Resistant to &horbar; </span>{{creature.resistances.join(', ')}}
+					</div>
+					<div ng-if="creature.vulnerabilities" style="margin-bottom:6px;">
+						<span style="font-weight:bold;">Vulnerable to &horbar; </span>{{creature.vulnerabilities.join(', ')}}
 					</div>
 				</div>
-				
-			<!--	{{creature.spellcasting}} <!-- -->
-				
+				<div ng-if="creature.passives.length>0">
+					<span class="label subheader">Passives</span>
+					<table class="full" ng-repeat="p in creature.passives"
+						ng-if="!p.dmHide">
+						<thead><tr><th ng-click="p.hidden=!p.hidden">{{p.name}}</th></tr></thead>
+						<tbody ng-hide="p.hidden"><tr><td style="white-space: pre-wrap;">{{p.dmDescription || p.description}}</td></tr></tbody>
+					</table>
+				</div>
+				<div ng-if="creature.actions">
+					<span class="label subheader">Actions</span>
+					<table class="full" ng-repeat="a in creature.actions">
+						<thead><tr><th ng-click="a.hidden=!a.hidden">{{a.name}}</th></tr></thead>
+						<tbody ng-hide="a.hidden"><tr><td style="white-space: pre-wrap;">{{evalTooltip(a,creature)}}</td></tr></tbody>
+					</table>
+				</div>
+				<div ng-if="creature.spellcasting">
+					<span class="label subheader">Spellcasting</span>
+					<div>{{creature.spellcasting.description}}</div>
+					<div ng-if="creature.spellcasting.will">
+						<span>At will: {{creature.spellcasting.will.join(', ')}}</span>
+					</div>
+					<div ng-if="creature.spellcasting.individual">
+						<span>Individual uses: </span>
+						<span ng-repeat="spell in creature.spellcasting.individual" class="spellButton"
+								ng-click="spell.charges=spell.charges-1" ng-if="spell.charges"
+								ng-mouseenter="spellTipRight(spell)"
+								ng-mouseleave="clearTip()">{{spell.name}} ({{spell.charges}})</span>
+					</div>
+					<div ng-if="creature.spellcasting.spells"> 
+						<div ng-repeat="level in creature.spellcasting.spells"
+							 ng-click="level.slots=level.slots-1"
+							 ng-if="level.slots>0">
+							<span style="font-weight:bold;"> Level {{$index}} ({{level.slots}}): </span>
+							<span ng-repeat="spell in level.spells" class="spellButton"
+								  ng-mouseenter="spellTipRight(spell,$index)"
+								  ng-mouseleave="clearTip()">{{spell}}</span>
+						</div>
+					</div>
+					
+				<!--	{{creature.spellcasting}} <!-- -->
+					
+				</div>
 			</div>
-		</div>
-	</td>
-	</tr></tbody>
-</table>
+		</td>
+		</tr></tbody>
+	</table>
 </div>
 <!-- End Combat -->
 
@@ -543,6 +539,16 @@
 
 <div ng-show="tab=='notes'">
 	<textarea ng-model='dm.notes' style="margin-left: -4px;margin-top: 10px;width: 100%;height: 800px;"></textarea>
+</div>
+
+<div ng-show="tab=='adventure'">
+	<div ></div>
+	<div id='adventurePage' ng-mousemove="debugCoords($event)">
+		<svg id='mapsvg'></svg>
+	</div>
+	<div class="debug-coords">
+		{{coords}}
+	</div>
 </div>
 
 <div ng-show="tab=='spells'">
