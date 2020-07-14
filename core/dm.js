@@ -556,16 +556,63 @@ $scope.updateSpellFilter=function(){
 }
 $scope.updateSpellFilter();
 
-$scope.debugCoords=function(e){
+$scope.debugCoords=function(){
 	var svgElem = $("#mapsvg");
-	$scope.coords="" + e.originalEvent.offsetX + " " + e.originalEvent.offsetY;
+	var coords = d3.mouse(this);
+	$scope.coords="" + Math.floor(coords[0]) + " " + Math.floor(coords[1]);
 }
 
-$scope.drawMap=function(path){
-	var svgElem = $("#mapsvg");
-	svgElem.css("background-image",`url('/resources/Adventures/${path}')`);
+$scope.adventures=[];
+
+$scope.currentPath=null;
+
+$scope.startPath=function(){
+	$scope.currentPath = "";
+	if ($scope.pathPreview){
+		$scope.pathPreview.remove();
+	}
+	$scope.pathPreview = d3.select('#mapsvg>g').append('path').attr('id','pathPreview');
+}
+
+$scope.appendPath=function(){
+	if ($scope.currentPath == null){
+		return;
+	}
+	if ($scope.currentPath.length==0){
+		$scope.currentPath = "M "+$scope.coords;
+	} else {
+		$scope.currentPath += " L "+ $scope.coords;
+	}
+	$scope.pathPreview.attr('d',$scope.currentPath+" Z");
+}
+$scope.endPath=function(){
+	$scope.currentPath=null;
+	$scope.pathPreview.remove();
+}
+
+$http.get('http://localhost:8080/resources/Adventures').then(function(response){
+	for (let filename of response.data){
+		$scope.adventures.push(filename);
+	}
+},function(error){
+	console.error("Error loading character vault.");
+	console.error(error);
+});
+
+$scope.loadAdventure=function(name){
+	$scope.chosenAdventure=name;
+	drawMap(name);
+}
+
+function drawMap(path){
+	var svgElem = d3.select("#mapsvg");
+	d3.selectAll('#mapsvg>g').remove();
+	var g = svgElem.append('g');
+	var svgImage = g.append('image');
+	var adventure = $scope.chosenAdventure;
+	svgImage.attr("href",`/resources/Adventures/${adventure}/areas/${path}/map.jpg`);
 	
-	var imageSrc = svgElem.css("background-image")
+	var imageSrc = svgImage.attr("href")
 		.replace(/url\((['"])?(.*?)\1\)/gi, '$2')
 		.split(',')[0];
 						
@@ -573,11 +620,78 @@ $scope.drawMap=function(path){
 	image.onload=function(){
 	    var width = this.width;
 		var height = this.height;
-		svgElem.css('width',''+width+'px');
-		svgElem.css('height',''+height+'px');
+		var zoom = d3.zoom();
+		zoom.translateExtent([[0,0],[width,height]])
+			.scaleExtent([0.1,1])
+			.on('zoom', function(){
+				g.attr("transform", d3.event.transform);
+			});
+		
+		svgElem.call(zoom);
 	}
     image.src = imageSrc;
+	g.on('mousemove',$scope.debugCoords);
+	
+	//draw regions and POIs
+	$http.get(`http://localhost:8080/resources/Adventures/${adventure}/areas/${path}/info.json`).then(function(response){
+		$scope.areaInfo=response.data;
+		$scope.currentArea=$scope.areaInfo;
+		var dataJoin = g.selectAll('path').data(response.data.regions);
+		dataJoin.enter().append('path')
+			.attr('d',function(d){
+				return d.path;
+			})
+			.attr("class", "region")
+			.on('mouseenter',updateMapLabel)
+			.on('mouseleave',removeMapLabel)
+			.on('click',goToLocation);
+		dataJoin = g.selectAll('circle').data(response.data.locations);
+		dataJoin.enter().append('circle')
+			.attr('r',function(d){return d.iconSize;})
+			.attr('cx',function(d){return d.location[0];})
+			.attr('cy',function(d){return d.location[1];})
+			.attr('class','location')
+			.on('mouseenter',updateMapLabel)
+			.on('mouseleave',removeMapLabel)
+			.on('click',goToLocation);
+	},function(error){
+		console.error("Error loading character vault.");
+		console.error(error);
+	});
+	
 
 }
+
+function updateMapLabel(d){
+	d3.select('#mapText').remove();
+	var mapText = d3.select('#mapLabel').append('div');
+	mapText.attr('id','mapText');
+	mapText.text(d.name);
+	$('#mapText').arctext({radius:800});
+}
+function removeMapLabel(){
+	d3.select('#mapText').remove();
+}
+function goToLocation(location){
+	if (location.articleLink){
+		drawMap(location.articleLink);
+	} else {
+		$scope.areaInfo=location;
+		$scope.areaInfo.parent=$scope.currentArea;
+		$scope.$apply();
+	}
+}
+
+$scope.goToParentArea=function(){
+	if ($scope.currentArea.name == $scope.areaInfo.name){
+		if ($scope.areaInfo.parent){
+			drawMap($scope.areaInfo.parent);
+		}
+	} else {
+		$scope.areaInfo=$scope.currentArea;
+	}
+}
+
+
 
 }]);

@@ -881,6 +881,42 @@ datalist.level-slider option {
 	border: 1px solid black;
     position: absolute;
 }
+#mapsvg path.region{
+	fill:transparent;
+}
+#mapsvg path.region:hover{
+	fill:#ffee2244;
+}
+#mapsvg circle.location{
+	fill:#00ff0000;
+	stroke: #00ff00;
+	stroke-width: 2px;
+}
+#mapsvg circle.location:hover{
+	fill:#00ff0044;
+	stroke-width:6;
+}
+#mapLabel {
+    background-image: url(/images/maplabel.png);
+    position: absolute;
+    bottom: 50px;
+    left: calc(25vw - 200px);
+    background-size: contain;
+    background-repeat: no-repeat;
+    width: 400px;
+    height: 109px;
+}
+#mapLabel.top{
+	top:50px;
+}
+#mapText{
+	font-size: 30px;
+    margin-top: 44px;
+    text-align: center;
+}
+#pathPreview{
+	fill: #00bb1a6e;
+}
 .debug-coords {
     z-index: 1000;
     position: fixed;
@@ -888,4 +924,55 @@ datalist.level-slider option {
     padding: 6px 10px;
     top: 50px;
     left: 10px;
+}
+.entry-heading{
+	color: #822000;
+    font-family: andada,serif;
+	font-size:1.9em;
+}
+div.mapContent{
+	padding:20px;
+	font-size:18px;
+	min-height: calc(100vh - 98px);
+	background: url(/images/parchment2.jpg);
+}
+div.mapContent table{
+	width: 100%;
+    border-collapse: collapse;
+    border: 1px solid #bfbfbf;
+}
+div.mapContent table>thead>tr>th,
+div.mapContent table>tbody>tr>td{
+	border: 1px solid #b9b9b9;
+	padding: 2px 8px;
+}
+div.mapContent table>thead{
+	background: #43759e;
+    font-weight: bold;
+    color: white;
+}
+div.mapContent table>tbody>tr{
+	border: 1px solid black;
+	background: #bccfde;
+}
+div.mapContent table>tbody>tr:nth-of-type(2n){
+	background: #9caebb;
+}
+div.adventurelist{
+	border-radius: 10px;
+    text-align: center;
+    font-weight: bold;
+    color: white;
+    background: green;
+    border: 2px solid black;
+    margin: 10px 25%;
+    padding: 12px;
+    font-size: 2em;
+}
+div.backIcon{
+	background:url(/images/back.png);
+	width:50px;
+	height:50px;
+	background-size:cover;
+	background-repeat:no-repeat;
 }

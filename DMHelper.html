@@ -8,6 +8,8 @@
 <script src="libs/angular.min.js"></script>
 <script src="libs/angular-animate.js"></script>
 <script src="libs/angular-sanitize.js"></script>
+<script src="libs/d3.js"></script>
+<script src="libs/arctext.js"></script>
 
 </head>
 <body style="background-color:#ffffff;width:100vw;margin:0px;">
@@ -541,13 +543,50 @@
 	<textarea ng-model='dm.notes' style="margin-left: -4px;margin-top: 10px;width: 100%;height: 800px;"></textarea>
 </div>
 
-<div ng-show="tab=='adventure'">
-	<div ></div>
-	<div id='adventurePage' ng-mousemove="debugCoords($event)">
-		<svg id='mapsvg'></svg>
+<div ng-show="tab=='adventure'" style="display:flex;">
+	<div class="flex1">
+		<div class="adventuremenu" ng-show="!chosenAdventure">
+			<div ng-repeat="adv in adventures" class="adventurelist" ng-click="loadAdventure(adv)">{{adv}}</div>
+		</div>
+		<div id='adventurePage' ng-show="chosenAdventure"
+			ng-click="appendPath()">
+			<svg id='mapsvg' width="50vw" height="90vh"></svg>
+		</div>
+		<div class="debug-coords" ng-show="chosenAdventure">
+			{{coords}}
+		</div>
+		<div id="mapLabel" ng-show="chosenAdventure" ng-class="{'top':flipLabel}"
+			ng-mouseenter="flipLabel = !flipLabel">
+			<div id="mapText"></div>
+		</div>
 	</div>
-	<div class="debug-coords">
-		{{coords}}
+	<div class="flex1">
+		<div class="mapContent">
+			<button ng-click="startPath()">Start</button>
+			<button ng-click="endPath()">End</button>
+			<textarea ng-model="currentPath" ></textarea>
+			<br>
+			<div class="backIcon" ng-click="goToParentArea()"></div>
+			<div class="entry-heading">{{areaInfo.name}}</div>
+			<div ng-repeat="entry in areaInfo.description track by $index">
+				
+				<div ng-switch="entry.type">
+					<div ng-switch-when="list" class="entry-list">
+						<ul>
+							<li ng-repeat="s in entry.content">{{s}}</li>
+						</ul>
+					</div>
+					<div ng-switch-when="heading" class="entry-heading">{{entry.content}}</div>
+					<div ng-switch-when="html">
+						<div ng-bind-html="entry.content"></div>
+					</div>
+					
+					
+					<div ng-switch-default><p>{{entry.content}}</p></div>
+				</div>
+				
+			</div>
+		</div>
 	</div>
 </div>
 
@@ -624,7 +663,7 @@
 			<button class="button" ng-click="loot=[]">Clear</button>
 			<button class="button" ng-click="generateLoot()">Generate</button>
 			<br><br>
-			<div class="label">Merchants</label>
+			<div class="label">Merchants</div>
 			<button ng-repeat="merch in merchants" ng-click="generateMerchant(merch)">{{merch.name}}</button>
 		</td>
 		<td style="display: flex;flex-wrap: wrap;">
