@@ -1,0 +1,33 @@
+<div ng-switch="entry.type">
+	<div ng-switch-when="list" class="entry-list">
+		<ul>
+			<li ng-repeat="s in content" ng-bind-html="s"></li>
+		</ul>
+	</div>
+	<div ng-switch-when="heading" class="entry-heading">{{entry.content}}</div>
+	<div ng-switch-when="html">
+		<div ng-bind-html="entry.content"></div>
+	</div>
+	<div ng-switch-when="description">
+		<div class="entry-description" ng-bind-html="content"></div>
+	</div>
+	<div ng-switch-when="table">
+		<table>
+			<thead><tr>
+				<th ng-repeat="item in entry.content[0]">{{item}}</th>
+			</tr></thead>
+			<tbody>
+				<tr ng-repeat="row in entry.content track by $index" ng-if="$index>0">
+					<td ng-repeat="item in row">{{item}}</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+	<div ng-switch-when="link" class="entry-link" ng-click="goToLink(entry)">
+		{{entry.content}}
+	</div>
+	
+	<div ng-switch-default>
+		<p compile="content"></p>
+	</div>
+</div>

@@ -1,5 +1,94 @@
 var app=angular.module('myApp',['ngSanitize']);
 
+/**
+ * Replaces the part of this string between (including) start and end with content
+ */
+String.prototype.write=function(start, end, content){
+	return this.substring(0,start) + content + this.substring(end+1);
+}
+
+app.directive('compile', ['$compile', function ($compile) {
+    return function(scope, element, attrs) {
+      scope.$watch(
+        function(scope) {
+          return scope.$eval(attrs.compile);
+        },
+        function(value) {
+          element.html(value);
+          $compile(element.contents())(scope);
+        }
+    );
+  };
+}]);
+
+app.directive('dndEntry',['$sce','$compile',function($sce,$compile){
+	return {
+		restrict:"A",
+		scope:{
+			entry:"="
+		},
+		templateUrl:'templates/dndEntry.html',
+		controller:function($scope,$element){
+			
+			$scope.content=$scope.entry.content;
+			
+			//transform any placeholders into tooltip links
+			if (typeof $scope.content == 'string') {
+				var index = $scope.content.indexOf('${');
+				while (index != -1) {
+					let endIndex = $scope.content.indexOf('}',index);
+					console.log('replacement detected at '+index+"-"+endIndex);
+					let code = $scope.content.substring(index+2,endIndex);
+					//code is in the format ${linkType:entryName:description}
+					let segments = code.split(':');
+					let linkType = segments[0];
+					let entryName = segments[1];
+					let description = segments.length>=3?segments[2]:entryName;
+					
+					if (linkType=='creature'){
+						$scope.content=$scope.content.write(index,endIndex,
+							"<span class='tipLink' ng-click='addToInitiative(\""+entryName+"\")'"
+							+" ng-mouseenter='setTip(\""+linkType+"\",\""+entryName+"\")'"
+							+" ng-mouseleave='clearTip()'>"+description+"</span>"
+						);
+					} else {
+						$scope.content=$scope.content.write(index,endIndex,
+							"<span"
+							+" ng-mouseenter='setTip(\""+linkType+"\",\""+entryName+"\")'"
+							+" ng-mouseleave='clearTip()'>"+description+"</span>"
+						);
+					}
+					index=$scope.content.indexOf('${');
+				}
+				//$scope.content = $sce.trustAsHtml($scope.content);
+			}
+		},
+		link:function(scope, element, attrs){
+			
+			scope.goToLink=scope.$parent.goToLink;
+			
+			scope.setTip=function(refType, entryName){
+				var tip = null;
+				switch (refType) {
+					case 'creature': tip = window.creatures.find({name:entryName});break;
+					case 'spell': tip = window.spells.find({name:entryName});break;
+				}
+				topScope.setLeftTip(tip);
+			}
+			scope.clearTip=function(){
+				topScope.clearTip();
+			}
+			
+			scope.addToInitiative = function(entryName){
+				
+			}
+			
+			
+			
+		}
+	}
+}]);
+
 app.directive('number', ['$parse', function($parse) {
     return {
         require: 'ngModel',
@@ -37,6 +126,8 @@ $scope.spellFilters={
 	includeClass:[true,true,true,true,true,true,true,true],
 	excludeClass:[false,false,false,false,false,false,false,false]
 }
+
+window.topScope=$scope;
 
 $scope.players=[];
 
@@ -330,7 +421,7 @@ $scope.evalTooltip=function(tip,owner){
 var tipPromise=null;
 
 $scope.clearTip=function(){
-	tipPromise=$timeout(function(){$scope.tip=null;$scope.spellLevel=null;},1000);
+	tipPromise=$timeout(function(){$scope.tip=null;$scope.spellLevel=null;},100000);
 }
 
 $scope.renewTip=function(){
@@ -604,7 +695,7 @@ $scope.loadAdventure=function(name){
 	drawMap(name);
 }
 
-function drawMap(path){
+function drawMap(path, locationJump, sectionJump){
 	var svgElem = d3.select("#mapsvg");
 	d3.selectAll('#mapsvg>g').remove();
 	var g = svgElem.append('g');
@@ -622,7 +713,7 @@ function drawMap(path){
 		var height = this.height;
 		var zoom = d3.zoom();
 		zoom.translateExtent([[0,0],[width,height]])
-			.scaleExtent([0.1,1])
+			.scaleExtent([0.1,2])
 			.on('zoom', function(){
 				g.attr("transform", d3.event.transform);
 			});
@@ -641,10 +732,17 @@ function drawMap(path){
 			.attr('d',function(d){
 				return d.path;
 			})
-			.attr("class", "region")
+			.attr("class", function(d){
+				if ($scope.areaInfo.showRegions){
+					return "region outline";
+				} else {
+					return "region";
+				}
+			})
 			.on('mouseenter',updateMapLabel)
 			.on('mouseleave',removeMapLabel)
 			.on('click',goToLocation);
+		
 		dataJoin = g.selectAll('circle').data(response.data.locations);
 		dataJoin.enter().append('circle')
 			.attr('r',function(d){return d.iconSize;})
@@ -654,12 +752,26 @@ function drawMap(path){
 			.on('mouseenter',updateMapLabel)
 			.on('mouseleave',removeMapLabel)
 			.on('click',goToLocation);
+			
+		if (locationJump){
+			for (var loc of $scope.areaInfo.regions){
+				if (loc.name == locationJump){
+					goToLocation(loc,sectionJump);
+					return;
+				}
+			}
+			for (var loc of $scope.areaInfo.locations){
+				if (loc.name == locationJump){
+					goToLocation(loc,sectionJump);
+					return;
+				}
+			}
+		}
 	},function(error){
 		console.error("Error loading character vault.");
 		console.error(error);
 	});
 	
-
 }
 
 function updateMapLabel(d){
@@ -672,13 +784,23 @@ function updateMapLabel(d){
 function removeMapLabel(){
 	d3.select('#mapText').remove();
 }
-function goToLocation(location){
-	if (location.articleLink){
-		drawMap(location.articleLink);
+function goToLocation(location, sectionJump){
+	if (location.areaLink){
+		drawMap(location.areaLink);
 	} else {
 		$scope.areaInfo=location;
 		$scope.areaInfo.parent=$scope.currentArea;
-		$scope.$apply();
+		if (sectionJump){
+			//remove all entries before the given section
+			var i=0;
+			for (i=0;i<$scope.areaInfo.description.length;i++){
+				if ($scope.areaInfo.description[i].content == sectionJump){
+					$scope.areaInfo.description.splice(0,i);
+					break;
+				}
+			}
+		}
+		//$scope.$apply();
 	}
 }
 
@@ -692,6 +814,35 @@ $scope.goToParentArea=function(){
 	}
 }
 
+$scope.openArticle=function(entry){
+	if (entry.evals && entry.evals.length>0){
+		for (var s of entry.evals){
+			$scope.$eval(s);
+		}
+	}
+	goToLocation(entry);
+}
+
+$scope.goToLink=function(entry){
+	//link to a location in the current areaInfo
+	if (entry.locationLink) {
+		if ($scope.areaInfo != $scope.currentArea){
+			//need to pop up first
+			$scope.areaInfo = $scope.currentArea;
+		}
+		for (var loc of $scope.areaInfo.locations){
+			if (loc.name == entry.locationLink){
+				goToLocation(loc);
+				return;
+			}
+		}
+	} else if (entry.areaLink) {
+		drawMap(entry.areaLink);
+	} else if (entry.pathLink) {
+		var parts = entry.pathLink.split('/');
+		drawMap(parts[0],parts[1],parts[2]);
+	}
+}
 
 
 }]);

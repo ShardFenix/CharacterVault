@@ -359,7 +359,15 @@ table.full{
 }
 .creatureCard .label.subheader,
 .playerCard .label.subheader{
-	background: linear-gradient(90deg, #00000000, #fffad6 20%,#fffad6 80%, #00000000);
+	background: rgba(255, 94, 0, 0.4);
+}
+.creatureCard .abilitySection>p {
+    line-height: 1em;
+    margin-block-start: 0.5em;
+    margin-block-end: 0.5em;
+}
+.leftTip .creatureCard .abilitySection{
+	text-align:left;
 }
 .playerHeader{
 	position:relative;
@@ -505,7 +513,7 @@ div.rightTip {
 	background-attachment:local;
     box-shadow: 0 0 2px 1px black;
     width: 41%;
-    left: 110%;
+    left: 59%;
     top: 0%;
     transition: 0.5s ease all;
     text-align: center;
@@ -513,9 +521,10 @@ div.rightTip {
 	max-height: 100%;
 	overflow-y:scroll;
     z-index: 6;
+	display:none;
 }
 div.rightTip.show{
-	left:59%;
+	display:block;
 }
 
 div.leftTip {
@@ -524,7 +533,7 @@ div.leftTip {
 	background-attachment:local;
     box-shadow: 0 0 2px 1px black;
     width: 41%;
-    right: 110%;
+    right: 59%;
     top: 0%;
     transition: 0.5s ease all;
     text-align: center;
@@ -532,9 +541,13 @@ div.leftTip {
 	max-height: 100%;
 	overflow-y:scroll;
     z-index: 6;
+	display:none;
 }
 div.leftTip.show{
-	right:59%;
+	display:block;
+}
+div.leftTip>.creatureCard{
+	max-width:1900px;
 }
 
 .tipDescription{
@@ -887,6 +900,15 @@ datalist.level-slider option {
 #mapsvg path.region:hover{
 	fill:#ffee2244;
 }
+#mapsvg path.region.outline {
+    stroke: #d8c23e;
+    stroke-width: 2px;
+    fill: #ffee2244;
+}
+#mapsvg path.region.outline:hover {
+    fill: #00800045;
+	stroke: #4CAF50;
+}
 #mapsvg circle.location{
 	fill:#00ff0000;
 	stroke: #00ff00;
@@ -928,13 +950,33 @@ datalist.level-slider option {
 .entry-heading{
 	color: #822000;
     font-family: andada,serif;
-	font-size:1.9em;
+	font-size:1.4em;
+}
+.entry-link{
+	color: #822000;
+    font-family: andada,serif;
+	font-size:1.4em;
+	text-decoration: underline;
+	cursor:pointer;
+    line-height: 1.3em;
+}
+.entry-description{
+	margin: 0px 20px;
+    padding: 10px;
+    box-shadow: 0 0 2px 2px #9cadad;
+    white-space: pre-wrap;
+    background: azure;
+}
+.parchmentBackground{
+	overflow-y: scroll;
+    background: url(/images/parchment2.jpg);
+    background-attachment: local;
 }
 div.mapContent{
 	padding:20px;
-	font-size:18px;
-	min-height: calc(100vh - 98px);
-	background: url(/images/parchment2.jpg);
+	font-size:22px;
+	height: calc(100vh - 82px);
+	
 }
 div.mapContent table{
 	width: 100%;
@@ -975,4 +1017,8 @@ div.backIcon{
 	height:50px;
 	background-size:cover;
 	background-repeat:no-repeat;
+}
+span.tipLink{
+	color:blue;
+	cursor:pointer;
 }

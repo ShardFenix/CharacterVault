@@ -3,6 +3,7 @@
 <head>
 <link rel="stylesheet" href="./core/style.css">
 <link href="https://fonts.googleapis.com/css?family=Cinzel+Decorative:700" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Balthazar&family=Amiri&display=swap" rel="stylesheet">
 
 <script src="libs/jquery.min.js"></script>
 <script src="libs/angular.min.js"></script>
@@ -12,7 +13,7 @@
 <script src="libs/arctext.js"></script>
 
 </head>
-<body style="background-color:#ffffff;width:100vw;margin:0px;">
+<body style="background-color:#ffffff;width:100vw;margin:0px;font-family:'Balthazar', sans-serif;font-size:19px;">
 <div ng-app="myApp">
 <div ng-controller="MyController" ng-cloak>
 
@@ -560,7 +561,7 @@
 			<div id="mapText"></div>
 		</div>
 	</div>
-	<div class="flex1">
+	<div class="flex1 parchmentBackground">
 		<div class="mapContent">
 			<button ng-click="startPath()">Start</button>
 			<button ng-click="endPath()">End</button>
@@ -568,23 +569,8 @@
 			<br>
 			<div class="backIcon" ng-click="goToParentArea()"></div>
 			<div class="entry-heading">{{areaInfo.name}}</div>
-			<div ng-repeat="entry in areaInfo.description track by $index">
-				
-				<div ng-switch="entry.type">
-					<div ng-switch-when="list" class="entry-list">
-						<ul>
-							<li ng-repeat="s in entry.content">{{s}}</li>
-						</ul>
-					</div>
-					<div ng-switch-when="heading" class="entry-heading">{{entry.content}}</div>
-					<div ng-switch-when="html">
-						<div ng-bind-html="entry.content"></div>
-					</div>
-					
-					
-					<div ng-switch-default><p>{{entry.content}}</p></div>
-				</div>
-				
+			<div ng-repeat="entry in areaInfo.description">
+				<div dnd-entry entry="entry"></div>
 			</div>
 		</div>
 	</div>
@@ -640,7 +626,7 @@
 	</div>
 	
 	<!-- Creature statbox tooltip -->
-	<div class="creatureCard box" ng-if="tip.cr" style="width:100%;padding-top:40px;">
+	<div class="creatureCard box" ng-if="tip.cr" style="width:100%;padding:40px 0px 6px 0px;">
 		<div creature-tip></div>
 	</div>
 </div>
@@ -650,7 +636,7 @@
 	</div>
 	
 	<!-- Creature statbox tooltip -->
-	<div class="creatureCard box" ng-if="tip.cr" style="width:100%;padding-top:40px;">
+	<div class="creatureCard box" ng-if="tip.cr" style="width:100%;padding:40px 0px 6px 0px;">
 		<div creature-tip></div>
 	</div>
 </div>
