@@ -4,56 +4,117 @@
 <script src="../libs/jquery.min.js"></script>
 <script src="../libs/angular.min.js"></script>
 <script src="../libs/angular-animate.js"></script>
-<script src="../resources/5emm.js"></script>
+<script src="../core/api.js"></script>
+<script src="./monsters.js"></script>
+<script src="../core/monsters.js"></script>
 </head>
 <body style="background-color:#ffffff;">
 <script type="text/javascript">
 
+window.deferredmonsters=[];
 
 function convertSpells(){
 	var monsters=[];
 	var print=true;
-	for (let mm of window.monsters){
+	while (window.newmonsters.length>0){
 		try{
+			let mm = window.newmonsters[0];
 			let monster={name:mm.name,source:mm.source};
-			if (typeof mm.cr === 'string'){
-				monster.cr=mm.cr;
+			if (mm._copy){
+				var mod=mm._copy._mod;
+				var orig = window.creatures.find({name:mm._copy.name});
+				if (!orig){
+					orig = monsters.find({name:mm._copy.name});
+					if (!orig){
+						//this is a mod of another creature in this package.
+						//add it to the end of the queue to do after everything else is processed
+						window.newmonsters.push(window.newmonsters[0]);
+						window.newmonsters.splice(0,1);
+						continue;
+					}
+				}
+				orig=angular.copy(orig);
+				handleModifications(orig,mod);
+				orig.name=monster.name;
+				monster=orig;
 			} else {
-				monster.cr=mm.cr.cr;
-			}
-			monster.ac=getAc(mm.ac);
-			monster.size=getSize(mm.size);
-			monster.hp=mm.hp.average;
-			monster.hpgen=mm.hp.formula;
-			monster.speed=getSpeed(mm.speed);
-			monster.attributes={str:mm.str,
-								dex:mm.dex,
-								con:mm.con,
-								int:mm.int,
-								wis:mm.wis,
-								cha:mm.cha}
-			monster.saves=getSaves(mm);
-			monster.skills=mm.skill;
-			monster.languages=getLanguages(mm);
-			monster.passives=getPassives(mm.trait);
-			monster.actions=getActions(mm.action);
-			populateResistances(monster,mm);
-			populateSpellcasting(mm,monster);
-			if (typeof mm.type === 'string'){
-				monster.type=mm.type;
-			} else {
-				monster.type=mm.type.type;
+				if (mm.cr === undefined){
+					monster.cr=0;
+				} else if (typeof mm.cr === 'string'){
+					monster.cr=mm.cr;
+				} else {
+					monster.cr=mm.cr.cr;
+				}
+				monster.ac=getAc(mm.ac);
+				monster.size=getSize(mm.size);
+				monster.hp=mm.hp.average;
+				monster.hpgen=mm.hp.formula;
+				monster.speed=getSpeed(mm.speed);
+				monster.attributes={str:mm.str,
+									dex:mm.dex,
+									con:mm.con,
+									int:mm.int,
+									wis:mm.wis,
+									cha:mm.cha}
+				monster.saves=getSaves(mm);
+				monster.skills=mm.skill;
+				monster.languages=getLanguages(mm);
+				monster.passives=getPassives(mm.trait);
+				monster.actions=getActions(mm.action);
+				populateResistances(monster,mm);
+				populateSpellcasting(mm,monster);
+				if (typeof mm.type === 'string'){
+					monster.type=mm.type;
+				} else {
+					monster.type=mm.type.type;
+				}
 			}
 			monsters.push(monster);
+			window.newmonsters.splice(0,1);
 		}catch(error){
-			console.error("Error with "+mm.name);
 			console.error(error);
+			console.error("Error with ",mm);
 			print=false;
 		}
 	}
 	if (print){
 		console.log(JSON.stringify(monsters));
 		document.getElementsByTagName('body')[0].innerHTML=JSON.stringify(monsters);
+	}
+}
+
+String.prototype.capitalize=function(){
+	return this.charAt(0).toUpperCase()+this.substring(1);
+}
+
+function handleModifications(monster, mods){
+	for (let prop in mods){
+		if (mods.hasOwnProperty(prop)){
+			if (prop=='*') {
+				if (mods[prop].mode=='replaceTxt'){
+					for (let a of monster.actions){
+						a.description = a.description.replace(mods[prop].replace,mods[prop].with);
+						a.description = a.description.replace(mods[prop].replace.capitalize(),mods[prop].with);
+					}
+					for (let a of monster.passives){
+						a.description = a.description.replace(mods[prop].replace,mods[prop].with);
+						a.description = a.description.replace(mods[prop].replace.capitalize(),mods[prop].with);
+					}
+				}
+			} else if (prop=='trait'){
+				console.log(mods[prop]);
+				if (mods[prop].mode=='prependArr'){
+					monster.passives.unshift(
+						{
+							name:mods[prop].items.name,
+							description:removeTags(collapseEntries(mods[prop].items.entries))
+						}
+					);
+				}
+			} else {
+				console.log(prop);
+			}
+		}
 	}
 }
 
@@ -255,7 +316,7 @@ function removeTags(string){
 	string=string.replace('{@h}','');
 	string=string.replace('{@atk mw,rw}','Ranged or Melee Weapon Attack');
 	string=string.replace(/\{@hit (\d+)\}/g,'+$1');
-	return string.replace(/\{@[^ ]+ ([^}]+)\}/g,'$1');
+	return string.replace(/\{@[^ ]+ ([^}]+?)(\|\|[^}]+)?\}/g,'$1');
 }
 
 function getSaves(monster){

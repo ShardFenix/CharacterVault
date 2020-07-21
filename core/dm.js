@@ -53,7 +53,7 @@ app.directive('dndEntry',['$sce','$compile',function($sce,$compile){
 						);
 					} else {
 						$scope.content=$scope.content.write(index,endIndex,
-							"<span"
+							"<span class='tipLink'"
 							+" ng-mouseenter='setTip(\""+linkType+"\",\""+entryName+"\")'"
 							+" ng-mouseleave='clearTip()'>"+description+"</span>"
 						);
@@ -399,6 +399,9 @@ function getDescription(desc){
 
 $scope.evalTooltip=function(tip,owner){
 	if (tip && tip.description){
+		if (!owner){
+			owner={level:1};
+		}
 		$scope.char=owner;
 		let desc=getDescription(tip.description);
 		let token=desc.indexOf('${');
@@ -421,7 +424,7 @@ $scope.evalTooltip=function(tip,owner){
 var tipPromise=null;
 
 $scope.clearTip=function(){
-	tipPromise=$timeout(function(){$scope.tip=null;$scope.spellLevel=null;},100000);
+	tipPromise=$timeout(function(){$scope.tip=null;$scope.spellLevel=null;},1000);
 }
 
 $scope.renewTip=function(){
@@ -692,6 +695,12 @@ $http.get('http://localhost:8080/resources/Adventures').then(function(response){
 
 $scope.loadAdventure=function(name){
 	$scope.chosenAdventure=name;
+	//load monsters specific to this adventure
+	$http.get('http://localhost:8080/resources/Adventures/'+name+"monsters.json").then(
+		function(response){
+			window.creatures.append(response.data);
+		},function(error){}
+	);
 	drawMap(name);
 }
 
@@ -713,7 +722,7 @@ function drawMap(path, locationJump, sectionJump){
 		var height = this.height;
 		var zoom = d3.zoom();
 		zoom.translateExtent([[0,0],[width,height]])
-			.scaleExtent([0.1,2])
+			.scaleExtent([0.1,4])
 			.on('zoom', function(){
 				g.attr("transform", d3.event.transform);
 			});
