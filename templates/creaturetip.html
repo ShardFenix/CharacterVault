@@ -1,17 +1,28 @@
 <div class="monsterHeader">
 	<div class="headerBg"></div>
-	<span class="white label">{{tip.name}}</span><span class="white"> (CR {{tip.cr}})</span>
+	<span class="white label">{{creature.name}}</span><span class="white"> (CR {{creature.cr}})</span>
 </div>
 <div style="position:relative;text-align:left;">
-	<span style="font-size:1.3em">Max HP: {{tip.hp}}</span>
+	<span style="font-size:1.3em" ng-if="!editable">Max HP: {{creature.hp}}</span>
+	
+	<div ng-if="editable" style="display:inline-block;">
+		<span>&emsp;HP: </span>
+		<input type="text" class="hidden right" ng-model="creature.hp"/>
+		<span ng-click="rerollHp(creature)"> / {{creature.hpMax}}</span>
+		<form ng-submit="damage(this)" style="display:initial;">
+			<input type="text" number ng-model="damageAmount" 
+					placeholder="Deal damage" class="med"/>
+		</form>
+	</div>
+	
 	<table class="borders" style="display:inline-table; width:30%;margin-left:40px;"><thead><tr><th>Walk</th><th>Fly</th><th>Swim</th></tr>
 		<tbody><tr>
-			<td>{{tip.speed.walk || 0}}</td>
-			<td>{{tip.speed.fly || 0}}</td>
-			<td>{{tip.speed.swim || 0}}</td>
+			<td>{{creature.speed.walk || 0}}</td>
+			<td>{{creature.speed.fly || 0}}</td>
+			<td>{{creature.speed.swim || 0}}</td>
 		</tr></tbody>
 	</table>
-	<div style="position:absolute;right:4px;top:8px;font-weight:bold;">{{tip.type}}</div>
+	<div style="position:absolute;right:4px;top:8px;font-weight:bold;">{{creature.type}}</div>
 </div>
 <div>
 	<table class="borders full"><thead><tr>
@@ -24,7 +35,7 @@
 		<th>CHA</th>
 	</tr></thead>
 	<tr>
-		<td>AC {{tip.ac}}</td>
+		<td>AC {{creature.ac}}</td>
 		<td>{{att(tip,'str')}}</td>
 		<td>{{att(tip,'dex')}}</td>
 		<td>{{att(tip,'con')}}</td>
@@ -43,45 +54,45 @@
 	</tr>
 	</table>
 </div>
-<div ng-if="tip.immunities.length>0
-|| tip.conditionImmunities.length>0
-|| tip.resistances.length>0
-|| tip.vulnerabilities.length>0">
+<div ng-if="creature.immunities.length>0
+|| creature.conditionImmunities.length>0
+|| creature.resistances.length>0
+|| creature.vulnerabilities.length>0">
 	<span class="label subheader">Resistances and Vulnerabilities</span>
-	<div ng-if="tip.immunities" style="margin-bottom:6px;">
-		<span style="font-weight:bold;">Immune to &horbar; </span>{{tip.immunities.join(', ')}}
+	<div ng-if="creature.immunities" style="margin-bottom:6px;">
+		<span style="font-weight:bold;">Immune to &horbar; </span>{{creature.immunities.join(', ')}}
 	</div>
-	<div ng-if="tip.conditionImmunities" style="margin-bottom:6px;">
-		<span style="font-weight:bold;">Immune to &horbar; </span>{{tip.conditionImmunities.join(', ')}}
+	<div ng-if="creature.conditionImmunities" style="margin-bottom:6px;">
+		<span style="font-weight:bold;">Immune to &horbar; </span>{{creature.conditionImmunities.join(', ')}}
 	</div>
-	<div ng-if="tip.resistances" style="margin-bottom:6px;">
-		<span style="font-weight:bold;">Resistant to &horbar; </span>{{tip.resistances.join(', ')}}
+	<div ng-if="creature.resistances" style="margin-bottom:6px;">
+		<span style="font-weight:bold;">Resistant to &horbar; </span>{{creature.resistances.join(', ')}}
 	</div>
-	<div ng-if="tip.vulnerabilities" style="margin-bottom:6px;">
-		<span style="font-weight:bold;">Vulnerable to &horbar; </span>{{tip.vulnerabilities.join(', ')}}
+	<div ng-if="creature.vulnerabilities" style="margin-bottom:6px;">
+		<span style="font-weight:bold;">Vulnerable to &horbar; </span>{{creature.vulnerabilities.join(', ')}}
 	</div>
 </div>
-<div ng-if="tip.passives.length>0" class="abilitySection">
+<div ng-if="creature.passives.length>0" class="abilitySection">
 	<span class="label subheader">Passives</span>
-	<p ng-repeat="a in tip.passives"><b>{{a.name}}.</b> {{a.description}}</p>
+	<p ng-repeat="a in creature.passives"><b>{{a.name}}.</b> {{a.description}}</p>
 </div>
-<div ng-if="tip.actions" class="abilitySection">
+<div ng-if="creature.actions" class="abilitySection">
 	<span class="label subheader">Actions</span>
-	<p ng-repeat="a in tip.actions"><b>{{a.name}}.</b> {{a.description}}</p>
+	<p ng-repeat="a in creature.actions"><b>{{a.name}}.</b> {{a.description}}</p>
 </div>
-<div ng-if="tip.spellcasting" class="abilitySection">
+<div ng-if="creature.spellcasting" class="abilitySection">
 	<span class="label subheader">Spellcasting</span>
-	<div>{{tip.spellcasting.description}}</div>
-	<div ng-if="tip.spellcasting.will">
-		<span>At will: {{tip.spellcasting.will.join(', ')}}</span>
+	<div>{{creature.spellcasting.description}}</div>
+	<div ng-if="creature.spellcasting.will">
+		<span>At will: {{creature.spellcasting.will.join(', ')}}</span>
 	</div>
-	<div ng-if="tip.spellcasting.individual">
+	<div ng-if="creature.spellcasting.individual">
 		<span>Individual uses: </span>
-		<span ng-repeat="spell in tip.spellcasting.individual" class="spellButton"
+		<span ng-repeat="spell in creature.spellcasting.individual" class="spellButton"
 				ng-click="spell.charges=spell.charges-1" ng-if="spell.charges">{{spell.name}} ({{spell.charges}})</span>
 	</div>
-	<div ng-if="tip.spellcasting.spells"> 
-		<div ng-repeat="level in tip.spellcasting.spells"
+	<div ng-if="creature.spellcasting.spells"> 
+		<div ng-repeat="level in creature.spellcasting.spells"
 			 ng-click="level.slots=level.slots-1">
 			<span style="font-weight:bold;"> Level {{$index}} ({{level.slots}}): </span>
 			<span ng-repeat="spell in level.spells" class="spellButton">{{spell}}</span>

@@ -967,6 +967,14 @@ datalist.level-slider option {
     white-space: pre-wrap;
     background: azure;
 }
+.entry-dmnote{
+	margin: 0px 20px;
+    padding: 10px;
+    box-shadow: 0 0 2px 2px #003656;
+    white-space: pre-wrap;
+    background: #ffe689;
+    border-radius: 15px;
+}
 .parchmentBackground{
 	overflow-y: scroll;
     background: url(/images/parchment2.jpg);

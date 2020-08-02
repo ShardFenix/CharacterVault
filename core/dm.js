@@ -80,7 +80,11 @@ app.directive('dndEntry',['$sce','$compile',function($sce,$compile){
 			}
 			
 			scope.addToInitiative = function(entryName){
-				
+				var creature = window.creatures.find({name:entryName});
+				if (creature){
+					creature=angular.copy(creature);
+					topScope.addToEncounter(creature);
+				}
 			}
 			
 			
@@ -112,7 +116,13 @@ app.directive('sideTip',function(){
 	return {templateUrl:'templates/sidetip.html'};
 });
 app.directive('creatureTip',function(){
-	return {templateUrl:'templates/creaturetip.html'};
+	return {
+		templateUrl:'templates/creaturetip.html',
+		scope:{
+			creature:"=",
+			editable:"=?"
+		}
+	};
 });
 app.directive('playerbox',function(){
 	return {templateUrl:'templates/dmPlayerBox.html'};
@@ -755,6 +765,7 @@ function drawMap(path, locationJump, sectionJump){
 		dataJoin = g.selectAll('circle').data(response.data.locations);
 		dataJoin.enter().append('circle')
 			.attr('r',function(d){return d.iconSize;})
+			
 			.attr('cx',function(d){return d.location[0];})
 			.attr('cy',function(d){return d.location[1];})
 			.attr('class','location')
