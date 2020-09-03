@@ -1333,8 +1333,8 @@ function loadList(){
 	if (serverVaultEnabled){
 		$http.get('http://localhost:8080/characters').then(function(response){
 			for (let filename of response.data){
-				if (!filename.endsWith('.history')){
-					$scope.saveList.push({name:filename,saveId:filename});
+				if (!filename.name.endsWith('.history')){
+					$scope.saveList.push({name:filename.name,saveId:filename.name});
 				}
 			}
 		},function(error){
@@ -1569,7 +1569,7 @@ $scope.patch=function(){
 				}
 				if (p && p.dmHide){
 					passive.dmHide=p.dmHide;
-					console.log("Added dmHide to history["+i+"]"+passive.name);
+					//console.log("Added dmHide to history["+i+"]"+passive.name);
 				}
 			}
 		}
@@ -1590,7 +1590,7 @@ $scope.patch=function(){
 		}
 		if (p && p.dmHide){
 			passive.dmHide=p.dmHide;
-			console.log("Added dmHide to char."+passive.name);
+			//console.log("Added dmHide to char."+passive.name);
 		}
 	}
 }
