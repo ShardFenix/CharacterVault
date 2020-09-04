@@ -37,6 +37,18 @@ window.passives.append([
 	},{
 		name:"Shapechanger",
 		description:"As an action, you can change your appearance and your voice. You determine the specifics of the changes, including your coloration, hair length, and sex. You can also adjust your height and weight, but not so much that your size changes. You can make yourself appear as a member of another race, though none of your game statistics change. You can't duplicate the appearance of a creature you've never seen, and you must adopt a form that has the same basic arrangement of limbs that you have. Your clothing and equipment aren't changed by this trait.\n\nYou stay in the new form until you use an action to revert to your true form or until you die."
+	},{
+		name:"Living Construct",
+		description:"You are a being molded of powerful magicks and living stone, and so, your creature type is construct instead of humanoid. Spells like cure wounds will only heal you half as effectively, but you are immune to spells like crown of madness or dominate person because they specifically target humanoids. You are immune to poison damage, being poisoned, and diseases.\n\nAlso, When the mending spell is cast on you, it has the following alterations: It has a casting time of 1 action. If you have 0 hit points you become stable. As part of the casting of mending the caster may expend a level 1 spell slot to cause you to add a number of temporary hit points equal to 1d8, plus their spellcasting ability modifier."
+	},{
+		name:"Chiseled Armor",
+		description:"While not wearing armor, your armor class equals 13 + your Dexterity modifier. You can equip a shield and still gain this benefit."
+	},{
+		name:"Statuesque",
+		description:"When you stop moving, you are almost indistinguishable from a normal statue. This allows them to effectively hide in plain sight, allowing advantage on stealth rolls that involve not moving."
+	},{
+		name:"Built to Work",
+		description:"You do not need to sleep to gain the benefits of a long rest. You can instead use that time to do light work."
 	}
 ]);
 
@@ -514,5 +526,22 @@ window.races=[
 				}
 			);
 		}
-	},
+	},{
+		name:"Stone Golem",
+		description:"A Stone Golem's form is designated by whomever their creator is. The quality of magic their creator is capable of wielding and understanding tends to correlate to the form the Stone Golem takes. This means they can vary from appearing as statuesque wonders, meticulously etched and carved from the most incredible of marbles that would make artists weep in awe, animated as if they were legitimate flesh and blood wrapped in a hardened exterior... To what would generally appear to be nothing more than a mobile and semi-sentient boulder with limbs of mossy river-rocks, held loosely together by a minuscule thread of magical energy. As they are created, so they shall be. They are often incredibly dense, given that they are made entirely from stone, and weigh roughly twice to three times as much as their size and shape would generally yield.\n\nThey typically have a simple purpose assigned to them upon their creation, and will vehemently stick to that purpose, unless cataclysmically altered by an outside force.\n\nThis purpose could be something as simple as guarding or protecting a specific place or person, or as complex as keeping the books for the particularly financially savvy. They are imbued with the knowledge granted to them by their creator, to whatever extent that creator desires. Often, there is an inherent kinship between these Golems and other magical constructs, meaning that they tend to \"enjoy\" being in the presence of others of such creations, to the extent that their minds allow.\n\nDue to their most common uses as durable muscle, Golems are often not the most terribly intelligent creatures when left to their own devices. That said, there is often a fierce intuition in their actions, and is rarely wasted effort. They were created to work, not to waste time.",
+		onPickup:function(char,scope){
+			char.proficiencies.push("Language: Common");
+			char.proficiencies.push("Simple Weapons");
+			char.speed=30;
+			char.attributes.str+=1;
+			char.attributes.con+=2;
+			char.attributes.dex-=1;
+			char.attributes.int-=1;
+			addPassive(char,"Living Construct");
+			addPassive(char,"Chiseled Armor");
+			addPassive(char,"Statuesque");
+			addPassive(char,"Built to Work");
+			scope.choiceQueue.push(helper.learnLanguage);
+		}
+	}
 ];
