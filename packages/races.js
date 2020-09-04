@@ -49,6 +49,12 @@ window.passives.append([
 	},{
 		name:"Built to Work",
 		description:"You do not need to sleep to gain the benefits of a long rest. You can instead use that time to do light work."
+	},{
+		name:"Expert Forgery",
+		description:"You can duplicate other creatures' handwriting and craftwork. You have advantage on all checks made to produce forgeries or duplicates of existing objects."
+	},{
+		name:"Mimicry",
+		description:"You can mimic sounds you have heard, including voices. A creature that hears the sounds can tell they are imitations with a successful Wisdom (Insight) check opposed by your Charisma (Deception) check. You have great trouble speaking in phrases that you are not mimicking."
 	}
 ]);
 
@@ -531,7 +537,6 @@ window.races=[
 		description:"A Stone Golem's form is designated by whomever their creator is. The quality of magic their creator is capable of wielding and understanding tends to correlate to the form the Stone Golem takes. This means they can vary from appearing as statuesque wonders, meticulously etched and carved from the most incredible of marbles that would make artists weep in awe, animated as if they were legitimate flesh and blood wrapped in a hardened exterior... To what would generally appear to be nothing more than a mobile and semi-sentient boulder with limbs of mossy river-rocks, held loosely together by a minuscule thread of magical energy. As they are created, so they shall be. They are often incredibly dense, given that they are made entirely from stone, and weigh roughly twice to three times as much as their size and shape would generally yield.\n\nThey typically have a simple purpose assigned to them upon their creation, and will vehemently stick to that purpose, unless cataclysmically altered by an outside force.\n\nThis purpose could be something as simple as guarding or protecting a specific place or person, or as complex as keeping the books for the particularly financially savvy. They are imbued with the knowledge granted to them by their creator, to whatever extent that creator desires. Often, there is an inherent kinship between these Golems and other magical constructs, meaning that they tend to \"enjoy\" being in the presence of others of such creations, to the extent that their minds allow.\n\nDue to their most common uses as durable muscle, Golems are often not the most terribly intelligent creatures when left to their own devices. That said, there is often a fierce intuition in their actions, and is rarely wasted effort. They were created to work, not to waste time.",
 		onPickup:function(char,scope){
 			char.proficiencies.push("Language: Common");
-			char.proficiencies.push("Simple Weapons");
 			char.speed=30;
 			char.attributes.str+=1;
 			char.attributes.con+=2;
@@ -542,6 +547,27 @@ window.races=[
 			addPassive(char,"Statuesque");
 			addPassive(char,"Built to Work");
 			scope.choiceQueue.push(helper.learnLanguage);
+		}
+	},{
+		name:"Kenku (PC Race)",
+		description:"",
+		onPickup:function(char,scope){
+			char.proficiencies.push("Language: Common");
+			char.proficiencies.push("Auran");
+			char.speed=30;
+			char.attributes.dex+=2;
+			char.attributes.wis+=1;
+			addPassive(char,"Expert Forgery");
+			addPassive(char,"Mimicry");
+			scope.choiceQueue.push({
+					limit:2,
+					choicePrompt:"Choose two proficiencies",
+					choices:['Acrobatics','Deception','Stealth','Sleight of Hand'],
+					action:function(char,derived,choice){
+						addProficiency(char,choice);
+					}
+				}
+			);
 		}
 	}
 ];
