@@ -478,14 +478,15 @@ div.modal {
     height: auto;
     padding: 3%;
     left: 10%;
-    top: -90%;
     transition: 0.5s ease all;
     text-align: center;
     min-height: 50%;
     z-index: 2;
+	top: 10%;
+	display:none;
 }
 div.modal.show{
-	top: 10%;
+	display:block;
 }
 
 div.leftModal {

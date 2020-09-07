@@ -121,6 +121,47 @@ app.directive('creatureTip',function(){
 		scope:{
 			creature:"=",
 			editable:"=?"
+		},
+		link:function($scope){
+			$scope.damage=function(scope){
+				if (scope.creature && scope.damageAmount){
+					scope.creature.hp-=scope.damageAmount;
+					scope.damageAmount=null;
+				}
+			}
+			
+			$scope.rerollHp=function(monster){
+				let params=monster.hpgen.match(/(\d+)d(\d+) ?\+? ?(\d*)/);
+				let diceNum=parseInt(params[1]);
+				let diceType=parseInt(params[2]);
+				let bonus=parseInt(params[3]);
+				let sum=0;
+				if (bonus){
+					sum=bonus;
+				}
+				for (let i=0;i<diceNum;i++){
+					sum+=Math.floor(1 + Math.random()*diceType);
+				}
+				monster.hpMax=sum;
+				monster.hp=sum;
+			}
+
+			$scope.att=function(creature,attribute){
+				let total = Math.floor((creature.attributes[attribute]+20)/2)-15;
+				if (total>=0){total="+"+total;}
+				return creature.attributes[attribute]+" ("+total+")";
+			}
+
+			$scope.saveBonus=function(creature,attribute){
+				let total = Math.floor((creature.attributes[attribute]+20)/2)-15;
+				if (creature.saves && creature.saves[attribute]){
+					total=creature.saves[attribute];
+				}
+				if (total>0){
+					return "+"+total;
+				}
+				return total;
+			}
 		}
 	};
 });
@@ -146,7 +187,6 @@ $scope.loot=[];
 $scope.addPlayer=function(player){
 	if (player){
 		$scope.players.push(angular.copy(player));
-		
 		return;
 	} else {
 		let p = {
@@ -197,22 +237,6 @@ $scope.addToEncounter=function(monster){
 	m.hpMax=m.hp;
 }
 
-$scope.rerollHp=function(monster){
-	let params=monster.hpgen.match(/(\d+)d(\d+) ?\+? ?(\d*)/);
-	let diceNum=parseInt(params[1]);
-	let diceType=parseInt(params[2]);
-	let bonus=parseInt(params[3]);
-	let sum=0;
-	if (bonus){
-		sum=bonus;
-	}
-	for (let i=0;i<diceNum;i++){
-		sum+=Math.floor(1 + Math.random()*diceType);
-	}
-	monster.hpMax=sum;
-	monster.hp=sum;
-}
-
 $scope.att=function(creature,attribute){
 	let total = Math.floor((creature.attributes[attribute]+20)/2)-15;
 	if (total>=0){total="+"+total;}
@@ -229,14 +253,7 @@ $scope.saveBonus=function(creature,attribute){
 	}
 	return total;
 }
-
-$scope.damage=function(scope){
-	if (scope.creature && scope.damageAmount){
-		scope.creature.hp-=scope.damageAmount;
-		scope.damageAmount=null;
-	}
-}
-
+			
 $scope.initiativeOrder=[];
 $scope.newInitiative='';
 
@@ -349,6 +366,7 @@ $scope.incrDuration=function(item, condition, event){
 $scope.deleteInit=function(item,event){
 	var index=$scope.initiativeOrder.indexOf(item);
 	$scope.initiativeOrder.splice(index,1);
+	event.stopPropagation();
 }
 
 $scope.increment=function(item){
@@ -493,10 +511,10 @@ $http.get('http://localhost:8080/').then(function(resp){
 function loadPlayerList(){
 	$http.get('http://localhost:8080/characters').then(function(response){
 		for (let filename of response.data){
-			if (filename.endsWith('.history')){
+			if (filename.name.endsWith('.history')){
 				continue;
 			}
-			$http.get('http://localhost:8080/characters/'+filename).then(function(response){
+			$http.get('http://localhost:8080/characters/'+filename.name).then(function(response){
 				let char=response.data;
 				prepCharacter(char);
 				$scope.creatures.push(char);
@@ -523,6 +541,7 @@ function prepCharacter(char){
 	let chaBonus = Math.floor((char.attributes.cha+20)/2)-15;
 	
 	let p=proficiency(char.level);
+	char.speed={walk:char.speed, fly:0, swim:0};
 	
 	char.saves.str = strBonus + p*char.saves.str;
 	char.saves.dex = dexBonus + p*char.saves.dex;

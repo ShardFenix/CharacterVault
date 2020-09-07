@@ -19,12 +19,10 @@
 
 <div style="display:flex;">
 <span class="tab" ng-click="tab='general'" ng-class="{'activetab':tab=='general'}">General</span>
-<span class="tab" ng-click="tab='players'" ng-class="{'activetab':tab=='players'}">Players</span>
 <span class="tab" ng-click="tab='combat'" ng-class="{'activetab':tab=='combat'}">Combat</span>
 <span class="tab" ng-click="tab='adventure'" ng-class="{'activetab':tab=='adventure'}">Adventure</span>
 <span class="tab" ng-click="tab='spells'" ng-class="{'activetab':tab=='spells'}">Spells</span>
 <span class="tab" ng-click="tab='loot'" ng-class="{'activetab':tab=='loot'}">LOOt</span>
-<span class="tab" ng-click="tab='notes'" ng-class="{'activetab':tab=='notes'}">Notes</span>
 </div>
 
 <div ng-show="tab=='general'">
@@ -397,42 +395,6 @@
 	</table>
 </div>
 <!-- End Combat -->
-
-<div ng-show="tab=='players'">
-	<div style="display:flex;flex-wrap:wrap;">
-		<div ng-repeat="player in players" class="playerCard box">
-			<playerbox></playerbox>
-		</div>
-	</div>
-	
-	<input type="text" ng-model="playerFilter" placeholder="Filter..."/>
-	<div style="overflow-y:scroll;max-height:calc(100vh - 450px);width:max-content;">
-		<table class="borders">
-			<thead><tr>
-				<th>Name</th>
-				<th>Level</th>
-				<th>Class</th>
-				<th></th>
-			</tr></thead>
-			<tbody>
-				<tr ng-repeat="creature in creatures | filter:playerFilter" ng-if="creature.isPlayer">
-					<td style="width:30%">{{creature.name}}</td>
-					<td style="width:10%">{{creature.level}}</td>
-					<td style="width:20%">{{getClassDescription(creature)}}</td>
-					<td style="width:10%"><span class="button" ng-click="addPlayer(creature)">^</span></td>
-				</tr>
-			</tbody>
-		</table>
-	</div>
-
-	<div>
-		<span class="button" ng-click="addPlayer()">Add New</span>
-	</div>
-</div>
-
-<div ng-show="tab=='notes'">
-	<textarea ng-model='dm.notes' style="margin-left: -4px;margin-top: 10px;width: 100%;height: 800px;"></textarea>
-</div>
 
 <div ng-show="tab=='adventure'" style="display:flex;">
 	<div class="flex1">

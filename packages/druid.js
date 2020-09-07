@@ -630,9 +630,9 @@ window.subclasses.push(
 					helper.chooseDruidCantrip,
 					{
 						choicePrompt:"You gain the following",
-						choices:[findPassive("Natural Recovery")],
+						choices:[findAbility("Natural Recovery")],
 						action:function(char,derived,choice,$scope){
-							addPassive(char,"Natural Recovery");
+							addAbility(char,"Natural Recovery");
 						}
 					}
 				]

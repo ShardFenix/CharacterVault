@@ -9,7 +9,7 @@
 		<span>&emsp;HP: </span>
 		<input type="text" class="hidden right" ng-model="creature.hp"/>
 		<span ng-click="rerollHp(creature)"> / {{creature.hpMax}}</span>
-		<form ng-submit="damage(this)" style="display:initial;">
+		<form ng-submit="damage(creature)" style="display:initial;">
 			<input type="text" number ng-model="damageAmount" 
 					placeholder="Deal damage" class="med"/>
 		</form>
@@ -36,21 +36,21 @@
 	</tr></thead>
 	<tr>
 		<td>AC {{creature.ac}}</td>
-		<td>{{att(tip,'str')}}</td>
-		<td>{{att(tip,'dex')}}</td>
-		<td>{{att(tip,'con')}}</td>
-		<td>{{att(tip,'int')}}</td>
-		<td>{{att(tip,'wis')}}</td>
-		<td>{{att(tip,'cha')}}</td>
+		<td>{{att(creature,'str')}}</td>
+		<td>{{att(creature,'dex')}}</td>
+		<td>{{att(creature,'con')}}</td>
+		<td>{{att(creature,'int')}}</td>
+		<td>{{att(creature,'wis')}}</td>
+		<td>{{att(creature,'cha')}}</td>
 	</tr>
 	<tr>
 		<td>Saves:</td>
-		<td>{{saveBonus(tip,'str')}}</td>
-		<td>{{saveBonus(tip,'dex')}}</td>
-		<td>{{saveBonus(tip,'con')}}</td>
-		<td>{{saveBonus(tip,'int')}}</td>
-		<td>{{saveBonus(tip,'wis')}}</td>
-		<td>{{saveBonus(tip,'cha')}}</td>
+		<td>{{saveBonus(creature,'str')}}</td>
+		<td>{{saveBonus(creature,'dex')}}</td>
+		<td>{{saveBonus(creature,'con')}}</td>
+		<td>{{saveBonus(creature,'int')}}</td>
+		<td>{{saveBonus(creature,'wis')}}</td>
+		<td>{{saveBonus(creature,'cha')}}</td>
 	</tr>
 	</table>
 </div>
@@ -93,7 +93,8 @@
 	</div>
 	<div ng-if="creature.spellcasting.spells"> 
 		<div ng-repeat="level in creature.spellcasting.spells"
-			 ng-click="level.slots=level.slots-1">
+			 ng-click="level.slots=level.slots-1"
+			 ng-if="level.slots>0">
 			<span style="font-weight:bold;"> Level {{$index}} ({{level.slots}}): </span>
 			<span ng-repeat="spell in level.spells" class="spellButton">{{spell}}</span>
 		</div>
