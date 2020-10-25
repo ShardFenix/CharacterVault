@@ -124,8 +124,8 @@ app.directive('creatureTip',function(){
 		},
 		link:function($scope){
 			$scope.damage=function(scope){
-				if (scope.creature && scope.damageAmount){
-					scope.creature.hp-=scope.damageAmount;
+				if ($scope.creature && scope.damageAmount){
+					$scope.creature.hp-=scope.damageAmount;
 					scope.damageAmount=null;
 				}
 			}
