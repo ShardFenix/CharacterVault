@@ -33,7 +33,7 @@ $scope.calculate=function(){
 	var offset = 0;
 	if (match.length>2 && match[2]){
 		offset = parseFloat(match[3]);
-		if (match[2]==-'-'){
+		if (match[2]=='-'){
 			offset*=-1;
 		}
 	}
@@ -68,9 +68,15 @@ $scope.calculate=function(){
 	<button ng-click="calculate()">Calculate</button>
 	
 	<br>
-	<textarea style="white-space:pre-wrap;">
-	{{answer}}
-	</textarea>
+	
+	<p>{{answer}}</p>
+	
+	<br><br><br>
+	<p>Beats total is the number of beats in the loop, including only one of the llopstart/loopends (loopstart and loopend are technically on the same beat). This will most likely be an even number.</p>
+	<p>Formula can be one of two things. It can either be a list of numbers, each of which is a beat number.</p>
+	<p>It can also be a string in the format Xn + Y or Xn - Y, where X and Y are numbers and n is the letter n. n represents each beat, X represents how many beats to skip before looping, and Y is a beat offset.</p>
+	<p>For example, to jump to the stinger on any 4th beat, you would simply put 4n.</p>
+	<p>The very beginning of the loop is beat 0, not beat 1. The beat counts are at the end of each beat.</p>
 
 </div>
 </div>

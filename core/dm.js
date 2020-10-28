@@ -123,10 +123,12 @@ app.directive('creatureTip',function(){
 			editable:"=?"
 		},
 		link:function($scope){
-			$scope.damage=function(scope){
-				if ($scope.creature && scope.damageAmount){
-					$scope.creature.hp-=scope.damageAmount;
-					scope.damageAmount=null;
+			$scope.damage=function($event){
+				if ($event.which===13){
+					if ($scope.creature && $scope.creature.damageAmount){
+						$scope.creature.hp-=$scope.creature.damageAmount;
+						delete $scope.creature.damageAmount;
+					}
 				}
 			}
 			

@@ -9,10 +9,8 @@
 		<span>&emsp;HP: </span>
 		<input type="text" class="hidden right" ng-model="creature.hp"/>
 		<span ng-click="rerollHp(creature)"> / {{creature.hpMax}}</span>
-		<form ng-submit="damage(creature)" style="display:initial;">
-			<input type="text" number ng-model="damageAmount" 
-					placeholder="Deal damage" class="med"/>
-		</form>
+		<input type="text" number ng-model="creature.damageAmount" ng-keypress="damage($event)" 
+				placeholder="Deal damage" class="med"/>
 	</div>
 	
 	<table class="borders" style="display:inline-table; width:30%;margin-left:40px;"><thead><tr><th>Walk</th><th>Fly</th><th>Swim</th></tr>
