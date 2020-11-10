@@ -735,7 +735,9 @@ $scope.loadAdventure=function(name){
 	drawMap(name);
 }
 
-function drawMap(path, locationJump, sectionJump){
+var lastZoom = null;
+
+function drawMap(path, locationJump, sectionJump, preserveZoom){
 	var svgElem = d3.select("#mapsvg");
 	d3.selectAll('#mapsvg>g').remove();
 	var g = svgElem.append('g');
@@ -756,8 +758,11 @@ function drawMap(path, locationJump, sectionJump){
 			.scaleExtent([0.1,4])
 			.on('zoom', function(){
 				g.attr("transform", d3.event.transform);
+				lastZoom=d3.event.transform;
 			});
-		
+		if (lastZoom && preserveZoom){
+			g.attr('transform',lastZoom);
+		}
 		svgElem.call(zoom);
 	}
     image.src = imageSrc;
@@ -827,7 +832,7 @@ function removeMapLabel(){
 }
 function goToLocation(location, sectionJump){
 	if (location.areaLink){
-		drawMap(location.areaLink);
+		drawMap(location.areaLink,null,null,location.preserveZoom);
 	} else {
 		$scope.areaInfo=location;
 		$scope.areaInfo.parent=$scope.currentArea;
@@ -848,7 +853,7 @@ function goToLocation(location, sectionJump){
 $scope.goToParentArea=function(){
 	if ($scope.currentArea.name == $scope.areaInfo.name){
 		if ($scope.areaInfo.parent){
-			drawMap($scope.areaInfo.parent);
+			drawMap($scope.areaInfo.parent,null,null,true);
 		}
 	} else {
 		$scope.areaInfo=$scope.currentArea;
@@ -878,7 +883,7 @@ $scope.goToLink=function(entry){
 			}
 		}
 	} else if (entry.areaLink) {
-		drawMap(entry.areaLink);
+		drawMap(entry.areaLink,null,null,entry.preserveZoom);
 	} else if (entry.pathLink) {
 		var parts = entry.pathLink.split('/');
 		drawMap(parts[0],parts[1],parts[2]);
