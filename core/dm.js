@@ -37,7 +37,6 @@ app.directive('dndEntry',['$sce','$compile',function($sce,$compile){
 				var index = $scope.content.indexOf('${');
 				while (index != -1) {
 					let endIndex = $scope.content.indexOf('}',index);
-					console.log('replacement detected at '+index+"-"+endIndex);
 					let code = $scope.content.substring(index+2,endIndex);
 					//code is in the format ${linkType:entryName:description}
 					let segments = code.split(':');
@@ -61,6 +60,34 @@ app.directive('dndEntry',['$sce','$compile',function($sce,$compile){
 					index=$scope.content.indexOf('${');
 				}
 				//$scope.content = $sce.trustAsHtml($scope.content);
+			} else if ($scope.entry.type === 'list'){
+				for (var i=0;i<$scope.content.length;i++){
+					var index = $scope.content[i].indexOf('${');
+					while (index != -1) {
+						let endIndex = $scope.content[i].indexOf('}',index);
+						let code = $scope.content[i].substring(index+2,endIndex);
+						//code is in the format ${linkType:entryName:description}
+						let segments = code.split(':');
+						let linkType = segments[0];
+						let entryName = segments[1];
+						let description = segments.length>=3?segments[2]:entryName;
+						
+						if (linkType=='creature'){
+							$scope.content[i]=$scope.content[i].write(index,endIndex,
+								"<span class='tipLink' ng-click='addToInitiative(\""+entryName+"\")'"
+								+" ng-mouseenter='setTip(\""+linkType+"\",\""+entryName+"\")'"
+								+" ng-mouseleave='clearTip()'>"+description+"</span>"
+							);
+						} else {
+							$scope.content[i]=$scope.content[i].write(index,endIndex,
+								"<span class='tipLink'"
+								+" ng-mouseenter='setTip(\""+linkType+"\",\""+entryName+"\")'"
+								+" ng-mouseleave='clearTip()'>"+description+"</span>"
+							);
+						}
+						index=$scope.content[i].indexOf('${');
+					}
+				}
 			}
 		},
 		link:function(scope, element, attrs){
@@ -788,16 +815,18 @@ function drawMap(path, locationJump, sectionJump, preserveZoom){
 			.on('mouseleave',removeMapLabel)
 			.on('click',goToLocation);
 		
-		dataJoin = g.selectAll('circle').data(response.data.locations);
-		dataJoin.enter().append('circle')
-			.attr('r',function(d){return d.iconSize;})
-			
-			.attr('cx',function(d){return d.location[0];})
-			.attr('cy',function(d){return d.location[1];})
-			.attr('class','location')
-			.on('mouseenter',updateMapLabel)
-			.on('mouseleave',removeMapLabel)
-			.on('click',goToLocation);
+		if (response.data.locations){
+			dataJoin = g.selectAll('circle').data(response.data.locations);
+			dataJoin.enter().append('circle')
+				.attr('r',function(d){return d.iconSize;})
+				
+				.attr('cx',function(d){return d.location[0];})
+				.attr('cy',function(d){return d.location[1];})
+				.attr('class','location')
+				.on('mouseenter',updateMapLabel)
+				.on('mouseleave',removeMapLabel)
+				.on('click',goToLocation);
+		}
 			
 		if (locationJump){
 			for (var loc of $scope.areaInfo.regions){

@@ -1,7 +1,7 @@
 <div ng-switch="entry.type">
 	<div ng-switch-when="list" class="entry-list">
 		<ul>
-			<li ng-repeat="s in content" ng-bind-html="s"></li>
+			<li ng-repeat="s in content" compile="s"></li>
 		</ul>
 	</div>
 	<div ng-switch-when="heading" class="entry-heading">{{entry.content}}</div>
