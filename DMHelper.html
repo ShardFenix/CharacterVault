@@ -348,8 +348,7 @@
 					 class="yellowback item" style="display:flex;"
 					 ng-mouseenter="chooseMonster(item)"
 					 ng-mouseleave="chooseMonster()"
-					 ng-mousedown="rightClickInitiative(item,$event)"
-					 oncontextmenu="return false">
+					 ng-right-click="rightClickInitiative(item,$event)">
 					<span style="flex: 3">{{item.name || item}}</span>
 					<div class="conditionList">
 						<span ng-repeat-start="condition in item.conditions track by $index"

@@ -13,6 +13,10 @@ Array.prototype.find=function(objectOrFunction){
 		for (let element of this){
 			if (element.name===objectOrFunction.name){
 				return element;
+			} else if (element.name.length === objectOrFunction.name.length){
+				if (element.name.toLowerCase() === objectOrFunction.name.toLowerCase()){
+					return element;
+				}
 			}
 		}
 	} else {

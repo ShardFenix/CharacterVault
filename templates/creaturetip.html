@@ -94,7 +94,8 @@
 			 ng-click="level.slots=level.slots-1"
 			 ng-if="level.slots>0">
 			<span style="font-weight:bold;"> Level {{$index}} ({{level.slots}}): </span>
-			<span ng-repeat="spell in level.spells" class="spellButton">{{spell}}</span>
+			<span ng-repeat="spell in level.spells" class="spellButton"
+				ng-right-click="setTip('spell',spell)">{{spell}}</span>
 		</div>
 	</div>			
 </div>

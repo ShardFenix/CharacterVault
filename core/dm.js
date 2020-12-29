@@ -7,6 +7,19 @@ String.prototype.write=function(start, end, content){
 	return this.substring(0,start) + content + this.substring(end+1);
 }
 
+app.directive('ngRightClick', function($parse) {
+    return function(scope, element, attrs) {
+        var fn = $parse(attrs.ngRightClick);
+        element.bind('contextmenu', function(event) {
+            scope.$apply(function() {
+                event.preventDefault();
+				event.stopPropagation();
+                fn(scope, {$event:event});
+            });
+        });
+    };
+});
+
 app.directive('compile', ['$compile', function ($compile) {
     return function(scope, element, attrs) {
       scope.$watch(
@@ -191,6 +204,19 @@ app.directive('creatureTip',function(){
 				}
 				return total;
 			}
+			
+			$scope.setTip=function(refType, entryName){
+				var tip = null;
+				switch (refType) {
+					case 'creature': tip = window.creatures.find({name:entryName});break;
+					case 'spell': tip = window.spells.find({name:entryName});break;
+				}
+				topScope.setLeftTip(tip);
+			}
+			
+			$scope.clearTip=function(){
+				topScope.clearTip();
+			}
 		}
 	};
 });
@@ -347,13 +373,11 @@ $scope.conditions = [
 ];
 
 $scope.rightClickInitiative=function(item,event){
-	if (event.which===3) {
-		//create context menu
-		let elem = angular.element('#contextMenu');
-		elem.attr("style","display:flex;left:"+(event.clientX+2)+"px;top:"+(event.clientY+2)+"px;");
-		$scope.contextTarget=item;
-		event.stopPropagation();
-    }
+	//create context menu
+	let elem = angular.element('#contextMenu');
+	elem.attr("style","display:flex;left:"+(event.clientX+2)+"px;top:"+(event.clientY+2)+"px;");
+	$scope.contextTarget=item;
+	event.stopPropagation();
 }
 
 $scope.dismissContextMenu=function(){
