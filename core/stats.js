@@ -39,6 +39,113 @@ app.directive('creatureTip',function(){
 	return {templateUrl:'templates/creaturetip.html'};
 });
 
+app.directive('compile', ['$compile', function ($compile) {
+    return function(scope, element, attrs) {
+      scope.$watch(
+        function(scope) {
+          return scope.$eval(attrs.compile);
+        },
+        function(value) {
+          element.html(value);
+          $compile(element.contents())(scope);
+        }
+    );
+  };
+}]);
+
+app.directive('dndEntry',['$sce','$compile',function($sce,$compile){
+	return {
+		restrict:"A",
+		scope:{
+			entry:"="
+		},
+		templateUrl:'templates/dndEntry.html',
+		controller:function($scope,$element){
+					
+			if (typeof $scope.entry == 'string'){
+				$scope.entry = {
+					type:"",
+					content:$scope.entry
+				}
+			}
+			$scope.content=$scope.entry.content;
+			
+			//transform any placeholders into tooltip links
+			if (typeof $scope.content == 'string') {
+				var index = $scope.content.indexOf('${');
+				while (index != -1) {
+					let endIndex = $scope.content.indexOf('}',index);
+					let code = $scope.content.substring(index+2,endIndex);
+					//code is in the format ${linkType:entryName:description}
+					let segments = code.split(':');
+					let linkType = segments[0];
+					let entryName = segments[1];
+					let description = segments.length>=3?segments[2]:entryName;
+					
+					if (linkType=='creature'){
+						$scope.content=$scope.content.write(index,endIndex,
+							"<span class='tipLink' ng-click='addToInitiative(\""+entryName+"\")'"
+							+" ng-mouseenter='setTip(\""+linkType+"\",\""+entryName+"\")'"
+							+" ng-mouseleave='clearTip()'>"+description+"</span>"
+						);
+					} else {
+						$scope.content=$scope.content.write(index,endIndex,
+							"<span class='tipLink'"
+							+" ng-mouseenter='setTip(\""+linkType+"\",\""+entryName+"\")'"
+							+" ng-mouseleave='clearTip()'>"+description+"</span>"
+						);
+					}
+					index=$scope.content.indexOf('${');
+				}
+				//$scope.content = $sce.trustAsHtml($scope.content);
+			} else if ($scope.entry.type === 'list'){
+				for (var i=0;i<$scope.content.length;i++){
+					var index = $scope.content[i].indexOf('${');
+					while (index != -1) {
+						let endIndex = $scope.content[i].indexOf('}',index);
+						let code = $scope.content[i].substring(index+2,endIndex);
+						//code is in the format ${linkType:entryName:description}
+						let segments = code.split(':');
+						let linkType = segments[0];
+						let entryName = segments[1];
+						let description = segments.length>=3?segments[2]:entryName;
+						
+						if (linkType=='creature'){
+							$scope.content[i]=$scope.content[i].write(index,endIndex,
+								"<span class='tipLink' ng-click='addToInitiative(\""+entryName+"\")'"
+								+" ng-mouseenter='setTip(\""+linkType+"\",\""+entryName+"\")'"
+								+" ng-mouseleave='clearTip()'>"+description+"</span>"
+							);
+						} else {
+							$scope.content[i]=$scope.content[i].write(index,endIndex,
+								"<span class='tipLink'"
+								+" ng-mouseenter='setTip(\""+linkType+"\",\""+entryName+"\")'"
+								+" ng-mouseleave='clearTip()'>"+description+"</span>"
+							);
+						}
+						index=$scope.content[i].indexOf('${');
+					}
+				}
+			}
+		},
+		link:function(scope, element, attrs){
+			
+			scope.setTip=function(refType, entryName){
+				var tip = null;
+				switch (refType) {
+					case 'creature': tip = window.creatures.find({name:entryName});break;
+					case 'spell': tip = window.spells.find({name:entryName});break;
+				}
+				topScope.setLeftTip(tip);
+			}
+			scope.clearTip=function(){
+				topScope.clearTip();
+			}
+			
+		}
+	}
+}]);
+
 app.controller('MyController',['$scope','$timeout','$http','$interval',function($scope,$timeout,$http,$interval){
 
 $scope.spellFilters={
@@ -1107,46 +1214,32 @@ $scope.selectSpell=function(spell){
 	$scope.setTip(spell);
 }
 
-function getDescription(desc){
-	if (typeof desc === 'string'){
-		return desc;
-	} else if (Array.isArray(desc)){
-		var temp = '';
-		for (let d of desc){
-			temp += getDescription(d);
-		}
-		return temp;
-	} else if (typeof desc === 'object'){
-		if (typeof desc.showWhen === 'function' && desc.showWhen($scope.char,$scope.derived,$scope)){
-			return desc.value;
-		}
-	}
-	return '';
-}
-
+//takes an object with the description property, and replaces the placeholders in the content
 $scope.evalTooltip=function(tip){
-	if (tip && tip.description){
-		let desc=getDescription(tip.description);
-		if (tip.level && $scope.chosenSpell && tip.level<$scope.chosenSpell.level){
-			return $scope.chosenSpell.name+' can only be cast at level '+$scope.chosenSpell.level+' or higher.';
-		}
-		let token=desc.indexOf('${');
-		while (token!=-1){
-			let endtoken=desc.indexOf("}");
-			let expression = desc.substring(token+2,endtoken);
-			expression=expression.replace(/clevel/mg,$scope.char.level);
-			if ($scope.spellLevel){
-				expression=expression.replace(/slevel/mg,$scope.spellLevel);
-			} else {
-				expression=expression.replace(/slevel/mg,tip.level?tip.level:0);
+	if (!tip){return [];}
+	if (tip.description){
+		for (var section of tip.description){
+			if (tip.level && $scope.chosenSpell && tip.level<$scope.chosenSpell.level){
+				return $scope.chosenSpell.name+' can only be cast at level '+$scope.chosenSpell.level+' or higher.';
 			}
-			expression=eval(expression);
-			desc=desc.substring(0,token)+expression+desc.substring(endtoken+1);
-			token=desc.indexOf('${');
+			desc=section.content;
+			let token=desc.indexOf('${');
+			while (token!=-1){
+				let endtoken=desc.indexOf("}");
+				let expression = desc.substring(token+2,endtoken);
+				expression=expression.replace(/clevel/mg,$scope.char.level);
+				if ($scope.spellLevel){
+					expression=expression.replace(/slevel/mg,$scope.spellLevel);
+				} else {
+					expression=expression.replace(/slevel/mg,tip.level?tip.level:0);
+				}
+				expression=eval(expression);
+				desc=desc.substring(0,token)+expression+desc.substring(endtoken+1);
+				token=desc.indexOf('${');
+			}
+			section.content=desc;
 		}
-		return desc;
 	}
-	return '';
 }
 
 
@@ -1248,6 +1341,14 @@ $scope.setTip=function(choice,spellLevel,event){
 	if (event){
 		event.stopPropagation();
 	}
+	if (typeof $scope.tip.description == 'string'){
+		$scope.tip=angular.copy($scope.tip); //clone to avoid changing the original
+		$scope.tip.description=[{
+			type:"",
+			content:$scope.tip.description
+		}];
+	}
+	$scope.evalTooltip($scope.tip);
 }
 
 $scope.setLeftTip=function(choice,spellLevel,event){

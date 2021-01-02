@@ -985,7 +985,6 @@ div.mapContent{
 	padding:20px;
 	font-size:22px;
 	height: calc(100vh - 82px);
-	
 }
 div.mapContent table{
 	width: 100%;
@@ -1009,6 +1008,7 @@ div.mapContent table>tbody>tr{
 div.mapContent table>tbody>tr:nth-of-type(2n){
 	background: #9caebb;
 }
+
 div.adventurelist{
 	border-radius: 10px;
     text-align: center;
@@ -1030,4 +1030,29 @@ div.backIcon{
 span.tipLink{
 	color:blue;
 	cursor:pointer;
+}
+
+table.table{
+	width: 100%;
+    border-collapse: collapse;
+    border: 1px solid #bfbfbf;
+	font-size:1.2em;
+}
+table.table>thead>tr>th,
+table.table>tbody>tr>td{
+	border: 1px solid #b9b9b9;
+	padding: 2px 8px;
+	text-align:left;
+}
+table.table>thead{
+	background: #43759e;
+    font-weight: bold;
+    color: white;
+}
+table.table>tbody>tr{
+	border: 1px solid black;
+	background: #bccfde;
+}
+table.table>tbody>tr:nth-of-type(2n){
+	background: #9caebb;
 }

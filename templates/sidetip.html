@@ -47,8 +47,40 @@
 	<br>
 	<span class="footnote" ng-show="isWeapon(tip)">Your attack bonus with this item is +{{attackBonus(tip)}}</span>
 </div>
-<div ng-bind-html='evalTooltip(tip)' class="tipDescription"></div>
+
+<!--div ng-bind-html='evalTooltip(tip)' class="tipDescription"></div-->
+<div ng-repeat="description in tip.description">
+	<div ng-switch="description.type">
+		<div ng-switch-when="list" class="entry-list">
+			<ul>
+				<li ng-repeat="s in description" compile="s"></li>
+			</ul>
+		</div>
+		<div ng-switch-when="heading" class="entry-heading">{{description.content}}</div>
+		<div ng-switch-when="html">
+			<div ng-bind-html="description.content"></div>
+		</div>
+		<div ng-switch-when="table">
+			<table class="table">
+				<thead><tr>
+					<th ng-repeat="item in description.content[0]">{{item}}</th>
+				</tr></thead>
+				<tbody>
+					<tr ng-repeat="row in description.content track by $index" ng-if="$index>0">
+						<td ng-repeat="item in row">{{item}}</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+		
+		<div ng-switch-default>
+			<p compile="description.content" class="tipDescription"></p>
+		</div>
+	</div>
+</div>
+
 <br>
+
 <!-- Background metadata -->
 <div ng-show="tip.featureName">
 	<div class="label subheader">{{tip.featureName}}</div>

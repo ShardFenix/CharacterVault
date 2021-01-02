@@ -31,6 +31,26 @@ window.abilities.append([
 		onLongRest:function(){
 			this.charges=this.maxCharges;
 		}
+	},{
+		name:"Magic Awareness",
+		description:"As an action, you can open your awareness to the presence of concentrated magic. Until the end of your next turn, you know the location of any spell or magic item within 60 feet of you that isn't behind total cover. When you sense a spell, you learn which school of magic it belongs to.\n\nYou can use this feature a number of times equal to your proficiency bonus, and you regain all expended uses when you finish a long rest.",
+		charges:2,
+		maxChargesFunction:function(char,scope){
+			return scope.derived.proficiency;
+		},
+		onLongRest:function(){
+			this.charges=this.maxCharges;
+		}
+	},{
+		name:"Bolstering Magic",
+		description:"You can harness your wild magic to bolster yourself or a companion. As an action, you can touch one creature (which can be yourself) and confer one of the following benefits of your choice to that creature:\nâ€¢ For 10 minutes, the creature can roll a d3 whenever making an attack roll or an ability check and add the number rolled to the d20 roll.\nâ€¢ Roll a d3. The creature regains one expended spell slot, the level of which equals the number rolled or lower (the creature's choice). Once a creature receives this benefit, that creature can't receive it again until after a long rest.\nYou can take this action a number of times equal to your proficiency bonus, and you regain all expended uses when you finish a long rest.",
+		charges:2,
+		maxChargesFunction:function(char,scope){
+			return scope.derived.proficiency;
+		},
+		onLongRest:function(){
+			this.charges=this.maxCharges;
+		}
 	}
 ]);
 
@@ -159,7 +179,7 @@ window.passives.append([
 		description:"The power of the storm you channel grows mightier, lashing out at your foes. The effect is based on the environment you chose for your Storm Aura."
 	},{//DISPLAY ONLY
 		name:"Totem Spirit",
-		description:"choose a totem spirit and gain its feature. You must make or acquire a physical totem object—an amulet or similar adornment—that incorporates fur or feathers, claws, teeth, or bones of the totem animal. At your option, you also gain minor physical attributes that are reminiscent of your totem spirit. For example, if you have a bear totem spirit, you might be unusually hairy and thick-skinned, or if your totem is the eagle, your eyes turn bright yellow.\n\nYour totem animal might be an animal related to those listed here but more appropriate to your homeland. For example, you could choose a hawk or vulture in place of an eagle.\n\u2022 Bear. While raging, you have resistance to all damage except psychic damage. The spirit of the bear makes you tough enough to stand up to any punishment.\n\u2022 Eagle. While you're raging and aren't wearing heavy armor, other creatures have disadvantage on opportunity attack rolls against you, and you can use the Dash action as a bonus action on your turn. The spirit of the eagle makes you into a predator who can weave through the fray with ease.\n\u2022 Elk. While you're raging and aren't wearing heavy armor, your walking speed increases by 15 feet. The spirit of the elk makes you extraordinarily swift.\n\u2022 Tiger. While raging, you can add 10 feet to your long jump distance and 3 feet to your high jump distance. The spirit of the tiger empowers your leaps.\n\u2022 Wolf. While you're raging, your friends have advantage on melee attack rolls against any creature within 5 feet of you that is hostile to you. The spirit of the wolf makes you a leader of hunters."
+		description:"choose a totem spirit and gain its feature. You must make or acquire a physical totem objectï¿½an amulet or similar adornmentï¿½that incorporates fur or feathers, claws, teeth, or bones of the totem animal. At your option, you also gain minor physical attributes that are reminiscent of your totem spirit. For example, if you have a bear totem spirit, you might be unusually hairy and thick-skinned, or if your totem is the eagle, your eyes turn bright yellow.\n\nYour totem animal might be an animal related to those listed here but more appropriate to your homeland. For example, you could choose a hawk or vulture in place of an eagle.\n\u2022 Bear. While raging, you have resistance to all damage except psychic damage. The spirit of the bear makes you tough enough to stand up to any punishment.\n\u2022 Eagle. While you're raging and aren't wearing heavy armor, other creatures have disadvantage on opportunity attack rolls against you, and you can use the Dash action as a bonus action on your turn. The spirit of the eagle makes you into a predator who can weave through the fray with ease.\n\u2022 Elk. While you're raging and aren't wearing heavy armor, your walking speed increases by 15 feet. The spirit of the elk makes you extraordinarily swift.\n\u2022 Tiger. While raging, you can add 10 feet to your long jump distance and 3 feet to your high jump distance. The spirit of the tiger empowers your leaps.\n\u2022 Wolf. While you're raging, your friends have advantage on melee attack rolls against any creature within 5 feet of you that is hostile to you. The spirit of the wolf makes you a leader of hunters."
 	},{
 		name:"Bear Spirit",
 		description:"While raging, you have resistance to all damage except psychic damage. The spirit of the bear makes you tough enough to stand up to any punishment."
@@ -214,6 +234,32 @@ window.passives.append([
 	},{
 		name:"Wolf Attunement",
 		description:"While you're raging, you can use a bonus action on your turn to knock a Large or smaller creature prone when you hit it with melee weapon attack."
+	},{
+		name:"Wild Surge",
+		description:[
+			{
+				content:"The magical energy roiling inside you sometimes erupts from you. When you enter your rage, roll on the Wild Magic table to determine the magical effect produced.\n\nIf the effect requires a saving throw, the DC equals 8 + your proficiency bonus + your Constitution modifier."
+			},{
+				type:"table",
+				content:[
+					["1d8","Effect"],
+					['1',"Shadowy tendrils lash around you. Each creature of your choice that you can see within 30 feet of you must succeed on a Constitution saving throw or take 1d12 necrotic damage. You also gain 1d12 temporary hit points."],
+					['2',"You teleport up to 30 feet to an unoccupied space you can see. Until your rage ends, you can use this effect again on each of your turns as a bonus action."],
+					['3',"An intangible spirit, which looks like a flumph or a pixie (your choice), appears within 5 feet of one creature of your choice that you can see within 30 feet of you. At the end of the current turn, the spirit explodes, and each creature within 5 feet of it must succeed on a Dexterity saving throw or take 1d6 force damage. Until your rage ends, you can use this effect again, summoning another spirit, on each of your turns as a bonus action."],
+					['4',"Magic infuses one weapon of your choice that you are holding. Until your rage ends, the weapon's damage type changes to force, and it gains the light and thrown properties, with a normal range of 20 feet and a long range of 60 feet. If the weapon leaves your hand, the weapon reappears in your hand at the end of the current turn."],
+					['5',"Whenever a creature hits you with an attack roll before your rage ends, that creature takes 1d6 force damage, as magic lashes out in retribution."],
+					['6',"Until your rage ends, you are surrounded by multi colored, protective lights. You gain a +1 bonus to AC, and while within 10 feet of you, your allies gain the same bonus."],
+					['7',"Flowers and vines temporarily grow around you. Until your rage ends, the ground within 15 feet of you is difficult terrain for your enemies."],
+					['8',"A bolt of light shoots from your chest. Another creature of your choice that you can see within 30 feet of you must succeed on a Constitution saving throw or take 1d6 radiant damage and be blinded until the start of your next turn. Until your rage ends, you can use this effect again on each of your turns as a bonus action."]
+				]
+			}
+		]
+	},{
+		name:"Unstable Backlash",
+		description:"When you are imperiled during your rage, the magic within you can lash out; immediately after you take damage or fail a saving throw while raging, you can use your reaction to roll on the Wild Magic table and immediately produce the effect rolled. This effect replaces your current Wild Magic effect."
+	},{
+		name:"Controlled Surge",
+		description:"Whenever you roll on the Wild Magic table, you can roll the die twice and choose which of the two effects to unleash. If you roll the same number on both dice, you can ignore the number and choose any effect on the table."
 	}
 ]);
 
@@ -221,7 +267,7 @@ window.classes.push(
 	{
 		classname:"Barbarian",
 		name:"Barbarian",
-		description:"People of towns and cities take pride in how their civilized ways set them apart from animals, as if denying one's own nature was a mark of superiority. To a barbarian, though, civilization is no virtue, but a sign of weakness. The strong embrace their animal nature—keen instincts, primal physicality, and ferocious rage. Barbarians are uncomfortable when hedged in by walls and crowds. They thrive in the wilds of their homelands: the tundra, jungle, or grasslands where their tribes live and hunt.\nBarbarians come alive in the chaos of combat. They can enter a berserk state where rage takes over, giving them superhuman strength and resilience. A barbarian can draw on this reservoir of fury only a few times without resting, but those few rages are usually sufficient to defeat whatever threats arise.",
+		description:"People of towns and cities take pride in how their civilized ways set them apart from animals, as if denying one's own nature was a mark of superiority. To a barbarian, though, civilization is no virtue, but a sign of weakness. The strong embrace their animal natureï¿½keen instincts, primal physicality, and ferocious rage. Barbarians are uncomfortable when hedged in by walls and crowds. They thrive in the wilds of their homelands: the tundra, jungle, or grasslands where their tribes live and hunt.\nBarbarians come alive in the chaos of combat. They can enter a berserk state where rage takes over, giving them superhuman strength and resilience. A barbarian can draw on this reservoir of fury only a few times without resting, but those few rages are usually sufficient to defeat whatever threats arise.",
 		levels:[
 			{ //1, first player level
 				summary:[
@@ -630,7 +676,7 @@ window.subclasses.push(
 		classname:"Barbarian",
 		name:"Berserker",
 		subclass:"Berserker",
-		description:"For some barbarians, rage is a means to an end—that end being violence. The Path of the Berserker is a path of untrammeled fury, slick with blood. As you enter the berserker's rage, you thrill in the chaos of battle, heedless of your own health or well-being.",
+		description:"For some barbarians, rage is a means to an endï¿½that end being violence. The Path of the Berserker is a path of untrammeled fury, slick with blood. As you enter the berserker's rage, you thrill in the chaos of battle, heedless of your own health or well-being.",
 		levels:[{},{},{},
 			{//3
 				updates:[
@@ -689,7 +735,7 @@ window.subclasses.push(
 		classname:"Barbarian",
 		name:"Zealot",
 		subclass:"Zealot",
-		description:"Some deities inspire their followers to pitch themselves into a ferocious battle fury. These barbarians are zealots—warriors who channel their rage into powerful displays of divine power.\n\nA variety of gods across the worlds of D&D inspire their followers to embrace this path. Tempus from the Forgotten Realms and Hextor and Erythnul of Greyhawk are all prime examples. In general, the gods who inspire zealots are deities of combat, destruction, and violence. Not all are evil, but few are good.",
+		description:"Some deities inspire their followers to pitch themselves into a ferocious battle fury. These barbarians are zealotsï¿½warriors who channel their rage into powerful displays of divine power.\n\nA variety of gods across the worlds of D&D inspire their followers to embrace this path. Tempus from the Forgotten Realms and Hextor and Erythnul of Greyhawk are all prime examples. In general, the gods who inspire zealots are deities of combat, destruction, and violence. Not all are evil, but few are good.",
 		levels:[{},{},{},
 			{//3
 				summary:[
@@ -905,6 +951,71 @@ window.subclasses.push(
 					{
 						choicePrompt:"Choose a totem attunement",
 						choices:[findPassive("Bear Attunement"),findPassive("Eagle Attunement"),findPassive("Elk Attunement"),findPassive("Tiger Attunement"),findPassive("Wolf Attunement")],
+						action:function(char,derived,choice){
+							addPassive(char,choice);
+						}
+					}
+				]
+
+			},{},{},{},{},{},{}
+		]
+	}
+);
+
+
+window.subclasses.push(
+	{
+		classname:"Barbarian",
+		name:"Wild Magic",
+		subclass:"Wild Magic",
+		description:"Many places in the multiverse abound with beauty, intense emotion, and rampant magic; the Feywild, the Upper Planes, and other realms of supernatural power radiate with such forces and can profoundly influence people. As folk of deep feeling, barbarians are especially susceptible to these wild influences, with some barbarians being transformed by the magic. These magic-suffused barbarians walk the Path of Wild Magic. Elf, tiefling, aasimar, and genasi barbarians often seek this path, eager to manifest the otherworldly magic of their ancestors.",
+		levels:[{},{},{},
+			{//3
+				summary:[
+					findAbility("Magic Awareness"),
+					findPassive("Wild Surge")
+				],
+				updates:[
+					{
+						always:true,
+						choicePrompt:"You gain the following",
+						choices:[findAbility("Magic Awareness"),findPassive("Wild Surge")],
+						action:function(char){
+							addAbility(char,"Magic Awareness");
+							addPassive(char,"Wild Surge");
+						}
+					}
+				]
+			},{},{},{ //6
+				updates:[
+					{
+						summary:findAbility("Bolstering Magic"),
+						choicePrompt:"You gain the following",
+						choices:[findAbility("Bolstering Magic")],
+						action:function(char,derived,choice){
+							addAbility(char,choice);
+						}
+					}
+				]
+			},{},{},{},
+			{//10
+				updates:[
+					{
+						choicePrompt:"You gain the following",
+						summary:findPassive("Unstable Backlash"),
+						choices:[findPassive("Unstable Backlash")],
+						action:function(char){
+							addPassive(char,choice);
+						}
+					}
+				]
+			},{},{},{},
+			{//14
+				updates:[
+					{
+						summary:findPassive("Controlled Surge"),
+						choicePrompt:"You gain the following",
+						choices:[findPassive("Controlled Surge")],
 						action:function(char,derived,choice){
 							addPassive(char,choice);
 						}
