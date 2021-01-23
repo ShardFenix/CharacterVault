@@ -61,7 +61,7 @@
 		</div>
 	</td>
 
-	<td style="width:700px;vertical-align:top;">
+	<td style="width:900px;vertical-align:top;">
 	<div class="character-header">
 		<div class="levelwrapper flex1" style="cursor:pointer;" ng-click="levelUpStart()">
 			<input type='text' class='statbox' ng-model='char.level' disabled='disabled' number />
@@ -69,8 +69,16 @@
 				<div class="levelhover">Level<br>Up</div>
 			</div>
 		</div>
-		<div class="character-name flex3">{{char.name}}</div>
-		<div class="flex1">
+		<div class="character-name flex1">{{char.name}}</div>
+		<div class="flex2">
+			<span>{{char.race}}</span>
+			<div class="classlist">
+				<span ng-repeat="class in char.classes" ng-if="class.level">
+					Lv {{class.level}} {{class.name}} {{class.subclass || ""}}
+				</span>
+			</div>
+		</div>
+		<div class="flex1" style="text-align:right">
 			<span class="button" ng-click="showSaveMenu=true;">Save/Load</span>
 		</div>
 	</div>
@@ -110,6 +118,28 @@
 					<span class='label'>Move<br>Speed</span><br>
 					<input type='text' class='statbox' ng-model='char.speed'/>
 				</label>
+			</td>
+			<td style="border:3px ridge #989898">
+				<table><tr><td>Copper:</td><td>
+					<span class='subtract noselect' ng-click="decrCopper()">-</span>
+					<span class='money'>{{getCopper()}}</span>
+					<span class='add noselect' ng-click="incrCopper()">&#x271A;</span></td></tr>
+				<tr><td>Silver:</td><td>
+					<span class='subtract noselect' ng-click="decrSilver()">-</span>
+					<span class='money' >{{getSilver()}}</span>
+					<span class='add noselect' ng-click="incrSilver()">&#x271A;</span></td></tr>
+				<tr><td>Gold:</td><td>
+					<span class='subtract noselect' ng-click="decrGold()">-</span>
+					<span class='money' >{{getGold()}}</span>
+					<span class='add noselect' ng-click="incrGold()">&#x271A;</span></td></tr>
+				<tr>
+				<td colspan=2 style="text-align:right;">
+					<form ng-submit="spendGold()">
+						<input type="text" style="width:75%" ng-model="spendGoldInput" placeholder="Spend Gold..." />
+					</form>
+				</td>
+				</tr>
+				</table>
 			</td>
 		</tr>
 	</table>
@@ -180,28 +210,6 @@
 	<span ng-show='char.saves.cha===0' class='redx' ng-click='char.saves.cha=1;calculate();'>&#x2716;</span>
 	<span ng-show='char.saves.cha===1' class='greenx' ng-click='char.saves.cha=0;calculate();'>&#x2714;</span>
 	<span style="font-weight:bold;font-size:1.3em;"> {{derived.saves.cha}}</span> Charisma
-
-	<br>
-		<table><tr><td>Copper:</td><td>
-			<span class='subtract noselect' ng-click="decrCopper()">-</span>
-			<span class='money'>{{getCopper()}}</span>
-			<span class='add noselect' ng-click="incrCopper()">&#x271A;</span></td></tr>
-		<tr><td>Silver:</td><td>
-			<span class='subtract noselect' ng-click="decrSilver()">-</span>
-			<span class='money' >{{getSilver()}}</span>
-			<span class='add noselect' ng-click="incrSilver()">&#x271A;</span></td></tr>
-		<tr><td>Gold:</td><td>
-			<span class='subtract noselect' ng-click="decrGold()">-</span>
-			<span class='money' >{{getGold()}}</span>
-			<span class='add noselect' ng-click="incrGold()">&#x271A;</span></td></tr>
-		<tr>
-		<td colspan=2 style="text-align:right;">
-			<form ng-submit="spendGold()">
-				<input type="text" style="width:75%" ng-model="spendGoldInput" placeholder="Spend Gold..." />
-			</form>
-		</td>
-		</tr>
-		</table>
 	</td>
 	
 	<td class="top" style="padding-left:30px;width:250px;">

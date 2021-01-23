@@ -17,6 +17,25 @@
     user-select: none;
     position: relative;
 }
+
+/* simplified item
+.item {
+    margin-top: -1px;
+    border: 3px ridge #989898;
+    padding: 6px 4px;
+    font-size: 18px;
+    font-family: cursive;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    position: relative;
+    border-radius: 5px;
+}
+*/
+
 .item:hover {
 	color:white;
 	background-color:#005280;
@@ -805,6 +824,7 @@ input[type="range"].level-slider::-webkit-slider-thumb {
   border-radius: 50%; 
   background: #bb0000;
   cursor: pointer;
+  margin-top:-18px;
 }
 
 datalist.level-slider {
@@ -1055,4 +1075,10 @@ table.table>tbody>tr{
 }
 table.table>tbody>tr:nth-of-type(2n){
 	background: #9caebb;
+}
+.classlist {
+    display: flex;
+    flex-direction: column;
+    height: 56px;
+    flex-wrap: wrap;
 }

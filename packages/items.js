@@ -1375,6 +1375,15 @@ window.items=[
 		attackRange:[80,320],
 		proficiencies:['Simple Weapons','Light Crossbows']
 	},{
+		name:"Belabor +2",
+		description:"Belabor provides a +2 bonus to attack and damage rolls.\n\nFour times per day, as an action, the user can spend a charge to force a creature within thirty feet to make a strength saving throw. If the creature fails, it suffers 3d8 force damage and is pushed fifteen feet away.",
+		count:1,
+		value:300000,
+		damage2:'1d10',
+		damageType:"Bludgeoning",
+		proficiencies:['Simple Weapons','Staves'],
+		categories:['Simple','Melee','Weapon']
+	},{
 		name:"Scroll",
 		description:"If the spell written on this scroll is on your class's spell list, you can read the scroll and cast it without having to provide any of the spell's components. Once the spell is cast, the scroll is destroyed. If the casting is interrupted, the scroll is not lost.\n\nIf the spell is on your class's spell list but of a higher level than you can normally cast, you must make a DC 18 ability check using your spellcasting ability. On a failed check, the scroll is destroyed.\n\nA spell cast from this scroll has a save DC of 18 and an attack bonus of +10.",
 		count:1,
