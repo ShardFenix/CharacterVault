@@ -12,7 +12,12 @@
 		<div class="entry-description" ng-bind-html="content"></div>
 	</div>
 	<div ng-switch-when="dmnote">
-		<div class="entry-dmnote" ng-bind-html="content"></div>
+		<div class="entry-dmnote">
+			<div ng-if="content[0].content">
+				<div ng-repeat="e in content" dnd-entry entry="e"></div>
+			</div>
+			<div ng-if="!content[0].content" ng-bind-html="content" class="p"></div>
+		</div>
 	</div>
 	<div ng-switch-when="table">
 		<table>
@@ -31,6 +36,6 @@
 	</div>
 	
 	<div ng-switch-default>
-		<p compile="content"></p>
+		<div compile="content" class="p"></div>
 	</div>
 </div>

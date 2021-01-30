@@ -992,9 +992,12 @@ datalist.level-slider option {
 	margin: 0px 20px;
     padding: 10px;
     box-shadow: 0 0 2px 2px #003656;
-    white-space: pre-wrap;
     background: #ffe689;
     border-radius: 15px;
+}
+.p{
+	white-space:pre-wrap;
+	margin: 0.5em 0 1em 0;
 }
 .parchmentBackground{
 	overflow-y: scroll;
