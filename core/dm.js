@@ -205,17 +205,43 @@ app.directive('creatureTip',function(){
 				return total;
 			}
 			
-			$scope.setTip=function(refType, entryName){
+			$scope.setTip=function(refType, entryName, spellLevel){
 				var tip = null;
 				switch (refType) {
 					case 'creature': tip = window.creatures.find({name:entryName});break;
-					case 'spell': tip = window.spells.find({name:entryName});break;
+					case 'spell': tip = angular.copy(window.spells.find({name:entryName}));break;
 				}
-				topScope.setLeftTip(tip);
+				if (typeof tip.description == 'string'){
+					var desc = evalTooltip(tip);
+					tip.description=[{content:desc}];
+				}
+				if (spellLevel == undefined){
+					spellLevel=tip.level;
+				}
+				topScope.setLeftTip(tip,tip.level);
 			}
 			
 			$scope.clearTip=function(){
 				topScope.clearTip();
+			}
+			
+			function evalTooltip(tip){
+				var owner=$scope.creature;
+				if (tip && tip.description){
+					let desc=tip.description;
+					let token=desc.indexOf('${');
+					while (token!=-1){
+						let endtoken=desc.indexOf("}");
+						let expression = desc.substring(token+2,endtoken);
+						expression=expression.replace(/clevel/mg,owner.level);
+						expression=expression.replace(/slevel/mg,tip.level?tip.level:0);
+						expression=eval(expression);
+						desc=desc.substring(0,token)+expression+desc.substring(endtoken+1);
+						token=desc.indexOf('${');
+					}
+					return desc;
+				}
+				return '';
 			}
 		}
 	};

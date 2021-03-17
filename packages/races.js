@@ -55,6 +55,12 @@ window.passives.append([
 	},{
 		name:"Mimicry",
 		description:"You can mimic sounds you have heard, including voices. A creature that hears the sounds can tell they are imitations with a successful Wisdom (Insight) check opposed by your Charisma (Deception) check. You have great trouble speaking in phrases that you are not mimicking."
+	},{
+		name:"Bite and Scratch",
+		description: "You are proficient with your teeth and claws. Your attacks count as both weapon and unarmed attacks, and deals slashing or piercing damage equal to 1d6 plus your strength modifier."
+	},{
+		name:"Tree Cat",
+		description:"Moving with preternatural speed and grace, you scramble up sheer surfaces with ease. You get +2 to ability checks to climb objects or structures."
 	}
 ]);
 
