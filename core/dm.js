@@ -726,6 +726,89 @@ $scope.generateMerchant=function(merch){
 	$scope.loot=generateMerchant(merch);
 }
 
+$scope.doQuickSearch=function(){
+	var s = $scope.quickSearch.toLowerCase();
+	var results=[];
+	for (var spell of window.spells){
+		if (spell.name.toLowerCase() == s){
+			$scope.setLeftTip(spell);
+			return;
+		}
+		if (spell.name.toLowerCase().contains(s)){
+			results.push(spell);
+		}
+	}
+	for (var creature of window.creatures){
+		if (creature.name.toLowerCase() == s){
+			$scope.setLeftTip(creature);
+			return;
+		}
+		if (creature.name.toLowerCase().contains(s)){
+			results.push(creature);
+		}
+	}
+	if (results.length>0){
+		var shortestDistance=levenshtein(s,results[0].name.toLowerCase());
+		var bestResult=results[0];
+		for (var i=1;i<results.length;i++){
+			var distance = levenshtein(s,results[i].name.toLowerCase());
+			if (distance<shortestDistance){
+				shortestDistance=distance;
+				bestResult=results[i];
+			}
+		}
+		$scope.setLeftTip(bestResult);
+	}
+}
+
+function levenshtein(a,b){
+	// optimization
+	if (a.length == 0) {
+		return b.length();
+	}
+	if (b.length == 0) {
+		return a.length();
+	}
+	var m = a.length + 1;
+	var n = b.length + 1;
+	// for all i and j, d[i,j] will hold the Levenshtein distance between
+	// the first i characters of a and the first j characters of b
+	var d=[];
+	for (var i=0;i<m;i++){
+		d.push([]);
+	}
+	for (var i = 1; i < m; i++) {
+		d[i][0] = i;
+	}
+	for (var j = 1; j < n; j++) {
+		d[0][j] = j;
+	}
+	var substitutionCost = 0;
+	for (var j = 1; j < n; j++) {
+		for (var i = 1; i < m; i++) {
+			if (a[i - 1] == b[j - 1]) {
+				substitutionCost = 0;
+			} else {
+				substitutionCost = 1;
+			}
+			d[i][j] = min(d[i - 1][j] + 1, // deletion
+					d[i][j - 1] + 1, // insertion
+					d[i - 1][j - 1] + substitutionCost); // substitution
+		}
+	}
+	return d[m - 1][n - 1];
+}
+
+function min(){
+	var lowest=arguments[0];
+	for (var i=1;i<arguments.length;i++){
+		if (arguments[i]<lowest){
+			lowest=arguments[i];
+		}
+	}
+	return lowest;
+}
+
 $scope.updateSpellFilter=function(){
 	//validate some of the filters
 	$scope.filteredSpellList=[];

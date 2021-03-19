@@ -60,7 +60,98 @@ window.passives.append([
 		description: "You are proficient with your teeth and claws. Your attacks count as both weapon and unarmed attacks, and deals slashing or piercing damage equal to 1d6 plus your strength modifier."
 	},{
 		name:"Tree Cat",
-		description:"Moving with preternatural speed and grace, you scramble up sheer surfaces with ease. You get +2 to ability checks to climb objects or structures."
+		tags:['Cat'],
+		description:"Moving with preternatural speed and grace, you scramble up sheer surfaces with ease. You have advantage on ability checks to climb objects or structures."
+	},{
+		name:"Feline Intuition",
+		tags:['Cat'],
+		description:"You know things. Even if you're not entirely sure how sometimes, you just... do. Gain +1 to Intelligence.",
+		onPickup:function(char){
+			char.attributes.int+=1;
+		}
+	},{
+		name:"Cute Cat",
+		tags:['Cat'],
+		description:"Are they... ignoring you? Have they seen what you look like? Get +1 to Charisma.",
+		onPickup:function(char){
+			char.attributes.cha+=1;
+		}
+	},{
+		name:"Skilled Hunter",
+		tags:['Cat'],
+		description:"You can follow your prey through any terrain. No one is gettign away from you! You gain expertise in the Traacking skill.",
+		onPickup:function(char){
+			addProficiency(char,"Tracking");
+			addExpertise(char,"Tracking");
+		}
+	},{
+		name:"Action Cat",
+		tags:['Cat'],
+		description:"You're always ready for what comes next; you're poised, cunning, and able to anticipate. Add +2 to initiative.",
+		apply:function(char,scope){
+			scope.derived.initiative+=2;
+		}
+	},{
+		name:"Flower Marked",
+		tags:['Cat'],
+		description:"Your fur patterns are highly effective camouflage, making you difficult to spot in the wilderness. You have advantage on Stealth checks made in natural terrain."
+	},{
+		name:"Four-Point Landing",
+		tags:['Cat'],
+		description:"You are adept at landing safely on your feet, even from long distances. You are resistant to fall damage."
+	},{
+		name:"Lucky Cat",
+		tags:['Cat'],
+		description:"You're lucky. You don't know why. You can reroll any attack roll, ability check, or saving throw, once per long rest.",
+		onPickup:function(char){
+			addAbility(char,"Lucky Cat");
+		}
+	},{
+		name:"Life in the Shadows",
+		tags:['Cat'],
+		description:"Twilight is your element, your coloring and lithe form making you almost impossible to detect as the light dims. You have advantage on stealth roles in low-light or dark environments."
+	},{
+		name:"Like a Wolf",
+		tags:['Cat'],
+		description:"As you shed your fur, you begin to resemble a vicious wolf, teeth bared and hungry for blood. Gain expertise at the Intimidation skill.",
+		onPickup:function(char){
+			addProficiency(char,"Intimidation");
+			addExpertise(char,"Intimidation");
+		}
+	},{
+		name:"Gym Cat",
+		tags:['Cat'],
+		description:"Hulking and mighty, it doesn't matter that you aren't as big as a dragon - you pack jus as much into a smaller package! Add +1 to Strength.",
+		onPickup:function(char){
+			char.attributes.strength+=1;
+		}
+	},{
+		name:"Fluffy Cat",
+		tags:['Cat'],
+		description:"Your fur is spectacularly fluffy, softening the blows of your enemies. Get +1 to AC."
+	},{
+		name:"Adaptation",
+		tags:['Cat'],
+		description:"You were born in freezing cold conditions. You're used to it. You are resistant to cold damage."
+	},{
+		name:"Go Limp",
+		tags:['Cat'],
+		description:"You've spent a lot of time going limp and playing dead. You're eerily good at it, but you've learned something more. While you're prone, other creatures don't gain advantage on attacks against you for being prone."
+	},{
+		name:"Light Sleeper",
+		tags:['Cat'],
+		description:"You don't need much in the way of recovery time. Whenever you spend hit dice to heal during a short rest, you heal an additional 1d4+2 hit points."
+	},{
+		name:"Slippery Customer",
+		tags:['Cat'],
+		description:"Someone with your dignity is, most assuredly, not going to be manhandled. You have advantage on grapple contests made against you, and on all checks to break grapple."
+	},{
+		name:"Nine Lives",
+		tags:['Cat'],
+		description:"You have nine lives. Whenever you would die, you instead gain 1 hit point. You can also use this ability while unconscious to regain one hit point. You may use this ability eight times. This ability does not recharge.",
+		onPickup:function(char){
+			addAbility(char,"Nine Lives");
+		}
 	}
 ]);
 
@@ -173,6 +264,18 @@ window.abilities.append([
 			}
 			return 0;
 		}
+	},{
+		name:"Lucky Cat",
+		description:"You can reroll any attack roll, ability check, or saving throw. You can't use this again until you finish a long rest.",
+		charges:1,
+		maxCharges:1,
+		onLongRest:helper.refresh
+	},{
+		name:"Nine Lives",
+		description:"If you would die, you instead gain one hit point. You can also use this ability while unconscious to regain one hit point. This skill does not recharge.",
+		charges:8,
+		maxCharges:8,
+		onLongRest:function(){}
 	}
 ]);
 
@@ -571,6 +674,47 @@ window.races=[
 					choices:['Acrobatics','Deception','Stealth','Sleight of Hand'],
 					action:function(char,derived,choice){
 						addProficiency(char,choice);
+					}
+				}
+			);
+		}
+	},{
+		name:"Feline (PC Race)",
+		description:"",
+		onPickup:function(char,scope){
+			char.proficiencies.push("Language: Common");
+			char.proficiencies.push("Language: Feline");
+			char.speed=30;
+			char.attributes.dex+=2;
+			addPassive(char,"Darkvision");
+			addPassive(char,"Bite and Scratch");
+			scope.choiceQueue.push({
+					limit:1,
+					choicePrompt:"Choose one",
+					choices:['+1 Strength','+1 Wisdom','+1 Charisma'],
+					action:function(char,derived,choice){
+						switch (choice){
+							case '+1 Strength':char.str+=1;break;
+							case '+1 Wisdom':char.wis+=1;break;
+							case '+1 Charisma':char.cha+=1;break;
+						}
+					}
+				}
+			);
+			scope.choiceQueue.push({
+					limit:1,
+					choicePrompt:"Choose one",
+					choices:[function(){
+						var result=[];
+						for (var passive of window.passives){
+							if (passive.tags && passive.tags.has('Cat')){
+								result.push(passive);
+							}
+						}
+						return result;
+					}],
+					action:function(char,derived,choice){
+						addPassive(char,choice);
 					}
 				}
 			);

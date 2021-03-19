@@ -48,7 +48,6 @@
 	<span class="footnote" ng-show="isWeapon(tip)">Your attack bonus with this item is +{{attackBonus(tip)}}</span>
 </div>
 
-<!--div ng-bind-html='evalTooltip(tip)' class="tipDescription"></div-->
 <div ng-repeat="description in tip.description">
 	<div ng-switch="description.type">
 		<div ng-switch-when="list" class="entry-list">

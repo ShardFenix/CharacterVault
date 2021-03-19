@@ -13,7 +13,7 @@
 <script src="libs/arctext.js"></script>
 
 </head>
-<body style="background-color:#ffffff;width:100vw;margin:0px;font-family:'Balthazar', sans-serif;font-size:19px;">
+<body style="background-color:#ffffff;width:100%;margin:0px;font-family:'Balthazar', sans-serif;font-size:19px;">
 <div ng-app="myApp">
 <div ng-controller="MyController" ng-cloak>
 
@@ -23,6 +23,7 @@
 <span class="tab" ng-click="tab='adventure'" ng-class="{'activetab':tab=='adventure'}">Adventure</span>
 <span class="tab" ng-click="tab='spells'" ng-class="{'activetab':tab=='spells'}">Spells</span>
 <span class="tab" ng-click="tab='loot'" ng-class="{'activetab':tab=='loot'}">LOOt</span>
+<span class="tab" style="padding:0;flex-grow:0;"><input type="text" style="width:200px;font-size:0.9em" placeholder="QuickSearch" ng-change="doQuickSearch()" ng-model="quickSearch"/></span>
 </div>
 
 <div ng-show="tab=='general'">

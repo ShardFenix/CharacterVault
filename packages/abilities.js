@@ -10,7 +10,7 @@ window.abilities=[
 			let warlockLevel=classLevel(scope.char,"Warlock");
 			switch (warlockLevel){
 				case 1: this.charges=Math.min(this.maxCharges,this.charges+1);break;
-				case 2: this.charges=Math.min(this.maxCharges,this.charges+2);break;
+				case 2:	this.charges=Math.min(this.maxCharges,this.charges+2);break;
 			}
 		}
 	},{
@@ -24,7 +24,7 @@ window.abilities=[
 			let warlockLevel=classLevel(scope.char,"Warlock");
 			switch (warlockLevel){
 				case 3: 
-				case 4: this.charges=Math.min(this.maxCharges,this.charges+2);break;
+				case 4:this.charges=Math.min(this.maxCharges,this.charges+2);break;
 			}
 		}
 	},{
@@ -38,7 +38,7 @@ window.abilities=[
 			let warlockLevel=classLevel(scope.char,"Warlock");
 			switch (warlockLevel){
 				case 5: 
-				case 6: this.charges=Math.min(this.maxCharges,this.charges+2);break;
+				case 6:this.charges=Math.min(this.maxCharges,this.charges+2);break;
 			}
 		}
 	},{

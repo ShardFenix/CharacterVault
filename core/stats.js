@@ -146,6 +146,35 @@ app.directive('dndEntry',['$sce','$compile',function($sce,$compile){
 	}
 }]);
 
+////////////////////////////////////////////////////
+// Turn string descriptions into arrays
+function fixDescription(a){
+	if (typeof a.description == 'string'){
+		console.log("Fixing description for "+a.name);
+		var temp = a.description.split(/[\r\n]+/gm);
+		a.description = [];
+		for (var s of temp){
+			a.description.push({content:s});
+		}
+	}
+}
+
+for (var a of window.abilities){
+	fixDescription(a);
+}
+for (var a of window.passives){
+	fixDescription(a);
+}
+/*
+for (var a of window.classes){
+	fixDescription(a);
+}
+for (var a of window.subclasses){
+	fixDescription(a);
+}
+*/
+////////////////////////////////////////////////////
+
 app.controller('MyController',['$scope','$timeout','$http','$interval',function($scope,$timeout,$http,$interval){
 
 $scope.spellFilters={
@@ -1217,12 +1246,13 @@ $scope.selectSpell=function(spell){
 //takes an object with the description property, and replaces the placeholders in the content
 $scope.evalTooltip=function(tip){
 	if (!tip){return [];}
-	if (tip.description){
+	if (Array.isArray(tip.description)){
+		var result="";
 		for (var section of tip.description){
 			if (tip.level && $scope.chosenSpell && tip.level<$scope.chosenSpell.level){
 				return $scope.chosenSpell.name+' can only be cast at level '+$scope.chosenSpell.level+' or higher.';
 			}
-			desc=section.content;
+			var desc=section.content;
 			let token=desc.indexOf('${');
 			while (token!=-1){
 				let endtoken=desc.indexOf("}");
@@ -1238,7 +1268,29 @@ $scope.evalTooltip=function(tip){
 				token=desc.indexOf('${');
 			}
 			section.content=desc;
+			result+="\n\n"+desc;
 		}
+		return result.substring(2);
+	} else if (typeof tip.description == 'string'){
+		if (tip.level && $scope.chosenSpell && tip.level<$scope.chosenSpell.level){
+			return $scope.chosenSpell.name+' can only be cast at level '+$scope.chosenSpell.level+' or higher.';
+		}
+		var desc=""+tip.description;
+		let token=desc.indexOf('${');
+		while (token!=-1){
+			let endtoken=desc.indexOf("}");
+			let expression = desc.substring(token+2,endtoken);
+			expression=expression.replace(/clevel/mg,$scope.char.level);
+			if ($scope.spellLevel){
+				expression=expression.replace(/slevel/mg,$scope.spellLevel);
+			} else {
+				expression=expression.replace(/slevel/mg,tip.level?tip.level:0);
+			}
+			expression=eval(expression);
+			desc=desc.substring(0,token)+expression+desc.substring(endtoken+1);
+			token=desc.indexOf('${');
+		}
+		return desc;
 	}
 }
 
@@ -1329,7 +1381,7 @@ $scope.setTip=function(choice,spellLevel,event){
 	if (tipPromise){
 		$timeout.cancel(tipPromise);
 	}
-	$scope.tip=choice;
+	$scope.tip=angular.copy(choice);
 	//$scope.tip.description = getDescription(choice);
 	if (spellLevel){
 		$scope.spellLevel=spellLevel;
@@ -1340,13 +1392,6 @@ $scope.setTip=function(choice,spellLevel,event){
 	$scope.tipLeft=false;
 	if (event){
 		event.stopPropagation();
-	}
-	if (typeof $scope.tip.description == 'string'){
-		$scope.tip=angular.copy($scope.tip); //clone to avoid changing the original
-		$scope.tip.description=[{
-			type:"",
-			content:$scope.tip.description
-		}];
 	}
 	$scope.evalTooltip($scope.tip);
 }
@@ -1655,6 +1700,7 @@ $scope.patch=function(){
 	for (let i=1;i<=20;i++){
 		if ($scope.history[i]){
 			for (let passive of $scope.history[i].passives){
+				fixDescription(passive);
 				let p = findPassive(passive.name);
 				if (!p){
 					//all backgrounds should be hidden on the dm screen
@@ -1676,6 +1722,7 @@ $scope.patch=function(){
 		}
 	}
 	for (let passive of $scope.char.passives){
+		fixDescription(passive);
 		let p = findPassive(passive.name);
 		if (!p){
 			//all backgrounds should be hidden on the dm screen
@@ -1693,6 +1740,10 @@ $scope.patch=function(){
 			passive.dmHide=p.dmHide;
 			//console.log("Added dmHide to char."+passive.name);
 		}
+	}
+	
+	for (let ability of $scope.char.abilities){
+		fixDescription(ability);
 	}
 }
 
