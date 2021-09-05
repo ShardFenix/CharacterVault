@@ -107,13 +107,13 @@ app.directive('dndEntry',['$sce','$compile',function($sce,$compile){
 			
 			scope.goToLink=scope.$parent.goToLink;
 			
-			scope.setTip=function(refType, entryName){
+			scope.setTip=function(refType, entryName, spellLevel){
 				var tip = null;
 				switch (refType) {
 					case 'creature': tip = window.creatures.find({name:entryName});break;
 					case 'spell': tip = window.spells.find({name:entryName});break;
 				}
-				topScope.setLeftTip(tip);
+				topScope.setLeftTip(tip,spellLevel);
 			}
 			scope.clearTip=function(){
 				topScope.clearTip();
@@ -646,29 +646,33 @@ function prepCharacter(char){
 	//setup spells
 	char.spellcasting={spells:[{slots:999,spells:[]}]};
 	let slots = spellSlots1(char);
-	if (slots){char.spellcasting.spells.push({slots:slots,spells:[]});}
+	char.spellcasting.spells.push({slots:slots,spells:[]});
 	slots = spellSlots2(char);
-	if (slots){char.spellcasting.spells.push({slots:slots,spells:[]});}
+	char.spellcasting.spells.push({slots:slots,spells:[]});
 	slots = spellSlots3(char);
-	if (slots){char.spellcasting.spells.push({slots:slots,spells:[]});}
+	char.spellcasting.spells.push({slots:slots,spells:[]});
 	slots = spellSlots4(char);
-	if (slots){char.spellcasting.spells.push({slots:slots,spells:[]});}
+	char.spellcasting.spells.push({slots:slots,spells:[]});
 	slots = spellSlots5(char);
-	if (slots){char.spellcasting.spells.push({slots:slots,spells:[]});}
+	char.spellcasting.spells.push({slots:slots,spells:[]});
 	slots = spellSlots6(char);
-	if (slots){char.spellcasting.spells.push({slots:slots,spells:[]});}
+	char.spellcasting.spells.push({slots:slots,spells:[]});
 	slots = spellSlots7(char);
-	if (slots){char.spellcasting.spells.push({slots:slots,spells:[]});}
+	char.spellcasting.spells.push({slots:slots,spells:[]});
 	slots = spellSlots8(char);
-	if (slots){char.spellcasting.spells.push({slots:slots,spells:[]});}
+	char.spellcasting.spells.push({slots:slots,spells:[]});
 	slots = spellSlots9(char);
-	if (slots){char.spellcasting.spells.push({slots:slots,spells:[]});}
+	char.spellcasting.spells.push({slots:slots,spells:[]});
 
 	
 	for (let clas of char.classes){
 		for (let spell of clas.spells){
-			if (char.spellcasting.spells[spell.level]){
-				char.spellcasting.spells[spell.level].spells.push(spell.name);
+			if (spell.level==0){
+				char.spellcasting.spells[0].spells.push(spell.name);
+			} else {
+				for (var i=spell.level;i<=9;i++){
+					char.spellcasting.spells[i].spells.push(spell.name);
+				}
 			}
 		}
 	}

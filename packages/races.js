@@ -718,6 +718,7 @@ window.races=[
 					}
 				}
 			);
+			scope.choiceQueue.push(helper.learnLanguage);
 		}
 	}
 ];

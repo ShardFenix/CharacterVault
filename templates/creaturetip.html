@@ -71,25 +71,25 @@
 	</div>
 </div>
 <div ng-if="creature.passives.length>0" class="abilitySection">
-	<span class="label subheader">Passives</span>
-	<p ng-repeat="a in creature.passives"><b>{{a.name}}.</b> {{a.description}}</p>
+	<span class="label subheader" ng-click="hidePassives = !hidePassives">Passives</span>
+	<p ng-repeat="a in creature.passives" ng-show="!hidePassives"><b>{{a.name}}.</b> {{a.description}}</p>
 </div>
 <div ng-if="creature.actions" class="abilitySection">
-	<span class="label subheader">Actions</span>
-	<p ng-repeat="a in creature.actions"><b>{{a.name}}.</b> {{a.description}}</p>
+	<span class="label subheader" ng-click="hideActions = !hideActions">Actions</span>
+	<p ng-repeat="a in creature.actions" ng-show="!hideActions"><b>{{a.name}}.</b> {{a.description}}</p>
 </div>
 <div ng-if="creature.spellcasting" class="abilitySection">
-	<span class="label subheader">Spellcasting</span>
-	<div>{{creature.spellcasting.description}}</div>
-	<div ng-if="creature.spellcasting.will">
+	<span class="label subheader" ng-click="hideSpells=!hideSpells">Spellcasting</span>
+	<div ng-show="!hideSpells">{{creature.spellcasting.description}}</div>
+	<div ng-show="!hideSpells" ng-if="creature.spellcasting.will">
 		<span>At will: {{creature.spellcasting.will.join(', ')}}</span>
 	</div>
-	<div ng-if="creature.spellcasting.individual">
+	<div ng-show="!hideSpells" ng-if="creature.spellcasting.individual">
 		<span>Individual uses: </span>
 		<span ng-repeat="spell in creature.spellcasting.individual" class="spellButton"
 				ng-click="spell.charges=spell.charges-1" ng-if="spell.charges">{{spell.name}} ({{spell.charges}})</span>
 	</div>
-	<div ng-if="creature.spellcasting.spells"> 
+	<div ng-show="!hideSpells" ng-if="creature.spellcasting.spells"> 
 		<div ng-repeat="level in creature.spellcasting.spells"
 			 ng-click="level.slots=level.slots-1"
 			 ng-if="level.slots>0">

@@ -384,6 +384,7 @@ table.full{
     line-height: 1em;
     margin-block-start: 0.5em;
     margin-block-end: 0.5em;
+	white-space: pre-line;
 }
 .leftTip .creatureCard .abilitySection{
 	text-align:left;
